@@ -36,10 +36,45 @@
                 <br />
                 <asp:loginview id="LoginView1" runat="server">
                     <loggedintemplate>
-                        <p><h3>Secure Menu:</h3>
-                            <asp:hyperlink navigateurl="~/Members/SecurePage.aspx" runat="server">Secure Page</asp:hyperlink>
+                        <p>
+                        </p>
+                    <h3>Secure Menu:</h3>
+                        &nbsp;<asp:TreeView ID="TreeView1" runat="server" ExpandDepth="1" ImageSet="Arrows"
+                            ShowLines="True">
+                            <ParentNodeStyle Font-Bold="False" />
+                            <HoverNodeStyle Font-Underline="True" ForeColor="#5555DD" />
+                            <SelectedNodeStyle Font-Underline="True" ForeColor="#5555DD" HorizontalPadding="0px"
+                                VerticalPadding="0px" />
+                            <Nodes>
+                                <asp:TreeNode Text="Employee's Views" Value="Employee's Views">
+                                    <asp:TreeNode Text="Director Views" Value="Director Views">
+                                        <asp:TreeNode NavigateUrl="~/Director/CampAndNeg.aspx" Text="Campaign and Negotiation"
+                                            Value="Campaign and Negotiation"></asp:TreeNode>
+                                        <asp:TreeNode NavigateUrl="~/Director/NegotiationTemplate.aspx" Text="Negotiation Form"
+                                            Value="Negotiation Form"></asp:TreeNode>
+                                    </asp:TreeNode>
+                                    <asp:TreeNode Text="Staff Views" Value="Staff Views">
+                                        <asp:TreeNode NavigateUrl="~/Staff/StaffView.aspx" Text="Info View" Value="Info View">
+                                        </asp:TreeNode>
+                                        <asp:TreeNode NavigateUrl="~/Staff/FillTimesheet.aspx" Text="Fill in Timesheet" Value="Fill in Timesheet">
+                                        </asp:TreeNode>
+                                    </asp:TreeNode>
+                                    <asp:TreeNode Text="Governor Views" Value="Governor Views">
+                                        <asp:TreeNode NavigateUrl="~/Governor/CampaignSummary.aspx" Text="Campaigns Summary"
+                                            Value="Campaigns Summary"></asp:TreeNode>
+                                        <asp:TreeNode NavigateUrl="~/Governor/StaffUtilization.aspx" Text="Staff Utilization"
+                                            Value="Staff Utilization"></asp:TreeNode>
+                                        <asp:TreeNode NavigateUrl="~/Governor/NegotiationSummary.aspx" Text="Negotiation in Progress"
+                                            Value="Negotiation in Progress"></asp:TreeNode>
+                                    </asp:TreeNode>
+                                </asp:TreeNode>
+                            </Nodes>
+                            <NodeStyle Font-Names="Verdana" Font-Size="8pt" ForeColor="Black" HorizontalPadding="5px"
+                                NodeSpacing="0px" VerticalPadding="0px" />
+                        </asp:TreeView>
                             <br />
-                            <asp:hyperlink navigateurl="~/Members/ChangePassword.aspx" runat="server">Change Password</asp:hyperlink>
+                            <br />
+                        <p>
                         </p>
                     </loggedintemplate>
                 </asp:loginview>

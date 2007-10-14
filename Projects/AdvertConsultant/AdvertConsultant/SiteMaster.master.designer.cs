@@ -16,9 +16,8 @@
 /// <remarks>
 /// Auto-generated class.
 /// </remarks>
-public partial class SiteMaster_master
-{
-
+public partial class SiteMaster_master {
+    
     /// <summary>
     /// form1 control.
     /// </summary>
@@ -27,7 +26,7 @@ public partial class SiteMaster_master
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-
+    
     /// <summary>
     /// LoginView2 control.
     /// </summary>
@@ -36,7 +35,7 @@ public partial class SiteMaster_master
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.LoginView LoginView2;
-
+    
     /// <summary>
     /// Hyperlink6 control.
     /// </summary>
@@ -45,7 +44,7 @@ public partial class SiteMaster_master
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HyperLink Hyperlink6;
-
+    
     /// <summary>
     /// Hyperlink2 control.
     /// </summary>
@@ -54,7 +53,7 @@ public partial class SiteMaster_master
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HyperLink Hyperlink2;
-
+    
     /// <summary>
     /// Hyperlink1 control.
     /// </summary>
@@ -63,7 +62,7 @@ public partial class SiteMaster_master
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.HyperLink Hyperlink1;
-
+    
     /// <summary>
     /// LoginView1 control.
     /// </summary>
@@ -72,7 +71,7 @@ public partial class SiteMaster_master
     /// To modify move field declaration from designer file to code-behind file.
     /// </remarks>
     protected global::System.Web.UI.WebControls.LoginView LoginView1;
-
+    
     /// <summary>
     /// PageContent control.
     /// </summary>

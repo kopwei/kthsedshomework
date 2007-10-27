@@ -57,18 +57,17 @@ namespace AdvertConsultant.Director
             assignStaffButton.Enabled = false;
             CampaignList.Visible = true;
             CampaignList.Enabled = true;
-            commitAssignmentButton.Visible = true;
-            commitAssignmentButton.Enabled = true;
+            buttonCommitAssignment.Visible = true;
+            buttonCommitAssignment.Enabled = true;
         }
 
-        protected void commitAssignmentButton_Click(object sender, EventArgs e)
+        protected void Button1_Click(object sender, EventArgs e)
         {
-            
             DataView view = (DataView)(SqlDataSource1.Select(DataSourceSelectArguments.Empty));
             DataRow dr = view.Table.Rows[0];
             String strId = dr.ItemArray[0].ToString();
 
-            
+
             SqlDataSource1.UpdateCommandType = SqlDataSourceCommandType.Text;
             SqlDataSource1.UpdateCommand = "UPDATE Staffs SET CampaignID = @CampaignID WHERE(StaffID = @StaffID)";
             SqlDataSource1.UpdateParameters.Add("CampaignID", strId);
@@ -81,8 +80,7 @@ namespace AdvertConsultant.Director
             {
 
             }
-
-            
         }
+
     }
 }

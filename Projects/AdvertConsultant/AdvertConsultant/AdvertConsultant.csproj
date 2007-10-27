@@ -175,6 +175,13 @@
     <Compile Include="Staff\FillTimesheet.aspx.designer.cs">
       <DependentUpon>FillTimesheet.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Staff\Schedule.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Schedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Staff\Schedule.aspx.designer.cs">
+      <DependentUpon>Schedule.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Staff\StaffView.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>StaffView.aspx</DependentUpon>
@@ -233,6 +240,7 @@
     <Content Include="Governor\NegotiationSummary.aspx" />
     <Content Include="Governor\StaffUtilization.aspx" />
     <Content Include="Staff\FillTimesheet.aspx" />
+    <Content Include="Staff\Schedule.aspx" />
     <Content Include="Staff\StaffView.aspx" />
     <Content Include="Members\web.config" />
   </ItemGroup>

@@ -65,13 +65,13 @@ namespace AdvertConsultant.Director {
         protected global::System.Web.UI.WebControls.DropDownList CampaignList;
         
         /// <summary>
-        /// commitAssignmentButton control.
+        /// buttonCommitAssignment control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button commitAssignmentButton;
+        protected global::System.Web.UI.WebControls.Button buttonCommitAssignment;
         
         /// <summary>
         /// SqlDataSource1 control.

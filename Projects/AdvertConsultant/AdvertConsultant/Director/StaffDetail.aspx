@@ -65,9 +65,9 @@
     <asp:DropDownList ID="CampaignList" runat="server" DataSourceID="CampaignData"
         DataTextField="CampaignName" DataValueField="CampaignName" Width="172px" Visible="False">
         <asp:ListItem>None</asp:ListItem>
-    </asp:DropDownList>
-    <asp:Button ID="commitAssignmentButton" runat="server" Enabled="False" Text="OK"
-        Visible="False" OnClick="commitAssignmentButton_Click" PostBackUrl="~/Director/AssignmentOK.aspx" /><br />
+    </asp:DropDownList>&nbsp;
+    <asp:Button ID="buttonCommitAssignment" runat="server" Enabled="False" OnClick="Button1_Click"
+        Text="OK" Visible="False" /><br />
     <br />
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
         SelectCommand="SELECT [CampaignID] FROM [Campaigns] WHERE ([CampaignName] = @CampaignName)">

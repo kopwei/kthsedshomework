@@ -224,11 +224,15 @@ namespace AdvertConsultant.DataSets {
         [System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class CampaignsDataTable : System.Data.DataTable, System.Collections.IEnumerable {
             
+            private System.Data.DataColumn columnCampaignID;
+            
             private System.Data.DataColumn columnCampaignName;
             
             private System.Data.DataColumn columnDirectorName;
             
             private System.Data.DataColumn columnClientName;
+            
+            private System.Data.DataColumn columnClientContact;
             
             private System.Data.DataColumn columnTypeOfCampaign;
             
@@ -271,6 +275,13 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn CampaignIDColumn {
+                get {
+                    return this.columnCampaignID;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public System.Data.DataColumn CampaignNameColumn {
                 get {
                     return this.columnCampaignName;
@@ -288,6 +299,13 @@ namespace AdvertConsultant.DataSets {
             public System.Data.DataColumn ClientNameColumn {
                 get {
                     return this.columnClientName;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn ClientContactColumn {
+                get {
+                    return this.columnClientContact;
                 }
             }
             
@@ -355,12 +373,14 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public CampaignsRow AddCampaignsRow(string CampaignName, string DirectorName, string ClientName, string TypeOfCampaign, decimal Budget, System.DateTime StartTime, System.DateTime EndTime, bool InNegotiation) {
+            public CampaignsRow AddCampaignsRow(int CampaignID, string CampaignName, string DirectorName, string ClientName, decimal ClientContact, string TypeOfCampaign, decimal Budget, System.DateTime StartTime, System.DateTime EndTime, bool InNegotiation) {
                 CampaignsRow rowCampaignsRow = ((CampaignsRow)(this.NewRow()));
                 rowCampaignsRow.ItemArray = new object[] {
+                        CampaignID,
                         CampaignName,
                         DirectorName,
                         ClientName,
+                        ClientContact,
                         TypeOfCampaign,
                         Budget,
                         StartTime,
@@ -368,6 +388,12 @@ namespace AdvertConsultant.DataSets {
                         InNegotiation};
                 this.Rows.Add(rowCampaignsRow);
                 return rowCampaignsRow;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public CampaignsRow FindByCampaignID(int CampaignID) {
+                return ((CampaignsRow)(this.Rows.Find(new object[] {
+                            CampaignID})));
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -389,9 +415,11 @@ namespace AdvertConsultant.DataSets {
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             internal void InitVars() {
+                this.columnCampaignID = base.Columns["CampaignID"];
                 this.columnCampaignName = base.Columns["CampaignName"];
                 this.columnDirectorName = base.Columns["DirectorName"];
                 this.columnClientName = base.Columns["ClientName"];
+                this.columnClientContact = base.Columns["ClientContact"];
                 this.columnTypeOfCampaign = base.Columns["TypeOfCampaign"];
                 this.columnBudget = base.Columns["Budget"];
                 this.columnStartTime = base.Columns["StartTime"];
@@ -401,12 +429,16 @@ namespace AdvertConsultant.DataSets {
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             private void InitClass() {
+                this.columnCampaignID = new System.Data.DataColumn("CampaignID", typeof(int), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCampaignID);
                 this.columnCampaignName = new System.Data.DataColumn("CampaignName", typeof(string), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnCampaignName);
                 this.columnDirectorName = new System.Data.DataColumn("DirectorName", typeof(string), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDirectorName);
                 this.columnClientName = new System.Data.DataColumn("ClientName", typeof(string), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnClientName);
+                this.columnClientContact = new System.Data.DataColumn("ClientContact", typeof(decimal), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnClientContact);
                 this.columnTypeOfCampaign = new System.Data.DataColumn("TypeOfCampaign", typeof(string), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnTypeOfCampaign);
                 this.columnBudget = new System.Data.DataColumn("Budget", typeof(decimal), null, System.Data.MappingType.Element);
@@ -417,6 +449,10 @@ namespace AdvertConsultant.DataSets {
                 base.Columns.Add(this.columnEndTime);
                 this.columnInNegotiation = new System.Data.DataColumn("InNegotiation", typeof(bool), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnInNegotiation);
+                this.Constraints.Add(new System.Data.UniqueConstraint("Constraint1", new System.Data.DataColumn[] {
+                                this.columnCampaignID}, true));
+                this.columnCampaignID.AllowDBNull = false;
+                this.columnCampaignID.Unique = true;
                 this.columnCampaignName.AllowDBNull = false;
                 this.columnCampaignName.MaxLength = 50;
                 this.columnDirectorName.AllowDBNull = false;
@@ -525,6 +561,16 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int CampaignID {
+                get {
+                    return ((int)(this[this.tableCampaigns.CampaignIDColumn]));
+                }
+                set {
+                    this[this.tableCampaigns.CampaignIDColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string CampaignName {
                 get {
                     return ((string)(this[this.tableCampaigns.CampaignNameColumn]));
@@ -551,6 +597,21 @@ namespace AdvertConsultant.DataSets {
                 }
                 set {
                     this[this.tableCampaigns.ClientNameColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public decimal ClientContact {
+                get {
+                    try {
+                        return ((decimal)(this[this.tableCampaigns.ClientContactColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'ClientContact\' in table \'Campaigns\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableCampaigns.ClientContactColumn] = value;
                 }
             }
             
@@ -602,6 +663,16 @@ namespace AdvertConsultant.DataSets {
                 set {
                     this[this.tableCampaigns.InNegotiationColumn] = value;
                 }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsClientContactNull() {
+                return this.IsNull(this.tableCampaigns.ClientContactColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetClientContactNull() {
+                this[this.tableCampaigns.ClientContactColumn] = System.Convert.DBNull;
             }
         }
         
@@ -722,15 +793,51 @@ namespace AdvertConsultant.DataSets.CampaignTableAdapters {
             System.Data.Common.DataTableMapping tableMapping = new System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
             tableMapping.DataSetTable = "Campaigns";
+            tableMapping.ColumnMappings.Add("CampaignID", "CampaignID");
             tableMapping.ColumnMappings.Add("CampaignName", "CampaignName");
             tableMapping.ColumnMappings.Add("DirectorName", "DirectorName");
             tableMapping.ColumnMappings.Add("ClientName", "ClientName");
+            tableMapping.ColumnMappings.Add("ClientContact", "ClientContact");
             tableMapping.ColumnMappings.Add("TypeOfCampaign", "TypeOfCampaign");
             tableMapping.ColumnMappings.Add("Budget", "Budget");
             tableMapping.ColumnMappings.Add("StartTime", "StartTime");
             tableMapping.ColumnMappings.Add("EndTime", "EndTime");
             tableMapping.ColumnMappings.Add("InNegotiation", "InNegotiation");
             this._adapter.TableMappings.Add(tableMapping);
+            this._adapter.DeleteCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.DeleteCommand.Connection = this.Connection;
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [Campaigns] WHERE (([CampaignID] = @Original_CampaignID))";
+            this._adapter.DeleteCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_CampaignID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.InsertCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.InsertCommand.Connection = this.Connection;
+            this._adapter.InsertCommand.CommandText = @"INSERT INTO [Campaigns] ([CampaignID], [CampaignName], [DirectorName], [ClientName], [ClientContact], [TypeOfCampaign], [Budget], [StartTime], [EndTime], [InNegotiation]) VALUES (@CampaignID, @CampaignName, @DirectorName, @ClientName, @ClientContact, @TypeOfCampaign, @Budget, @StartTime, @EndTime, @InNegotiation)";
+            this._adapter.InsertCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "CampaignName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@DirectorName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "DirectorName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ClientName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ClientName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ClientContact", System.Data.SqlDbType.Decimal, 0, System.Data.ParameterDirection.Input, 18, 0, "ClientContact", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@TypeOfCampaign", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "TypeOfCampaign", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Budget", System.Data.SqlDbType.Money, 0, System.Data.ParameterDirection.Input, 0, 0, "Budget", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@StartTime", System.Data.SqlDbType.SmallDateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "StartTime", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@EndTime", System.Data.SqlDbType.SmallDateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "EndTime", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@InNegotiation", System.Data.SqlDbType.Bit, 0, System.Data.ParameterDirection.Input, 0, 0, "InNegotiation", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.UpdateCommand.Connection = this.Connection;
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [Campaigns] SET [CampaignID] = @CampaignID, [CampaignName] = @CampaignName, [DirectorName] = @DirectorName, [ClientName] = @ClientName, [ClientContact] = @ClientContact, [TypeOfCampaign] = @TypeOfCampaign, [Budget] = @Budget, [StartTime] = @StartTime, [EndTime] = @EndTime, [InNegotiation] = @InNegotiation WHERE (([CampaignID] = @Original_CampaignID))";
+            this._adapter.UpdateCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "CampaignName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@DirectorName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "DirectorName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ClientName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "ClientName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@ClientContact", System.Data.SqlDbType.Decimal, 0, System.Data.ParameterDirection.Input, 18, 0, "ClientContact", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@TypeOfCampaign", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "TypeOfCampaign", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Budget", System.Data.SqlDbType.Money, 0, System.Data.ParameterDirection.Input, 0, 0, "Budget", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@StartTime", System.Data.SqlDbType.SmallDateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "StartTime", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@EndTime", System.Data.SqlDbType.SmallDateTime, 0, System.Data.ParameterDirection.Input, 0, 0, "EndTime", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@InNegotiation", System.Data.SqlDbType.Bit, 0, System.Data.ParameterDirection.Input, 0, 0, "InNegotiation", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_CampaignID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -741,12 +848,18 @@ namespace AdvertConsultant.DataSets.CampaignTableAdapters {
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection = new System.Data.SqlClient.SqlCommand[2];
             this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT CampaignName, DirectorName, ClientName, TypeOfCampaign, Budget, StartTime," +
-                " \r\n      EndTime, InNegotiation\r\nFROM Campaigns";
+            this._commandCollection[0].CommandText = "SELECT     Campaigns.*\r\nFROM         Campaigns";
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT     CampaignID, CampaignName, DirectorName, ClientName, ClientContact, Typ" +
+                "eOfCampaign, Budget, StartTime, EndTime, InNegotiation\r\nFROM         Campaigns\r\n" +
+                "WHERE     (CampaignID = @CampaignID)";
+            this._commandCollection[1].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -757,6 +870,174 @@ namespace AdvertConsultant.DataSets.CampaignTableAdapters {
             Campaign.CampaignsDataTable dataTable = new Campaign.CampaignsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual Campaign.CampaignsDataTable GetCampaignDataByID(int CampaignID) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(CampaignID));
+            Campaign.CampaignsDataTable dataTable = new Campaign.CampaignsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(Campaign.CampaignsDataTable dataTable) {
+            return this.Adapter.Update(dataTable);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(Campaign dataSet) {
+            return this.Adapter.Update(dataSet, "Campaigns");
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(System.Data.DataRow dataRow) {
+            return this.Adapter.Update(new System.Data.DataRow[] {
+                        dataRow});
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(System.Data.DataRow[] dataRows) {
+            return this.Adapter.Update(dataRows);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Delete, true)]
+        public virtual int Delete(int Original_CampaignID) {
+            this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_CampaignID));
+            System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
+            if (((this.Adapter.DeleteCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.DeleteCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.DeleteCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.DeleteCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Insert, true)]
+        public virtual int Insert(int CampaignID, string CampaignName, string DirectorName, string ClientName, System.Nullable<decimal> ClientContact, string TypeOfCampaign, decimal Budget, System.DateTime StartTime, System.DateTime EndTime, bool InNegotiation) {
+            this.Adapter.InsertCommand.Parameters[0].Value = ((int)(CampaignID));
+            if ((CampaignName == null)) {
+                throw new System.ArgumentNullException("CampaignName");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(CampaignName));
+            }
+            if ((DirectorName == null)) {
+                throw new System.ArgumentNullException("DirectorName");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[2].Value = ((string)(DirectorName));
+            }
+            if ((ClientName == null)) {
+                throw new System.ArgumentNullException("ClientName");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[3].Value = ((string)(ClientName));
+            }
+            if ((ClientContact.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[4].Value = ((decimal)(ClientContact.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[4].Value = System.DBNull.Value;
+            }
+            if ((TypeOfCampaign == null)) {
+                throw new System.ArgumentNullException("TypeOfCampaign");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[5].Value = ((string)(TypeOfCampaign));
+            }
+            this.Adapter.InsertCommand.Parameters[6].Value = ((decimal)(Budget));
+            this.Adapter.InsertCommand.Parameters[7].Value = ((System.DateTime)(StartTime));
+            this.Adapter.InsertCommand.Parameters[8].Value = ((System.DateTime)(EndTime));
+            this.Adapter.InsertCommand.Parameters[9].Value = ((bool)(InNegotiation));
+            System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
+            if (((this.Adapter.InsertCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.InsertCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.InsertCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.InsertCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Update, true)]
+        public virtual int Update(/*int CampaignID, */string CampaignName, string DirectorName, string ClientName, System.Nullable<decimal> ClientContact, string TypeOfCampaign, decimal Budget, System.DateTime StartTime, System.DateTime EndTime, bool InNegotiation, int Original_CampaignID) {
+            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(Original_CampaignID));
+            if ((CampaignName == null)) {
+                throw new System.ArgumentNullException("CampaignName");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(CampaignName));
+            }
+            if ((DirectorName == null)) {
+                throw new System.ArgumentNullException("DirectorName");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((string)(DirectorName));
+            }
+            if ((ClientName == null)) {
+                throw new System.ArgumentNullException("ClientName");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(ClientName));
+            }
+            if ((ClientContact.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((decimal)(ClientContact.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[4].Value = System.DBNull.Value;
+            }
+            if ((TypeOfCampaign == null)) {
+                throw new System.ArgumentNullException("TypeOfCampaign");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[5].Value = ((string)(TypeOfCampaign));
+            }
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((decimal)(Budget));
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((System.DateTime)(StartTime));
+            this.Adapter.UpdateCommand.Parameters[8].Value = ((System.DateTime)(EndTime));
+            this.Adapter.UpdateCommand.Parameters[9].Value = ((bool)(InNegotiation));
+            this.Adapter.UpdateCommand.Parameters[10].Value = ((int)(Original_CampaignID));
+            System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
+            if (((this.Adapter.UpdateCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.UpdateCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.UpdateCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.UpdateCommand.Connection.Close();
+                }
+            }
         }
     }
 }

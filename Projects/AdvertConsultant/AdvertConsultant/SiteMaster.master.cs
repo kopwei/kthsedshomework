@@ -10,5 +10,4 @@ using System.Web.UI.HtmlControls;
 
 public partial class SiteMaster_master : System.Web.UI.MasterPage
 {
-
 }

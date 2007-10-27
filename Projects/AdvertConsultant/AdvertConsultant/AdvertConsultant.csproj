@@ -65,6 +65,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Staff.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Director\AssignmentOK.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>AssignmentOK.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\AssignmentOK.aspx.designer.cs">
+      <DependentUpon>AssignmentOK.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Director\CampaignDetail.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>CampaignDetail.aspx</DependentUpon>
@@ -85,6 +92,13 @@
     </Compile>
     <Compile Include="Director\NegotiationTemplate.aspx.designer.cs">
       <DependentUpon>NegotiationTemplate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\StaffDetail.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>StaffDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\StaffDetail.aspx.designer.cs">
+      <DependentUpon>StaffDetail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Director\ViewStaff.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -209,9 +223,11 @@
     <Content Include="SiteMaster.master" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Director\AssignmentOK.aspx" />
     <Content Include="Director\CampaignDetail.aspx" />
     <Content Include="Director\CampAndNeg.aspx" />
     <Content Include="Director\NegotiationTemplate.aspx" />
+    <Content Include="Director\StaffDetail.aspx" />
     <Content Include="Director\ViewStaff.aspx" />
     <Content Include="Governor\CampaignSummary.aspx" />
     <Content Include="Governor\NegotiationSummary.aspx" />

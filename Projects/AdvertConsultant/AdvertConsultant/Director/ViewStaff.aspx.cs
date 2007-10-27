@@ -15,7 +15,22 @@ namespace AdvertConsultant.Director
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            // The following code is used to switch the grid's data source while user changes the list
+            // index
+            if (0 == staffGroupList.SelectedIndex)
+            {
+                staffGridView.DataSourceID = "StaffDataSource";
+            }
+            if (1 == staffGroupList.SelectedIndex)
+            {
+                staffGridView.DataSourceID = "AvailableStaffData";
+            }
+        }
 
+        protected void staffGroupList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            //staffGridView.Upda
         }
     }
 }

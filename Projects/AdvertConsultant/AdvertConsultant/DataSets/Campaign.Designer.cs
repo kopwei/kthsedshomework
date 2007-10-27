@@ -25,6 +25,8 @@ namespace AdvertConsultant.DataSets {
         
         private CampaignsDataTable tableCampaigns;
         
+        private CampaignNamesDataTable tableCampaignNames;
+        
         private System.Data.SchemaSerializationMode _schemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -54,6 +56,9 @@ namespace AdvertConsultant.DataSets {
                 if ((ds.Tables["Campaigns"] != null)) {
                     base.Tables.Add(new CampaignsDataTable(ds.Tables["Campaigns"]));
                 }
+                if ((ds.Tables["CampaignNames"] != null)) {
+                    base.Tables.Add(new CampaignNamesDataTable(ds.Tables["CampaignNames"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -78,6 +83,15 @@ namespace AdvertConsultant.DataSets {
         public CampaignsDataTable Campaigns {
             get {
                 return this.tableCampaigns;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public CampaignNamesDataTable CampaignNames {
+            get {
+                return this.tableCampaignNames;
             }
         }
         
@@ -143,6 +157,9 @@ namespace AdvertConsultant.DataSets {
                 if ((ds.Tables["Campaigns"] != null)) {
                     base.Tables.Add(new CampaignsDataTable(ds.Tables["Campaigns"]));
                 }
+                if ((ds.Tables["CampaignNames"] != null)) {
+                    base.Tables.Add(new CampaignNamesDataTable(ds.Tables["CampaignNames"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -179,6 +196,12 @@ namespace AdvertConsultant.DataSets {
                     this.tableCampaigns.InitVars();
                 }
             }
+            this.tableCampaignNames = ((CampaignNamesDataTable)(base.Tables["CampaignNames"]));
+            if ((initTable == true)) {
+                if ((this.tableCampaignNames != null)) {
+                    this.tableCampaignNames.InitVars();
+                }
+            }
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -190,10 +213,17 @@ namespace AdvertConsultant.DataSets {
             this.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableCampaigns = new CampaignsDataTable();
             base.Tables.Add(this.tableCampaigns);
+            this.tableCampaignNames = new CampaignNamesDataTable();
+            base.Tables.Add(this.tableCampaignNames);
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private bool ShouldSerializeCampaigns() {
+            return false;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private bool ShouldSerializeCampaignNames() {
             return false;
         }
         
@@ -218,6 +248,8 @@ namespace AdvertConsultant.DataSets {
         }
         
         public delegate void CampaignsRowChangeEventHandler(object sender, CampaignsRowChangeEvent e);
+        
+        public delegate void CampaignNamesRowChangeEventHandler(object sender, CampaignNamesRowChangeEvent e);
         
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
         [System.Serializable()]
@@ -550,6 +582,199 @@ namespace AdvertConsultant.DataSets {
         }
         
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        [System.Serializable()]
+        [System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class CampaignNamesDataTable : System.Data.DataTable, System.Collections.IEnumerable {
+            
+            private System.Data.DataColumn columnCampaignName;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public CampaignNamesDataTable() {
+                this.TableName = "CampaignNames";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal CampaignNamesDataTable(System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected CampaignNamesDataTable(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn CampaignNameColumn {
+                get {
+                    return this.columnCampaignName;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public CampaignNamesRow this[int index] {
+                get {
+                    return ((CampaignNamesRow)(this.Rows[index]));
+                }
+            }
+            
+            public event CampaignNamesRowChangeEventHandler CampaignNamesRowChanging;
+            
+            public event CampaignNamesRowChangeEventHandler CampaignNamesRowChanged;
+            
+            public event CampaignNamesRowChangeEventHandler CampaignNamesRowDeleting;
+            
+            public event CampaignNamesRowChangeEventHandler CampaignNamesRowDeleted;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void AddCampaignNamesRow(CampaignNamesRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public CampaignNamesRow AddCampaignNamesRow(string CampaignName) {
+                CampaignNamesRow rowCampaignNamesRow = ((CampaignNamesRow)(this.NewRow()));
+                rowCampaignNamesRow.ItemArray = new object[] {
+                        CampaignName};
+                this.Rows.Add(rowCampaignNamesRow);
+                return rowCampaignNamesRow;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public virtual System.Collections.IEnumerator GetEnumerator() {
+                return this.Rows.GetEnumerator();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public override System.Data.DataTable Clone() {
+                CampaignNamesDataTable cln = ((CampaignNamesDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Data.DataTable CreateInstance() {
+                return new CampaignNamesDataTable();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal void InitVars() {
+                this.columnCampaignName = base.Columns["CampaignName"];
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            private void InitClass() {
+                this.columnCampaignName = new System.Data.DataColumn("CampaignName", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCampaignName);
+                this.columnCampaignName.AllowDBNull = false;
+                this.columnCampaignName.MaxLength = 50;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public CampaignNamesRow NewCampaignNamesRow() {
+                return ((CampaignNamesRow)(this.NewRow()));
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Data.DataRow NewRowFromBuilder(System.Data.DataRowBuilder builder) {
+                return new CampaignNamesRow(builder);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Type GetRowType() {
+                return typeof(CampaignNamesRow);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanged(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.CampaignNamesRowChanged != null)) {
+                    this.CampaignNamesRowChanged(this, new CampaignNamesRowChangeEvent(((CampaignNamesRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanging(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.CampaignNamesRowChanging != null)) {
+                    this.CampaignNamesRowChanging(this, new CampaignNamesRowChangeEvent(((CampaignNamesRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleted(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.CampaignNamesRowDeleted != null)) {
+                    this.CampaignNamesRowDeleted(this, new CampaignNamesRowChangeEvent(((CampaignNamesRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleting(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.CampaignNamesRowDeleting != null)) {
+                    this.CampaignNamesRowDeleting(this, new CampaignNamesRowChangeEvent(((CampaignNamesRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void RemoveCampaignNamesRow(CampaignNamesRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public static System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(System.Xml.Schema.XmlSchemaSet xs) {
+                System.Xml.Schema.XmlSchemaComplexType type = new System.Xml.Schema.XmlSchemaComplexType();
+                System.Xml.Schema.XmlSchemaSequence sequence = new System.Xml.Schema.XmlSchemaSequence();
+                Campaign ds = new Campaign();
+                xs.Add(ds.GetSchemaSerializable());
+                System.Xml.Schema.XmlSchemaAny any1 = new System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                System.Xml.Schema.XmlSchemaAny any2 = new System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                System.Xml.Schema.XmlSchemaAttribute attribute1 = new System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                System.Xml.Schema.XmlSchemaAttribute attribute2 = new System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "CampaignNamesDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                return type;
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
         public partial class CampaignsRow : System.Data.DataRow {
             
             private CampaignsDataTable tableCampaigns;
@@ -677,6 +902,28 @@ namespace AdvertConsultant.DataSets {
         }
         
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public partial class CampaignNamesRow : System.Data.DataRow {
+            
+            private CampaignNamesDataTable tableCampaignNames;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal CampaignNamesRow(System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableCampaignNames = ((CampaignNamesDataTable)(this.Table));
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string CampaignName {
+                get {
+                    return ((string)(this[this.tableCampaignNames.CampaignNameColumn]));
+                }
+                set {
+                    this[this.tableCampaignNames.CampaignNameColumn] = value;
+                }
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
         public class CampaignsRowChangeEvent : System.EventArgs {
             
             private CampaignsRow eventRow;
@@ -691,6 +938,34 @@ namespace AdvertConsultant.DataSets {
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public CampaignsRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public class CampaignNamesRowChangeEvent : System.EventArgs {
+            
+            private CampaignNamesRow eventRow;
+            
+            private System.Data.DataRowAction eventAction;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public CampaignNamesRowChangeEvent(CampaignNamesRow row, System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public CampaignNamesRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -987,8 +1262,8 @@ namespace AdvertConsultant.DataSets.CampaignTableAdapters {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(/*int CampaignID, */string CampaignName, string DirectorName, string ClientName, System.Nullable<decimal> ClientContact, string TypeOfCampaign, decimal Budget, System.DateTime StartTime, System.DateTime EndTime, bool InNegotiation, int Original_CampaignID) {
-            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(Original_CampaignID));
+        public virtual int Update(int CampaignID, string CampaignName, string DirectorName, string ClientName, System.Nullable<decimal> ClientContact, string TypeOfCampaign, decimal Budget, System.DateTime StartTime, System.DateTime EndTime, bool InNegotiation, int Original_CampaignID) {
+            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(CampaignID));
             if ((CampaignName == null)) {
                 throw new System.ArgumentNullException("CampaignName");
             }
@@ -1038,6 +1313,135 @@ namespace AdvertConsultant.DataSets.CampaignTableAdapters {
                     this.Adapter.UpdateCommand.Connection.Close();
                 }
             }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.ComponentModel.ToolboxItem(true)]
+    [System.ComponentModel.DataObjectAttribute(true)]
+    [System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class CampaignNamesTableAdapter : System.ComponentModel.Component {
+        
+        private System.Data.SqlClient.SqlDataAdapter _adapter;
+        
+        private System.Data.SqlClient.SqlConnection _connection;
+        
+        private System.Data.SqlClient.SqlCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public CampaignNamesTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private System.Data.SqlClient.SqlDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        internal System.Data.SqlClient.SqlConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        protected System.Data.SqlClient.SqlCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitAdapter() {
+            this._adapter = new System.Data.SqlClient.SqlDataAdapter();
+            System.Data.Common.DataTableMapping tableMapping = new System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "CampaignNames";
+            tableMapping.ColumnMappings.Add("CampaignName", "CampaignName");
+            this._adapter.TableMappings.Add(tableMapping);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitConnection() {
+            this._connection = new System.Data.SqlClient.SqlConnection();
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitCommandCollection() {
+            this._commandCollection = new System.Data.SqlClient.SqlCommand[2];
+            this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = "SELECT CampaignName FROM Campaigns";
+            this._commandCollection[0].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT CampaignName FROM Campaigns\r\nWHERE (InNegotiation = 0)";
+            this._commandCollection[1].CommandType = System.Data.CommandType.Text;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual Campaign.CampaignNamesDataTable GetCampaignNames() {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            Campaign.CampaignNamesDataTable dataTable = new Campaign.CampaignNamesDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual Campaign.CampaignNamesDataTable GetCampaignNamesByState() {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            Campaign.CampaignNamesDataTable dataTable = new Campaign.CampaignNamesDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
         }
     }
 }

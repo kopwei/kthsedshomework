@@ -52,6 +52,8 @@
                                             Value="Campaign and Negotiation"></asp:TreeNode>
                                         <asp:TreeNode NavigateUrl="~/Director/NegotiationTemplate.aspx" Text="Negotiation Form"
                                             Value="Negotiation Form"></asp:TreeNode>
+                                        <asp:TreeNode NavigateUrl="~/Director/ViewStaff.aspx" Text="StaffInfo" Value="StaffInfo">
+                                        </asp:TreeNode>
                                     </asp:TreeNode>
                                     <asp:TreeNode Text="Staff Views" Value="Staff Views" SelectAction="Expand">
                                         <asp:TreeNode NavigateUrl="~/Staff/StaffView.aspx" Text="Info View" Value="Info View">

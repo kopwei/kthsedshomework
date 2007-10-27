@@ -25,6 +25,8 @@ namespace AdvertConsultant.DataSets {
         
         private StaffsDataTable tableStaffs;
         
+        private StaffNameDataTable tableStaffName;
+        
         private System.Data.SchemaSerializationMode _schemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -54,6 +56,9 @@ namespace AdvertConsultant.DataSets {
                 if ((ds.Tables["Staffs"] != null)) {
                     base.Tables.Add(new StaffsDataTable(ds.Tables["Staffs"]));
                 }
+                if ((ds.Tables["StaffName"] != null)) {
+                    base.Tables.Add(new StaffNameDataTable(ds.Tables["StaffName"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -78,6 +83,15 @@ namespace AdvertConsultant.DataSets {
         public StaffsDataTable Staffs {
             get {
                 return this.tableStaffs;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Browsable(false)]
+        [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Content)]
+        public StaffNameDataTable StaffName {
+            get {
+                return this.tableStaffName;
             }
         }
         
@@ -143,6 +157,9 @@ namespace AdvertConsultant.DataSets {
                 if ((ds.Tables["Staffs"] != null)) {
                     base.Tables.Add(new StaffsDataTable(ds.Tables["Staffs"]));
                 }
+                if ((ds.Tables["StaffName"] != null)) {
+                    base.Tables.Add(new StaffNameDataTable(ds.Tables["StaffName"]));
+                }
                 this.DataSetName = ds.DataSetName;
                 this.Prefix = ds.Prefix;
                 this.Namespace = ds.Namespace;
@@ -179,6 +196,12 @@ namespace AdvertConsultant.DataSets {
                     this.tableStaffs.InitVars();
                 }
             }
+            this.tableStaffName = ((StaffNameDataTable)(base.Tables["StaffName"]));
+            if ((initTable == true)) {
+                if ((this.tableStaffName != null)) {
+                    this.tableStaffName.InitVars();
+                }
+            }
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -190,10 +213,17 @@ namespace AdvertConsultant.DataSets {
             this.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             this.tableStaffs = new StaffsDataTable();
             base.Tables.Add(this.tableStaffs);
+            this.tableStaffName = new StaffNameDataTable();
+            base.Tables.Add(this.tableStaffName);
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private bool ShouldSerializeStaffs() {
+            return false;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private bool ShouldSerializeStaffName() {
             return false;
         }
         
@@ -219,12 +249,22 @@ namespace AdvertConsultant.DataSets {
         
         public delegate void StaffsRowChangeEventHandler(object sender, StaffsRowChangeEvent e);
         
+        public delegate void StaffNameRowChangeEventHandler(object sender, StaffNameRowChangeEvent e);
+        
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
         [System.Serializable()]
         [System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
         public partial class StaffsDataTable : System.Data.DataTable, System.Collections.IEnumerable {
             
+            private System.Data.DataColumn columnStaffID;
+            
             private System.Data.DataColumn columnName;
+            
+            private System.Data.DataColumn columnCampaignID;
+            
+            private System.Data.DataColumn columnOutofOfficeHour;
+            
+            private System.Data.DataColumn columnDepartmentName;
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public StaffsDataTable() {
@@ -257,9 +297,37 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn StaffIDColumn {
+                get {
+                    return this.columnStaffID;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public System.Data.DataColumn NameColumn {
                 get {
                     return this.columnName;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn CampaignIDColumn {
+                get {
+                    return this.columnCampaignID;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn OutofOfficeHourColumn {
+                get {
+                    return this.columnOutofOfficeHour;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn DepartmentNameColumn {
+                get {
+                    return this.columnDepartmentName;
                 }
             }
             
@@ -292,12 +360,22 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public StaffsRow AddStaffsRow(string Name) {
+            public StaffsRow AddStaffsRow(int StaffID, string Name, int CampaignID, int OutofOfficeHour, string DepartmentName) {
                 StaffsRow rowStaffsRow = ((StaffsRow)(this.NewRow()));
                 rowStaffsRow.ItemArray = new object[] {
-                        Name};
+                        StaffID,
+                        Name,
+                        CampaignID,
+                        OutofOfficeHour,
+                        DepartmentName};
                 this.Rows.Add(rowStaffsRow);
                 return rowStaffsRow;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public StaffsRow FindByStaffID(int StaffID) {
+                return ((StaffsRow)(this.Rows.Find(new object[] {
+                            StaffID})));
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -319,15 +397,33 @@ namespace AdvertConsultant.DataSets {
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             internal void InitVars() {
+                this.columnStaffID = base.Columns["StaffID"];
                 this.columnName = base.Columns["Name"];
+                this.columnCampaignID = base.Columns["CampaignID"];
+                this.columnOutofOfficeHour = base.Columns["OutofOfficeHour"];
+                this.columnDepartmentName = base.Columns["DepartmentName"];
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             private void InitClass() {
+                this.columnStaffID = new System.Data.DataColumn("StaffID", typeof(int), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnStaffID);
                 this.columnName = new System.Data.DataColumn("Name", typeof(string), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnName);
+                this.columnCampaignID = new System.Data.DataColumn("CampaignID", typeof(int), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCampaignID);
+                this.columnOutofOfficeHour = new System.Data.DataColumn("OutofOfficeHour", typeof(int), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOutofOfficeHour);
+                this.columnDepartmentName = new System.Data.DataColumn("DepartmentName", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDepartmentName);
+                this.Constraints.Add(new System.Data.UniqueConstraint("Constraint1", new System.Data.DataColumn[] {
+                                this.columnStaffID}, true));
+                this.columnStaffID.AllowDBNull = false;
+                this.columnStaffID.Unique = true;
                 this.columnName.AllowDBNull = false;
                 this.columnName.MaxLength = 50;
+                this.columnOutofOfficeHour.AllowDBNull = false;
+                this.columnDepartmentName.MaxLength = 50;
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -413,6 +509,199 @@ namespace AdvertConsultant.DataSets {
         }
         
         [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        [System.Serializable()]
+        [System.Xml.Serialization.XmlSchemaProviderAttribute("GetTypedTableSchema")]
+        public partial class StaffNameDataTable : System.Data.DataTable, System.Collections.IEnumerable {
+            
+            private System.Data.DataColumn columnName;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public StaffNameDataTable() {
+                this.TableName = "StaffName";
+                this.BeginInit();
+                this.InitClass();
+                this.EndInit();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal StaffNameDataTable(System.Data.DataTable table) {
+                this.TableName = table.TableName;
+                if ((table.CaseSensitive != table.DataSet.CaseSensitive)) {
+                    this.CaseSensitive = table.CaseSensitive;
+                }
+                if ((table.Locale.ToString() != table.DataSet.Locale.ToString())) {
+                    this.Locale = table.Locale;
+                }
+                if ((table.Namespace != table.DataSet.Namespace)) {
+                    this.Namespace = table.Namespace;
+                }
+                this.Prefix = table.Prefix;
+                this.MinimumCapacity = table.MinimumCapacity;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected StaffNameDataTable(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : 
+                    base(info, context) {
+                this.InitVars();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn NameColumn {
+                get {
+                    return this.columnName;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [System.ComponentModel.Browsable(false)]
+            public int Count {
+                get {
+                    return this.Rows.Count;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public StaffNameRow this[int index] {
+                get {
+                    return ((StaffNameRow)(this.Rows[index]));
+                }
+            }
+            
+            public event StaffNameRowChangeEventHandler StaffNameRowChanging;
+            
+            public event StaffNameRowChangeEventHandler StaffNameRowChanged;
+            
+            public event StaffNameRowChangeEventHandler StaffNameRowDeleting;
+            
+            public event StaffNameRowChangeEventHandler StaffNameRowDeleted;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void AddStaffNameRow(StaffNameRow row) {
+                this.Rows.Add(row);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public StaffNameRow AddStaffNameRow(string Name) {
+                StaffNameRow rowStaffNameRow = ((StaffNameRow)(this.NewRow()));
+                rowStaffNameRow.ItemArray = new object[] {
+                        Name};
+                this.Rows.Add(rowStaffNameRow);
+                return rowStaffNameRow;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public virtual System.Collections.IEnumerator GetEnumerator() {
+                return this.Rows.GetEnumerator();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public override System.Data.DataTable Clone() {
+                StaffNameDataTable cln = ((StaffNameDataTable)(base.Clone()));
+                cln.InitVars();
+                return cln;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Data.DataTable CreateInstance() {
+                return new StaffNameDataTable();
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal void InitVars() {
+                this.columnName = base.Columns["Name"];
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            private void InitClass() {
+                this.columnName = new System.Data.DataColumn("Name", typeof(string), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnName);
+                this.columnName.AllowDBNull = false;
+                this.columnName.MaxLength = 50;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public StaffNameRow NewStaffNameRow() {
+                return ((StaffNameRow)(this.NewRow()));
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Data.DataRow NewRowFromBuilder(System.Data.DataRowBuilder builder) {
+                return new StaffNameRow(builder);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override System.Type GetRowType() {
+                return typeof(StaffNameRow);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanged(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanged(e);
+                if ((this.StaffNameRowChanged != null)) {
+                    this.StaffNameRowChanged(this, new StaffNameRowChangeEvent(((StaffNameRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowChanging(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowChanging(e);
+                if ((this.StaffNameRowChanging != null)) {
+                    this.StaffNameRowChanging(this, new StaffNameRowChangeEvent(((StaffNameRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleted(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleted(e);
+                if ((this.StaffNameRowDeleted != null)) {
+                    this.StaffNameRowDeleted(this, new StaffNameRowChangeEvent(((StaffNameRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            protected override void OnRowDeleting(System.Data.DataRowChangeEventArgs e) {
+                base.OnRowDeleting(e);
+                if ((this.StaffNameRowDeleting != null)) {
+                    this.StaffNameRowDeleting(this, new StaffNameRowChangeEvent(((StaffNameRow)(e.Row)), e.Action));
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void RemoveStaffNameRow(StaffNameRow row) {
+                this.Rows.Remove(row);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public static System.Xml.Schema.XmlSchemaComplexType GetTypedTableSchema(System.Xml.Schema.XmlSchemaSet xs) {
+                System.Xml.Schema.XmlSchemaComplexType type = new System.Xml.Schema.XmlSchemaComplexType();
+                System.Xml.Schema.XmlSchemaSequence sequence = new System.Xml.Schema.XmlSchemaSequence();
+                Staff ds = new Staff();
+                xs.Add(ds.GetSchemaSerializable());
+                System.Xml.Schema.XmlSchemaAny any1 = new System.Xml.Schema.XmlSchemaAny();
+                any1.Namespace = "http://www.w3.org/2001/XMLSchema";
+                any1.MinOccurs = new decimal(0);
+                any1.MaxOccurs = decimal.MaxValue;
+                any1.ProcessContents = System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any1);
+                System.Xml.Schema.XmlSchemaAny any2 = new System.Xml.Schema.XmlSchemaAny();
+                any2.Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1";
+                any2.MinOccurs = new decimal(1);
+                any2.ProcessContents = System.Xml.Schema.XmlSchemaContentProcessing.Lax;
+                sequence.Items.Add(any2);
+                System.Xml.Schema.XmlSchemaAttribute attribute1 = new System.Xml.Schema.XmlSchemaAttribute();
+                attribute1.Name = "namespace";
+                attribute1.FixedValue = ds.Namespace;
+                type.Attributes.Add(attribute1);
+                System.Xml.Schema.XmlSchemaAttribute attribute2 = new System.Xml.Schema.XmlSchemaAttribute();
+                attribute2.Name = "tableTypeName";
+                attribute2.FixedValue = "StaffNameDataTable";
+                type.Attributes.Add(attribute2);
+                type.Particle = sequence;
+                return type;
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
         public partial class StaffsRow : System.Data.DataRow {
             
             private StaffsDataTable tableStaffs;
@@ -424,12 +713,104 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int StaffID {
+                get {
+                    return ((int)(this[this.tableStaffs.StaffIDColumn]));
+                }
+                set {
+                    this[this.tableStaffs.StaffIDColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public string Name {
                 get {
                     return ((string)(this[this.tableStaffs.NameColumn]));
                 }
                 set {
                     this[this.tableStaffs.NameColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int CampaignID {
+                get {
+                    try {
+                        return ((int)(this[this.tableStaffs.CampaignIDColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'CampaignID\' in table \'Staffs\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableStaffs.CampaignIDColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public int OutofOfficeHour {
+                get {
+                    return ((int)(this[this.tableStaffs.OutofOfficeHourColumn]));
+                }
+                set {
+                    this[this.tableStaffs.OutofOfficeHourColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string DepartmentName {
+                get {
+                    try {
+                        return ((string)(this[this.tableStaffs.DepartmentNameColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'DepartmentName\' in table \'Staffs\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableStaffs.DepartmentNameColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsCampaignIDNull() {
+                return this.IsNull(this.tableStaffs.CampaignIDColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetCampaignIDNull() {
+                this[this.tableStaffs.CampaignIDColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsDepartmentNameNull() {
+                return this.IsNull(this.tableStaffs.DepartmentNameColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetDepartmentNameNull() {
+                this[this.tableStaffs.DepartmentNameColumn] = System.Convert.DBNull;
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public partial class StaffNameRow : System.Data.DataRow {
+            
+            private StaffNameDataTable tableStaffName;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            internal StaffNameRow(System.Data.DataRowBuilder rb) : 
+                    base(rb) {
+                this.tableStaffName = ((StaffNameDataTable)(this.Table));
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public string Name {
+                get {
+                    return ((string)(this[this.tableStaffName.NameColumn]));
+                }
+                set {
+                    this[this.tableStaffName.NameColumn] = value;
                 }
             }
         }
@@ -449,6 +830,34 @@ namespace AdvertConsultant.DataSets {
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public StaffsRow Row {
+                get {
+                    return this.eventRow;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataRowAction Action {
+                get {
+                    return this.eventAction;
+                }
+            }
+        }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+        public class StaffNameRowChangeEvent : System.EventArgs {
+            
+            private StaffNameRow eventRow;
+            
+            private System.Data.DataRowAction eventAction;
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public StaffNameRowChangeEvent(StaffNameRow row, System.Data.DataRowAction action) {
+                this.eventRow = row;
+                this.eventAction = action;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public StaffNameRow Row {
                 get {
                     return this.eventRow;
                 }
@@ -551,6 +960,312 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
             System.Data.Common.DataTableMapping tableMapping = new System.Data.Common.DataTableMapping();
             tableMapping.SourceTable = "Table";
             tableMapping.DataSetTable = "Staffs";
+            tableMapping.ColumnMappings.Add("StaffID", "StaffID");
+            tableMapping.ColumnMappings.Add("Name", "Name");
+            tableMapping.ColumnMappings.Add("CampaignID", "CampaignID");
+            tableMapping.ColumnMappings.Add("OutofOfficeHour", "OutofOfficeHour");
+            tableMapping.ColumnMappings.Add("DepartmentName", "DepartmentName");
+            this._adapter.TableMappings.Add(tableMapping);
+            this._adapter.DeleteCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.DeleteCommand.Connection = this.Connection;
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [Staffs] WHERE (([StaffID] = @Original_StaffID))";
+            this._adapter.DeleteCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.DeleteCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_StaffID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.InsertCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.InsertCommand.Connection = this.Connection;
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [Staffs] ([StaffID], [Name], [CampaignID], [OutofOfficeHour], [Depart" +
+                "mentName]) VALUES (@StaffID, @Name, @CampaignID, @OutofOfficeHour, @DepartmentNa" +
+                "me)";
+            this._adapter.InsertCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@StaffID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Name", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "Name", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@OutofOfficeHour", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "OutofOfficeHour", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@DepartmentName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "DepartmentName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand = new System.Data.SqlClient.SqlCommand();
+            this._adapter.UpdateCommand.Connection = this.Connection;
+            this._adapter.UpdateCommand.CommandText = "UPDATE [Staffs] SET [StaffID] = @StaffID, [Name] = @Name, [CampaignID] = @Campaig" +
+                "nID, [OutofOfficeHour] = @OutofOfficeHour, [DepartmentName] = @DepartmentName WH" +
+                "ERE (([StaffID] = @Original_StaffID))";
+            this._adapter.UpdateCommand.CommandType = System.Data.CommandType.Text;
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@StaffID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Name", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "Name", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@OutofOfficeHour", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "OutofOfficeHour", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@DepartmentName", System.Data.SqlDbType.NVarChar, 0, System.Data.ParameterDirection.Input, 0, 0, "DepartmentName", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new System.Data.SqlClient.SqlParameter("@Original_StaffID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Original, false, null, "", "", ""));
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitConnection() {
+            this._connection = new System.Data.SqlClient.SqlConnection();
+            this._connection.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitCommandCollection() {
+            this._commandCollection = new System.Data.SqlClient.SqlCommand[3];
+            this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[0].Connection = this.Connection;
+            this._commandCollection[0].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName FROM Staffs";
+            this._commandCollection[0].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName FROM Staffs WHE" +
+                "RE (StaffID = @StaffID)";
+            this._commandCollection[1].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new System.Data.SqlClient.SqlParameter("@StaffID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "SELECT     StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName\r\nFROM      " +
+                "   Staffs\r\nWHERE     (CampaignID IS NULL)";
+            this._commandCollection[2].CommandType = System.Data.CommandType.Text;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, true)]
+        public virtual Staff.StaffsDataTable GetAllStaffData() {
+            this.Adapter.SelectCommand = this.CommandCollection[0];
+            Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual Staff.StaffsDataTable GetStaffDataByID(int StaffID) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(StaffID));
+            Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual Staff.StaffsDataTable GetAvailableStaff() {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
+            Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(Staff.StaffsDataTable dataTable) {
+            return this.Adapter.Update(dataTable);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(Staff dataSet) {
+            return this.Adapter.Update(dataSet, "Staffs");
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(System.Data.DataRow dataRow) {
+            return this.Adapter.Update(new System.Data.DataRow[] {
+                        dataRow});
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        public virtual int Update(System.Data.DataRow[] dataRows) {
+            return this.Adapter.Update(dataRows);
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Delete, true)]
+        public virtual int Delete(int Original_StaffID) {
+            this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_StaffID));
+            System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
+            if (((this.Adapter.DeleteCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.DeleteCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.DeleteCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.DeleteCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Insert, true)]
+        public virtual int Insert(int StaffID, string Name, System.Nullable<int> CampaignID, int OutofOfficeHour, string DepartmentName) {
+            this.Adapter.InsertCommand.Parameters[0].Value = ((int)(StaffID));
+            if ((Name == null)) {
+                throw new System.ArgumentNullException("Name");
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[1].Value = ((string)(Name));
+            }
+            if ((CampaignID.HasValue == true)) {
+                this.Adapter.InsertCommand.Parameters[2].Value = ((int)(CampaignID.Value));
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[2].Value = System.DBNull.Value;
+            }
+            this.Adapter.InsertCommand.Parameters[3].Value = ((int)(OutofOfficeHour));
+            if ((DepartmentName == null)) {
+                this.Adapter.InsertCommand.Parameters[4].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.InsertCommand.Parameters[4].Value = ((string)(DepartmentName));
+            }
+            System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
+            if (((this.Adapter.InsertCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.InsertCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.InsertCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.InsertCommand.Connection.Close();
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Update, true)]
+        public virtual int Update(int StaffID, string Name, System.Nullable<int> CampaignID, int OutofOfficeHour, string DepartmentName, int Original_StaffID) {
+            this.Adapter.UpdateCommand.Parameters[0].Value = ((int)(StaffID));
+            if ((Name == null)) {
+                throw new System.ArgumentNullException("Name");
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[1].Value = ((string)(Name));
+            }
+            if ((CampaignID.HasValue == true)) {
+                this.Adapter.UpdateCommand.Parameters[2].Value = ((int)(CampaignID.Value));
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[2].Value = System.DBNull.Value;
+            }
+            this.Adapter.UpdateCommand.Parameters[3].Value = ((int)(OutofOfficeHour));
+            if ((DepartmentName == null)) {
+                this.Adapter.UpdateCommand.Parameters[4].Value = System.DBNull.Value;
+            }
+            else {
+                this.Adapter.UpdateCommand.Parameters[4].Value = ((string)(DepartmentName));
+            }
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Original_StaffID));
+            System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
+            if (((this.Adapter.UpdateCommand.Connection.State & System.Data.ConnectionState.Open) 
+                        != System.Data.ConnectionState.Open)) {
+                this.Adapter.UpdateCommand.Connection.Open();
+            }
+            try {
+                int returnValue = this.Adapter.UpdateCommand.ExecuteNonQuery();
+                return returnValue;
+            }
+            finally {
+                if ((previousConnectionState == System.Data.ConnectionState.Closed)) {
+                    this.Adapter.UpdateCommand.Connection.Close();
+                }
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "2.0.0.0")]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.ComponentModel.ToolboxItem(true)]
+    [System.ComponentModel.DataObjectAttribute(true)]
+    [System.ComponentModel.DesignerAttribute("Microsoft.VSDesigner.DataSource.Design.TableAdapterDesigner, Microsoft.VSDesigner" +
+        ", Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+    public partial class StaffNameTableAdapter : System.ComponentModel.Component {
+        
+        private System.Data.SqlClient.SqlDataAdapter _adapter;
+        
+        private System.Data.SqlClient.SqlConnection _connection;
+        
+        private System.Data.SqlClient.SqlCommand[] _commandCollection;
+        
+        private bool _clearBeforeFill;
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public StaffNameTableAdapter() {
+            this.ClearBeforeFill = true;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private System.Data.SqlClient.SqlDataAdapter Adapter {
+            get {
+                if ((this._adapter == null)) {
+                    this.InitAdapter();
+                }
+                return this._adapter;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        internal System.Data.SqlClient.SqlConnection Connection {
+            get {
+                if ((this._connection == null)) {
+                    this.InitConnection();
+                }
+                return this._connection;
+            }
+            set {
+                this._connection = value;
+                if ((this.Adapter.InsertCommand != null)) {
+                    this.Adapter.InsertCommand.Connection = value;
+                }
+                if ((this.Adapter.DeleteCommand != null)) {
+                    this.Adapter.DeleteCommand.Connection = value;
+                }
+                if ((this.Adapter.UpdateCommand != null)) {
+                    this.Adapter.UpdateCommand.Connection = value;
+                }
+                for (int i = 0; (i < this.CommandCollection.Length); i = (i + 1)) {
+                    if ((this.CommandCollection[i] != null)) {
+                        ((System.Data.SqlClient.SqlCommand)(this.CommandCollection[i])).Connection = value;
+                    }
+                }
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        protected System.Data.SqlClient.SqlCommand[] CommandCollection {
+            get {
+                if ((this._commandCollection == null)) {
+                    this.InitCommandCollection();
+                }
+                return this._commandCollection;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public bool ClearBeforeFill {
+            get {
+                return this._clearBeforeFill;
+            }
+            set {
+                this._clearBeforeFill = value;
+            }
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        private void InitAdapter() {
+            this._adapter = new System.Data.SqlClient.SqlDataAdapter();
+            System.Data.Common.DataTableMapping tableMapping = new System.Data.Common.DataTableMapping();
+            tableMapping.SourceTable = "Table";
+            tableMapping.DataSetTable = "StaffName";
             tableMapping.ColumnMappings.Add("Name", "Name");
             this._adapter.TableMappings.Add(tableMapping);
         }
@@ -566,7 +1281,7 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
             this._commandCollection = new System.Data.SqlClient.SqlCommand[1];
             this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT     Name\r\nFROM         Staffs\r\nWHERE     (CampaignID = @CampaignID)";
+            this._commandCollection[0].CommandText = "SELECT Name FROM Staffs\r\nWHERE (CampaignID = @CampaignID)";
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
             this._commandCollection[0].Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
@@ -574,7 +1289,7 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual Staff.StaffsDataTable GetStaffNameByCampaignID(System.Nullable<int> CampaignID) {
+        public virtual Staff.StaffNameDataTable GetStaffNameByCampaign(System.Nullable<int> CampaignID) {
             this.Adapter.SelectCommand = this.CommandCollection[0];
             if ((CampaignID.HasValue == true)) {
                 this.Adapter.SelectCommand.Parameters[0].Value = ((int)(CampaignID.Value));
@@ -582,7 +1297,7 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
             else {
                 this.Adapter.SelectCommand.Parameters[0].Value = System.DBNull.Value;
             }
-            Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
+            Staff.StaffNameDataTable dataTable = new Staff.StaffNameDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
         }

@@ -18,5 +18,41 @@ namespace AdvertConsultant.Director {
     /// Auto-generated class.
     /// </remarks>
     public partial class ViewStaff {
+        
+        /// <summary>
+        /// staffGroupList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList staffGroupList;
+        
+        /// <summary>
+        /// staffGridView control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView staffGridView;
+        
+        /// <summary>
+        /// StaffDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource StaffDataSource;
+        
+        /// <summary>
+        /// AvailableStaffData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource AvailableStaffData;
     }
 }

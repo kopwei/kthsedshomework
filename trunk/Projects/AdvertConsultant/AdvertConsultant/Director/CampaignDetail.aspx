@@ -65,7 +65,7 @@
     <asp:ListBox ID="ListBox1" runat="server" DataSourceID="CampaignStaffDataSource"
         DataTextField="Name" DataValueField="Name" Width="330px"></asp:ListBox>
     <asp:ObjectDataSource ID="CampaignStaffDataSource" runat="server" OldValuesParameterFormatString="original_{0}"
-        SelectMethod="GetStaffNameByCampaignID" TypeName="AdvertConsultant.DataSets.StaffTableAdapters.StaffsTableAdapter">
+        SelectMethod="GetStaffNameByCampaign" TypeName="AdvertConsultant.DataSets.StaffTableAdapters.StaffNameTableAdapter">
         <SelectParameters>
             <asp:QueryStringParameter Name="CampaignID" QueryStringField="CampaignID" Type="Int32" />
         </SelectParameters>

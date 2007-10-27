@@ -60,6 +60,7 @@
                                         </asp:TreeNode>
                                         <asp:TreeNode NavigateUrl="~/Staff/FillTimesheet.aspx" Text="Fill in Timesheet" Value="Fill in Timesheet">
                                         </asp:TreeNode>
+                                        <asp:TreeNode NavigateUrl="~/Staff/Schedule.aspx" Text="Schedule" Value="Schedule"></asp:TreeNode>
                                     </asp:TreeNode>
                                     <asp:TreeNode Text="Governor Views" Value="Governor Views" SelectAction="Expand">
                                         <asp:TreeNode NavigateUrl="~/Governor/CampaignSummary.aspx" Text="Campaigns Summary"

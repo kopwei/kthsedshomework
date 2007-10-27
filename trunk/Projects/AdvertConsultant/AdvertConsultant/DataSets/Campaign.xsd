@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Campaign" targetNamespace="http://tempuri.org/Campaign.xsd" xmlns:mstns="http://tempuri.org/Campaign.xsd" xmlns="http://tempuri.org/Campaign.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="ConnectionString" ConnectionStringObject="" IsAppSettingsProperty="True" Modifier="Assembly" Name="ConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.ConnectionString.ConnectionString" Provider="System.Data.SqlClient">
+          </Connection>
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="CampaignsTableAdapter" GeneratorDataComponentClassName="CampaignsTableAdapter" Name="Campaigns" UserDataComponentName="CampaignsTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="ConnectionString (Web.config)" DbObjectName="dbo.Campaigns" DbObjectType="Table" GenerateMethods="Get" GenerateShortCommands="False" GeneratorGetMethodName="GetAllCampaignData" GetMethodModifier="Public" GetMethodName="GetAllCampaignData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="False" UserGetMethodName="GetAllCampaignData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="True">
+                    <CommandText>SELECT CampaignName, DirectorName, ClientName, TypeOfCampaign, Budget, StartTime, 
+      EndTime, InNegotiation
+FROM Campaigns</CommandText>
+                    <Parameters>
+                    </Parameters>
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="CampaignName" DataSetColumn="CampaignName" />
+              <Mapping SourceColumn="DirectorName" DataSetColumn="DirectorName" />
+              <Mapping SourceColumn="ClientName" DataSetColumn="ClientName" />
+              <Mapping SourceColumn="TypeOfCampaign" DataSetColumn="TypeOfCampaign" />
+              <Mapping SourceColumn="Budget" DataSetColumn="Budget" />
+              <Mapping SourceColumn="StartTime" DataSetColumn="StartTime" />
+              <Mapping SourceColumn="EndTime" DataSetColumn="EndTime" />
+              <Mapping SourceColumn="InNegotiation" DataSetColumn="InNegotiation" />
+            </Mappings>
+            <Sources>
+            </Sources>
+          </TableAdapter>
+        </Tables>
+        <Sources>
+        </Sources>
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="Campaign" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="Campaign" msprop:Generator_DataSetName="Campaign">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Campaigns" msprop:Generator_UserTableName="Campaigns" msprop:Generator_RowDeletedName="CampaignsRowDeleted" msprop:Generator_TableClassName="CampaignsDataTable" msprop:Generator_RowChangedName="CampaignsRowChanged" msprop:Generator_RowClassName="CampaignsRow" msprop:Generator_RowChangingName="CampaignsRowChanging" msprop:Generator_RowEvArgName="CampaignsRowChangeEvent" msprop:Generator_RowEvHandlerName="CampaignsRowChangeEventHandler" msprop:Generator_TablePropName="Campaigns" msprop:Generator_TableVarName="tableCampaigns" msprop:Generator_RowDeletingName="CampaignsRowDeleting">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="CampaignName" msprop:Generator_UserColumnName="CampaignName" msprop:Generator_ColumnPropNameInRow="CampaignName" msprop:Generator_ColumnVarNameInTable="columnCampaignName" msprop:Generator_ColumnPropNameInTable="CampaignNameColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="DirectorName" msprop:Generator_UserColumnName="DirectorName" msprop:Generator_ColumnPropNameInRow="DirectorName" msprop:Generator_ColumnVarNameInTable="columnDirectorName" msprop:Generator_ColumnPropNameInTable="DirectorNameColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ClientName" msprop:Generator_UserColumnName="ClientName" msprop:Generator_ColumnPropNameInRow="ClientName" msprop:Generator_ColumnVarNameInTable="columnClientName" msprop:Generator_ColumnPropNameInTable="ClientNameColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="TypeOfCampaign" msprop:Generator_UserColumnName="TypeOfCampaign" msprop:Generator_ColumnPropNameInRow="TypeOfCampaign" msprop:Generator_ColumnVarNameInTable="columnTypeOfCampaign" msprop:Generator_ColumnPropNameInTable="TypeOfCampaignColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Budget" msprop:Generator_UserColumnName="Budget" msprop:Generator_ColumnPropNameInRow="Budget" msprop:Generator_ColumnVarNameInTable="columnBudget" msprop:Generator_ColumnPropNameInTable="BudgetColumn" type="xs:decimal" />
+              <xs:element name="StartTime" msprop:Generator_UserColumnName="StartTime" msprop:Generator_ColumnPropNameInRow="StartTime" msprop:Generator_ColumnVarNameInTable="columnStartTime" msprop:Generator_ColumnPropNameInTable="StartTimeColumn" type="xs:dateTime" />
+              <xs:element name="EndTime" msprop:Generator_UserColumnName="EndTime" msprop:Generator_ColumnPropNameInRow="EndTime" msprop:Generator_ColumnVarNameInTable="columnEndTime" msprop:Generator_ColumnPropNameInTable="EndTimeColumn" type="xs:dateTime" />
+              <xs:element name="InNegotiation" msprop:Generator_UserColumnName="InNegotiation" msprop:Generator_ColumnPropNameInRow="InNegotiation" msprop:Generator_ColumnVarNameInTable="columnInNegotiation" msprop:Generator_ColumnPropNameInTable="InNegotiationColumn" type="xs:boolean" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

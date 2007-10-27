@@ -39,7 +39,7 @@
                         <p>
                         </p>
                     <h3>Secure Menu:</h3>
-                        &nbsp;<asp:TreeView ID="TreeView1" runat="server" ExpandDepth="1" ImageSet="Arrows"
+                        &nbsp;<asp:TreeView ID="EmployeeTreeView" runat="server" ExpandDepth="1" ImageSet="Arrows"
                             ShowLines="True">
                             <ParentNodeStyle Font-Bold="False" />
                             <HoverNodeStyle Font-Underline="True" ForeColor="#5555DD" />
@@ -47,19 +47,19 @@
                                 VerticalPadding="0px" />
                             <Nodes>
                                 <asp:TreeNode Text="Employee's Views" Value="Employee's Views">
-                                    <asp:TreeNode Text="Director Views" Value="Director Views">
+                                    <asp:TreeNode Text="Director Views" Value="Director Views" SelectAction="Expand">
                                         <asp:TreeNode NavigateUrl="~/Director/CampAndNeg.aspx" Text="Campaign and Negotiation"
                                             Value="Campaign and Negotiation"></asp:TreeNode>
                                         <asp:TreeNode NavigateUrl="~/Director/NegotiationTemplate.aspx" Text="Negotiation Form"
                                             Value="Negotiation Form"></asp:TreeNode>
                                     </asp:TreeNode>
-                                    <asp:TreeNode Text="Staff Views" Value="Staff Views">
+                                    <asp:TreeNode Text="Staff Views" Value="Staff Views" SelectAction="Expand">
                                         <asp:TreeNode NavigateUrl="~/Staff/StaffView.aspx" Text="Info View" Value="Info View">
                                         </asp:TreeNode>
                                         <asp:TreeNode NavigateUrl="~/Staff/FillTimesheet.aspx" Text="Fill in Timesheet" Value="Fill in Timesheet">
                                         </asp:TreeNode>
                                     </asp:TreeNode>
-                                    <asp:TreeNode Text="Governor Views" Value="Governor Views">
+                                    <asp:TreeNode Text="Governor Views" Value="Governor Views" SelectAction="Expand">
                                         <asp:TreeNode NavigateUrl="~/Governor/CampaignSummary.aspx" Text="Campaigns Summary"
                                             Value="Campaigns Summary"></asp:TreeNode>
                                         <asp:TreeNode NavigateUrl="~/Governor/StaffUtilization.aspx" Text="Staff Utilization"

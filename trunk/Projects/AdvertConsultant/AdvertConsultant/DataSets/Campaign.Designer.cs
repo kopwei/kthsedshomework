@@ -1123,18 +1123,31 @@ namespace AdvertConsultant.DataSets.CampaignTableAdapters {
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new System.Data.SqlClient.SqlCommand[2];
+            this._commandCollection = new System.Data.SqlClient.SqlCommand[4];
             this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT     Campaigns.*\r\nFROM         Campaigns";
+            this._commandCollection[0].CommandText = "SELECT CampaignID, CampaignName, DirectorName, ClientName, ClientContact, \r\n     " +
+                " TypeOfCampaign, Budget, StartTime, EndTime, InNegotiation\r\nFROM Campaigns";
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT     CampaignID, CampaignName, DirectorName, ClientName, ClientContact, Typ" +
-                "eOfCampaign, Budget, StartTime, EndTime, InNegotiation\r\nFROM         Campaigns\r\n" +
-                "WHERE     (CampaignID = @CampaignID)";
+            this._commandCollection[1].CommandText = "SELECT CampaignID, CampaignName, DirectorName, ClientName, ClientContact, \r\n     " +
+                " TypeOfCampaign, Budget, StartTime, EndTime, InNegotiation\r\nFROM Campaigns\r\nWHER" +
+                "E (InNegotiation = 1)";
             this._commandCollection[1].CommandType = System.Data.CommandType.Text;
-            this._commandCollection[1].Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "SELECT Budget, CampaignID, CampaignName, ClientContact, ClientName, DirectorName," +
+                " EndTime, InNegotiation, StartTime, TypeOfCampaign FROM Campaigns WHERE (Campaig" +
+                "nID = @CampaignID)";
+            this._commandCollection[2].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[2].Parameters.Add(new System.Data.SqlClient.SqlParameter("@CampaignID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "CampaignID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "SELECT CampaignID, CampaignName, DirectorName, ClientName, ClientContact, \r\n     " +
+                " TypeOfCampaign, Budget, StartTime, EndTime, InNegotiation\r\nFROM Campaigns\r\nWHER" +
+                "E (InNegotiation = 0)";
+            this._commandCollection[3].CommandType = System.Data.CommandType.Text;
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1150,9 +1163,29 @@ namespace AdvertConsultant.DataSets.CampaignTableAdapters {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual Campaign.CampaignsDataTable GetCampaignDataByID(int CampaignID) {
+        public virtual Campaign.CampaignsDataTable GetNegotiationSummaryDataByInNegotiation() {
             this.Adapter.SelectCommand = this.CommandCollection[1];
+            Campaign.CampaignsDataTable dataTable = new Campaign.CampaignsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual Campaign.CampaignsDataTable GetCampaignDataByID(int CampaignID) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(CampaignID));
+            Campaign.CampaignsDataTable dataTable = new Campaign.CampaignsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual Campaign.CampaignsDataTable GetCampaignSummaryDataByInNegotiation() {
+            this.Adapter.SelectCommand = this.CommandCollection[3];
             Campaign.CampaignsDataTable dataTable = new Campaign.CampaignsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;

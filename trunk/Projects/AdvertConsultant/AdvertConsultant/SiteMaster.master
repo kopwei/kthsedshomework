@@ -85,7 +85,40 @@
             
             <td valign="top" align="left" class="body">
                 <!-- this is the placeholder for the page content -->
-                <asp:contentplaceholder id="PageContent" runat="server" />
+                <asp:contentplaceholder id="PageContent" runat="server" >
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                </asp:contentplaceholder>
                 
                 <br />
             </td>
@@ -93,7 +126,7 @@
         
         <!-- site footer -->
         <tr>
-            <td colspan="2" class="wrapper">&nbsp;</td>
+            <td colspan="2" class="wrapper" style="height: 80px">&nbsp;</td>
         </tr>
     </table>
     </form>

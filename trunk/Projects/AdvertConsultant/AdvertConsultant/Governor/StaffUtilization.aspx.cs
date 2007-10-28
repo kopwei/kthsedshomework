@@ -15,7 +15,19 @@ namespace AdvertConsultant.Governor
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (StaffUtilizationList.SelectedIndex == 0)
+            {
+                GridView1.DataSourceID = "InCampaignStaffDataSource";
+            }
+            if (StaffUtilizationList.SelectedIndex == 1)
+            {
+                GridView1.DataSourceID = "FreeStaffsDataSource";
+            }
         }
+
+        protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }              
     }
 }

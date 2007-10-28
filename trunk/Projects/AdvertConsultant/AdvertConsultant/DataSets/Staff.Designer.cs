@@ -1004,22 +1004,27 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new System.Data.SqlClient.SqlCommand[3];
+            this._commandCollection = new System.Data.SqlClient.SqlCommand[4];
             this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName FROM Staffs";
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName FROM Staffs WHE" +
-                "RE (StaffID = @StaffID)";
+            this._commandCollection[1].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName\r\nFROM Staffs\r\nW" +
+                "HERE (CampaignID IS NOT NULL)";
             this._commandCollection[1].CommandType = System.Data.CommandType.Text;
-            this._commandCollection[1].Parameters.Add(new System.Data.SqlClient.SqlParameter("@StaffID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[2].Connection = this.Connection;
             this._commandCollection[2].CommandText = "SELECT     StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName\r\nFROM      " +
                 "   Staffs\r\nWHERE     (CampaignID IS NULL)";
             this._commandCollection[2].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[3] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName FROM Staffs WHE" +
+                "RE (StaffID = @StaffID)";
+            this._commandCollection[3].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[3].Parameters.Add(new System.Data.SqlClient.SqlParameter("@StaffID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1035,9 +1040,8 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual Staff.StaffsDataTable GetStaffDataByID(int StaffID) {
+        public virtual Staff.StaffsDataTable GetInCampaignStaffsDataByCampaignID() {
             this.Adapter.SelectCommand = this.CommandCollection[1];
-            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(StaffID));
             Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -1048,6 +1052,17 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
         public virtual Staff.StaffsDataTable GetAvailableStaff() {
             this.Adapter.SelectCommand = this.CommandCollection[2];
+            Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual Staff.StaffsDataTable GetStaffDataByID(int StaffID) {
+            this.Adapter.SelectCommand = this.CommandCollection[3];
+            this.Adapter.SelectCommand.Parameters[0].Value = ((int)(StaffID));
             Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;

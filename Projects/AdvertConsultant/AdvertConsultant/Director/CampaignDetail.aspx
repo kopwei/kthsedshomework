@@ -20,6 +20,7 @@
         <RowStyle BackColor="White" ForeColor="#333333" />
         <PagerStyle BackColor="#336666" ForeColor="White" HorizontalAlign="Center" />
         <Fields>
+            <asp:BoundField DataField="CampaignID" HeaderText="CampaignID" ReadOnly="True" SortExpression="CampaignID" />
             <asp:BoundField DataField="CampaignName" HeaderText="CampaignName" SortExpression="CampaignName" />
             <asp:BoundField DataField="DirectorName" HeaderText="DirectorName" SortExpression="DirectorName" />
             <asp:BoundField DataField="ClientName" HeaderText="ClientName" SortExpression="ClientName" />
@@ -40,7 +41,6 @@
             <asp:Parameter Name="Original_CampaignID" Type="Int32" />
         </DeleteParameters>
         <UpdateParameters>
-            <asp:Parameter Name="CampaignID" Type="Int32" />
             <asp:Parameter Name="CampaignName" Type="String" />
             <asp:Parameter Name="DirectorName" Type="String" />
             <asp:Parameter Name="ClientName" Type="String" />

@@ -72,13 +72,21 @@ namespace AdvertConsultant.Director
             SqlDataSource1.UpdateCommand = "UPDATE Staffs SET CampaignID = @CampaignID WHERE(StaffID = @StaffID)";
             SqlDataSource1.UpdateParameters.Add("CampaignID", strId);
             SqlDataSource1.UpdateParameters.Add("StaffID", StaffDetailsView.DataKey.Value.ToString());
+
+            int rowsAffected1 = 0;
+
             try
             {
-                SqlDataSource1.Update();
+                rowsAffected1 = SqlDataSource1.Update();
             }
             catch (System.Exception)
             {
 
+            }
+            
+            if (rowsAffected1 == 1)
+            {
+                Server.Transfer("AssignmentOK.aspx");
             }
         }
 

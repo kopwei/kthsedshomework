@@ -25,7 +25,6 @@
             <asp:Parameter Name="Original_CampaignID" Type="Int32" />
         </DeleteParameters>
         <UpdateParameters>
-            <asp:Parameter Name="CampaignID" Type="Int32" />
             <asp:Parameter Name="CampaignName" Type="String" />
             <asp:Parameter Name="DirectorName" Type="String" />
             <asp:Parameter Name="ClientName" Type="String" />
@@ -50,11 +49,12 @@
             <asp:Parameter Name="InNegotiation" Type="Boolean" />
         </InsertParameters>
     </asp:ObjectDataSource>
-    &nbsp;</p>
-
+    </p>
+    <p>
+    &nbsp;<br />
 <br />
 <br />
 <br />
 <br />
-<br />
+    </p>
 </asp:content>

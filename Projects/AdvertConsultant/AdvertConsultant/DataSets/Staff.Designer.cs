@@ -266,6 +266,8 @@ namespace AdvertConsultant.DataSets {
             
             private System.Data.DataColumn columnDepartmentName;
             
+            private System.Data.DataColumn columnPendingAssignment;
+            
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public StaffsDataTable() {
                 this.TableName = "Staffs";
@@ -332,6 +334,13 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.Data.DataColumn PendingAssignmentColumn {
+                get {
+                    return this.columnPendingAssignment;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -360,14 +369,15 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public StaffsRow AddStaffsRow(int StaffID, string Name, int CampaignID, int OutofOfficeHour, string DepartmentName) {
+            public StaffsRow AddStaffsRow(int StaffID, string Name, int CampaignID, int OutofOfficeHour, string DepartmentName, bool PendingAssignment) {
                 StaffsRow rowStaffsRow = ((StaffsRow)(this.NewRow()));
                 rowStaffsRow.ItemArray = new object[] {
                         StaffID,
                         Name,
                         CampaignID,
                         OutofOfficeHour,
-                        DepartmentName};
+                        DepartmentName,
+                        PendingAssignment};
                 this.Rows.Add(rowStaffsRow);
                 return rowStaffsRow;
             }
@@ -402,6 +412,7 @@ namespace AdvertConsultant.DataSets {
                 this.columnCampaignID = base.Columns["CampaignID"];
                 this.columnOutofOfficeHour = base.Columns["OutofOfficeHour"];
                 this.columnDepartmentName = base.Columns["DepartmentName"];
+                this.columnPendingAssignment = base.Columns["PendingAssignment"];
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -416,6 +427,8 @@ namespace AdvertConsultant.DataSets {
                 base.Columns.Add(this.columnOutofOfficeHour);
                 this.columnDepartmentName = new System.Data.DataColumn("DepartmentName", typeof(string), null, System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDepartmentName);
+                this.columnPendingAssignment = new System.Data.DataColumn("PendingAssignment", typeof(bool), null, System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPendingAssignment);
                 this.Constraints.Add(new System.Data.UniqueConstraint("Constraint1", new System.Data.DataColumn[] {
                                 this.columnStaffID}, true));
                 this.columnStaffID.AllowDBNull = false;
@@ -773,6 +786,21 @@ namespace AdvertConsultant.DataSets {
             }
             
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool PendingAssignment {
+                get {
+                    try {
+                        return ((bool)(this[this.tableStaffs.PendingAssignmentColumn]));
+                    }
+                    catch (System.InvalidCastException e) {
+                        throw new System.Data.StrongTypingException("The value for column \'PendingAssignment\' in table \'Staffs\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableStaffs.PendingAssignmentColumn] = value;
+                }
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public bool IsCampaignIDNull() {
                 return this.IsNull(this.tableStaffs.CampaignIDColumn);
             }
@@ -790,6 +818,16 @@ namespace AdvertConsultant.DataSets {
             [System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public void SetDepartmentNameNull() {
                 this[this.tableStaffs.DepartmentNameColumn] = System.Convert.DBNull;
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public bool IsPendingAssignmentNull() {
+                return this.IsNull(this.tableStaffs.PendingAssignmentColumn);
+            }
+            
+            [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public void SetPendingAssignmentNull() {
+                this[this.tableStaffs.PendingAssignmentColumn] = System.Convert.DBNull;
             }
         }
         
@@ -965,6 +1003,7 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
             tableMapping.ColumnMappings.Add("CampaignID", "CampaignID");
             tableMapping.ColumnMappings.Add("OutofOfficeHour", "OutofOfficeHour");
             tableMapping.ColumnMappings.Add("DepartmentName", "DepartmentName");
+            tableMapping.ColumnMappings.Add("PendingAssignment", "PendingAssignment");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
@@ -1004,27 +1043,33 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new System.Data.SqlClient.SqlCommand[4];
+            this._commandCollection = new System.Data.SqlClient.SqlCommand[5];
             this._commandCollection[0] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName FROM Staffs";
             this._commandCollection[0].CommandType = System.Data.CommandType.Text;
             this._commandCollection[1] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName\r\nFROM Staffs\r\nW" +
-                "HERE (CampaignID IS NOT NULL)";
+            this._commandCollection[1].CommandText = "SELECT     StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName\r\nFROM      " +
+                "   Staffs\r\nWHERE     (Name = @Name)";
             this._commandCollection[1].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new System.Data.SqlClient.SqlParameter("@Name", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, 0, 0, "Name", System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._commandCollection[2] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "SELECT     StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName\r\nFROM      " +
-                "   Staffs\r\nWHERE     (CampaignID IS NULL)";
+            this._commandCollection[2].CommandText = "SELECT CampaignID, DepartmentName, Name, OutofOfficeHour, StaffID FROM Staffs WHE" +
+                "RE (CampaignID IS NULL)";
             this._commandCollection[2].CommandType = System.Data.CommandType.Text;
             this._commandCollection[3] = new System.Data.SqlClient.SqlCommand();
             this._commandCollection[3].Connection = this.Connection;
-            this._commandCollection[3].CommandText = "SELECT StaffID, Name, CampaignID, OutofOfficeHour, DepartmentName FROM Staffs WHE" +
-                "RE (StaffID = @StaffID)";
+            this._commandCollection[3].CommandText = "SELECT CampaignID, DepartmentName, Name, OutofOfficeHour, StaffID FROM Staffs WHE" +
+                "RE (CampaignID IS NOT NULL)";
             this._commandCollection[3].CommandType = System.Data.CommandType.Text;
-            this._commandCollection[3].Parameters.Add(new System.Data.SqlClient.SqlParameter("@StaffID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[4] = new System.Data.SqlClient.SqlCommand();
+            this._commandCollection[4].Connection = this.Connection;
+            this._commandCollection[4].CommandText = "SELECT     CampaignID, DepartmentName, Name, OutofOfficeHour, StaffID, PendingAss" +
+                "ignment\r\nFROM         Staffs\r\nWHERE     (StaffID = @StaffID)";
+            this._commandCollection[4].CommandType = System.Data.CommandType.Text;
+            this._commandCollection[4].Parameters.Add(new System.Data.SqlClient.SqlParameter("@StaffID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, 0, 0, "StaffID", System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1040,8 +1085,14 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual Staff.StaffsDataTable GetInCampaignStaffsDataByCampaignID() {
+        public virtual Staff.StaffsDataTable GetStaffDataByName(string Name) {
             this.Adapter.SelectCommand = this.CommandCollection[1];
+            if ((Name == null)) {
+                throw new System.ArgumentNullException("Name");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[0].Value = ((string)(Name));
+            }
             Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -1060,8 +1111,18 @@ namespace AdvertConsultant.DataSets.StaffTableAdapters {
         [System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
-        public virtual Staff.StaffsDataTable GetStaffDataByID(int StaffID) {
+        public virtual Staff.StaffsDataTable GetInCampaignStaffsDataByCampaignID() {
             this.Adapter.SelectCommand = this.CommandCollection[3];
+            Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [System.ComponentModel.DataObjectMethodAttribute(System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual Staff.StaffsDataTable GetStaffDataByID(int StaffID) {
+            this.Adapter.SelectCommand = this.CommandCollection[4];
             this.Adapter.SelectCommand.Parameters[0].Value = ((int)(StaffID));
             Staff.StaffsDataTable dataTable = new Staff.StaffsDataTable();
             this.Adapter.Fill(dataTable);

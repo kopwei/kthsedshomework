@@ -72,6 +72,13 @@
     <Compile Include="Director\AssignmentOK.aspx.designer.cs">
       <DependentUpon>AssignmentOK.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Director\AssignmentPending.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>AssignmentPending.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\AssignmentPending.aspx.designer.cs">
+      <DependentUpon>AssignmentPending.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Director\CampaignDetail.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>CampaignDetail.aspx</DependentUpon>
@@ -86,12 +93,33 @@
     <Compile Include="Director\CampAndNeg.aspx.designer.cs">
       <DependentUpon>CampAndNeg.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Director\Messages.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Messages.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\Messages.aspx.designer.cs">
+      <DependentUpon>Messages.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Director\NegotiationTemplate.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>NegotiationTemplate.aspx</DependentUpon>
     </Compile>
     <Compile Include="Director\NegotiationTemplate.aspx.designer.cs">
       <DependentUpon>NegotiationTemplate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\Replied.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Replied.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\Replied.aspx.designer.cs">
+      <DependentUpon>Replied.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\ReplyMessage.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>ReplyMessage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Director\ReplyMessage.aspx.designer.cs">
+      <DependentUpon>ReplyMessage.aspx</DependentUpon>
     </Compile>
     <Compile Include="Director\StaffDetail.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -218,6 +246,13 @@
     <Compile Include="Start.aspx.designer.cs">
       <DependentUpon>Start.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Test\TestNegotiation.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>TestNegotiation.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Test\TestNegotiation.aspx.designer.cs">
+      <DependentUpon>TestNegotiation.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\ASPNETDB.MDF">
@@ -231,9 +266,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Director\AssignmentOK.aspx" />
+    <Content Include="Director\AssignmentPending.aspx" />
     <Content Include="Director\CampaignDetail.aspx" />
     <Content Include="Director\CampAndNeg.aspx" />
+    <Content Include="Director\Messages.aspx" />
     <Content Include="Director\NegotiationTemplate.aspx" />
+    <Content Include="Director\Replied.aspx" />
+    <Content Include="Director\ReplyMessage.aspx" />
     <Content Include="Director\StaffDetail.aspx" />
     <Content Include="Director\ViewStaff.aspx" />
     <Content Include="Governor\CampaignSummary.aspx" />
@@ -243,6 +282,7 @@
     <Content Include="Staff\Schedule.aspx" />
     <Content Include="Staff\StaffView.aspx" />
     <Content Include="Members\web.config" />
+    <Content Include="Test\TestNegotiation.aspx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DataSets\Campaign.xsc">

@@ -3,25 +3,49 @@ using System.Data;
 using System.Configuration;
 using System.Collections;
 using System.Web;
+using System.Threading;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 
-namespace AdvertConsultant.Director
+namespace AdvertConsultant.Test
 {
-    public partial class NegotiationTemplate : System.Web.UI.Page
+    public partial class TestNegotiation : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            //Thread myThread = new Thread(new ThreadStart(ThreadMethod));
+            ////myThread.SetApartmentState(ApartmentState.STA);
+            //myThread.Start();
+            //try
+            //{
+            //    //myThread.SetApartmentState(ApartmentState.MTA);
+            //}
+            //catch (System.Exception)
+            //{
+            	
+            //}
 
+
+            CampaignID.Text = "800";
+            CampaignName.Text = "TestNegotiation";
+            DirectorName.Text = "Scott";
+            ClientName.Text = "TestClient";
+            ClientContact.Text = "12345678";
+            TypeOfCampaign.Text = "TV";
+            Budget.Text = "45000";
+            StartTime.Text = "2007-11-12";
+            EndTime.Text = "2007-12-20";
         }
 
         protected void CreateNegotiation_Click(object sender, EventArgs e)
         {
             SqlDataSource ASPNETDBDataSource = new SqlDataSource();
             ASPNETDBDataSource.ConnectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
+
+
 
             ASPNETDBDataSource.InsertCommandType = SqlDataSourceCommandType.Text;
             ASPNETDBDataSource.InsertCommand = "INSERT INTO Campaigns (CampaignID, CampaignName, DirectorName, ClientName, ClientContact, TypeOfCampaign, Budget, StartTime, EndTime, InNegotiation) VALUES (@CampaignID, @CampaignName, @DirectorName, @ClientName, @ClientContact, @TypeOfCampaign, @Budget, @StartTime, @EndTime, @InNegotiation)";
@@ -65,7 +89,26 @@ namespace AdvertConsultant.Director
             {
                 Server.Transfer("CampAndNeg.aspx");
             }
-
         }
+
+
+        //protected void ThreadMethod()
+        //{
+        //    Thread.Sleep(3000);
+        //    CampaignID.Text = "800";
+        //    CampaignName.Text = "TestNegotiation";
+        //    Thread.Sleep(3000);
+        //    DirectorName.Text = "Scott";
+        //    ClientName.Text = "TestClient";
+        //    Thread.Sleep(3000);
+        //    ClientContact.Text = "12345678";
+        //    TypeOfCampaign.Text = "TV";
+        //    Thread.Sleep(3000);
+        //    Budget.Text = "45000";
+        //    StartTime.Text = "2007-11-12";
+        //    EndTime.Text = "2007-12-20";
+        //    Thread.Sleep(3000);
+        //    this.CreateNegotiation_Click(null, null);
+        //}
     }
 }

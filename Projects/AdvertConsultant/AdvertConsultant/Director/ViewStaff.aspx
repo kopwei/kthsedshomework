@@ -13,19 +13,17 @@
         ForeColor="Black" GridLines="None">
         <FooterStyle BackColor="Tan" />
         <Columns>
-            <asp:BoundField DataField="StaffID" HeaderText="StaffID" ReadOnly="True" SortExpression="StaffID" >
+            <asp:BoundField DataField="StaffID" HeaderText="StaffID" ReadOnly="True" SortExpression="StaffID">
                 <ItemStyle HorizontalAlign="Center" />
             </asp:BoundField>
-            <asp:BoundField DataField="Name" HeaderText="Name" SortExpression="Name" >
+            <asp:BoundField DataField="Name" HeaderText="Name" SortExpression="Name">
                 <ItemStyle HorizontalAlign="Center" />
             </asp:BoundField>
-            <asp:BoundField DataField="DepartmentName" HeaderText="Department" SortExpression="Department" >
+            <asp:BoundField DataField="DepartmentName" HeaderText="Department" SortExpression="DepartmentName">
                 <ItemStyle HorizontalAlign="Center" />
             </asp:BoundField>
             <asp:HyperLinkField DataNavigateUrlFields="StaffID" DataNavigateUrlFormatString="StaffDetail.aspx?StaffID={0}"
-                HeaderText="Details" Text="Details" >
-                <ItemStyle HorizontalAlign="Center" />
-            </asp:HyperLinkField>
+                HeaderText="Details" Text="Details" />
         </Columns>
         <SelectedRowStyle BackColor="DarkSlateBlue" ForeColor="GhostWhite" />
         <PagerStyle BackColor="PaleGoldenrod" ForeColor="DarkSlateBlue" HorizontalAlign="Center" />

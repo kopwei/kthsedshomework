@@ -12,92 +12,65 @@ namespace AdvertConsultant.Director {
     
     
     /// <summary>
-    /// StaffDetail class.
+    /// Messages class.
     /// </summary>
     /// <remarks>
     /// Auto-generated class.
     /// </remarks>
-    public partial class StaffDetail {
+    public partial class Messages {
         
         /// <summary>
-        /// StaffDetailsView control.
+        /// labelRequest control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DetailsView StaffDetailsView;
+        protected global::System.Web.UI.WebControls.Label labelRequest;
         
         /// <summary>
-        /// StaffDataSource control.
+        /// messageGridView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource StaffDataSource;
+        protected global::System.Web.UI.WebControls.GridView messageGridView;
         
         /// <summary>
-        /// directorSqlDataSource control.
+        /// messageSqlDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource directorSqlDataSource;
+        protected global::System.Web.UI.WebControls.SqlDataSource messageSqlDataSource;
         
         /// <summary>
-        /// assignStaffButton control.
+        /// labelReplied control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button assignStaffButton;
+        protected global::System.Web.UI.WebControls.Label labelReplied;
         
         /// <summary>
-        /// CampaignList control.
+        /// GridView1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList CampaignList;
+        protected global::System.Web.UI.WebControls.GridView GridView1;
         
         /// <summary>
-        /// buttonCommitAssignment control.
+        /// replySqlDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button buttonCommitAssignment;
-        
-        /// <summary>
-        /// SqlDataSource1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
-        
-        /// <summary>
-        /// ListBox1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox ListBox1;
-        
-        /// <summary>
-        /// CampaignData control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource CampaignData;
+        protected global::System.Web.UI.WebControls.SqlDataSource replySqlDataSource;
     }
 }

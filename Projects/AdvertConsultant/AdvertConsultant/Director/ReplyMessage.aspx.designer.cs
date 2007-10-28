@@ -12,92 +12,74 @@ namespace AdvertConsultant.Director {
     
     
     /// <summary>
-    /// StaffDetail class.
+    /// ReplyMessage class.
     /// </summary>
     /// <remarks>
     /// Auto-generated class.
     /// </remarks>
-    public partial class StaffDetail {
+    public partial class ReplyMessage {
         
         /// <summary>
-        /// StaffDetailsView control.
+        /// staffDetailsView control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DetailsView StaffDetailsView;
+        protected global::System.Web.UI.WebControls.DetailsView staffDetailsView;
         
         /// <summary>
-        /// StaffDataSource control.
+        /// staffDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource StaffDataSource;
+        protected global::System.Web.UI.WebControls.ObjectDataSource staffDataSource;
         
         /// <summary>
-        /// directorSqlDataSource control.
+        /// sqlDataSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource directorSqlDataSource;
+        protected global::System.Web.UI.WebControls.SqlDataSource sqlDataSource;
         
         /// <summary>
-        /// assignStaffButton control.
+        /// labelMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button assignStaffButton;
+        protected global::System.Web.UI.WebControls.Label labelMessage;
         
         /// <summary>
-        /// CampaignList control.
+        /// textBoxMessage control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList CampaignList;
+        protected global::System.Web.UI.WebControls.TextBox textBoxMessage;
         
         /// <summary>
-        /// buttonCommitAssignment control.
+        /// buttonAccept control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button buttonCommitAssignment;
+        protected global::System.Web.UI.WebControls.Button buttonAccept;
         
         /// <summary>
-        /// SqlDataSource1 control.
+        /// buttonReject control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource1;
-        
-        /// <summary>
-        /// ListBox1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox ListBox1;
-        
-        /// <summary>
-        /// CampaignData control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ObjectDataSource CampaignData;
+        protected global::System.Web.UI.WebControls.Button buttonReject;
     }
 }

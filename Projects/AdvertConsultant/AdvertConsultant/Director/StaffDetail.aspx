@@ -10,12 +10,21 @@
         <RowStyle BackColor="#FFFBD6" ForeColor="#333333" />
         <PagerStyle BackColor="#FFCC66" ForeColor="#333333" HorizontalAlign="Center" />
         <Fields>
-            <asp:BoundField DataField="StaffID" HeaderText="StaffID" ReadOnly="True" SortExpression="StaffID" />
-            <asp:BoundField DataField="Name" HeaderText="Name" SortExpression="Name" />
-            <asp:BoundField DataField="CampaignID" HeaderText="CampaignID" SortExpression="CampaignID" />
-            <asp:BoundField DataField="OutofOfficeHour" HeaderText="OutofOfficeHour" SortExpression="OutofOfficeHour" />
-            <asp:BoundField DataField="DepartmentName" HeaderText="DepartmentName" SortExpression="DepartmentName" />
-            <asp:CheckBoxField DataField="PendingAssignment" HeaderText="PendingAssignment" SortExpression="PendingAssignment" />
+            <asp:BoundField DataField="StaffID" HeaderText="ID" ReadOnly="True" SortExpression="StaffID">
+                <ItemStyle HorizontalAlign="Center" />
+            </asp:BoundField>
+            <asp:BoundField DataField="Name" HeaderText="Name" SortExpression="Name">
+                <ItemStyle HorizontalAlign="Center" />
+            </asp:BoundField>
+            <asp:BoundField DataField="CampaignID" HeaderText="Campaign" SortExpression="CampaignID">
+                <ItemStyle HorizontalAlign="Center" />
+            </asp:BoundField>
+            <asp:BoundField DataField="DepartmentName" HeaderText="Department" SortExpression="DepartmentName">
+                <ItemStyle HorizontalAlign="Center" />
+            </asp:BoundField>
+            <asp:CheckBoxField DataField="PendingAssignment" HeaderText="Pending" SortExpression="PendingAssignment">
+                <ItemStyle HorizontalAlign="Center" />
+            </asp:CheckBoxField>
         </Fields>
         <FieldHeaderStyle BackColor="#FFFF99" Font-Bold="True" />
         <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />

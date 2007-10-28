@@ -196,6 +196,13 @@
       <DependentUpon>SecurePage.aspx</DependentUpon>
     </Compile>
     <Compile Include="InfoData\Negotiation.cs" />
+    <Compile Include="Readme.aspx.cs">
+      <SubType>ASPXCodeBehind</SubType>
+      <DependentUpon>Readme.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Readme.aspx.designer.cs">
+      <DependentUpon>Readme.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Staff\FillTimesheet.aspx.cs">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>FillTimesheet.aspx</DependentUpon>
@@ -278,6 +285,7 @@
     <Content Include="Governor\CampaignSummary.aspx" />
     <Content Include="Governor\NegotiationSummary.aspx" />
     <Content Include="Governor\StaffUtilization.aspx" />
+    <Content Include="Readme.aspx" />
     <Content Include="Staff\FillTimesheet.aspx" />
     <Content Include="Staff\Schedule.aspx" />
     <Content Include="Staff\StaffView.aspx" />

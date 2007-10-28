@@ -9,7 +9,7 @@
         <br />
         &nbsp;<asp:Label ID="Label9" runat="server" Text="Campaign ID" Width="124px"></asp:Label>
         &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
-        <asp:TextBox ID="CampaignID" runat="server" Width="130px"></asp:TextBox>
+        <asp:TextBox ID="CampaignID" runat="server" Width="130px" ReadOnly="True"></asp:TextBox>
         <asp:RequiredFieldValidator ID="reFieValidator1" runat="server" ControlToValidate="CampaignID"
             ErrorMessage="Please input a Campaign ID.">*</asp:RequiredFieldValidator><br />
         <br />
@@ -21,7 +21,7 @@
             ErrorMessage="Please input a Campaign Name.">*</asp:RequiredFieldValidator><br />
         <br />
         &nbsp;<asp:Label ID="Label2" runat="server" Text="Director Name" Width="124px"></asp:Label>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<asp:TextBox ID="DirectorName" runat="server" Width="130px"></asp:TextBox>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<asp:TextBox ID="DirectorName" runat="server" Width="130px" ReadOnly="True"></asp:TextBox>
         <asp:RequiredFieldValidator ID="reFieValidator3" runat="server" ControlToValidate="DirectorName"
             ErrorMessage="Please input a Director Name.">*</asp:RequiredFieldValidator><br />
         <br />

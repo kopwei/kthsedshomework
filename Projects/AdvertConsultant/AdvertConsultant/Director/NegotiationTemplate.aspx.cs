@@ -15,7 +15,25 @@ namespace AdvertConsultant.Director
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            SqlDataSource dataSource = new SqlDataSource();
+            dataSource.ConnectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ToString();
+            dataSource.SelectCommandType = SqlDataSourceCommandType.Text;
+            dataSource.SelectCommand = "SELECT MAX(CampaignID) FROM Campaigns";
+            try
+            {
+                DataView view = (DataView)(dataSource.Select(DataSourceSelectArguments.Empty));
+                DataRow dr = view.Table.Rows[0];
+                int ID = (int)(dr.ItemArray[0]) + 1;
+                CampaignID.Text = ID.ToString();
+                
+            }
+            catch (System.Exception)
+            {
+            	
+            }
+            
+            DirectorName.Text = Membership.GetUser().UserName;
+            dataSource = null;
         }
 
         protected void CreateNegotiation_Click(object sender, EventArgs e)

@@ -29,6 +29,24 @@ namespace AdvertConsultant.Staff {
         protected global::System.Web.UI.WebControls.Calendar ScheduleCalendar;
         
         /// <summary>
+        /// staffSqlDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource staffSqlDataSource;
+        
+        /// <summary>
+        /// campaignSqlDataSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource campaignSqlDataSource;
+        
+        /// <summary>
         /// WorkLabel control.
         /// </summary>
         /// <remarks>

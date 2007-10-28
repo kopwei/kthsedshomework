@@ -15,6 +15,7 @@
             <asp:BoundField DataField="CampaignID" HeaderText="CampaignID" SortExpression="CampaignID" />
             <asp:BoundField DataField="OutofOfficeHour" HeaderText="OutofOfficeHour" SortExpression="OutofOfficeHour" />
             <asp:BoundField DataField="DepartmentName" HeaderText="DepartmentName" SortExpression="DepartmentName" />
+            <asp:CheckBoxField DataField="PendingAssignment" HeaderText="PendingAssignment" SortExpression="PendingAssignment" />
         </Fields>
         <FieldHeaderStyle BackColor="#FFFF99" Font-Bold="True" />
         <HeaderStyle BackColor="#990000" Font-Bold="True" ForeColor="White" />
@@ -46,27 +47,33 @@
             <asp:QueryStringParameter Name="StaffID" QueryStringField="StaffID" Type="Int32" />
         </SelectParameters>
     </asp:ObjectDataSource>
+    &nbsp;&nbsp;<asp:SqlDataSource ID="directorSqlDataSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"
+        SelectCommand="SELECT DepartmentName FROM Directors&#13;&#10;WHERE (DirectorName = @DirectorName)">
+        <SelectParameters>
+            <asp:Parameter Name="DirectorName" />
+        </SelectParameters>
+    </asp:SqlDataSource>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;<br />
-    Staff Skills<br />
-    <br />
-    <asp:ListBox ID="StaffSkillBox" runat="server" Width="220px"></asp:ListBox><br />
-    <br />
     <asp:Button ID="assignStaffButton" runat="server" OnClick="assignStaffButton_Click"
         Text="Assign the Staff to.." /><br />
     <br />
     <asp:DropDownList ID="CampaignList" runat="server" DataSourceID="CampaignData"
         DataTextField="CampaignName" DataValueField="CampaignName" Width="172px" Visible="False">
-        <asp:ListItem>None</asp:ListItem>
     </asp:DropDownList>&nbsp;
-    <asp:Button ID="buttonCommitAssignment" runat="server" Enabled="False" OnClick="Button1_Click"
+    <asp:Button ID="buttonCommitAssignment" runat="server" Enabled="False" OnClick="buttonCommitAssignment_Click"
         Text="OK" Visible="False" /><br />
     <br />
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"

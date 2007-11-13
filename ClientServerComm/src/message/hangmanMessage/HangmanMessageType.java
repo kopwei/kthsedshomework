@@ -15,5 +15,6 @@ public enum HangmanMessageType {
     Terminate,
     CheckInput,
     WrongInput,
-    CorrectInput
+    CorrectInput,
+    GameOver
 }

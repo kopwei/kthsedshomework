@@ -5,6 +5,8 @@
 
 package hangmanserver;
 
+import javax.swing.JOptionPane;
+
 
 
 /**
@@ -22,11 +24,31 @@ public class HangmanServerViewCmd {
     public HangmanServerView getMainView() {
         return serverView;
     }
-    
-    public void Start() {
+    public void stop() {
+        if (null != mainThread) {
+            mainThread.stopAllThreads();
+            mainThread.stopRunning();
+        }
+    }
+    public void start() {
+        String portNumberString = serverView.getPortNumberString();
+        boolean isPortNumberValid = true;
+        try {
+            int portNumber = Integer.parseInt(portNumberString);
+            if (portNumber > 65535 || portNumber <= 1024) isPortNumberValid = false;
+        }
+        catch (NumberFormatException e) {
+            isPortNumberValid = false;
+        }
+       if (!isPortNumberValid) {
+           JOptionPane.showMessageDialog(serverView, "Please enter a valid port number");
+           serverView.setStatusLabelToStop("Stop");
+           return;
+       }
         if (null == mainThread) {
             mainThread = new ServerMainThread(this);
             mainThread.start();
+            serverView.setStatusLabelToStop("Running");
         }
     }
 }

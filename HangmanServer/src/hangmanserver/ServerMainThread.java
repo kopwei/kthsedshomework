@@ -8,6 +8,7 @@ package hangmanserver;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Vector;
 
 /**
  *
@@ -15,27 +16,33 @@ import java.net.Socket;
  */
 public class ServerMainThread extends Thread{
     private HangmanServerViewCmd mainCmd = null;
+    private boolean listening = true;
+    
+    private Vector<ClientHandler> handlerVector = new Vector<ClientHandler>();
     
     public ServerMainThread(HangmanServerViewCmd cmd) {
         mainCmd = cmd;
     }
     
-    @Override public void run() {
+    @Override
+    public void run() {
         ServerSocket serverSocket = null;
-        boolean listening = true;
+        int portNumber = Integer.parseInt(mainCmd.getMainView().getPortNumberString());
         
         try {
-           serverSocket  = new ServerSocket(4444);
+            serverSocket  = new ServerSocket(portNumber);
         }
         catch (IOException ie) {
             System.err.println(ie.getMessage());
             System.exit(1);
         }
+        System.out.println(portNumber);
         
         while (listening) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                Thread handler = new ClientHandler(clientSocket);
+                ClientHandler handler = new ClientHandler(clientSocket, mainCmd);
+                handlerVector.add(handler);
                 mainCmd.getMainView().addClient(clientSocket.getInetAddress().toString());
                 handler.start();
             }
@@ -51,6 +58,16 @@ public class ServerMainThread extends Thread{
         catch (IOException ie){
             System.err.println(ie.getMessage());
             System.exit(1);
+        }
+    }
+    
+    public void stopRunning() {
+        listening = false;
+    }
+    
+    public void stopAllThreads() {
+        for (ClientHandler clientHandler : handlerVector) {
+            clientHandler.terminateServer();
         }
     }
 

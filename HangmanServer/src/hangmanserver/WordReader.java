@@ -52,12 +52,13 @@ public class WordReader {
     private static boolean isWordValid(StringBuffer word) {
         boolean isValid = true;
         int length = word.length();
-        
+        // the length of word can not larger than 10
+        if (length > 10) return false;
         // Check if the word contains invalid characters.
         for (int i = 0; i < length; i++) {
             char c = word.charAt(i);
             int charValue = (int)c;
-            if (charValue > 122 && charValue < 97) {
+            if (charValue > 122 || charValue < 97) {
                 isValid = false;
                 break;
             }

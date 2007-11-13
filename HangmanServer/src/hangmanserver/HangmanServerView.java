@@ -6,7 +6,12 @@
 
 package hangmanserver;
 
+import java.awt.im.InputContext;
+import java.net.UnknownHostException;
 import java.util.Vector;
+import java.net.InetAddress;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,19 +20,48 @@ import java.util.Vector;
 public class HangmanServerView extends javax.swing.JFrame {
     
     /** Creates new form HangmanServerView */
-    public HangmanServerView() {
+    public HangmanServerView() throws UnknownHostException {
         initComponents();
+        serverAddressField.setText(getServerAddress());
         clientList.setListData(clientVector);
+    }
+    
+    private String getServerAddress() throws UnknownHostException {
+        InetAddress add = InetAddress.getLocalHost();
+        byte[] ipAddr = add.getAddress();
+
+        // convet to String in dot representation
+        StringBuffer ipAddrStr = new StringBuffer();
+        for (int i = 0; i < ipAddr.length; i++) {
+            if (i > 0) {
+                ipAddrStr.append(".");
+            }
+            ipAddrStr.append(ipAddr[i] & 0xFF);
+        }
+        return ipAddrStr.toString();
+        //return add.toString() ----> HostName + Address;
     }
     
     public void addClient(String clientInfo) {
         clientVector.add(clientInfo);
-        clientList.updateUI();
+        clientList.setListData(clientVector);
     }
     
     public void removeClient(String clientInfo) {
         clientVector.remove(clientInfo);
-        clientList.updateUI();
+        clientList.setListData(clientVector);
+    }
+    
+    public synchronized void addNewMessage(String newMessage) {
+        messageArea.append(newMessage);
+    }
+    
+    public String getPortNumberString() {
+        return portField.getText();
+    }
+    
+    public void setStatusLabelToStop(String status) {
+        statusLabel.setText(status);
     }
     
     /** This method is called from within the constructor to
@@ -45,9 +79,16 @@ public class HangmanServerView extends javax.swing.JFrame {
         clientListScrollPane = new javax.swing.JScrollPane();
         clientList = new javax.swing.JList();
         statusLabel = new javax.swing.JLabel();
+        clientsLabel = new javax.swing.JLabel();
+        messagesLabel = new javax.swing.JLabel();
+        serverAddressLabel = new javax.swing.JLabel();
+        portLabel = new javax.swing.JLabel();
+        portField = new javax.swing.JTextField();
+        serverAddressField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Hangman Server");
+        setResizable(false);
 
         messageArea.setColumns(20);
         messageArea.setEditable(false);
@@ -63,11 +104,26 @@ public class HangmanServerView extends javax.swing.JFrame {
         });
 
         stopButton.setText("Stop");
+        stopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                stopButtonActionPerformed(evt);
+            }
+        });
 
         clientList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         clientListScrollPane.setViewportView(clientList);
 
-        statusLabel.setText("Stoped");
+        statusLabel.setText("Stop");
+
+        clientsLabel.setText("Clients");
+
+        messagesLabel.setText("Messages");
+
+        serverAddressLabel.setText("Server Address:");
+
+        portLabel.setText("Port:");
+
+        serverAddressField.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -75,16 +131,28 @@ public class HangmanServerView extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(messageAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(statusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(startButton)
+                        .addComponent(serverAddressLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(stopButton))
-                    .addComponent(clientListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                        .addComponent(serverAddressField))
+                    .addComponent(messagesLabel)
+                    .addComponent(messageAreaScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(clientListScrollPane, 0, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(startButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(stopButton))
+                            .addComponent(clientsLabel))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(portLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(portField))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -92,14 +160,26 @@ public class HangmanServerView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(messageAreaScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
-                    .addComponent(clientListScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(serverAddressLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE)
+                        .addComponent(serverAddressField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(portLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(portField)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(stopButton)
+                    .addComponent(clientsLabel)
+                    .addComponent(messagesLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(clientListScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                    .addComponent(messageAreaScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
+                    .addComponent(stopButton)
                     .addComponent(statusLabel))
-                .addContainerGap())
+                .addGap(10, 10, 10))
         );
 
         pack();
@@ -107,16 +187,29 @@ public class HangmanServerView extends javax.swing.JFrame {
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
     // TODO add your handling code here:
-        viewCmd.Start();
-        statusLabel.setText("Running...");
+        viewCmd.start();
 }//GEN-LAST:event_startButtonActionPerformed
+
+    private void stopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stopButtonActionPerformed
+        // TODO add your handling code here:
+        clientVector.removeAllElements();
+        clientList.updateUI();
+        viewCmd.stop();
+        statusLabel.setText("Stop");
+    }//GEN-LAST:event_stopButtonActionPerformed
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList clientList;
     private javax.swing.JScrollPane clientListScrollPane;
+    private javax.swing.JLabel clientsLabel;
     private javax.swing.JTextArea messageArea;
     private javax.swing.JScrollPane messageAreaScrollPane;
+    private javax.swing.JLabel messagesLabel;
+    private javax.swing.JTextField portField;
+    private javax.swing.JLabel portLabel;
+    private javax.swing.JTextField serverAddressField;
+    private javax.swing.JLabel serverAddressLabel;
     private javax.swing.JButton startButton;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JButton stopButton;

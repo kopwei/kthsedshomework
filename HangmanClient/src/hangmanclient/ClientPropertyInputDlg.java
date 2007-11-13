@@ -20,7 +20,7 @@ public class ClientPropertyInputDlg extends javax.swing.JDialog {
         //}
         initComponents();
         setLocationRelativeTo(cmd.getMainView().getFrame());
-        
+        this.setResizable(false);
     }
     
     /** This method is called from within the constructor to
@@ -39,9 +39,11 @@ public class ClientPropertyInputDlg extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setName("Form"); // NOI18N
-
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(hangmanclient.HangmanClientApp.class).getContext().getResourceMap(ClientPropertyInputDlg.class);
+        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setName("Form"); // NOI18N
+        setResizable(false);
+
         serverIPLabel.setText(resourceMap.getString("serverIPLabel.text")); // NOI18N
         serverIPLabel.setName("serverIPLabel"); // NOI18N
 
@@ -72,7 +74,6 @@ public class ClientPropertyInputDlg extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 212, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,7 +90,6 @@ public class ClientPropertyInputDlg extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 154, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(serverIPLabel)

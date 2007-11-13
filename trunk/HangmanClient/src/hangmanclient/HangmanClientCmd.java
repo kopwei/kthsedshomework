@@ -7,6 +7,8 @@ package hangmanclient;
 
 import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
+import message.hangmanMessage.HangmanMessage;
+import message.hangmanMessage.HangmanMessageType;
 
 /**
  *
@@ -33,31 +35,37 @@ public class HangmanClientCmd {
      * This method
      * @param evt
      */
-    public void startButtonActionPerformed() {
+    public boolean startButtonActionPerformed() {
         // TODO add your handling code here:
         // Check the validity of server IP and port
         if (null != serverIP && serverPort > 1024) {
             String newWord = communicator.getNewWord();
-            mainView.setText(newWord);
-            mainView.setDanger(0);
-        }
-        // If the IP and port are not properly set, then warn user
+            if (null != newWord) {
+                mainView.setText(newWord);
+                mainView.setDanger(0);
+                return true;
+            } else {
+                return false;
+            }
+        } // If the IP and port are not properly set, then warn user
         else {
             try {
                 JOptionPane.showMessageDialog(mainView.getFrame(), new String("Please set the server's IP and port properly"));
-            }
-            catch (HeadlessException he) {
+            } catch (HeadlessException he) {
                 System.err.println(he.getMessage());
             }
+            return false;
         }
     }
-        
+
     /**
      * 
      * @param evt
      */
     public void endButtonActionPerformed() {
-        // TODO add your handling code here:
+        // Tell server the client will terminate
+        communicator.terminate();
+        // Exit the application
         mainView.getApplication().exit();
     }
     
@@ -66,15 +74,13 @@ public class HangmanClientCmd {
      * @param evt
      */
     public void submit(String submitInfo) {
-        //char c = evt.getKeyChar();
-        Boolean isCorrect = Boolean.FALSE;
-        String msg = communicator.checkInput(submitInfo, isCorrect);
-        mainView.setText(msg);
+        HangmanMessage msg = communicator.checkInput(submitInfo);
+        mainView.setText(msg.getContent());
         // If all the letters are fullfilled then call victory
-        if (isVictory(msg)) {
+        if (isVictory(msg.getContent())) {
             mainView.victory();
         }
-        if (Boolean.FALSE == isCorrect) {
+        if (msg.getHangmanMessageType() == HangmanMessageType.WrongInput) {
             increaseDanger();
         }
     }
@@ -94,6 +100,18 @@ public class HangmanClientCmd {
         });
     }
     
+    public void victory() {
+        // Tell the server thr round is over
+        communicator.gameOver();
+    }
+    
+    public void lose() {
+        // Tell the server thr round is over and display the whole word
+        HangmanMessage msg = communicator.gameOver();
+        if (null != msg) {
+            mainView.setText(msg.getContent());
+        }
+    }
     
     public void setServerIP(String serverIP) {
         // Set the server IP address
@@ -117,10 +135,11 @@ public class HangmanClientCmd {
     }
     
     private boolean isVictory(String word) {
+        // If all the characters are really 
         boolean isVictory = true;
         char[] charArray = word.toCharArray();
         for (char c : charArray) {
-            if (c > 122 || c < 97) {
+            if (!Character.isLetter(c)) {
                 isVictory = false;
             }
         }
@@ -129,6 +148,7 @@ public class HangmanClientCmd {
     
     private void increaseDanger()
     {
+        // Increase the danger level by 1
         dangerLevel += 1;
         if (dangerLevel == 7) {
             mainView.lose();

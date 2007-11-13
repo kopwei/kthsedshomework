@@ -36,25 +36,32 @@ public class HangmanClientComminicator {
         }
     }
     
-    public String checkInput(String inputString, Boolean isCorrect) {
+    public HangmanMessage checkInput(String inputString) {
         // Create a start new round message and request the server
         HangmanMessage requestMessage = new HangmanMessage();
         requestMessage.setHangmanMessageType(HangmanMessageType.CheckInput);
         requestMessage.setContent(inputString);
         HangmanMessage replyMessage = requestServer(requestMessage);
         // 
-        if (null != replyMessage) {
-            if (HangmanMessageType.CorrectInput == replyMessage.getHangmanMessageType()) {
-                isCorrect = Boolean.TRUE;
-            }
-            else {
-                isCorrect = Boolean.FALSE;
-            }
-            return replyMessage.getContent();
-        }
-        else {
-            return null;
-        }
+        return replyMessage;
+    }
+    
+    /**
+     * This method is used to notify server that the game is over
+     * @return the message contains the correct word
+     */
+    public HangmanMessage gameOver() {
+        HangmanMessage requestMessage = new HangmanMessage();
+        requestMessage.setHangmanMessageType(HangmanMessageType.GameOver);
+        HangmanMessage replyMessage = requestServer(requestMessage);
+        // 
+        return replyMessage;
+    }
+    
+    public void terminate() {
+        HangmanMessage requestMessage = new HangmanMessage();
+        requestMessage.setHangmanMessageType(HangmanMessageType.Terminate);
+        requestServer(requestMessage);
     }
     
     private HangmanMessage requestServer(HangmanMessage requestMessage) {

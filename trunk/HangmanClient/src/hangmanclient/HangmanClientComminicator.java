@@ -17,6 +17,12 @@ import message.hangmanMessage.HangmanMessageType;
  * @author Kop
  */
 public class HangmanClientComminicator {
+    private HangmanClientCmd mainCmd;
+    private Socket clientSocket = null;
+    
+    public HangmanClientComminicator(HangmanClientCmd cmd) {
+        mainCmd = cmd;
+    }
     public String getNewWord() {
         // Create a start new round message and request the server
         HangmanMessage requestMessage = new HangmanMessage();
@@ -30,12 +36,13 @@ public class HangmanClientComminicator {
         }
     }
     
-    public String checkInput(char inputChar, Boolean isCorrect) {
+    public String checkInput(String inputString, Boolean isCorrect) {
         // Create a start new round message and request the server
         HangmanMessage requestMessage = new HangmanMessage();
         requestMessage.setHangmanMessageType(HangmanMessageType.CheckInput);
-        requestMessage.setContent(Character.toString(inputChar));
+        requestMessage.setContent(inputString);
         HangmanMessage replyMessage = requestServer(requestMessage);
+        // 
         if (null != replyMessage) {
             if (HangmanMessageType.CorrectInput == replyMessage.getHangmanMessageType()) {
                 isCorrect = Boolean.TRUE;
@@ -51,19 +58,25 @@ public class HangmanClientComminicator {
     }
     
     private HangmanMessage requestServer(HangmanMessage requestMessage) {
-        Socket clientSocket = null;
+        
         HangmanMessage replyMessage = null;
         ObjectOutputStream objOut = null;
         ObjectInputStream objInput = null;
         // Create a client socket which communicate with the server
         try {
-            clientSocket  = new Socket("localhost", 4444);
+            if (null == clientSocket) {
+                clientSocket  = new Socket(mainCmd.getServerIP(), mainCmd.getServerPort());
+            }
         }
         catch (UnknownHostException ue) {
-            
+            System.err.println(ue.getMessage());
         }
         catch (IOException ie) {
             System.err.println(ie.getMessage());
+        }
+        // Check the validity
+        if (null == clientSocket) {
+            return null;
         }
         // Send the message object to server and wait for reply
         try {

@@ -31,6 +31,8 @@ public class HangmanClientView extends FrameView {
         initComponents();
         // group all the text fields at the beginning
         groupTextFields();
+        // Disable the resize of the frame
+        getFrame().setResizable(false);
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
@@ -253,6 +255,7 @@ public class HangmanClientView extends FrameView {
         mainPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         mainPanel.setFocusable(false);
         mainPanel.setName("mainPanel"); // NOI18N
+        mainPanel.setPreferredSize(new java.awt.Dimension(500, 365));
 
         textFieldChar10.setEditable(false);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(hangmanclient.HangmanClientApp.class).getContext().getResourceMap(HangmanClientView.class);

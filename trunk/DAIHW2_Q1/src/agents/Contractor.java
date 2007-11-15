@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * @author Ricky
  */
 public class Contractor extends Agent{
-    private final int lowestLine = 0;
+    private int lowestLine = 0;
     private int initialPrice = 0;
     
     @Override
@@ -36,7 +36,7 @@ public class Contractor extends Agent{
         try {
             System.out.println(getLocalName() + ": Please set the lowest line of offer.");
             BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-            initialPrice = Integer.parseInt(buffer.readLine());
+            lowestLine = Integer.parseInt(buffer.readLine());
         } catch (IOException ex) {
             Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -56,29 +56,22 @@ public class Contractor extends Agent{
         ACLMessage firstRequest = blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
         ACLMessage firstOffer = firstRequest.createReply();
         Random rnd = new Random(System.currentTimeMillis());
-        initialPrice = lowestLine + rnd.nextInt(30) + 1;
+        initialPrice = lowestLine + rnd.nextInt(15) + 1;
         firstOffer.setPerformative(ACLMessage.INFORM);
         firstOffer.setContent(Integer.toString(initialPrice));
+        System.out.println(getLocalName() + ": My first offer is " + firstOffer);
         send(firstOffer);
 
         addBehaviour(new CyclicBehaviour(this) {
-            private ReceiverBehaviour be = new ReceiverBehaviour(myAgent, -1, MessageTemplate.MatchPerformative(ACLMessage.INFORM));
+            //private ReceiverBehaviour be = new ReceiverBehaviour(myAgent, -1, MessageTemplate.MatchPerformative(ACLMessage.INFORM));
             @Override
             public void action() {
-                addBehaviour(be);
-                ACLMessage msg = null;
+                ACLMessage msg = myAgent.blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 
-                if (be.done()) {
-                    try {
-                        msg = be.getMessage();
-                    } catch (TimedOut ex) {
-                        Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (NotYetReady ex) {
-                        Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
                 if (msg != null) {
                     String lowestPrice = msg.getContent();
+                    System.out.println(myAgent.getLocalName() + ": get manager's msg, content is " + lowestPrice);
+                    
                     int lp = Integer.parseInt(lowestPrice);
                     int nextOffer = lp - 1;
                     // can I make a better offer?
@@ -86,11 +79,12 @@ public class Contractor extends Agent{
 
                     if (lowestLine <= nextOffer) {
                         // create the reply
+                        System.out.println(myAgent.getLocalName() + ": I can accept, my new offer is " + nextOffer);
                         reply.setPerformative(ACLMessage.INFORM);
                         reply.setContent(Integer.toString(nextOffer));
                     } else {
+                        System.out.println(myAgent.getLocalName() + ": I can not accept.");
                         reply.setPerformative(ACLMessage.REFUSE);
-                        return;
                     }
                     send(reply);
                 }

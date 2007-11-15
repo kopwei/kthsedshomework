@@ -8,7 +8,6 @@ package agents;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.Property;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
@@ -23,7 +22,7 @@ public class ContractManager extends Agent{
         DFAgentDescription templateDFD = new DFAgentDescription();
         ServiceDescription templateSD = new ServiceDescription();
         templateSD.setType("jade-contractor");
-        templateSD.addProperties(new Property("", ""));
+        //templateSD.addProperties(new Property("", ""));
         templateDFD.addServices(templateSD);
         
         // Prepare the search constraints

@@ -20,6 +20,7 @@ import java.util.Iterator;
 public class ManagerCNPBehaviour extends SimpleBehaviour{
     private ArrayList<DFAgentDescription> descriptions;
     private boolean isFinished = false;
+    private int bestPrice = 0;
     
     
     public ManagerCNPBehaviour(ArrayList<DFAgentDescription> descs) {
@@ -46,10 +47,14 @@ public class ManagerCNPBehaviour extends SimpleBehaviour{
                 }
             }
         }
+        // Get the current best contractor and ask for more benefit
         AID bestContractor = getBestContractor(contractors);
-        int bestPrice = contractors.get(bestContractor);
-        AID realBestContractor = iterateForBestContractor(contractors, bestPrice);
-        System.out.println("I have got the best price from " + realBestContractor.getName());
+        bestPrice = contractors.get(bestContractor);
+        if (contractors.size() > 1) {
+            bestContractor = iterateForBestContractor(contractors, bestPrice);
+        }
+        System.out.println("I have got the best price from " + bestContractor.getName());
+        System.out.println("The best price is  " + bestPrice);
         isFinished = true;
     }
     
@@ -62,21 +67,21 @@ public class ManagerCNPBehaviour extends SimpleBehaviour{
         // Prepare to iterate the map and find the best contractor out
         Iterator<AID> itor = contractors.keySet().iterator();
         AID bestAID = null;
-        int bestPrice = Integer.MAX_VALUE;
+        int currentBestPrice = Integer.MAX_VALUE;
         // Iterate the hashmap, if the price is lower, then we set the best price as the lower price
         // the best AID as the current AID
         while (itor.hasNext()) {
             AID currentAID = itor.next();
             int price = contractors.get(currentAID).intValue();
-            if (price < bestPrice) {
-                bestPrice = price;
+            if (price < currentBestPrice) {
+                currentBestPrice = price;
                 bestAID = currentAID;
             }
         }
         return bestAID;
     }
     
-    private AID iterateForBestContractor(HashMap<AID, Integer> contractors, int bestPrice) {
+    private AID iterateForBestContractor(HashMap<AID, Integer> contractors, int currentBestPrice) {
         // Prepare the message which contains the best price
         ACLMessage bestPriceMsg = new ACLMessage(ACLMessage.INFORM);
         Iterator<AID> itor = contractors.keySet().iterator();
@@ -84,8 +89,10 @@ public class ManagerCNPBehaviour extends SimpleBehaviour{
             bestPriceMsg.addReceiver(itor.next());
 
         }
-        bestPriceMsg.setContent(Integer.toString(bestPrice));
+        bestPriceMsg.setContent(Integer.toString(currentBestPrice));
         myAgent.send(bestPriceMsg);
+        System.out.println("I send the lowest price as " + currentBestPrice);
+        
         // Ask all the contrators for their price and store their new proposed price
         int contractorNumber = 0;
         HashMap<AID, Integer> ctors = new HashMap<AID, Integer>();
@@ -100,13 +107,13 @@ public class ManagerCNPBehaviour extends SimpleBehaviour{
         }
         // Get the best price out and check if there is only one best contractor
         AID bestContractor = getBestContractor(ctors);
-        int newBestPrice = contractors.get(bestContractor).intValue();
+        bestPrice = ctors.get(bestContractor).intValue();
         if (ctors.size() == 1) {
             return bestContractor;
         }
         else {
             // If there are more contractors, next iteration 
-            return iterateForBestContractor(ctors, newBestPrice);
+            return iterateForBestContractor(ctors, bestPrice);
         }
     }
 

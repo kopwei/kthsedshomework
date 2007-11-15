@@ -9,6 +9,10 @@ import jade.core.Agent;
 import jade.core.behaviours.*;
 import jade.core.behaviours.ReceiverBehaviour.NotYetReady;
 import jade.core.behaviours.ReceiverBehaviour.TimedOut;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.io.BufferedReader;
@@ -28,6 +32,18 @@ public class Contractor extends Agent{
     
     @Override
     protected void setup() {
+        // DF service registration
+        DFAgentDescription dfd = new DFAgentDescription();
+        dfd.setName(getAID());
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType("jade-contractor");
+        dfd.addServices(sd);
+        
+        try {
+            DFService.register(this, dfd);
+        }
+        catch (FIPAException fe) {fe.printStackTrace();}
+        
         try {
             System.out.println(getLocalName() + ": Please set the lowest line of offer.");
             BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));

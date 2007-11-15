@@ -32,70 +32,69 @@ public class Contractor extends Agent{
     
     @Override
     protected void setup() {
+        // set the lowest line
+        try {
+            System.out.println(getLocalName() + ": Please set the lowest line of offer.");
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+            initialPrice = Integer.parseInt(buffer.readLine());
+        } catch (IOException ex) {
+            Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         // DF service registration
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
         ServiceDescription sd = new ServiceDescription();
         sd.setType("jade-contractor");
+        sd.setName("HW2-Q1-contractor");
         dfd.addServices(sd);
         
         try {
             DFService.register(this, dfd);
         }
         catch (FIPAException fe) {fe.printStackTrace();}
-        
-        try {
-            System.out.println(getLocalName() + ": Please set the lowest line of offer.");
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-            initialPrice = Integer.parseInt(buffer.readLine());
+       
+        ACLMessage firstRequest = blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
+        ACLMessage firstOffer = firstRequest.createReply();
+        Random rnd = new Random(System.currentTimeMillis());
+        initialPrice = lowestLine + rnd.nextInt(30) + 1;
+        firstOffer.setPerformative(ACLMessage.INFORM);
+        firstOffer.setContent(Integer.toString(initialPrice));
+        send(firstOffer);
 
-            ACLMessage firstRequest = blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-            ACLMessage firstOffer = firstRequest.createReply();
-            Random rnd = new Random(System.currentTimeMillis());
-            initialPrice = lowestLine + rnd.nextInt(30) + 1;
-            firstOffer.setPerformative(ACLMessage.INFORM);
-            firstOffer.setContent(Integer.toString(initialPrice));
-            send(firstOffer);
+        addBehaviour(new CyclicBehaviour(this) {
+            private ReceiverBehaviour be = new ReceiverBehaviour(myAgent, -1, MessageTemplate.MatchPerformative(ACLMessage.INFORM));
+            @Override
+            public void action() {
+                addBehaviour(be);
+                ACLMessage msg = null;
 
-            addBehaviour(new CyclicBehaviour(this) {
-
-                private ReceiverBehaviour be = new ReceiverBehaviour(myAgent, -1, MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-
-                @Override
-                public void action() {
-                    addBehaviour(be);
-                    ACLMessage msg = null;
-
-                    if (be.done()) {
-                        try {
-                            msg = be.getMessage();
-                        } catch (TimedOut ex) {
-                            Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (NotYetReady ex) {
-                            Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    if (msg != null) {
-                        String lowestPrice = msg.getContent();
-                        int lp = Integer.parseInt(lowestPrice);
-                        int nextOffer = lp - 1;
-                        // can I make a better offer?
-                        ACLMessage reply = msg.createReply();
-
-                        if (lowestLine <= nextOffer) {
-                            // create the reply
-                            reply.setPerformative(ACLMessage.INFORM);
-                            reply.setContent(Integer.toString(nextOffer));
-                        } else {
-                            reply.setPerformative(ACLMessage.REFUSE);
-                            return;
-                        }
-                        send(reply);
+                if (be.done()) {
+                    try {
+                        msg = be.getMessage();
+                    } catch (TimedOut ex) {
+                        Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (NotYetReady ex) {
+                        Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-            });
-        } catch (IOException ex) {
-            Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }   
+                if (msg != null) {
+                    String lowestPrice = msg.getContent();
+                    int lp = Integer.parseInt(lowestPrice);
+                    int nextOffer = lp - 1;
+                    // can I make a better offer?
+                    ACLMessage reply = msg.createReply();
+
+                    if (lowestLine <= nextOffer) {
+                        // create the reply
+                        reply.setPerformative(ACLMessage.INFORM);
+                        reply.setContent(Integer.toString(nextOffer));
+                    } else {
+                        reply.setPerformative(ACLMessage.REFUSE);
+                        return;
+                    }
+                    send(reply);
+                }
+            }
+        });
+    }
 }

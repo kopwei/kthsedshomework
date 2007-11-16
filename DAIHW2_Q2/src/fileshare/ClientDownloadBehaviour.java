@@ -22,12 +22,14 @@ import java.util.logging.Logger;
 public class ClientDownloadBehaviour extends SimpleBehaviour{
     private FileSharingClient clientAgent = null;
     private boolean finished = false;
+    private boolean blocked  = true;
     
     public ClientDownloadBehaviour(Agent client) {
         this.clientAgent = (FileSharingClient) client;
     }
     
     @Override
+    @SuppressWarnings("empty-statement")
     public void action() {
         // Step 0) if all the blocks are fullfilled, then stop the behaviour
         if (clientAgent.getFileManager().isFull()) {
@@ -54,6 +56,14 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
         } catch (IOException ex) {
             Logger.getLogger(ClientDownloadBehaviour.class.getName()).log(Level.SEVERE, null, ex);
         }
+        while (blocked) {
+            ;
+        }
+        blocked = true;
+    }
+    
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
     @Override

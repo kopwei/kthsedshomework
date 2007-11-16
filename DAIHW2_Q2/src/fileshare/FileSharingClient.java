@@ -75,6 +75,18 @@ public class FileSharingClient extends Agent{
         return clientBehaviour;
     }
     
+    /**
+     * Get the download behaviour
+     * @return clien't download behaviour
+     */
+    public ClientDownloadBehaviour getDownloadBehaviour() {
+        return downloadBehaviour;
+    }
+    
+    /**
+     * Get all the available trackers
+     * @return the trackers list
+     */
     public ArrayList<AID> getTrackers() {
         return trackers;
     }

@@ -118,6 +118,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     private void handleProposeMessage(ACLMessage msg) {
         // Set the upload message and start the upload behaviour
         uploadBehaviour.setProposeMessage(msg);
+         System.out.println("I received a propose message");
         clientAgent.addBehaviour(uploadBehaviour);
     }
     
@@ -127,6 +128,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      */
     private void handleAcceptMessage(ACLMessage msg) {
         try {
+            System.out.println("I received an accept message");
             // Step 1) Fill the block first
             BTMessageContent content = (BTMessageContent) msg.getContentObject();
             if (null == content) return;
@@ -148,12 +150,14 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      */
     private void handleRejectMessage(ACLMessage msg) {
         // Release the download behaviour
+        System.out.println("I received a reject message");
         clientAgent.getDownloadBehaviour().setBlocked(false);
     }
     
     private void handleInformMessage(ACLMessage msg) {
         // Update the peer set
         try {
+            System.out.println("I received a inform message");
             BTMessageContent content = (BTMessageContent) msg.getContentObject();
             if (null == content) return;
             this.peerSet = content.getAIDCollection();

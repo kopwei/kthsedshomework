@@ -36,6 +36,7 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
     public void action() {
         // Step 0) if all the blocks are fullfilled, then stop the behaviour
         if (clientAgent.getFileManager().isFull()) {
+            System.out.println("Blocks full, download stops ");
             finished = true;
             return;
         }

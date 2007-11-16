@@ -42,7 +42,7 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
         messageContent.setBlockNumbers(lostBlocks);
         // Get the peer set and randomly select one of the peer
         HashSet<AID> peerSet = clientAgent.getClientBehaviour().getPeerSet();
-        if (peerSet.size() == 0) {
+        if (peerSet.size() == 0) { 
             return;
         }
         ArrayList<AID> peerList = new ArrayList(peerSet);

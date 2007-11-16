@@ -52,7 +52,7 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
                 }
             }
             // If there are blocks available then randomly select a block and reply it
-            if (availableBlocks.size() > 0) {
+            if (availableBlocks.size() > 0) { 
                 // Randomly select a block and packs it to a message
                 Random rand = new Random(System.currentTimeMillis());
                 int index = rand.nextInt(availableBlocks.size());

@@ -5,6 +5,9 @@
 
 package fileshare;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -18,7 +21,10 @@ public class FileManager {
     
     public FileManager(String fileName, int blockNumber){
         this.fileName = fileName;
-        fileBlocks = new ArrayList<String>(blockNumber);
+        fileBlocks = new ArrayList<String>();
+        for (int i = 0; i < blockNumber; i++) {
+            fileBlocks.add(null);
+        }
     }
     
     /**
@@ -35,7 +41,9 @@ public class FileManager {
      * @param blockContent
      */
     public void insertBlock(int index, String blockContent) {
-        fileBlocks.set(index, blockContent);
+        if (null != fileBlocks) {
+            fileBlocks.set(index, blockContent);
+        }
     }
     
     /**
@@ -101,5 +109,29 @@ public class FileManager {
             }
         }
         return lostBlocks;
-    }   
+    }
+    
+    public void readFullFile() {
+        try {
+            FileReader fstream = new FileReader("hello.txt");
+            BufferedReader reader = new BufferedReader(fstream);
+            String block = null;
+            int index = 0;
+            do {
+                block = reader.readLine();
+                if (null != block) {
+                    insertBlock(index, block);
+                }
+                index++;
+            }while(block != null);    
+        }
+        catch(IOException ie) {
+            System.err.println(ie.getMessage());
+            System.exit(0);
+        }
+    }
+    
+    public void writeFullFile() {
+        
+    }
 }

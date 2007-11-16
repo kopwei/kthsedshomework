@@ -23,7 +23,6 @@ public class TrackerBehaviour extends SimpleBehaviour{
     @Override
     public void action() {
         ACLMessage msg = myAgent.blockingReceive();
-        System.out.println("I received a message ");
         ACLMessage reply = msg.createReply();
         int msgPerf = msg.getPerformative();
         // check the performative of the msg
@@ -32,7 +31,8 @@ public class TrackerBehaviour extends SimpleBehaviour{
          * perf "INFORM" when he wanna share file, tracker adds him to the list 
          * of peers
          */ 
-        if (msgPerf == 7) {
+        if (msgPerf == ACLMessage.INFORM) {
+            System.out.println("I hava add " + msg.getSender().getName() + " into peers list");
             peersList.add(msg.getSender());
         }
         /**
@@ -40,8 +40,9 @@ public class TrackerBehaviour extends SimpleBehaviour{
          * with perf "REQUEST" when he initializes and has no block, tracker 
          * returns the list of peers
          */ 
-        if (msgPerf == 16) {
+        if (msgPerf == ACLMessage.REQUEST) {
             try {
+                System.out.println("I hava received " + msg.getSender().getName() + "'s request for peers");
                 reply.setPerformative(ACLMessage.INFORM);
 //            StringBuffer str = new StringBuffer();
 //            for (Iterator<AID> it = peersList.iterator(); it.hasNext();) {

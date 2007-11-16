@@ -32,6 +32,6 @@ public class FileSharingTracker extends Agent{
             fe.printStackTrace();
         }
         
-        //addBehaviour(new TrackerBehaviour());        
+        addBehaviour(new TrackerBehaviour());        
     }
 }

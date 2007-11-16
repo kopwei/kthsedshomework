@@ -23,8 +23,11 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
     private FileSharingClient clientAgent = null;
     private boolean finished = false;
     private boolean blocked  = true;
+    private int counter = 0;
+    private ArrayList<AID> myPeerList = new ArrayList<AID>(); 
     
     public ClientDownloadBehaviour(Agent client) {
+        super(client);
         this.clientAgent = (FileSharingClient) client;
     }
     
@@ -41,21 +44,26 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
         BTMessageContent messageContent = new BTMessageContent();
         messageContent.setBlockNumbers(lostBlocks);
         // Get the peer set and randomly select one of the peer
-        HashSet<AID> peerSet = clientAgent.getClientBehaviour().getPeerSet();
-        if (peerSet.size() == 0) { 
-            return;
+       
+        if (counter == 0) {
+            HashSet<AID> peerSet = clientAgent.getClientBehaviour().getPeerSet();
+            if (peerSet.size() == 0) { 
+                return;
+            }
+            myPeerList = new ArrayList(peerSet);
+            Collections.shuffle(myPeerList);
         }
-        ArrayList<AID> peerList = new ArrayList(peerSet);
-        Collections.shuffle(peerList);
         try {
             // Prepare the message and send it
             ACLMessage proposeMessage = new ACLMessage(ACLMessage.PROPOSE);
             proposeMessage.setContentObject(messageContent);
-            proposeMessage.addReceiver(peerList.get(0));
+            proposeMessage.addReceiver(myPeerList.get(counter));
             clientAgent.send(proposeMessage);
+            counter++;
         } catch (IOException ex) {
             Logger.getLogger(ClientDownloadBehaviour.class.getName()).log(Level.SEVERE, null, ex);
         }
+        if (counter == myPeerList.size()) counter = 0;
         while (blocked) {
             ;
         }

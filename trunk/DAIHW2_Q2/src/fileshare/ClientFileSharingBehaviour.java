@@ -8,7 +8,6 @@ package fileshare;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
-//import jade.domain.introspection.ACLMessage;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import java.util.HashSet;
@@ -40,19 +39,19 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     
     @Override
     public void action() {
-        // Step 1) Query for peer list
-        myAgent.addBehaviour(peerListQueryBehaviour);
-        
-        // Step 2) If the blocks are not empty, then Register to tracker
+        // Step 1) If the blocks are not empty, then Register to tracker
         if (!clientAgent.getFileManager().isEmpty() && !registered) {
             ACLMessage registerMessage  = new ACLMessage(ACLMessage.INFORM);
             //registerMessage.setContent(STATE_READY);
             clientAgent.send(registerMessage);
             registered = true;
         }
+        // Step 2) If the blocks are not full, query for peer list
+        if (!clientAgent.getFileManager().isFull()) {
+            myAgent.addBehaviour(peerListQueryBehaviour);
+        }
         // Step 3) Start to receiving files
         receivingMessages();
-        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

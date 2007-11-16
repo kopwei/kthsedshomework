@@ -23,6 +23,14 @@ public class FileManager {
     
     /**
      * 
+     * @return
+     */
+    public String getFileName() {
+        return fileName;
+    }
+    
+    /**
+     * 
      * @param index
      * @param blockContent
      */
@@ -37,6 +45,15 @@ public class FileManager {
      */
     public String getBlockAt(int index) {
         return fileBlocks.get(index);
+    }
+    
+    /**
+     * Check if one of the block is available
+     * @param index
+     * @return
+     */
+    public boolean isBlockAvailable(int index) {
+        return (fileBlocks.get(index) == null);
     }
     
     /**

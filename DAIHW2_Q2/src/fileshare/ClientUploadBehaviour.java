@@ -61,6 +61,7 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
                 // Prepare a BTMessageContent
                 BTMessageContent replyContent = new BTMessageContent();
                 replyContent.setBlockContent(block);
+                replyContent.setBlockIndex(index);
                 ACLMessage replyMessage = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                 replyMessage.setContentObject(replyContent);
                 replyMessage.addReceiver(proposeMsg.getSender());

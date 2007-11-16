@@ -23,6 +23,7 @@ public class PeerListQueryBehaviour extends OneShotBehaviour{
      */
     public PeerListQueryBehaviour(Agent clientAgent) { 
         //trackerAIDs = trackerAid;
+        super(clientAgent);
         this.clientAgent = (FileSharingClient)clientAgent;
     }
 

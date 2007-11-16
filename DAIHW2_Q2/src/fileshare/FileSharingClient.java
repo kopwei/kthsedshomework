@@ -51,11 +51,23 @@ public class FileSharingClient extends Agent{
         }
         // Read torrent information and start the main behaviour
         TorrentFileParser parser = new TorrentFileParser("bt.xml");
-        fileManager = new FileManager(parser.getFileName(), parser.getBlockNumber());      
+        fileManager = new FileManager(parser.getFileName(), parser.getBlockNumber());
+        // Act as seed if the argument is server
+        Object[] args = getArguments();
+        if (null != args) {
+            if (args.length > 0) {
+                if (args[0].toString().equals("server")) {
+                    actAsSeed();
+                }
+            }
+        }
+        
+        
+        // Start the main behaviour
         clientBehaviour = new ClientFileSharingBehaviour(this);
         addBehaviour(clientBehaviour);
         // Start the mdownload behaviour
-        downloadBehaviour = new ClientDownloadBehaviour(this); 
+        downloadBehaviour = new ClientDownloadBehaviour(this);
         addBehaviour(downloadBehaviour);
     }
     
@@ -91,13 +103,8 @@ public class FileSharingClient extends Agent{
         return trackers;
     }
     
-    
-    
-//    public HashSet<AID> getPeersList() {
-//        return clientPeers;
-//    }
-//    
-//    public void setPeersList(HashSet peersList) {
-//        clientPeers = peersList;
-//    }
+    private void actAsSeed() {
+        //System.out.println()
+        fileManager.readFullFile();
+    }
 }

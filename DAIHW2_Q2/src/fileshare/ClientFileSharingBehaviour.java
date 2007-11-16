@@ -68,17 +68,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     public HashSet<AID> getPeerSet() {
         return peerSet;
     }
-    
-    /**
-     * This method is used to update the peer set
-     * @param peerSet Input peer hash set to update the peers 
-     */
-    public void setPeerSet(HashSet<AID> peerSet) {
-        this.peerSet = peerSet;
-    }
         
-    //private int checkLostBlocks
-    
     /**
      * 
      */
@@ -127,7 +117,9 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      * @param msg
      */
     private void handleProposeMessage(ACLMessage msg) {
-        
+        // Set the upload message and start the upload behaviour
+        uploadBehaviour.setProposeMessage(msg);
+        clientAgent.addBehaviour(uploadBehaviour);
     }
     
     /**
@@ -142,6 +134,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
             int index = content.getBlockIndex();
             if (null == clientAgent.getFileManager().getBlockAt(index)) {
                 clientAgent.getFileManager().insertBlock(index, content.getBlockContent());
+                System.out.println("I have received the block no " + index);
             }
             // Release the download behaviour
             clientAgent.getDownloadBehaviour().setBlocked(false);
@@ -160,6 +153,14 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     }
     
     private void handleInformMessage(ACLMessage msg) {
-        
+        // Update the peer set
+        try {
+            BTMessageContent content = (BTMessageContent) msg.getContentObject();
+            if (null == content) return;
+            this.peerSet = content.getAIDCollection();
+        }   
+        catch (UnreadableException ex) {
+            Logger.getLogger(ClientFileSharingBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

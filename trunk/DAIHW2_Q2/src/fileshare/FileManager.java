@@ -116,14 +116,12 @@ public class FileManager {
             FileReader fstream = new FileReader("hello.txt");
             BufferedReader reader = new BufferedReader(fstream);
             String block = null;
-            int index = 0;
-            do {
+            for (int i = 0; i < fileBlocks.size(); i++) {
                 block = reader.readLine();
                 if (null != block) {
-                    insertBlock(index, block);
+                    insertBlock(i, block);
                 }
-                index++;
-            }while(block != null);    
+            } 
         }
         catch(IOException ie) {
             System.err.println(ie.getMessage());

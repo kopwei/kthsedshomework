@@ -23,13 +23,13 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
     private FileSharingClient clientAgent = null;
     private ACLMessage proposeMsg = null;
     
-    public ClientUploadBehaviour(Agent client, ACLMessage msg) throws Exception {
+    public ClientUploadBehaviour(Agent client) {
         super(client);
         clientAgent = (FileSharingClient)client;
-        if (null == clientAgent) {
-            throw(new Exception("agent type dosen't match"));
-        }
-        proposeMsg = msg;
+    }
+    
+    public void setProposeMessage(ACLMessage proposeMsg) {
+        this.proposeMsg = proposeMsg;
     }
 
     @Override

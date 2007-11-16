@@ -13,7 +13,7 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import java.util.ArrayList;
-import java.util.HashSet;
+//import java.util.HashSet;
 
 /**
  *
@@ -23,7 +23,8 @@ public class FileSharingClient extends Agent{
     
     private ArrayList<AID> trackers = new ArrayList<AID>();
     private FileManager fileManager = null;
-    private HashSet<AID> clientPeers = null;
+    private ClientFileSharingBehaviour clientBehaviour = null;
+    //private HashSet<AID> clientPeers = null;
     
     @Override
     protected void setup() {
@@ -47,21 +48,40 @@ public class FileSharingClient extends Agent{
             System.out.println(fe.getMessage());
             System.exit(1);
         }
+        // Read torrent information and start the main behaviour
         TorrentFileParser parser = new TorrentFileParser("bt.xml");
-        FileManager manager = new FileManager(parser.getFileName(), parser.getBlockNumber());
-        
-        
+        fileManager = new FileManager(parser.getFileName(), parser.getBlockNumber());      
+        clientBehaviour = new ClientFileSharingBehaviour(this);
+        addBehaviour(clientBehaviour);
     }
     
+    /**
+     * Get the client's file manager which handle the file management
+     * @return file manager object
+     */
     public FileManager getFileManager() {
         return fileManager;
     }
     
-    public HashSet<AID> getPeersList() {
-        return clientPeers;
+    /**
+     * Get the client's main behaviour
+     * @return client's main behaviour
+     */
+    public ClientFileSharingBehaviour getClientBehaviour() {
+        return clientBehaviour;
     }
     
-    public void setPeersList(HashSet peersList) {
-        clientPeers = peersList;
+    public ArrayList<AID> getTrackers() {
+        return trackers;
     }
+    
+    
+    
+//    public HashSet<AID> getPeersList() {
+//        return clientPeers;
+//    }
+//    
+//    public void setPeersList(HashSet peersList) {
+//        clientPeers = peersList;
+//    }
 }

@@ -16,7 +16,7 @@ import java.util.Random;
  * @author Ricky
  */
 public class ClientDownloadBehaviour extends SimpleBehaviour{
-    private HashSet<AID> peersList = new HashSet<AID>();
+    //private HashSet<AID> peerSet = new HashSet<AID>();
     private FileSharingClient clientAgent = new FileSharingClient();
     
     public ClientDownloadBehaviour(Agent client) {
@@ -25,20 +25,18 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
     
     @Override
     public void action() {
-        this.peersList = clientAgent.getPeersList();
-        int length = peersList.size();
+        HashSet<AID> peerSet  = clientAgent.getClientBehaviour().getPeerSet();
+        int length = peerSet.size();
         Random rnd = new Random(System.currentTimeMillis());
-        // choose a random position/peer in peersList to start to ask for block-downloading
+        // choose a random position/peer in peerSet to start to ask for block-downloading
         int startPosition = rnd.nextInt(length);
-        ArrayList<AID> pl = new ArrayList(peersList);
+        ArrayList<AID> pl = new ArrayList(peerSet);
         for (int i = startPosition; i < pl.size(); i++) {
             AID peer = pl.get(i);
             String fileName = clientAgent.getFileManager().getFileName();
             ArrayList lostBlocks = clientAgent.getFileManager().getLostBlockNumbers();
             
         }
-
-
     }
 
     @Override

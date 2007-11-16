@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class ClientDownloadBehaviour extends SimpleBehaviour{
     private FileSharingClient clientAgent = null;
     private boolean finished = false;
-    private boolean blocked  = true;
+    private boolean blocked  = false;
     private int counter = 0;
     private ArrayList<AID> myPeerList = new ArrayList<AID>(); 
     
@@ -34,6 +34,7 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
     @Override
     @SuppressWarnings("empty-statement")
     public void action() {
+        if(blocked) return;
         // Step 0) if all the blocks are fullfilled, then stop the behaviour
         if (clientAgent.getFileManager().isFull()) {
             System.out.println("Blocks full, download stops ");
@@ -65,9 +66,9 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
             Logger.getLogger(ClientDownloadBehaviour.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (counter == myPeerList.size()) counter = 0;
-        while (blocked) {
-            ;
-        }
+//        while (blocked) {
+//            ;
+//        }
         blocked = true;
     }
     

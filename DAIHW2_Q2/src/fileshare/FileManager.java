@@ -61,7 +61,7 @@ public class FileManager {
      * @return
      */
     public boolean isBlockAvailable(int index) {
-        return (fileBlocks.get(index) == null);
+        return (fileBlocks.get(index) != null);
     }
     
     /**

@@ -10,16 +10,12 @@ import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
-import java.util.HashSet;
 /**
  *
  * @author Ricky
  */
 public class PeerListQueryBehaviour extends OneShotBehaviour{
-    //private ArrayList<AID> trackerAIDs = null;
-    private HashSet<AID> peersList = new HashSet<AID>();
     private FileSharingClient clientAgent = null;
-    
     /**
      * 
      * @param trackerAid the AID of tracker agent

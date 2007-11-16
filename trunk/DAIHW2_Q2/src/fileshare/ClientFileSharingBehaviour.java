@@ -20,24 +20,34 @@ import java.util.HashSet;
 public class ClientFileSharingBehaviour extends SimpleBehaviour{
     private boolean finished = false;
     private PeerListQueryBehaviour peerListQueryBehaviour = null;
-    private ClientDownloadBehaviour downloadBehaviour = null;
     private ClientUploadBehaviour uploadBehaviour = null;
     private HashSet<AID> peerSet = new HashSet<AID>();
+    FileSharingClient clientAgent = null;
+    private boolean registered = false;
     
     
     public ClientFileSharingBehaviour(Agent a) {
         super(a);
-        FileSharingClient clientAgent = (FileSharingClient)a;
+        clientAgent = (FileSharingClient)a;
         if (null != clientAgent) {
             peerListQueryBehaviour = new PeerListQueryBehaviour(clientAgent);
-            downloadBehaviour = new ClientDownloadBehaviour(clientAgent);
             uploadBehaviour = new ClientUploadBehaviour(clientAgent);
         }
     }
     
     @Override
     public void action() {
+        // Step 1) Query for peer list
+        myAgent.addBehaviour(peerListQueryBehaviour);
         
+        // Step 2) If the blocks are not empty, then Register to tracker
+        if (!clientAgent.getFileManager().isEmpty() && !registered) {
+            ACLMessage registerMessage  = new ACLMessage(ACLMessage.INFORM);
+            //registerMessage.setContent(STATE_READY);
+            clientAgent.send(registerMessage);
+            registered = true;
+        }
+        // Step 3) Start to receiving files
         receivingMessages();
         //throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -63,6 +73,17 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     public void setPeerSet(HashSet<AID> peerSet) {
         this.peerSet = peerSet;
     }
+    
+    
+    /**
+     * This method will check the block state and register it self as a peer if its blocks are not 
+     * empty, also it will start the download behaviour while it is not full
+     */
+    private void checkBlockState() {
+        
+    }
+    
+    //private int checkLostBlocks
     
     /**
      * 
@@ -91,19 +112,47 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
         // Distribute the processing according to the message type
         switch (msg.getPerformative()) {
         case ACLMessage.PROPOSE:
-            
+            handleProposeMessage(msg);
             break;
         case ACLMessage.ACCEPT_PROPOSAL:
+            handleAcceptMessage(msg);
             break;
         case ACLMessage.REJECT_PROPOSAL:
+            handleRejectMessage(msg);
             break;
         case ACLMessage.INFORM:
+            handleInformMessage(msg);
             break;
         default:
             break;
         }
     }
 
+    /**
+     * This method will process the propose message
+     * @param msg
+     */
+    private void handleProposeMessage(ACLMessage msg) {
+        
+    }
     
+    /**
+     * This method will process the accept propose message
+     * @param msg
+     */
+    private void handleAcceptMessage(ACLMessage msg) {
+        
+    }
     
+    /**
+     * This method will process the propose message
+     * @param msg
+     */
+    private void handleRejectMessage(ACLMessage msg) {
+        
+    }
+    
+    private void handleInformMessage(ACLMessage msg) {
+        
+    }
 }

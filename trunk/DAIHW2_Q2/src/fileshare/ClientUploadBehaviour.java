@@ -12,6 +12,7 @@ import jade.lang.acl.UnreadableException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,11 +45,11 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
             }
             // Check the available blocks which it can provide.
             ArrayList<Integer> lostBlocks = content.getLostBlockNumber();
-            ArrayList<Integer> availableBlocks = new ArrayList<Integer>();
+            Vector<Integer> availableBlocks = new Vector<Integer>();
             FileManager manager = clientAgent.getFileManager(); 
             for (Integer integer : lostBlocks) {
                 if (manager.isBlockAvailable(integer.intValue())) {
-                    availableBlocks.add(integer);
+                    availableBlocks.addElement(integer);
                 }
             }
             // If there are blocks available then randomly select a block and reply it

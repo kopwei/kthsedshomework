@@ -78,7 +78,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      */
     private void receivingMessages() {
         try {
-            ACLMessage msg = myAgent.blockingReceive(10000);
+            ACLMessage msg = myAgent.blockingReceive(3000);
             if (null != msg) {
                 processMessage(msg);
             }       

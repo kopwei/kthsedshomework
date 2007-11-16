@@ -23,6 +23,7 @@ public class TrackerBehaviour extends SimpleBehaviour{
     @Override
     public void action() {
         ACLMessage msg = myAgent.blockingReceive();
+        System.out.println("I received a message ");
         ACLMessage reply = msg.createReply();
         int msgPerf = msg.getPerformative();
         // check the performative of the msg

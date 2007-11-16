@@ -56,7 +56,7 @@ public class TrackerBehaviour extends SimpleBehaviour{
 //            }
                 BTMessageContent btmc = new BTMessageContent();
                 btmc.setAIDCollection(peersList);
-                reply.setContentObject(btmc.getAIDCollection());
+                reply.setContentObject(btmc);
             } catch (IOException ex) {
                 Logger.getLogger(TrackerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
             }

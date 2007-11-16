@@ -67,22 +67,13 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     }
     
     /**
-     * 
-     * @param peerSet
+     * This method is used to update the peer set
+     * @param peerSet Input peer hash set to update the peers 
      */
     public void setPeerSet(HashSet<AID> peerSet) {
         this.peerSet = peerSet;
     }
-    
-    
-    /**
-     * This method will check the block state and register it self as a peer if its blocks are not 
-     * empty, also it will start the download behaviour while it is not full
-     */
-    private void checkBlockState() {
         
-    }
-    
     //private int checkLostBlocks
     
     /**

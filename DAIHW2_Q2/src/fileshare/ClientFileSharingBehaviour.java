@@ -10,6 +10,7 @@ import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +44,10 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
         if (!clientAgent.getFileManager().isEmpty() && !registered) {
             ACLMessage registerMessage  = new ACLMessage(ACLMessage.INFORM);
             //registerMessage.setContent(STATE_READY);
+            ArrayList<AID> trackers = clientAgent.getTrackers();
+            for (AID aid : trackers) {
+                registerMessage.addReceiver(aid);
+            }
             clientAgent.send(registerMessage);
             registered = true;
         }

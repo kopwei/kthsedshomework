@@ -24,6 +24,7 @@ public class FileSharingClient extends Agent{
     private ArrayList<AID> trackers = new ArrayList<AID>();
     private FileManager fileManager = null;
     private ClientFileSharingBehaviour clientBehaviour = null;
+    private ClientDownloadBehaviour downloadBehaviour = null;
     //private HashSet<AID> clientPeers = null;
     
     @Override
@@ -53,6 +54,9 @@ public class FileSharingClient extends Agent{
         fileManager = new FileManager(parser.getFileName(), parser.getBlockNumber());      
         clientBehaviour = new ClientFileSharingBehaviour(this);
         addBehaviour(clientBehaviour);
+        // Start the mdownload behaviour
+        downloadBehaviour = new ClientDownloadBehaviour(this);
+        addBehaviour(downloadBehaviour);
     }
     
     /**

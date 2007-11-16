@@ -25,7 +25,7 @@ public class FileManager {
      * 
      * @return
      */
-    public String getFileName() {
+    public String getFileName() { 
         return fileName;
     }
     

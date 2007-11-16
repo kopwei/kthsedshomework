@@ -55,7 +55,7 @@ public class FileSharingClient extends Agent{
         clientBehaviour = new ClientFileSharingBehaviour(this);
         addBehaviour(clientBehaviour);
         // Start the mdownload behaviour
-        downloadBehaviour = new ClientDownloadBehaviour(this);
+        downloadBehaviour = new ClientDownloadBehaviour(this); 
         addBehaviour(downloadBehaviour);
     }
     

@@ -21,6 +21,7 @@ public class BTMessageContent implements Serializable{
     private ArrayList<Integer> blockNumbers = null;
     private String fileName = null;
     private String blockContent = null;
+    private int blockIndex = -1;
     
     /**
      * 
@@ -54,6 +55,9 @@ public class BTMessageContent implements Serializable{
         blockContent = obj;
     }
     
+    public void setBlockIndex(int index) {
+        blockIndex = index;
+    }
     /**
      * 
      * @return
@@ -84,6 +88,10 @@ public class BTMessageContent implements Serializable{
      */
     public String getBlockContent() {
         return blockContent;
+    }
+    
+    public int getBlockIndex() {
+        return blockIndex;
     }
     /**
      * This method is used to get the set of AID from the message content

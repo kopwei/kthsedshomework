@@ -27,7 +27,7 @@ public class TorrentFileParser {
     
     public TorrentFileParser(String torrentFileName) {
         try {
-            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance(); 
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(new File(torrentFileName));
             // Normalize text representation

@@ -10,7 +10,10 @@ import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 //import jade.domain.introspection.ACLMessage;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -114,7 +117,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
         case ACLMessage.INFORM:
             handleInformMessage(msg);
             break;
-        default:
+        default: 
             break;
         }
     }
@@ -132,7 +135,19 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      * @param msg
      */
     private void handleAcceptMessage(ACLMessage msg) {
-        
+        try {
+            // Step 1) Fill the block first
+            BTMessageContent content = (BTMessageContent) msg.getContentObject();
+            if (null == content) return;
+            int index = content.getBlockIndex();
+            if (null == clientAgent.getFileManager().getBlockAt(index)) {
+                clientAgent.getFileManager().insertBlock(index, content.getBlockContent());
+            }
+            // Release the download behaviour
+            clientAgent.getDownloadBehaviour().setBlocked(false);
+        } catch (UnreadableException ex) {
+            Logger.getLogger(ClientFileSharingBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -140,7 +155,8 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      * @param msg
      */
     private void handleRejectMessage(ACLMessage msg) {
-        
+        // Release the download behaviour
+        clientAgent.getDownloadBehaviour().setBlocked(false);
     }
     
     private void handleInformMessage(ACLMessage msg) {

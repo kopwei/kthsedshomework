@@ -21,7 +21,7 @@ public class FileSharingTracker extends Agent{
         // DF service registration
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(getAID());
-        ServiceDescription sd = new ServiceDescription();
+        ServiceDescription sd = new ServiceDescription(); 
         sd.setType("bt-tracker");
         sd.setName("HW2-Q2-tracker");
         dfd.addServices(sd);

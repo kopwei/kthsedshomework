@@ -36,7 +36,10 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
     @Override
     @SuppressWarnings("empty-statement")
     public void action() {
-        if(isWaitingForProposeReply) return;
+        if(isWaitingForProposeReply) {
+            System.out.println("I am waiting for proposed reply, so I returned");
+            return;
+        }
         // Step 0) if all the blocks are fullfilled, then stop the behaviour
         if (clientAgent.getFileManager().isFull()) {
             System.out.println("Blocks full, download stops ");
@@ -58,15 +61,18 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
                 isWaitingForPeerListUpdate = true;
             }
             if (!isPeerListUpdated) {
+                System.out.println("I am waiting for peerlist update so I returned");
                 return;
             }
             
             HashSet<AID> peerSet = clientAgent.getClientBehaviour().getPeerSet();
+            
+            peerSet.remove(myAgent.getAID());
             //isPeerListUpdated = false;
             if (peerSet.size() == 0) { 
+                System.out.println("The peerlist is empty, thats why I returned");
                 return;
             }
-            peerSet.remove(myAgent.getAID());
             myPeerList = new ArrayList(peerSet);
             Collections.shuffle(myPeerList);
         }
@@ -80,6 +86,7 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
             proposeMessage.setContentObject(messageContent);
             proposeMessage.addReceiver(myPeerList.get(peerPointer));
             clientAgent.send(proposeMessage);
+            System.out.println("I send the propose message to " + myPeerList.get(peerPointer).getName() + " and waiting for his reply");
             peerPointer++;
             isWaitingForProposeReply = true;
         } catch (IOException ex) {

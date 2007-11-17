@@ -20,20 +20,15 @@ import java.util.logging.Logger;
  *
  * @author Kop
  */
-public class ClientUploadBehaviour extends OneShotBehaviour{
+public class ClientBlockUploader{
     private FileSharingClient clientAgent = null;
     private ACLMessage proposeMsg = null;
     
-    public ClientUploadBehaviour(Agent client) {
-        super(client);
+    public ClientBlockUploader(Agent client, ACLMessage proposeMsg) {
         clientAgent = (FileSharingClient)client;
-    }
-    
-    public void setProposeMessage(ACLMessage proposeMsg) {
         this.proposeMsg = proposeMsg;
     }
-
-    @Override
+    
     public void action() {
         
         //if (msg.)
@@ -86,7 +81,7 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
             }
         }
         catch (IOException ex) {
-            Logger.getLogger(ClientUploadBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientBlockUploader.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(ex.getMessage());
         }        catch (UnreadableException ue) {
             System.err.println(ue.getMessage());

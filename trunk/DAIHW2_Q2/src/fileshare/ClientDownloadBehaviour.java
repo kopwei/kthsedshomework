@@ -23,6 +23,8 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
     private FileSharingClient clientAgent = null;
     private boolean finished = false;
     private boolean blocked  = false;
+    private boolean askedForUpdate = false;
+    private boolean peerUpdated = false;
     private int counter = 0;
     private ArrayList<AID> myPeerList = new ArrayList<AID>(); 
     
@@ -39,6 +41,7 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
         if (clientAgent.getFileManager().isFull()) {
             System.out.println("Blocks full, download stops ");
             finished = true;
+            System.out.println("downloading blocks finished");
             return;
         }
         // Step 2) check the lost blocks and prepare for the message
@@ -48,10 +51,25 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
         // Get the peer set and randomly select one of the peer
        
         if (counter == 0) {
+            if (!askedForUpdate) {
+                ArrayList<AID> trackerAIDs = clientAgent.getTrackers();
+                ACLMessage sMsg = new ACLMessage(ACLMessage.REQUEST);
+                for (AID aid : trackerAIDs) {
+                    sMsg.addReceiver(aid);
+                }
+                myAgent.send(sMsg);
+                askedForUpdate = true;
+            }
+            if (!peerUpdated) {
+                return;
+            }
+            
             HashSet<AID> peerSet = clientAgent.getClientBehaviour().getPeerSet();
+            peerUpdated = false;
             if (peerSet.size() == 0) { 
                 return;
             }
+            peerSet.remove(myAgent.getAID());
             myPeerList = new ArrayList(peerSet);
             Collections.shuffle(myPeerList);
         }
@@ -65,7 +83,10 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
         } catch (IOException ex) {
             Logger.getLogger(ClientDownloadBehaviour.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (counter == myPeerList.size()) counter = 0;
+        if (counter == myPeerList.size()) {
+            counter = 0;
+            askedForUpdate = false;
+        }
 //        while (blocked) {
 //            ;
 //        }
@@ -74,6 +95,10 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
     
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
+    }
+    
+    public void setPeerUpdated(boolean peerUpdated) {
+        this.peerUpdated = peerUpdated;
     }
 
     @Override

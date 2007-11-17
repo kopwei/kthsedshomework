@@ -41,6 +41,7 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
             // Get the object out of the content
             BTMessageContent content = (BTMessageContent)(proposeMsg.getContentObject());
             if (null == content) {
+                System.out.println("Strange, The proposed message contains nothing");
                 return;
             }
             // Check the available blocks which it can provide.
@@ -86,6 +87,7 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
         }
         catch (IOException ex) {
             Logger.getLogger(ClientUploadBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }        catch (UnreadableException ue) {
             System.err.println(ue.getMessage());
         }

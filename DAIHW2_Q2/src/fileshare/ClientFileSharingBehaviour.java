@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public class ClientFileSharingBehaviour extends SimpleBehaviour{
     private boolean finished = false;
-    private PeerListQueryBehaviour peerListQueryBehaviour = null;
+    //private PeerListQueryBehaviour peerListQueryBehaviour = null;
     private ClientUploadBehaviour uploadBehaviour = null;
     private HashSet<AID> peerSet = new HashSet<AID>();
     FileSharingClient clientAgent = null;
@@ -33,7 +33,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
         super(a);
         clientAgent = (FileSharingClient)a;
         if (null != clientAgent) {
-            peerListQueryBehaviour = new PeerListQueryBehaviour(clientAgent);
+            //peerListQueryBehaviour = new PeerListQueryBehaviour(clientAgent);
             uploadBehaviour = new ClientUploadBehaviour(clientAgent);
         }
     }
@@ -146,7 +146,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
                 System.out.println("I have received the block no " + index);
             }
             // Release the download behaviour
-            clientAgent.getDownloadBehaviour().setBlocked(false);
+            clientAgent.getDownloadBehaviour().notifyProposeReplied();
         } catch (UnreadableException ex) {
             Logger.getLogger(ClientFileSharingBehaviour.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -159,7 +159,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     private void handleRejectMessage(ACLMessage msg) {
         // Release the download behaviour
         System.out.println("I received a reject message");
-        clientAgent.getDownloadBehaviour().setBlocked(false);
+        clientAgent.getDownloadBehaviour().notifyProposeReplied();
     }
     
     private void handleInformMessage(ACLMessage msg) {
@@ -169,14 +169,11 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
             System.out.println("I received a inform message. content is " + content);
             if (null == content) return;
             this.peerSet = content.getAIDCollection();
-            clientAgent.getDownloadBehaviour().setPeerUpdated(true);
+            clientAgent.getDownloadBehaviour().setPeerUpdatedState(true);
             for (AID aid : peerSet) {
                System.out.print(aid.getName());
             }
-            System.out.println();
-
-                
-            
+            System.out.println();           
         }   
         catch (UnreadableException ex) {
             Logger.getLogger(ClientFileSharingBehaviour.class.getName()).log(Level.SEVERE, null, ex);

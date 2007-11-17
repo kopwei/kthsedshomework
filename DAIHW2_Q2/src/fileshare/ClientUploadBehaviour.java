@@ -66,7 +66,7 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
                 replyMessage.setContentObject(replyContent);
                 replyMessage.addReceiver(proposeMsg.getSender());
                 clientAgent.send(replyMessage);
-                System.out.println("I replie the block " + index + " to agent " + proposeMsg.getSender().getName());
+                System.out.println("I replie the block " + index + " to agent " + proposeMsg.getSender().getName() + "\n And the block content is " + block);
             }
             // If there is no block available,then reject the propose
             else {

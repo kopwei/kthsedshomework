@@ -61,8 +61,8 @@ public class TrackerBehaviour extends SimpleBehaviour{
             } catch (IOException ex) {
                 Logger.getLogger(TrackerBehaviour.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        myAgent.send(reply);
+            myAgent.send(reply);
+        }   
     }
 
     @Override

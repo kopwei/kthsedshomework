@@ -101,19 +101,28 @@ public class FileManager {
      * @return
      */
     public ArrayList<Integer> getLostBlockNumbers() {
+        
+        int size = fileBlocks.size();
         ArrayList<Integer> lostBlocks = new ArrayList<Integer>();
         // Iterate the file blocks and store the lost block numbers into the array list
-        for (int i = 0; i < fileBlocks.size(); i++) {
+        for (int i = 0; i < size; i++) {
             if (fileBlocks.get(i) == null) {
                 lostBlocks.add(new Integer(i));
             }
         }
-        return lostBlocks;
+        ArrayList<Integer> returnArray = new ArrayList<Integer>(lostBlocks.size());
+        for (Integer integer : lostBlocks) {
+            if(null != integer) {
+                returnArray.add(integer);
+            }
+        }
+
+        return returnArray;
     }
     
     public void readFullFile() {
         try {
-            FileReader fstream = new FileReader("hello.txt");
+            FileReader fstream = new FileReader(fileName);
             BufferedReader reader = new BufferedReader(fstream);
             String block = null;
             for (int i = 0; i < fileBlocks.size(); i++) {

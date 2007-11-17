@@ -52,9 +52,9 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
             registered = true;
         }
         // Step 2) If the blocks are not full, query for peer list
-        if (!clientAgent.getFileManager().isFull()) {
-            myAgent.addBehaviour(peerListQueryBehaviour);
-        }
+//        if (!clientAgent.getFileManager().isFull()) {
+//            myAgent.addBehaviour(peerListQueryBehaviour);
+//        }
         // Step 3) Start to receiving files
         receivingMessages();
     }
@@ -136,7 +136,10 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
             System.out.println("I received an accept message");
             // Step 1) Fill the block first
             BTMessageContent content = (BTMessageContent) msg.getContentObject();
-            if (null == content) return;
+            if (null == content) {
+                System.out.println("accept message' content is null.");
+                return;
+            }
             int index = content.getBlockIndex();
             if (null == clientAgent.getFileManager().getBlockAt(index)) {
                 clientAgent.getFileManager().insertBlock(index, content.getBlockContent());
@@ -162,10 +165,18 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     private void handleInformMessage(ACLMessage msg) {
         // Update the peer set
         try {
-            System.out.println("I received a inform message");
             BTMessageContent content = (BTMessageContent) msg.getContentObject();
+            System.out.println("I received a inform message. content is " + content);
             if (null == content) return;
             this.peerSet = content.getAIDCollection();
+            clientAgent.getDownloadBehaviour().setPeerUpdated(true);
+            for (AID aid : peerSet) {
+               System.out.print(aid.getName());
+            }
+            System.out.println();
+
+                
+            
         }   
         catch (UnreadableException ex) {
             Logger.getLogger(ClientFileSharingBehaviour.class.getName()).log(Level.SEVERE, null, ex);

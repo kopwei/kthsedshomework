@@ -13,6 +13,7 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import java.util.ArrayList;
+import jade.core.behaviours.ParallelBehaviour;
 //import java.util.HashSet;
 
 /**
@@ -62,12 +63,15 @@ public class FileSharingClient extends Agent{
             }
         }
         
-        
+//        ParallelBehaviour par = new ParallelBehaviour(ParallelBehaviour.WHEN_ALL);
+//        addBehaviour(par);
         // Start the main behaviour
         clientBehaviour = new ClientFileSharingBehaviour(this);
+        //par.addSubBehaviour(clientBehaviour);
         addBehaviour(clientBehaviour);
         // Start the mdownload behaviour
         downloadBehaviour = new ClientDownloadBehaviour(this);
+        //par.addSubBehaviour(downloadBehaviour);
         addBehaviour(downloadBehaviour);
     }
     

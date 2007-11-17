@@ -22,10 +22,10 @@ import java.util.logging.Logger;
 public class ClientDownloadBehaviour extends SimpleBehaviour{
     private FileSharingClient clientAgent = null;
     private boolean finished = false;
-    private boolean blocked  = false;
-    private boolean askedForUpdate = false;
-    private boolean peerUpdated = false;
-    private int counter = 0;
+    private boolean isWaitingForProposeReply  = false;
+    private boolean isWaitingForPeerListUpdate = false;
+    private boolean isPeerListUpdated = false;
+    private int peerPointer = 0;
     private ArrayList<AID> myPeerList = new ArrayList<AID>(); 
     
     public ClientDownloadBehaviour(Agent client) {
@@ -36,7 +36,7 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
     @Override
     @SuppressWarnings("empty-statement")
     public void action() {
-        if(blocked) return;
+        if(isWaitingForProposeReply) return;
         // Step 0) if all the blocks are fullfilled, then stop the behaviour
         if (clientAgent.getFileManager().isFull()) {
             System.out.println("Blocks full, download stops ");
@@ -44,28 +44,25 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
             System.out.println("downloading blocks finished");
             return;
         }
-        // Step 2) check the lost blocks and prepare for the message
-        ArrayList<Integer> lostBlocks = clientAgent.getFileManager().getLostBlockNumbers();
-        BTMessageContent messageContent = new BTMessageContent();
-        messageContent.setBlockNumbers(lostBlocks);
+
         // Get the peer set and randomly select one of the peer
        
-        if (counter == 0) {
-            if (!askedForUpdate) {
+        if (peerPointer == 0) {
+            if (!isWaitingForPeerListUpdate) {
                 ArrayList<AID> trackerAIDs = clientAgent.getTrackers();
                 ACLMessage sMsg = new ACLMessage(ACLMessage.REQUEST);
                 for (AID aid : trackerAIDs) {
                     sMsg.addReceiver(aid);
                 }
                 myAgent.send(sMsg);
-                askedForUpdate = true;
+                isWaitingForPeerListUpdate = true;
             }
-            if (!peerUpdated) {
+            if (!isPeerListUpdated) {
                 return;
             }
             
             HashSet<AID> peerSet = clientAgent.getClientBehaviour().getPeerSet();
-            peerUpdated = false;
+            //isPeerListUpdated = false;
             if (peerSet.size() == 0) { 
                 return;
             }
@@ -74,31 +71,33 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
             Collections.shuffle(myPeerList);
         }
         try {
+            // Step 2) check the lost blocks and prepare for the message
+            ArrayList<Integer> lostBlocks = clientAgent.getFileManager().getLostBlockNumbers();
+            BTMessageContent messageContent = new BTMessageContent();
+            messageContent.setBlockNumbers(lostBlocks);
             // Prepare the message and send it
             ACLMessage proposeMessage = new ACLMessage(ACLMessage.PROPOSE);
             proposeMessage.setContentObject(messageContent);
-            proposeMessage.addReceiver(myPeerList.get(counter));
+            proposeMessage.addReceiver(myPeerList.get(peerPointer));
             clientAgent.send(proposeMessage);
-            counter++;
+            peerPointer++;
+            isWaitingForProposeReply = true;
         } catch (IOException ex) {
             Logger.getLogger(ClientDownloadBehaviour.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (counter == myPeerList.size()) {
-            counter = 0;
-            askedForUpdate = false;
-        }
-//        while (blocked) {
-//            ;
-//        }
-        blocked = true;
+        if (peerPointer == myPeerList.size()) {
+            peerPointer = 0;
+            isWaitingForPeerListUpdate = false;
+            isPeerListUpdated = false;
+        }     
     }
     
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
+    public void notifyProposeReplied() {
+        this.isWaitingForProposeReply = false;
     }
     
-    public void setPeerUpdated(boolean peerUpdated) {
-        this.peerUpdated = peerUpdated;
+    public void setPeerUpdatedState(boolean peerUpdated) {
+        this.isPeerListUpdated = peerUpdated;
     }
 
     @Override

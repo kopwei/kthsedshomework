@@ -53,10 +53,18 @@ public class ClientUploadBehaviour extends OneShotBehaviour{
                 }
             }
             // If there are blocks available then randomly select a block and reply it
-            if (availableBlocks.size() > 0) { 
+            if (availableBlocks.size() > 0) {
+                ArrayList<Integer>  availableBlockList = new ArrayList<Integer>(availableBlocks.size());
+                for (Integer integer : availableBlocks) {
+                    if (null != integer) {
+                        availableBlockList.add(integer);
+                    }
+                }
+
                 // Randomly select a block and packs it to a message
                 Random rand = new Random(System.currentTimeMillis());
-                int index = rand.nextInt(availableBlocks.size());
+                int randInt = rand.nextInt(availableBlockList.size());
+                int index = availableBlockList.get(randInt).intValue();
                 String block = manager.getBlockAt(index);
                 // Prepare a BTMessageContent
                 BTMessageContent replyContent = new BTMessageContent();

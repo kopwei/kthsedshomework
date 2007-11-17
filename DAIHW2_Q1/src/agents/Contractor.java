@@ -34,10 +34,12 @@ public class Contractor extends Agent{
     protected void setup() {
         // set the lowest line
         try {
-            System.out.println(getLocalName() + ": Please set the lowest line of offer.");
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-            lowestLine = Integer.parseInt(buffer.readLine());
-        } catch (IOException ex) {
+            Object[] args = getArguments();
+            if (null == args) {
+                doDelete();
+            }        
+            lowestLine = Integer.parseInt(args[0].toString());
+        } catch (Exception ex) {
             Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
         }
         // DF service registration
@@ -56,7 +58,7 @@ public class Contractor extends Agent{
         ACLMessage firstRequest = blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
         ACLMessage firstOffer = firstRequest.createReply();
         Random rnd = new Random(System.currentTimeMillis());
-        initialPrice = lowestLine + rnd.nextInt(15) + 1;
+        initialPrice = lowestLine + rnd.nextInt(20) + 1;
         firstOffer.setPerformative(ACLMessage.INFORM);
         firstOffer.setContent(Integer.toString(initialPrice));
         System.out.println(getLocalName() + ": My first offer is " + firstOffer);

@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class ClientFileSharingBehaviour extends SimpleBehaviour{
     private boolean finished = false;
     //private PeerListQueryBehaviour peerListQueryBehaviour = null;
-    private ClientUploadBehaviour uploadBehaviour = null;
+    private ClientBlockUploader uploader = null;
     private HashSet<AID> peerSet = new HashSet<AID>();
     FileSharingClient clientAgent = null;
     private boolean registered = false;
@@ -34,7 +34,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
         clientAgent = (FileSharingClient)a;
         if (null != clientAgent) {
             //peerListQueryBehaviour = new PeerListQueryBehaviour(clientAgent);
-            uploadBehaviour = new ClientUploadBehaviour(clientAgent);
+            //uploader = new ClientBlockUploader(clientAgent);
         }
     }
     
@@ -122,9 +122,9 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      */
     private void handleProposeMessage(ACLMessage msg) {
         // Set the upload message and start the upload behaviour
-        uploadBehaviour.setProposeMessage(msg);
-         System.out.println("I received a propose message");
-        clientAgent.addBehaviour(uploadBehaviour);
+        uploader = new ClientBlockUploader(myAgent, msg);
+         System.out.println("I received a propose message from " + msg.getSender().getName());
+         uploader.action();
     }
     
     /**
@@ -133,7 +133,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      */
     private void handleAcceptMessage(ACLMessage msg) {
         try {
-            System.out.println("I received an accept message");
+            System.out.println("I received an accept message from " + msg.getSender().getName());
             // Step 1) Fill the block first
             BTMessageContent content = (BTMessageContent) msg.getContentObject();
             if (null == content) {
@@ -158,7 +158,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      */
     private void handleRejectMessage(ACLMessage msg) {
         // Release the download behaviour
-        System.out.println("I received a reject message");
+        System.out.println("I received a reject message from " + msg.getSender().getName());
         clientAgent.getDownloadBehaviour().notifyProposeReplied();
     }
     
@@ -166,7 +166,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
         // Update the peer set
         try {
             BTMessageContent content = (BTMessageContent) msg.getContentObject();
-            System.out.println("I received a inform message. content is " + content);
+            System.out.println("I received a inform message, from " + msg.getSender().getName() + " content is " + content);
             if (null == content) return;
             this.peerSet = content.getAIDCollection();
             clientAgent.getDownloadBehaviour().setPeerUpdatedState(true);

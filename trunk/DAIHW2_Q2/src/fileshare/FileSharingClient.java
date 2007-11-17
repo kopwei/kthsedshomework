@@ -57,7 +57,7 @@ public class FileSharingClient extends Agent{
         Object[] args = getArguments();
         if (null != args) {
             if (args.length > 0) {
-                if (args[0].toString().equals("server")) {
+                if (args[0].toString().equals("seed")) {
                     actAsSeed();
                 }
             }

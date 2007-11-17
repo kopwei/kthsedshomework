@@ -71,6 +71,8 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
             //isPeerListUpdated = false;
             if (peerSet.size() == 0) { 
                 System.out.println("The peerlist is empty, thats why I returned");
+                isWaitingForPeerListUpdate = false;
+                isPeerListUpdated = false;
                 return;
             }
             myPeerList = new ArrayList(peerSet);

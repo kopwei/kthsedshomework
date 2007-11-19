@@ -6,51 +6,32 @@
 package market.server;
 
 import bank.BankAccount;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.UUID;
+
+
 
 /**
  *
  * @author Kop
  */
-public class ClientAccount {
-    private String userName = null;
-    private char[] passWord = null;
-    private BankAccount bankAccount = null;
-    private UUID clientAccountID = null;
+public interface ClientAccount extends Remote{
     /**
-     * Constructor which used to initialize all members
-     * @param userName the user name of the client account
-     * @param passWord
-     */
-    public ClientAccount(String userName, char[] passWord) {
-        this.userName = userName;
-        this.passWord = passWord;
-        clientAccountID = UUID.randomUUID();
-        // TODO: need the bank account info
-    }
-    
-    /**
-     * 
+     * Get the user name of the account
      * @return
      */
-    public String getUserName() {
-        return userName;
-    }
+    public String getUserName() throws RemoteException;
     
     /**
-     * 
+     * Get the bank account of the client
      * @return
      */
-    public BankAccount getBankAccount() {
-        return bankAccount;
-    }
+    public BankAccount getBankAccount() throws RemoteException;
     
     /**
-     * 
+     * Get the UUID of the client
      * @return
      */
-    public UUID getClientID() {
-        return clientAccountID;
-    }
-    
+    public UUID getClientID() throws RemoteException;
 }

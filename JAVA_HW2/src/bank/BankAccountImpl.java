@@ -5,20 +5,34 @@
 
 package bank;
 
-import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  *
  * @author Kop
  */
-public interface BankAccount extends Remote{ 
+public class BankAccountImpl extends UnicastRemoteObject implements BankAccount{
+    String accountID = null;
+    float balance = 0f;
+    public BankAccountImpl(String accountId, float balance) throws RemoteException {
+        this.accountID = accountId;
+        this.balance = balance;
+    }
+    public BankAccountImpl() throws RemoteException {
+        
+    }
     
+        
+
     /**
      * This method is used to increase the account balance
      * @param numberOfDeposit, the number of deposit, e.g. the original balance is 20, if the
      * deposit number is 30, then the final balance will be 50
      */
-    public void deposit(int numberOfDeposit);
+    public synchronized void deposit(int numberOfDeposit) {
+        balance += numberOfDeposit;
+    }
     
     /**
      * This method is used to decrease the account balance
@@ -28,17 +42,30 @@ public interface BankAccount extends Remote{
      * @return return true indicate that the decreasing action succeeds, otherwise the decreasing
      * fails
      */
-    public boolean withdraw(int numberOfWithdraw);
+    public synchronized boolean withdraw(int numberOfWithdraw) {
+        if (balance < numberOfWithdraw) {
+            return false;
+        }
+        else {
+            balance -= numberOfWithdraw;
+            return true;
+        }
+    }
     
     /**
      * This method is used to get the current balance of the bank account
      * @return the balance value
      */
-    public float getBalance();
+    public synchronized float getBalance() {
+        return balance;
+    }
     
    /**
     * This method is used to get the account id of the bank account
     * @return the account id
     */
-    public String getAccountID();
+    public String getAccountID() {
+        return accountID;
+    }
+
 }

@@ -5,60 +5,47 @@
 
 package market.server;
 
+import java.rmi.RemoteException;
 import java.util.UUID;
 
 /**
  *
  * @author Kop
  */
-public class ItemForSell {
-    private String name = null;
-    private int price = 0;    
-    private ItemType type = ItemType.Unknown;
-    private UUID itemId = null;
-    
-    /**
-     * Constructor for initiating the Item
-     * @param name
-     * @param price
-     */
-    public ItemForSell(String name, int price, ItemType type) {
-        this.name = name;
-        this.price = price;
-        this.type = type;
-        this.itemId = UUID.randomUUID();
-    }
-    
+public interface ItemForSell {
+
     /**
      * 
      * @return
+     * @throws java.rmi.RemoteException
      */
-    public int getPrice() {
-        return price;
-    }
-    
+    UUID getClientID() throws RemoteException;
+
     /**
      * 
      * @return
+     * @throws java.rmi.RemoteException
      */
-    public String getName() {
-        return name;
-    }
-    
+    UUID getItemID() throws RemoteException;
+
     /**
      * 
      * @return
+     * @throws java.rmi.RemoteException
      */
-    public ItemType getType() {
-        return type;
-    }
-    
+    String getName() throws RemoteException;
+
     /**
      * 
      * @return
+     * @throws java.rmi.RemoteException
      */
-    public UUID getID() {
-        return itemId;
-    }
-    
+    float getPrice() throws RemoteException;
+
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    ItemType getType() throws RemoteException;
 }

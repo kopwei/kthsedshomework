@@ -5,31 +5,72 @@
 
 package market.server;
 
-import java.util.Hashtable;
+import bank.BankAccount;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
  *
  * @author Kop
  */
-public class MarketServer {
-    private Hashtable<String, ClientAccount> clientAccountTable = new Hashtable<String, ClientAccount>();
-    private Hashtable<UUID, ItemForSell> itemTable = new Hashtable<UUID, ItemForSell>();
+public interface MarketServer extends Remote{
     
+    /**
+     * 
+     * @return The registered account
+     * @throws java.rmi.RemoteException
+     */
+    public ClientAccount registerAccount(String name, char[] password, BankAccount bankAccount) throws RemoteException;
     
-    public void registerAccount() {
-        
-    }
+    /**
+     * 
+     * @param itemName
+     * @param price
+     * @param type
+     * @throws java.rmi.RemoteException
+     */
+    public void publishItemForSell(String itemName, float price, ItemType type, ClientAccount sellerAccount) throws RemoteException;
     
-    public void publishItem(String itemName, int price, String type) {
-        
-    }
+    /**
+     * 
+     * @param itemName
+     * @param price
+     * @throws java.rmi.RemoteException
+     */
+    public void publishWishItem(String itemName, float price) throws RemoteException;
     
-    public boolean buyItem(UUID itemID, ClientAccount buyerAccount) {
-        // TODO: need implementation here
-        return true;
-    }
+    /**
+     * 
+     * @param accountName
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException;
     
+    /**
+     * 
+     * @param clientID
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public String getClientNameByID(UUID clientID) throws RemoteException;
     
+    /**
+     * 
+     * @param itemID
+     * @param buyerAccount
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public boolean buyItem(UUID itemID, ClientAccount buyerAccount) throws RemoteException;
     
+    /**
+     * 
+     * @param type
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ArrayList<ItemForSell> getItemsByType(ItemType type) throws RemoteException;
 }

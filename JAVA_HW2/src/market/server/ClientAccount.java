@@ -8,6 +8,7 @@ package market.server;
 import bank.BankAccount;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 
@@ -34,4 +35,53 @@ public interface ClientAccount extends Remote{
      * @return
      */
     public UUID getClientID() throws RemoteException;
+    
+    /**
+     * 
+     * @param password
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public boolean isValidPassword(char[] password) throws RemoteException;
+    
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ArrayList<ItemForSell> getSellersItem() throws RemoteException;
+    
+    /**
+     * 
+     * @throws java.rmi.RemoteException
+     */
+    public void addItemForSell(ItemForSell item) throws RemoteException;
+    
+    /**
+     * 
+     * @param item
+     * @throws java.rmi.RemoteException
+     */
+    public void addBoughtItem(ItemForSell item) throws RemoteException;
+    
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ArrayList<ItemForSell> getBoughtItems() throws RemoteException;
+    
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ArrayList<ItemForSell> getSoldItems() throws RemoteException;
+    
+    /**
+     * 
+     * @param item
+     * @throws java.rmi.RemoteException
+     */
+    public void addSoldItem(ItemForSell item) throws RemoteException;
 }

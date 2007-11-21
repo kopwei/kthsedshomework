@@ -8,8 +8,9 @@ package market.server;
 import bank.BankAccount;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
+import java.util.Vector;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.UUID;
 
@@ -19,8 +20,11 @@ import java.util.UUID;
  */
 public class MarketServerImpl extends UnicastRemoteObject implements MarketServer{
     private Hashtable<String, ClientAccount> clientAccountTable = new Hashtable<String, ClientAccount>();
-    private Hashtable<UUID, ItemForSell> itemTable = new Hashtable<UUID, ItemForSell>();
+    private Hashtable<UUID, ItemForSell> itemForSellTable = new Hashtable<UUID, ItemForSell>();
+    private Hashtable<String, ItemForSell> itemWantedTable = new Hashtable<String, ItemForSell>();
+    private Hashtable<UUID, String> currentClientIPTable = new Hashtable<UUID, String>();
     private String marketName = "No_Name";
+    private MarketServerCmd mainCmd;
     
     /**
      * Default constructor
@@ -35,9 +39,10 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @param marketName
      * @throws java.rmi.RemoteException
      */
-    public MarketServerImpl(String marketName) throws RemoteException {
+    public MarketServerImpl(MarketServerCmd cmd, String marketName) throws RemoteException {
         super();
         this.marketName = marketName;
+        this.mainCmd = cmd;
     }
 
     /**
@@ -54,12 +59,27 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         if (null == account) {
             return;
         }
-        ItemForSellImpl item = new ItemForSellImpl(itemName, price, type, clientID);
+        ItemForSell item = new ItemForSellImpl(itemName, price, type, clientID);
         account.addItemForSell(item);
+        itemForSellTable.put(item.getItemID(), item);
     }
     
-    public void publishWishItem(String itemName, float price) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    /**
+     * 
+     * @param itemName
+     * @param price
+     * @param buyerAccount
+     * @throws java.rmi.RemoteException
+     */
+    public void publishWishItem(String itemName, float price, ClientAccount buyerAccount) throws RemoteException {
+        UUID clientID = buyerAccount.getClientID();
+        ClientAccount account = clientAccountTable.get(clientID);
+        if (null == account) {
+            return;
+        }
+        ItemForSell item = new ItemForSellImpl(itemName, price);
+        account.addWantedItem(item);
+        itemWantedTable.put(itemName, item);                
     }
 
     /**
@@ -77,6 +97,20 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
             }
         }
         return null;
+    }
+    
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public Vector<String> getAllClientName() throws RemoteException {
+        Collection<ClientAccount> clientAccounts = clientAccountTable.values();
+        Vector<String> clientNames = new Vector<String>(clientAccounts.size());
+        for (ClientAccount account : clientAccounts) {
+            clientNames.add(account.getUserName());
+        }
+        return clientNames;
     }
 
     /**
@@ -97,9 +131,9 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return the list of items
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getItemsByType(ItemType type) throws RemoteException {
-        ArrayList<ItemForSell> list = new ArrayList<ItemForSell>();
-        Collection<ItemForSell> col =  itemTable.values();
+    public Vector<ItemForSell> getSellsItemsByType(ItemType type) throws RemoteException {
+        Vector<ItemForSell> list = new Vector<ItemForSell>();
+        Collection<ItemForSell> col =  itemForSellTable.values();
         // Iterate the item collection
         for (ItemForSell item : col) {
             if (item.getType() == type || ItemType.Unknown == type) {
@@ -135,5 +169,36 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
             return account.getUserName();
         }
     }
+
+    /**
+     * 
+     * @param accountName
+     * @param password
+     * @param ipAddress
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public boolean login(String accountName, char[] password, String ipAddress) throws RemoteException {
+        ClientAccount account = getClientAccount(accountName, password);
+        if (null != account) {
+            currentClientIPTable.put(account.getClientID(), ipAddress);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ItemForSell getItemByID(UUID id) throws RemoteException {
+        return itemForSellTable.get(id);
+    }
+
+
 
 }

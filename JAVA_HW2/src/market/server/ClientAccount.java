@@ -84,4 +84,19 @@ public interface ClientAccount extends Remote{
      * @throws java.rmi.RemoteException
      */
     public void addSoldItem(ItemForSell item) throws RemoteException;
+    
+    /**
+     * 
+     * @param itemName
+     * @param acceptencePrice
+     * @throws java.rmi.RemoteException
+     */
+    public void addWantedItem(ItemForSell item) throws RemoteException;
+    
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ArrayList<ItemForSell> getWantedItems() throws RemoteException;
 }

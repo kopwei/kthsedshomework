@@ -5,11 +5,13 @@
 
 package market.server;
 
+import java.rmi.Remote;
+
 /**
  *
  * @author Kop
  */
-public enum ItemType {
+public enum ItemType implements Remote{
     Unknown,
     Food,
     Electronic,

@@ -41,5 +41,5 @@ public interface BankAccount extends Remote{
     * This method is used to get the account id of the bank account
     * @return the account id
     */
-    public String getAccountID();
+//    public String getAccountID();
 }

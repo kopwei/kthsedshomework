@@ -35,5 +35,5 @@ public interface Bank extends Remote{
      * @return the delete action succeeds or not
      * @throws java.rmi.RemoteException
      */
-    public boolean deleteAccount(String name) throws RemoteException;
+    public boolean deleteAccount(BankAccount acc) throws RemoteException;
 }

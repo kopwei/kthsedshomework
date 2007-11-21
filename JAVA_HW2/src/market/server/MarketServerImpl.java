@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.UUID;
+import market.client.ClientInterface;
 
 /**
  *
@@ -121,26 +122,43 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @throws java.rmi.RemoteException
      */
     public boolean buyItem(UUID itemID, ClientAccount buyerAccount) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ItemForSell item = itemForSellTable.get(itemID);
+        float itemPrice = item.getPrice();
+        BankAccount buyerBankAccount = buyerAccount.getBankAccount();
+        // Check if the buyer is able to buy the item
+        if (buyerBankAccount.getBalance() < itemPrice) {
+            return false;
+        }
+        else {
+            // If the buyer can afford the item then deals
+            ClientAccount seller = clientAccountTable.get(item.getSellerClientID());
+            BankAccount sellerBankAccount = seller.getBankAccount();
+            itemForSellTable.remove(itemID);
+            buyerAccount.addBoughtItem(item);
+            seller.addSoldItem(item);
+            sellerBankAccount.deposit(itemPrice);
+            buyerBankAccount.withdraw(itemPrice);
+            return true;
+        }
     }
 
     /**
-     * Get the list of items with a certain type
+     * Get the retVector of items with a certain type
      * @param type, which indicate a unique type, if the type is unknown, then all the items will be
      * returned
-     * @return the list of items
+     * @return the retVector of items
      * @throws java.rmi.RemoteException
      */
     public Vector<ItemForSell> getSellsItemsByType(ItemType type) throws RemoteException {
-        Vector<ItemForSell> list = new Vector<ItemForSell>();
+        Vector<ItemForSell> retVector = new Vector<ItemForSell>();
         Collection<ItemForSell> col =  itemForSellTable.values();
         // Iterate the item collection
         for (ItemForSell item : col) {
             if (item.getType() == type || ItemType.Unknown == type) {
-                list.add(item);
+                retVector.add(item);
             }
         }
-        return list;
+        return retVector;
     }
 
     /**
@@ -199,6 +217,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         return itemForSellTable.get(id);
     }
 
-
-
+    public void addClientNotifyObject(ClientInterface clientObj, UUID clientID) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

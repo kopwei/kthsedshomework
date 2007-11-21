@@ -111,8 +111,8 @@ public class DepositDlg extends javax.swing.JDialog {
             String depositStr = textField.getText();
             float depositAmount = Float.parseFloat(depositStr);
             bankAccount.deposit(depositAmount);//GEN-LAST:event_okButtonActionPerformed
-            this.dispose();
             clientView.addMessage("deposit: $" + depositAmount);
+            this.dispose();
         } catch (RemoteException ex) {
             Logger.getLogger(DepositDlg.class.getName()).log(Level.SEVERE, null, ex);
         }

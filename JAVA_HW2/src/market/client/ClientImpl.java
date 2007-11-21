@@ -22,15 +22,13 @@ public class ClientImpl implements ClientInterface{
             this.clientView = cv;
     }
     
-    public void notifyItemSoldout(Item item) throws RemoteException {
-        Item soldOutItem = item;
-        System.out.println("Your item " + soldOutItem.getItemName() + " has been sold out in $" 
-                + soldOutItem.getItemPrice());
+    public void notifyItemSoldout(String itemName, float itemPrice) throws RemoteException {
+        System.out.println("Your item " + itemName + " has been sold out in $" 
+                + itemPrice);
     }
 
-    public void notifyItemAvailable(Item item) throws RemoteException {
-        Item interestedItem = item;
-        System.out.println("The item " + interestedItem.getItemName() + " with your interested price $" 
-                + interestedItem.getItemPrice() + " is available.");
+    public void notifyItemAvailable(String itemName, float itemPrice) throws RemoteException {
+        System.out.println("The item " + itemName + " with your interested price $" 
+                + itemPrice + " is available.");
     }
 }

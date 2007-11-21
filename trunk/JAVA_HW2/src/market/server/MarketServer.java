@@ -10,6 +10,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Vector;
 import java.util.UUID;
+import market.client.ClientInterface;
 
 /**
  *
@@ -100,4 +101,6 @@ public interface MarketServer extends Remote{
      * @throws java.rmi.RemoteException
      */
     public boolean login(String accountName, char[] password, String ipAddress) throws RemoteException;
+    
+    public void addClientNotifyObject(ClientInterface clientObj, UUID clientID) throws RemoteException;
 }

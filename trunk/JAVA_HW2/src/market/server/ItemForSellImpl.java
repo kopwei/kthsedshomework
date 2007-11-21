@@ -33,7 +33,18 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
         this.itemId = UUID.randomUUID();
         this.clientID = clientID;
     }
-    
+    /**
+     * 
+     * @param name
+     * @param price
+     * @throws java.rmi.RemoteException
+     */
+    public ItemForSellImpl(String name, float price) throws RemoteException {
+        super();
+        this.name = name;
+        this.price = price;
+    }
+        
     /**
      * 
      * @return
@@ -66,8 +77,48 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
         return itemId;
     }
     
-    public UUID getClientID() {
+    /**
+     * 
+     * @return
+     */
+    public UUID getSellerClientID() {
         return clientID;
     }
+
+    /**
+     * This method is used to check if the item matches another
+     * @param anotherItem
+     * @return if the two item matches
+     * @throws java.rmi.RemoteException
+     */
+    public boolean match(ItemForSell anotherItem) throws RemoteException {
+        if (this.itemId != null & anotherItem.getItemID() != null) {
+            return (this.itemId.equals(anotherItem.getItemID()));
+        }
+        else {
+            return this.name.equals(anotherItem.getName());
+        }
+    }
     
+    /**
+     * 
+     * @return
+     */
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public String show() throws RemoteException {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(name + "\n");
+        buffer.append("Price: " + price + "\n");
+        //buffer.append("Seller : ");
+        return buffer.toString();
+    }
 }

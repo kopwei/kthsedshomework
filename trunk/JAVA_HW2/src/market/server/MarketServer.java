@@ -8,7 +8,7 @@ package market.server;
 import bank.BankAccount;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.Vector;
 import java.util.UUID;
 
 /**
@@ -39,7 +39,7 @@ public interface MarketServer extends Remote{
      * @param price
      * @throws java.rmi.RemoteException
      */
-    public void publishWishItem(String itemName, float price) throws RemoteException;
+    public void publishWishItem(String itemName, float price, ClientAccount buyerAccount) throws RemoteException;
     
     /**
      * 
@@ -48,6 +48,13 @@ public interface MarketServer extends Remote{
      * @throws java.rmi.RemoteException
      */
     public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException;
+    
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public Vector<String> getAllClientName() throws RemoteException;
     
     /**
      * 
@@ -72,5 +79,25 @@ public interface MarketServer extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getItemsByType(ItemType type) throws RemoteException;
+    public Vector<ItemForSell> getSellsItemsByType(ItemType type) throws RemoteException;
+    
+    
+    
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ItemForSell getItemByID(UUID id) throws RemoteException;
+    
+    /**
+     * 
+     * @param accountName
+     * @param password
+     * @param ipAddress
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public boolean login(String accountName, char[] password, String ipAddress) throws RemoteException;
 }

@@ -82,8 +82,7 @@ public interface MarketServer extends Remote{
      */
     public Vector<ItemForSell> getSellsItemsByType(ItemType type) throws RemoteException;
     
-    
-    
+  
     /**
      * 
      * @param id

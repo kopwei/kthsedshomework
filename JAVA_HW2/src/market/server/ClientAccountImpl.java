@@ -8,7 +8,7 @@ package market.server;
 import bank.BankAccount;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
+import java.util.Vector;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.UUID;
@@ -86,8 +86,8 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getSellersItem() throws RemoteException {
-        ArrayList<ItemForSell> returnItems = new ArrayList<ItemForSell>();
+    public Vector<ItemForSell> getSellersItem() throws RemoteException {
+        Vector<ItemForSell> returnItems = new Vector<ItemForSell>();
         Collection<ItemForSell> col = itemsForSell.values();
         for (ItemForSell itemForSell : col) {
             returnItems.add(itemForSell);
@@ -110,8 +110,8 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getBoughtItems() throws RemoteException {
-        ArrayList<ItemForSell> returnItems = new ArrayList<ItemForSell>();
+    public Vector<ItemForSell> getBoughtItems() throws RemoteException {
+        Vector<ItemForSell> returnItems = new Vector<ItemForSell>();
         Collection<ItemForSell> col = boughtItems.values();
         for (ItemForSell boughtItem : col) {
             returnItems.add(boughtItem);
@@ -134,8 +134,8 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getSoldItems() throws RemoteException {
-        ArrayList<ItemForSell> returnItems = new ArrayList<ItemForSell>();
+    public Vector<ItemForSell> getSoldItems() throws RemoteException {
+        Vector<ItemForSell> returnItems = new Vector<ItemForSell>();
         Collection<ItemForSell> col = soldItems.values();
         for (ItemForSell soldItem : col) {
             returnItems.add(soldItem);
@@ -158,8 +158,8 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getWantedItems() throws RemoteException {
-        ArrayList<ItemForSell> returnItems = new ArrayList<ItemForSell>();
+    public Vector<ItemForSell> getWantedItems() throws RemoteException {
+        Vector<ItemForSell> returnItems = new Vector<ItemForSell>();
         Collection<ItemForSell> col = wantedItems.values();
         for (ItemForSell wantedItem : col) {
             returnItems.add(wantedItem);

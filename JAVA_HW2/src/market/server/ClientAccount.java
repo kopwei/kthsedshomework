@@ -8,7 +8,7 @@ package market.server;
 import bank.BankAccount;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.Vector;
 import java.util.UUID;
 
 
@@ -49,7 +49,7 @@ public interface ClientAccount extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getSellersItem() throws RemoteException;
+    public Vector<ItemForSell> getSellersItem() throws RemoteException;
     
     /**
      * 
@@ -69,14 +69,14 @@ public interface ClientAccount extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getBoughtItems() throws RemoteException;
+    public Vector<ItemForSell> getBoughtItems() throws RemoteException;
     
     /**
      * 
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getSoldItems() throws RemoteException;
+    public Vector<ItemForSell> getSoldItems() throws RemoteException;
     
     /**
      * 
@@ -98,5 +98,5 @@ public interface ClientAccount extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ArrayList<ItemForSell> getWantedItems() throws RemoteException;
+    public Vector<ItemForSell> getWantedItems() throws RemoteException;
 }

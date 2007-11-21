@@ -10,7 +10,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Vector;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.UUID;
 import market.client.ClientInterface;
@@ -20,10 +19,10 @@ import market.client.ClientInterface;
  * @author Kop
  */
 public class MarketServerImpl extends UnicastRemoteObject implements MarketServer{
-    private Hashtable<String, ClientAccount> clientAccountTable = new Hashtable<String, ClientAccount>();
+    private Hashtable<UUID, ClientAccount> clientAccountTable = new Hashtable<UUID, ClientAccount>();
+    private Hashtable<UUID, ClientInterface> notifiableClientTable = new Hashtable<UUID, ClientInterface>();
     private Hashtable<UUID, ItemForSell> itemForSellTable = new Hashtable<UUID, ItemForSell>();
     private Hashtable<String, ItemForSell> itemWantedTable = new Hashtable<String, ItemForSell>();
-    private Hashtable<UUID, String> currentClientIPTable = new Hashtable<UUID, String>();
     private String marketName = "No_Name";
     private MarketServerCmd mainCmd;
     
@@ -63,6 +62,20 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         ItemForSell item = new ItemForSellImpl(itemName, price, type, clientID);
         account.addItemForSell(item);
         itemForSellTable.put(item.getItemID(), item);
+        Collection<ItemForSell> wantedItems = itemWantedTable.values();
+        for (ItemForSell wanted : wantedItems) {
+            if (wanted.match(item) && wanted.getPrice() >= item.getPrice()) {
+                // TODO: We have notify
+                ClientInterface client = notifiableClientTable.get(wanted.getSellerClientID());
+                try {
+                client.notifyItemAvailable(itemName, price);
+                }
+                catch(Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+        mainCmd.getMainView().refreshData();
     }
     
     /**
@@ -78,7 +91,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         if (null == account) {
             return;
         }
-        ItemForSell item = new ItemForSellImpl(itemName, price);
+        ItemForSell item = new ItemForSellImpl(itemName, price, clientID);
         account.addWantedItem(item);
         itemWantedTable.put(itemName, item);                
     }
@@ -113,7 +126,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         }
         return clientNames;
     }
-
+    
     /**
      * 
      * @param itemID
@@ -138,6 +151,13 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
             seller.addSoldItem(item);
             sellerBankAccount.deposit(itemPrice);
             buyerBankAccount.withdraw(itemPrice);
+            ClientInterface notifiableClient = notifiableClientTable.get(seller.getClientID());
+            try {
+                notifiableClient.notifyItemSoldout(item.getName(), itemPrice);
+            } catch(Exception e) {
+                System.err.println(e.getMessage());
+            }
+            mainCmd.getMainView().refreshData();
             return true;
         }
     }
@@ -171,6 +191,8 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      */
     public ClientAccount registerAccount(String name, char[] password, BankAccount bankAccount) throws RemoteException {
         ClientAccountImpl account = new ClientAccountImpl(name, password, bankAccount);
+        clientAccountTable.put(account.getClientID(), account);
+        mainCmd.getMainView().refreshData();
         return account;
     }
 
@@ -199,7 +221,6 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
     public boolean login(String accountName, char[] password, String ipAddress) throws RemoteException {
         ClientAccount account = getClientAccount(accountName, password);
         if (null != account) {
-            currentClientIPTable.put(account.getClientID(), ipAddress);
             return true;
         }
         else {
@@ -218,6 +239,8 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
     }
 
     public void addClientNotifyObject(ClientInterface clientObj, UUID clientID) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        notifiableClientTable.put(clientID, clientObj);
     }
+
+
 }

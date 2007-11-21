@@ -202,7 +202,9 @@ public class MarketServerView extends javax.swing.JFrame {
 
     private void itemListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_itemListValueChanged
         // TODO add your handling code here:
-        
+        int index = itemList.getSelectedIndex();
+        ItemForSell item = itemVector.get(index);
+        itemDescArea.setText(item.toString());
     }//GEN-LAST:event_itemListValueChanged
     
 

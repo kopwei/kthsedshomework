@@ -1,7 +1,9 @@
-@echo off
+
 cd build\classes
 rmic market.server.ClientAccountImpl
 rmic market.server.ItemForSellImpl
 rmic market.server.MarketServerImpl
-@echo on
+rmic bank.BankImpl
+rmic bank.BankAccountImpl
+
 start rmiregistry

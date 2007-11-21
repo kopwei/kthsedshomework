@@ -5,6 +5,8 @@
 
 package market.server;
 
+import bank.Bank;
+import bank.BankImpl;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -16,6 +18,7 @@ import javax.swing.JFrame;
  */
 public class MarketServerCmd {
     private MarketServer server;
+    private Bank bank;
     private MarketServerView view;
     
     public MarketServerCmd() {
@@ -29,8 +32,10 @@ public class MarketServerCmd {
 
             // Bind the server
             server = new MarketServerImpl(this, "Taobao Market");
+            bank = new BankImpl("SEB");
             Registry registry = LocateRegistry.getRegistry ("localhost", 1099);
             registry.rebind("TaobaoServer", server);
+            registry.rebind("SEB", bank);
             //Naming.rebind("taobao", server);
 //        } catch (AlreadyBoundException ex) {
 //            Logger.getLogger(MarketServerCmd.class.getName()).log(Level.SEVERE, null, ex);

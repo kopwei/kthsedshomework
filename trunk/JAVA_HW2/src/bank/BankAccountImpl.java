@@ -13,25 +13,25 @@ import java.rmi.server.UnicastRemoteObject;
  * @author Kop
  */
 public class BankAccountImpl extends UnicastRemoteObject implements BankAccount{
-    String accountID = null;
-    float balance = 0f;
-    public BankAccountImpl(String accountId, float balance) throws RemoteException {
-        this.accountID = accountId;
-        this.balance = balance;
-    }
-    public BankAccountImpl() throws RemoteException {
+    private String _name = null;
+    private float balance = 0;
         
+    public BankAccountImpl(String name) throws RemoteException {
+        this._name = name;
     }
-    
-        
 
     /**
      * This method is used to increase the account balance
      * @param numberOfDeposit, the number of deposit, e.g. the original balance is 20, if the
      * deposit number is 30, then the final balance will be 50
      */
-    public synchronized void deposit(float numberOfDeposit) {
+    public synchronized void deposit(float numberOfDeposit) throws RemoteException{
+         if (numberOfDeposit < 0) {
+             return;
+            // throw new Rejected("Rejected: BankAccount " + name + ": Illegal value: " + value + " for deposit.");
+        }
         balance += numberOfDeposit;
+        System.out.println("Transaction: Account " + _name + ": deposit: $" + numberOfDeposit + ", balance: $" + balance);
     }
     
     /**
@@ -43,29 +43,33 @@ public class BankAccountImpl extends UnicastRemoteObject implements BankAccount{
      * fails
      */
     public synchronized boolean withdraw(float numberOfWithdraw) {
-        if (balance < numberOfWithdraw) {
+        if (numberOfWithdraw < 0) {
             return false;
+            // throw new Rejected("Rejected: BankAccount " + name + ": Illegal vaule: " + value + " for withdraw.");
         }
-        else {
-            balance -= numberOfWithdraw;
-            return true;
+        if ((balance - numberOfWithdraw) < 0) {
+            return false;
+            // throw new Rejected("Rejected: BankAccount " + name + ": Negative balance: $" + (_balance - value) + "on withdraw: $" + value);
         }
+        balance -= numberOfWithdraw;
+        System.out.println("Transaction: Account " + _name + ": withdraw: $" + numberOfWithdraw + ", balance: $" + balance);
+        return true;
     }
     
     /**
      * This method is used to get the current balance of the bank account
      * @return the balance value
      */
-    public synchronized float getBalance() {
+    public synchronized float getBalance() throws RemoteException{
         return balance;
     }
     
-   /**
-    * This method is used to get the account id of the bank account
-    * @return the account id
-    */
-    public String getAccountID() {
-        return accountID;
-    }
+//   /**
+//    * This method is used to get the account id of the bank account
+//    * @return the account id
+//    */
+//    public String get_name() {
+//        return _name;
+//    }
 
 }

@@ -12,10 +12,13 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import java.util.UUID;
+import java.util.Vector;
+import javax.swing.JList;
 
 /**
  *
@@ -56,6 +59,7 @@ public class MarketClientView extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         itemList = new javax.swing.JList();
         comboBox = new javax.swing.JComboBox();
+        buyItemButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -68,7 +72,6 @@ public class MarketClientView extends javax.swing.JFrame {
         depositMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         registerMenuItem = new javax.swing.JMenuItem();
-        buyItemMenuItem = new javax.swing.JMenuItem();
         sellItemMenuItem = new javax.swing.JMenuItem();
         wishMenuItem = new javax.swing.JMenuItem();
 
@@ -89,14 +92,23 @@ public class MarketClientView extends javax.swing.JFrame {
 
         nameTextField.setEditable(false);
 
-        itemList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+        itemList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(itemList);
 
-        comboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item for sell", "My Wish" }));
+        comboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All items for sell", "My Wish", "My items for sell" }));
+        comboBox.setEnabled(false);
+        comboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBoxActionPerformed(evt);
+            }
+        });
+
+        buyItemButton.setText("Buy it");
+        buyItemButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyItemButtonActionPerformed(evt);
+            }
+        });
 
         fileMenu.setText("File");
 
@@ -157,9 +169,6 @@ public class MarketClientView extends javax.swing.JFrame {
         });
         jMenu2.add(registerMenuItem);
 
-        buyItemMenuItem.setText("Buy Item");
-        jMenu2.add(buyItemMenuItem);
-
         sellItemMenuItem.setText("Sell Item");
         sellItemMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,8 +204,9 @@ public class MarketClientView extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                    .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                    .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buyItemButton))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -212,7 +222,9 @@ public class MarketClientView extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
                 .addGap(11, 11, 11)
-                .addComponent(startButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(startButton)
+                    .addComponent(buyItemButton))
                 .addContainerGap())
         );
 
@@ -223,8 +235,10 @@ public class MarketClientView extends javax.swing.JFrame {
         try {
             clientObj = new ClientImpl(this);
             bankObj = (Bank) Naming.lookup("SEB");//GEN-LAST:event_startButtonActionPerformed
-            serverObj = (MarketServer) Naming.lookup("Market");
+            serverObj = (MarketServer) Naming.lookup("TaobaoServer");
             nameTextField.setText(clientName);
+            comboBox.setEnabled(true);
+            comboBox.setEditable(false);
         } catch (NotBoundException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
@@ -352,6 +366,53 @@ public class MarketClientView extends javax.swing.JFrame {
             }
         });
     }//GEN-LAST:event_sellItemMenuItemActionPerformed
+
+    private void comboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxActionPerformed
+        try {
+            // TODO add your handling code here:
+            // comboBox = (JComboBox)evt.getSource();
+            int index = comboBox.getSelectedIndex();
+            itemList.setLayoutOrientation(JList.VERTICAL);
+            switch (index) {
+                // select items for sell, use item type "unknown" to ask for all the items for sell
+                case 0: Vector<ItemForSell> allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
+                        itemList.setListData(allItemForSell);
+                        break;
+                // select all the items that I wished            
+                case 1: Vector<ItemForSell> wishItems = marketAccount.getWantedItems();
+                        itemList.setListData(wishItems);
+                        break;
+                // select items that I wanna sell
+                case 2: Vector<ItemForSell> myItemForSell = marketAccount.getSellersItem();
+                        itemList.setListData(myItemForSell);
+                        break;
+                default: break;
+            }
+        } catch (RemoteException ex) {
+            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_comboBoxActionPerformed
+
+    private void buyItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyItemButtonActionPerformed
+        // TODO add your handling code here:
+        if ((comboBox.getSelectedIndex() == 0) && (itemList.getSelectedIndex() != -1)) {
+            try {
+                ItemForSell itemForSell = (ItemForSell) itemList.getSelectedValue();
+                boolean result = serverObj.buyItem(itemForSell.getItemID(), marketAccount);
+                String resultStr = null;
+                if (result == true) {
+                    resultStr = "Wow! This is yours now.";
+                }
+                else {
+                    resultStr = "Sorry, buy-action failed. Please try again!";
+                }
+                textArea.append(resultStr);
+            } catch (RemoteException ex) {
+                Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else JOptionPane.showMessageDialog(this, "Invalid Operation!");
+    }//GEN-LAST:event_buyItemButtonActionPerformed
     
     public void setMarketAccount(ClientAccount marketAcc) {
         this.marketAccount = marketAcc;
@@ -397,7 +458,7 @@ public class MarketClientView extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem balanceMenuItem;
-    private javax.swing.JMenuItem buyItemMenuItem;
+    private javax.swing.JButton buyItemButton;
     private javax.swing.JComboBox comboBox;
     private javax.swing.JMenuItem deleteAccountMenuItem;
     private javax.swing.JMenuItem depositMenuItem;

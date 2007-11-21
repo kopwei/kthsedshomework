@@ -30,7 +30,7 @@ public class BankAccountImpl extends UnicastRemoteObject implements BankAccount{
      * @param numberOfDeposit, the number of deposit, e.g. the original balance is 20, if the
      * deposit number is 30, then the final balance will be 50
      */
-    public synchronized void deposit(int numberOfDeposit) {
+    public synchronized void deposit(float numberOfDeposit) {
         balance += numberOfDeposit;
     }
     
@@ -42,7 +42,7 @@ public class BankAccountImpl extends UnicastRemoteObject implements BankAccount{
      * @return return true indicate that the decreasing action succeeds, otherwise the decreasing
      * fails
      */
-    public synchronized boolean withdraw(int numberOfWithdraw) {
+    public synchronized boolean withdraw(float numberOfWithdraw) {
         if (balance < numberOfWithdraw) {
             return false;
         }

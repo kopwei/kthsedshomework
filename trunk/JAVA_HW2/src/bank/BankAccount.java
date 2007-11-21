@@ -18,7 +18,7 @@ public interface BankAccount extends Remote{
      * @param numberOfDeposit, the number of deposit, e.g. the original balance is 20, if the
      * deposit number is 30, then the final balance will be 50
      */
-    public void deposit(int numberOfDeposit);
+    public void deposit(float numberOfDeposit);
     
     /**
      * This method is used to decrease the account balance
@@ -28,7 +28,7 @@ public interface BankAccount extends Remote{
      * @return return true indicate that the decreasing action succeeds, otherwise the decreasing
      * fails
      */
-    public boolean withdraw(int numberOfWithdraw);
+    public boolean withdraw(float numberOfWithdraw);
     
     /**
      * This method is used to get the current balance of the bank account

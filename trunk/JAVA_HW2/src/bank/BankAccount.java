@@ -29,7 +29,7 @@ public interface BankAccount extends Remote{
      * @return return true indicate that the decreasing action succeeds, otherwise the decreasing
      * fails
      */
-    public boolean withdraw(float numberOfWithdraw);
+    public boolean withdraw(float numberOfWithdraw) throws RemoteException;
     
     /**
      * This method is used to get the current balance of the bank account

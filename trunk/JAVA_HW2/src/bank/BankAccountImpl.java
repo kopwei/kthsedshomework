@@ -42,7 +42,7 @@ public class BankAccountImpl extends UnicastRemoteObject implements BankAccount{
      * @return return true indicate that the decreasing action succeeds, otherwise the decreasing
      * fails
      */
-    public synchronized boolean withdraw(float numberOfWithdraw) {
+    public synchronized boolean withdraw(float numberOfWithdraw) throws RemoteException{
         if (numberOfWithdraw < 0) {
             return false;
             // throw new Rejected("Rejected: BankAccount " + name + ": Illegal vaule: " + value + " for withdraw.");

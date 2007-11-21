@@ -6,6 +6,7 @@
 package bank;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
  *
@@ -18,7 +19,7 @@ public interface BankAccount extends Remote{
      * @param numberOfDeposit, the number of deposit, e.g. the original balance is 20, if the
      * deposit number is 30, then the final balance will be 50
      */
-    public void deposit(float numberOfDeposit);
+    public void deposit(float numberOfDeposit) throws RemoteException;
     
     /**
      * This method is used to decrease the account balance
@@ -34,7 +35,7 @@ public interface BankAccount extends Remote{
      * This method is used to get the current balance of the bank account
      * @return the balance value
      */
-    public float getBalance();
+    public float getBalance() throws RemoteException;
     
    /**
     * This method is used to get the account id of the bank account

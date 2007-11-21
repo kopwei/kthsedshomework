@@ -16,12 +16,12 @@ public interface ClientInterface extends Remote{
      * @param item
      * @throws java.rmi.RemoteException
      */
-    public void notifyItemSoldout(Item item) throws RemoteException;
+    public void notifyItemSoldout(String itemName, float itemPrice) throws RemoteException;
     /**
      * notify client that some item that matches his "wish" price is available
      * @param item
      * @throws java.rmi.RemoteException
      */
-    public void notifyItemAvailable(Item item) throws RemoteException;
+    public void notifyItemAvailable(String itemName, float itemPrice) throws RemoteException;
 
 }

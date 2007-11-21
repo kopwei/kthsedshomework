@@ -234,8 +234,8 @@ public class MarketClientView extends javax.swing.JFrame {
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
         try {
             clientObj = new ClientImpl(this);
-            bankObj = (Bank) Naming.lookup("SEB");//GEN-LAST:event_startButtonActionPerformed
-            serverObj = (MarketServer) Naming.lookup("TaobaoServer");
+            bankObj = (Bank) Naming.lookup("rmi://192.168.11.3:1099/SEB");
+            serverObj = (MarketServer) Naming.lookup("rmi://192.168.11.3:1099/TaobaoServer");
             nameTextField.setText(clientName);
             comboBox.setEnabled(true);
             comboBox.setEditable(false);
@@ -246,7 +246,7 @@ public class MarketClientView extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
-}
+	}//GEN-LAST:event_startButtonActionPerformed
 
     // open a new bank account
     private void newAccountMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAccountMenuItemActionPerformed
@@ -267,20 +267,20 @@ public class MarketClientView extends javax.swing.JFrame {
                             System.exit(0);
                         }
                     });
-                    dialog.setVisible(true);//GEN-LAST:event_newAccountMenuItemActionPerformed
+                    dialog.setVisible(true);
                 }
             });
-    }
+    }//GEN-LAST:event_newAccountMenuItemActionPerformed
 
     // get the bank account
     private void getAccountMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getAccountMenuItemActionPerformed
         try {            
-            bankAccount = bankObj.getAccount(clientName);//GEN-LAST:event_getAccountMenuItemActionPerformed
+            bankAccount = bankObj.getAccount(clientName);
             JOptionPane.showConfirmDialog(this, "Got your bank account");
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+	}//GEN-LAST:event_getAccountMenuItemActionPerformed
       
 
     // deposit to bank account
@@ -300,7 +300,7 @@ public class MarketClientView extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_depositMenuItemActionPerformed
 
-    private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerMenuItemActionPerformed
+    private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {                                                 
             // TODO add your handling code here:
             java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -314,7 +314,7 @@ public class MarketClientView extends javax.swing.JFrame {
                         }
                     });
                     dialog.setVisible(true);
-                }//GEN-LAST:event_registerMenuItemActionPerformed
+                }
             });
             // give the client interface object to server
         try {
@@ -323,7 +323,7 @@ public class MarketClientView extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }                                                
+    }                                                                                                
 
     private void balanceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanceMenuItemActionPerformed
         // TODO add your handling code here:

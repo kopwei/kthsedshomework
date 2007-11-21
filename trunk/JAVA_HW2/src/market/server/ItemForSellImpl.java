@@ -39,10 +39,11 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * @param price
      * @throws java.rmi.RemoteException
      */
-    public ItemForSellImpl(String name, float price) throws RemoteException {
+    public ItemForSellImpl(String name, float price, UUID clientID) throws RemoteException {
         super();
         this.name = name;
         this.price = price;
+        this.clientID = clientID;
     }
         
     /**

@@ -429,6 +429,10 @@ public class MarketClientView extends javax.swing.JFrame {
                     resultStr = "Sorry, buy-action failed. Please try again!";
                 }
                 textArea.append(resultStr + "\n");
+                itemICanBuy.remove(index);
+                allItemNameForSell.remove(index);
+                itemList.setLayoutOrientation(JList.VERTICAL);
+                itemList.setListData(allItemNameForSell);
             } catch (RemoteException ex) {
                 Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -437,9 +441,12 @@ public class MarketClientView extends javax.swing.JFrame {
     }//GEN-LAST:event_buyItemButtonActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
-        serverObj.logout(clientID);
-    }//GEN-LAST:event_formWindowClosing
+        try {            
+            serverObj.logout(clientID);//GEN-LAST:event_formWindowClosing
+        } catch (RemoteException ex) {
+            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public void setMarketAccount(ClientAccount marketAcc) {
         this.marketAccount = marketAcc;

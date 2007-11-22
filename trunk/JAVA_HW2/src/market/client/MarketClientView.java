@@ -49,8 +49,6 @@ public class MarketClientView extends javax.swing.JFrame {
         initComponents();
         try {
             clientObj = new ClientImpl(this);
-            bankObj = (Bank) Naming.lookup("rmi://" + serverIP + "/SEB");
-            serverObj = (MarketServer) Naming.lookup("rmi://" + serverIP +"/TaobaoServer");
             //nameTextField.setText(clientName);
             comboBox.setEnabled(true);
             comboBox.setEditable(false);
@@ -462,6 +460,14 @@ public class MarketClientView extends javax.swing.JFrame {
     public void setServerIP(String serverIp) {
         this.serverIP = serverIp;
 //        nameTextField.setText(clientName);
+         if (null != serverIP) {
+             try {
+            bankObj = (Bank) Naming.lookup("rmi://" + serverIP + "/SEB");
+            serverObj = (MarketServer) Naming.lookup("rmi://" + serverIP +"/TaobaoServer");
+             }catch (Exception ex) {
+                 System.err.println(ex.getMessage());
+             }
+         }
     }
     
 //    public String getServerIP() {

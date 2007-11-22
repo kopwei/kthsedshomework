@@ -12,7 +12,6 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -316,20 +315,13 @@ public class MarketClientView extends javax.swing.JFrame {
                     dialog.setVisible(true);
                 }
             });
-            // give the client interface object to server
-        try {
-            clientID = marketAccount.getClientID();
-            serverObj.addClientNotifyObject(clientObj, clientID);
-        } catch (RemoteException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }                                                                                                
 
     private void balanceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanceMenuItemActionPerformed
         // TODO add your handling code here:
         try {            
             float _balance = bankAccount.getBalance();                                               
-            textArea.append("Balance of your account: $" + _balance);
+            textArea.append("Balance of your account: $" + _balance + "\n");
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -406,7 +398,7 @@ public class MarketClientView extends javax.swing.JFrame {
                 else {
                     resultStr = "Sorry, buy-action failed. Please try again!";
                 }
-                textArea.append(resultStr);
+                textArea.append(resultStr + "\n");
             } catch (RemoteException ex) {
                 Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -438,8 +430,16 @@ public class MarketClientView extends javax.swing.JFrame {
         return bankAccount;
     }
     
+    public ClientInterface getClientObj() {
+        return clientObj;
+    }
+    
+    public void setClientID(UUID cID) {
+        this.clientID = cID;
+    }
+    
     public void addMessage(String message) {
-        textArea.append(message);
+        textArea.append(message + "\n");
     }
     /**
      * @param args the command line arguments

@@ -9,6 +9,7 @@ package market.client;
 import market.server.ClientAccount;
 import market.server.MarketServer;
 import java.rmi.RemoteException;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -107,6 +108,9 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
             String password = passwordField.getSelectedText();
             ClientAccount marketAcc = serverObj.registerAccount(clientView.getClientName(), password.toCharArray(), clientView.getBankAccount());                                        
             clientView.setMarketAccount(marketAcc);
+            UUID clientID = marketAcc.getClientID();
+            // give the client interface object to server
+            serverObj.addClientNotifyObject(clientView.getClientObj(), clientID);
             clientView.addMessage("Registration in market succeeds");
             this.dispose();
         } catch (RemoteException ex) {

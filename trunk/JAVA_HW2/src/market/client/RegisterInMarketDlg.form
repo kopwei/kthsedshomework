@@ -23,29 +23,41 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Component id="passwordField" alignment="0" max="32767" attributes="1"/>
-                  <Group type="102" attributes="0">
-                      <Component id="OkButton" min="-2" pref="80" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="accountNameLabel" alignment="0" min="-2" pref="61" max="-2" attributes="0"/>
+                  <Component id="userNameTestField" alignment="0" max="32767" attributes="1"/>
+                  <Component id="passWordLabel" alignment="0" max="32767" attributes="1"/>
+                  <Component id="passwordField" alignment="0" pref="100" max="32767" attributes="1"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="OkButton" min="-2" pref="80" max="-2" attributes="1"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="cancelButton" min="-2" pref="80" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jLabel1" alignment="0" max="32767" attributes="1"/>
+                  <Component id="bankAccountNameLabel" alignment="0" min="-2" pref="110" max="-2" attributes="1"/>
+                  <Component id="bankAccountNameTextField" alignment="0" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace pref="22" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="accountNameLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="userNameTestField" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+              <Component id="passWordLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="passwordField" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="29" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="bankAccountNameLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="bankAccountNameTextField" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="20" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cancelButton" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="OkButton" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -56,9 +68,9 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="passWordLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Please input your market account password:"/>
+        <Property name="text" type="java.lang.String" value="Password:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="OkButton">
@@ -78,6 +90,20 @@
       </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="passwordField">
+    </Component>
+    <Component class="javax.swing.JLabel" name="accountNameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="User Name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="userNameTestField">
+    </Component>
+    <Component class="javax.swing.JLabel" name="bankAccountNameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Bank Account Name"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="bankAccountNameTextField">
     </Component>
   </SubComponents>
 </Form>

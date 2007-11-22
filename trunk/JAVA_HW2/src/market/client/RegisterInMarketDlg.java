@@ -6,12 +6,13 @@
 
 package market.client;
 
+import bank.BankAccount;
 import market.server.ClientAccount;
 import market.server.MarketServer;
 import java.rmi.RemoteException;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -36,16 +37,20 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        passWordLabel = new javax.swing.JLabel();
         OkButton = new javax.swing.JButton();
         cancelButton = new javax.swing.JButton();
         passwordField = new javax.swing.JPasswordField();
+        accountNameLabel = new javax.swing.JLabel();
+        userNameTestField = new javax.swing.JTextField();
+        bankAccountNameLabel = new javax.swing.JLabel();
+        bankAccountNameTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registry");
         setResizable(false);
 
-        jLabel1.setText("Please input your market account password:");
+        passWordLabel.setText("Password:");
 
         OkButton.setText("OK");
         OkButton.addActionListener(new java.awt.event.ActionListener() {
@@ -61,29 +66,45 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
             }
         });
 
+        accountNameLabel.setText("User Name");
+
+        bankAccountNameLabel.setText("Bank Account Name");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(passwordField, javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(accountNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(userNameTestField)
+                    .addComponent(passWordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(OkButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(bankAccountNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bankAccountNameTextField))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(accountNameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(userNameTestField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(passWordLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(bankAccountNameLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(bankAccountNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancelButton)
                     .addComponent(OkButton))
@@ -101,11 +122,17 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
     private void OkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OkButtonActionPerformed
         // TODO add your handling code here:
         try {
+            String userName = userNameTestField.getText();
             char[] password = passwordField.getPassword();
-            ClientAccount marketAcc = serverObj.registerAccount(clientView.getClientName(), password, clientView.getBankAccount());                                        
+            String bankAccountName = bankAccountNameTextField.getText();
+            
+            if (userName.length() < 1 || password.length < 6 || bankAccountName.length() < 1) {
+                JOptionPane.showMessageDialog(rootPane, "Invalid input");
+                return;
+            }
+            BankAccount bankAccount = clientView.getBank().getAccount(bankAccountName);
+            ClientAccount marketAcc = serverObj.login(userName, password, bankAccount);                                        
             clientView.setMarketAccount(marketAcc);
-            UUID clientID = marketAcc.getClientID();
-            clientView.setClientID(clientID);
             // give the client interface object to server
             serverObj.addClientNotifyObject(clientView.getClientObj(), marketAcc);
             clientView.addMessage("Registration in market succeeds");
@@ -123,9 +150,13 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton OkButton;
+    private javax.swing.JLabel accountNameLabel;
+    private javax.swing.JLabel bankAccountNameLabel;
+    private javax.swing.JTextField bankAccountNameTextField;
     private javax.swing.JButton cancelButton;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel passWordLabel;
     private javax.swing.JPasswordField passwordField;
+    private javax.swing.JTextField userNameTestField;
     // End of variables declaration//GEN-END:variables
     
 }

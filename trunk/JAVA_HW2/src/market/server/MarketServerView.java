@@ -21,8 +21,7 @@ public class MarketServerView extends javax.swing.JFrame {
     public MarketServerView(MarketServerCmd cmd) {
         mainCmd = cmd;
         initComponents();
-        clientList.setListData(clientVector);
-        itemList.setListData(itemVector);
+        
         refreshData();
     }
     
@@ -32,8 +31,10 @@ public class MarketServerView extends javax.swing.JFrame {
             clientVector = mainCmd.getServer().getAllClientName();
             // Get all items
             itemVector = mainCmd.getServer().getSellsItemsByType(ItemType.Unknown);
-            clientList.updateUI();
-            itemList.updateUI();
+            clientList.setListData(clientVector);
+            itemList.setListData(itemVector);
+//            clientList.updateUI();
+//            itemList.updateUI();
         } catch (RemoteException ex) {
             Logger.getLogger(MarketServerView.class.getName()).log(Level.SEVERE, null, ex);
         }

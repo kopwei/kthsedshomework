@@ -76,8 +76,8 @@ public class MarketServerView extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                formWindowClosed(evt);
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
             }
         });
 
@@ -207,11 +207,6 @@ public class MarketServerView extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
                                                                 
 
-    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:
-        mainCmd.Close();
-    }//GEN-LAST:event_formWindowClosed
-
     private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
         // TODO add your handling code here:
         try {
@@ -222,6 +217,11 @@ public class MarketServerView extends javax.swing.JFrame {
             Logger.getLogger(MarketServerView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_itemListMouseClicked
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        mainCmd.Close();
+    }//GEN-LAST:event_formWindowClosing
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

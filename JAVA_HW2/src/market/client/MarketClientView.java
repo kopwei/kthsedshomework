@@ -1,7 +1,7 @@
 /*
  * MarketClientView.java
  *
- * Created on 2007锟?1锟?0锟? 涓嬪崍8:46
+ * Created on 2007é”Ÿ?1é”Ÿ?0é”Ÿ? æ¶“å¬ªå´?8:46
  */
 
 package market.client;
@@ -256,7 +256,10 @@ public class MarketClientView extends javax.swing.JFrame {
 
     // open a new bank account
     private void newAccountMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAccountMenuItemActionPerformed
-
+        if (null == serverIP) {
+            JOptionPane.showMessageDialog(rootPane, "Error", "Server IP address is not valid", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 NewAccountDlg dialog = new NewAccountDlg(MarketClientView.this, true);
@@ -295,6 +298,10 @@ public class MarketClientView extends javax.swing.JFrame {
 
     private void loginMenuItemActionPerformed(java.awt.event.ActionEvent evt) {                                                 
             // TODO add your handling code here:
+        if (null == serverIP) {
+            JOptionPane.showMessageDialog(rootPane, "Error", "Server IP address is not valid", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     RegisterInMarketDlg dialog = new RegisterInMarketDlg(MarketClientView.this, true);

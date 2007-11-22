@@ -41,6 +41,7 @@ public class DepositDlg extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Deposit");
 
         jLabel1.setText("The amount that you want to deposit:");
 

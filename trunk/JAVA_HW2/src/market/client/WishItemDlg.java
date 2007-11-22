@@ -43,6 +43,8 @@ public class WishItemDlg extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Make Wish");
+        setResizable(false);
 
         jLabel1.setText("Item Name:");
 

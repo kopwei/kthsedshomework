@@ -23,5 +23,9 @@ public interface ClientInterface extends Remote{
      * @throws java.rmi.RemoteException
      */
     public void notifyItemAvailable(String itemName, float itemPrice) throws RemoteException;
-
+    /**
+     * notify client that server is shut down
+     * @throws java.rmi.RemoteException
+     */
+    public void notifyServerDown() throws RemoteException;
 }

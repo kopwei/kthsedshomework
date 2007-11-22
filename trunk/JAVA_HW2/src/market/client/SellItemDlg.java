@@ -45,6 +45,7 @@ public class SellItemDlg extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sell Item");
+        setResizable(false);
 
         jLabel1.setText("Item Name:");
 

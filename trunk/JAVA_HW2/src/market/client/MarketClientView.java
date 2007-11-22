@@ -38,6 +38,11 @@ public class MarketClientView extends javax.swing.JFrame {
     private String clientName = null;
     private UUID clientID = null;
     
+    private Vector<ItemForSell> allItemForSell = new Vector<ItemForSell>();
+    private Vector<ItemForSell> itemICanBuy = new Vector<ItemForSell>();
+    private Vector<ItemForSell> wishItems = new Vector<ItemForSell>();
+    private Vector<ItemForSell> myItemForSell = new Vector<ItemForSell>();
+    
     /** Creates new form MarketClientView */
     public MarketClientView() {
         initComponents();
@@ -368,16 +373,22 @@ public class MarketClientView extends javax.swing.JFrame {
             itemList.setLayoutOrientation(JList.VERTICAL);
             switch (index) {
                 // select items for sell, use item type "unknown" to ask for all the items for sell
-                case 0: Vector<ItemForSell> allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
+                case 0: allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
+                        for (Iterator<ItemForSell> it = allItemForSell.iterator(); it.hasNext();) {
+                            ItemForSell itemForSell = it.next();
+                            if (this.clientID != itemForSell.getSellerClientID()) {
+                                itemICanBuy.add(itemForSell);
+                            }
+                        }
                         Vector<String> allItemNameForSell = new Vector<String>();
-                        for (Iterator it = allItemForSell.iterator(); it.hasNext();) {
+                        for (Iterator it = itemICanBuy.iterator(); it.hasNext();) {
                             ItemForSell object = (ItemForSell) it.next();
                             allItemNameForSell.add(object.getName());
                         }
                         itemList.setListData(allItemNameForSell);
                         break;
                 // select all the items that I wished            
-                case 1: Vector<ItemForSell> wishItems = marketAccount.getWantedItems();
+                case 1: wishItems = marketAccount.getWantedItems();
                         Vector<String> wishItemName = new Vector<String>();
                         for (Iterator it = wishItems.iterator(); it.hasNext();) {
                             ItemForSell object = (ItemForSell) it.next();
@@ -386,7 +397,7 @@ public class MarketClientView extends javax.swing.JFrame {
                         itemList.setListData(wishItemName);
                         break;
                 // select items that I wanna sell
-                case 2: Vector<ItemForSell> myItemForSell = marketAccount.getSellersItem();
+                case 2: myItemForSell = marketAccount.getSellersItem();
                         Vector<String> myItemNameForSell = new Vector<String>();
                         for (Iterator it = myItemForSell.iterator(); it.hasNext();) {
                             ItemForSell object = (ItemForSell) it.next();
@@ -405,7 +416,8 @@ public class MarketClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
         if ((comboBox.getSelectedIndex() == 0) && (itemList.getSelectedIndex() != -1)) {
             try {
-                ItemForSell itemForSell = (ItemForSell) itemList.getSelectedValue();
+                int index = itemList.getSelectedIndex();
+                ItemForSell itemForSell = itemICanBuy.elementAt(index);
                 boolean result = serverObj.buyItem(itemForSell, marketAccount);
                 String resultStr = null;
                 if (result == true) {

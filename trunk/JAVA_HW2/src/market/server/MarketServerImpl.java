@@ -266,6 +266,19 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         notifiableClientTable.put(client.getClientID(), clientObj);
     }
     
+    public Vector<ClientAccount> getAllNotifiableClients() {
+        Enumeration<UUID> notifiableClientIDs = notifiableClientTable.keys();
+        Vector<ClientAccount> returnVec = new Vector<ClientAccount>();
+        while (notifiableClientIDs.hasMoreElements()) {
+            UUID uuid = notifiableClientIDs.nextElement();
+            ClientAccount client = clientAccountTable.get(uuid);
+            if (null != client) {
+                returnVec.add(client);
+            }
+        }
+        return returnVec;
+    }
+    
     /**
      * 
      * @return
@@ -281,6 +294,6 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      */
     public void logout(UUID clientID) throws RemoteException {
         notifiableClientTable.remove(clientID);
-        
+        mainCmd.getMainView().refreshData();
     }
 }

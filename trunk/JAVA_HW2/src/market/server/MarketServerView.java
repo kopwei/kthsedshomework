@@ -28,7 +28,7 @@ public class MarketServerView extends javax.swing.JFrame {
     public void refreshData() {
         try {
             // Get all client name
-            clientVector = mainCmd.getServer().getAllClientName();
+            clientVector = ((MarketServerImpl)mainCmd.getServer()).getAllNotifiableClients();
             // Get all items
             itemVector = mainCmd.getServer().getSellsItemsByType(ItemType.Unknown);
             clientList.setListData(clientVector);
@@ -75,6 +75,11 @@ public class MarketServerView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         clientList.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -202,11 +207,20 @@ public class MarketServerView extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void itemListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_itemListValueChanged
+        try {
+            // TODO add your handling code here:
+            int index = itemList.getSelectedIndex();
+            ItemForSell item = itemVector.get(index);
+            itemDescArea.setText(item.show());//GEN-LAST:event_itemListValueChanged
+        } catch (RemoteException ex) {
+            Logger.getLogger(MarketServerView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }                                     
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
-        int index = itemList.getSelectedIndex();
-        ItemForSell item = itemVector.get(index);
-        itemDescArea.setText(item.toString());
-    }//GEN-LAST:event_itemListValueChanged
+        mainCmd.Close();
+    }//GEN-LAST:event_formWindowClosed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -237,7 +251,7 @@ public class MarketServerView extends javax.swing.JFrame {
     
     private MarketServerCmd mainCmd = null;
     
-    private Vector<String> clientVector = new Vector<String>();
+    private Vector<ClientAccount> clientVector = new Vector<ClientAccount>();
     private Vector<ItemForSell> itemVector = new Vector<ItemForSell>();
     
 }

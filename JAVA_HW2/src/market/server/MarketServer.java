@@ -72,7 +72,7 @@ public interface MarketServer extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public boolean buyItem(UUID itemID, ClientAccount buyerAccount) throws RemoteException;
+    public boolean buyItem(ItemForSell item, ClientAccount buyerAccount) throws RemoteException;
     
     /**
      * 
@@ -101,5 +101,11 @@ public interface MarketServer extends Remote{
      */
     public boolean login(String accountName, char[] password, String ipAddress) throws RemoteException;
     
-    public void addClientNotifyObject(ClientInterface clientObj, UUID clientID) throws RemoteException;
+    /**
+     * 
+     * @param clientObj
+     * @param client
+     * @throws java.rmi.RemoteException
+     */
+    public void addClientNotifyObject(ClientInterface clientObj, ClientAccount client) throws RemoteException;
 }

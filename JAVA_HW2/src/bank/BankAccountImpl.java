@@ -17,6 +17,7 @@ public class BankAccountImpl extends UnicastRemoteObject implements BankAccount{
     private float balance = 0;
         
     public BankAccountImpl(String name) throws RemoteException {
+        super();
         this._name = name;
     }
 

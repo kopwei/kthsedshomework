@@ -134,8 +134,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return
      * @throws java.rmi.RemoteException
      */
-    public boolean buyItem(UUID itemID, ClientAccount buyerAccount) throws RemoteException {
-        ItemForSell item = itemForSellTable.get(itemID);
+    public boolean buyItem(ItemForSell item, ClientAccount buyerAccount) throws RemoteException {
         float itemPrice = item.getPrice();
         BankAccount buyerBankAccount = buyerAccount.getBankAccount();
         // Check if the buyer is able to buy the item
@@ -146,7 +145,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
             // If the buyer can afford the item then deals
             ClientAccount seller = clientAccountTable.get(item.getSellerClientID());
             BankAccount sellerBankAccount = seller.getBankAccount();
-            itemForSellTable.remove(itemID);
+            itemForSellTable.remove(item.getItemID());
             buyerAccount.addBoughtItem(item);
             seller.addSoldItem(item);
             sellerBankAccount.deposit(itemPrice);
@@ -238,9 +237,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         return itemForSellTable.get(id);
     }
 
-    public void addClientNotifyObject(ClientInterface clientObj, UUID clientID) throws RemoteException {
-        notifiableClientTable.put(clientID, clientObj);
+    public void addClientNotifyObject(ClientInterface clientObj, ClientAccount client) throws RemoteException {
+        notifiableClientTable.put(client.getClientID(), clientObj);
     }
-
-
 }

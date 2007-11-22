@@ -104,6 +104,17 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
         UUID uuid = item.getItemID();
         itemsForSell.put(uuid, item);
     }
+    
+    /**
+     * 
+     * @param item
+     * @throws java.rmi.RemoteException
+     */
+    public void removeItemForSell(ItemForSell item) throws RemoteException {
+        UUID uuid = item.getItemID();
+        itemsForSell.remove(uuid);
+    }
+    
 
     /**
      * 
@@ -181,4 +192,6 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
         //UUID uuid = item.getItemID();
         wantedItems.put(item.getName(), item);
     }
+
+
 }

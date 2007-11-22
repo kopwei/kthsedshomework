@@ -62,6 +62,13 @@ public interface ClientAccount extends Remote{
      * @param item
      * @throws java.rmi.RemoteException
      */
+    public void removeItemForSell(ItemForSell item) throws RemoteException;
+    
+    /**
+     * 
+     * @param item
+     * @throws java.rmi.RemoteException
+     */
     public void addBoughtItem(ItemForSell item) throws RemoteException;
     
     /**

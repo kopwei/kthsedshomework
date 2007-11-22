@@ -7,6 +7,8 @@ package market.server;
 
 import bank.Bank;
 import bank.BankImpl;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -35,7 +37,9 @@ public class MarketServerCmd {
             // Bind the server
             server = new MarketServerImpl(this, "Taobao Market");
             bank = new BankImpl();
-            Registry registry = LocateRegistry.getRegistry ("localhost", 1099);
+            InetAddress add = Inet4Address.getLocalHost();
+            String ip = add.getHostAddress();
+            Registry registry = LocateRegistry.getRegistry (ip, 1099);
             registry.rebind("TaobaoServer", server);
             registry.rebind("SEB", bank);
             //Naming.rebind("taobao", server);

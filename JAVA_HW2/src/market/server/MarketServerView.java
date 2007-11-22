@@ -95,9 +95,9 @@ public class MarketServerView extends javax.swing.JFrame {
             public Object getElementAt(int i) { return strings[i]; }
         });
         itemList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        itemList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                itemListValueChanged(evt);
+        itemList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                itemListMouseClicked(evt);
             }
         });
         itemListScrollPane.setViewportView(itemList);
@@ -205,22 +205,23 @@ public class MarketServerView extends javax.swing.JFrame {
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
-
-    private void itemListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_itemListValueChanged
-        try {
-            // TODO add your handling code here:
-            int index = itemList.getSelectedIndex();
-            ItemForSell item = itemVector.get(index);
-            itemDescArea.setText(item.show());//GEN-LAST:event_itemListValueChanged
-        } catch (RemoteException ex) {
-            Logger.getLogger(MarketServerView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }                                     
+                                                                
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
         mainCmd.Close();
     }//GEN-LAST:event_formWindowClosed
+
+    private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
+        // TODO add your handling code here:
+        try {
+            int index = itemList.getSelectedIndex();
+            ItemForSell item = itemVector.get(index);
+            itemDescArea.setText(item.show());
+        } catch (RemoteException ex) {
+            Logger.getLogger(MarketServerView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_itemListMouseClicked
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

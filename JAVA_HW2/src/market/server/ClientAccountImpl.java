@@ -25,7 +25,7 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
     private Hashtable<UUID, ItemForSell> itemsForSell = new Hashtable<UUID, ItemForSell>();
     private Hashtable<UUID, ItemForSell> boughtItems = new Hashtable<UUID, ItemForSell>();
     private Hashtable<UUID, ItemForSell> soldItems = new Hashtable<UUID, ItemForSell>();
-    private Hashtable<UUID, ItemForSell> wantedItems = new Hashtable<UUID, ItemForSell>();
+    private Hashtable<String, ItemForSell> wantedItems = new Hashtable<String, ItemForSell>();
     
     
     /**
@@ -173,7 +173,7 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
      * @throws java.rmi.RemoteException
      */
     public void addWantedItem(ItemForSell item) throws RemoteException {
-        UUID uuid = item.getItemID();
-        wantedItems.put(uuid, item);
+        //UUID uuid = item.getItemID();
+        wantedItems.put(item.getName(), item);
     }
 }

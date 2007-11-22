@@ -1,23 +1,19 @@
 /*
  * MarketClientView.java
  *
- * Created on 2007�?1�?0�? 下午8:46
+ * Created on 2007锟?1锟?0锟? 涓嬪崍8:46
  */
 
 package market.client;
 
 import bank.*;
-import java.awt.event.ActionEvent;
 import market.server.*;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import java.util.UUID;
 import java.util.Vector;
 import javax.swing.JList;
 
@@ -458,6 +454,7 @@ public class MarketClientView extends javax.swing.JFrame {
         
     public void setServerIP(String serverIp) {
         this.serverIP = serverIp;
+//        nameTextField.setText(clientName);
     }
     
 //    public String getServerIP() {

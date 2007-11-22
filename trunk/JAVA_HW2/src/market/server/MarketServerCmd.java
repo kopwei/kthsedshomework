@@ -33,7 +33,7 @@ public class MarketServerCmd {
             // Bind the server
             server = new MarketServerImpl(this, "Taobao Market");
             bank = new BankImpl();
-            Registry registry = LocateRegistry.getRegistry ("localhost", 1099);
+            Registry registry = LocateRegistry.getRegistry ("192.168.11.3", 1099);
             registry.rebind("TaobaoServer", server);
             registry.rebind("SEB", bank);
             //Naming.rebind("taobao", server);

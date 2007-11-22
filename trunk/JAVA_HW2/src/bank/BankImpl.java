@@ -14,7 +14,7 @@ import java.util.Hashtable;
  * @author Kop
  */
 public class BankImpl extends UnicastRemoteObject implements Bank{
-private Hashtable clientAccountsTable = new Hashtable();
+    private Hashtable clientAccountsTable = new Hashtable();
 
     /**
      * Constructor for initialize bank name

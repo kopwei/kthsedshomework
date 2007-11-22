@@ -390,7 +390,7 @@ public class MarketClientView extends javax.swing.JFrame {
         if ((comboBox.getSelectedIndex() == 0) && (itemList.getSelectedIndex() != -1)) {
             try {
                 ItemForSell itemForSell = (ItemForSell) itemList.getSelectedValue();
-                boolean result = serverObj.buyItem(itemForSell.getItemID(), marketAccount);
+                boolean result = serverObj.buyItem(itemForSell, marketAccount);
                 String resultStr = null;
                 if (result == true) {
                     resultStr = "Wow! This is yours now.";

@@ -264,6 +264,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         }
         // Else admit login
         notifiableClientTable.put(client.getClientID(), clientObj);
+        mainCmd.getMainView().refreshData();
     }
     
     public Vector<ClientAccount> getAllNotifiableClients() {

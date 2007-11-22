@@ -23,7 +23,7 @@ public interface MarketServer extends Remote{
      * @return The registered account
      * @throws java.rmi.RemoteException
      */
-    public ClientAccount registerAccount(String name, char[] password, BankAccount bankAccount) throws RemoteException;
+    //public ClientAccount registerAccount(String name, char[] password, BankAccount bankAccount) throws RemoteException;
     
     /**
      * 
@@ -99,7 +99,7 @@ public interface MarketServer extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public boolean login(String accountName, char[] password) throws RemoteException;
+    public ClientAccount login(String accountName, char[] password,BankAccount bankAccount) throws RemoteException;
     
     /**
      * 

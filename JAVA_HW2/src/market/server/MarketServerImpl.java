@@ -190,7 +190,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ClientAccount registerAccount(String name, char[] password, BankAccount bankAccount) throws RemoteException {
+    private ClientAccount registerAccount(String name, char[] password, BankAccount bankAccount) throws RemoteException {
         // Check if the account is already registered
         Collection<ClientAccount> accounts = clientAccountTable.values();
         for (ClientAccount clientAccount : accounts) {
@@ -227,13 +227,13 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return
      * @throws java.rmi.RemoteException
      */
-    public boolean login(String accountName, char[] password) throws RemoteException {
+    public ClientAccount login(String accountName, char[] password,BankAccount bankAccount) throws RemoteException {
         ClientAccount account = getClientAccount(accountName, password);
         if (null != account) {
-            return true;
+            return account;
         }
         else {
-            return false;
+            return registerAccount(accountName, password, bankAccount);
         }
     }
 

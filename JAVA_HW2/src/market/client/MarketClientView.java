@@ -7,6 +7,7 @@
 package market.client;
 
 import bank.*;
+import java.awt.event.ActionEvent;
 import market.server.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -35,8 +36,9 @@ public class MarketClientView extends javax.swing.JFrame {
     private ClientAccount marketAccount = null;
     // use it to accept client interface object
     private ClientInterface clientObj = null;
-    private String clientName = null;
-    private UUID clientID = null;
+    //private String clientName = null;
+    //private UUID clientID = null;
+    private String serverIP = null;
     
     private Vector<ItemForSell> allItemForSell = new Vector<ItemForSell>();
     private Vector<ItemForSell> itemICanBuy = new Vector<ItemForSell>();
@@ -51,17 +53,15 @@ public class MarketClientView extends javax.swing.JFrame {
         initComponents();
         try {
             clientObj = new ClientImpl(this);
-            bankObj = (Bank) Naming.lookup("rmi://192.168.11.3:1099/SEB");
-            serverObj = (MarketServer) Naming.lookup("rmi://192.168.11.3:1099/TaobaoServer");
-            nameTextField.setText(clientName);
+            bankObj = (Bank) Naming.lookup("rmi://" + serverIP + "/SEB");
+            serverObj = (MarketServer) Naming.lookup("rmi://" + serverIP +"/TaobaoServer");
+            //nameTextField.setText(clientName);
             comboBox.setEnabled(true);
             comboBox.setEditable(false);
-        } catch (NotBoundException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
         } catch (RemoteException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
         }
     }
     
@@ -83,7 +83,8 @@ public class MarketClientView extends javax.swing.JFrame {
         buyItemButton = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        setupMenuItem = new javax.swing.JMenuItem();
+        exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
         newAccountMenuItem = new javax.swing.JMenuItem();
@@ -92,11 +93,11 @@ public class MarketClientView extends javax.swing.JFrame {
         balanceMenuItem = new javax.swing.JMenuItem();
         depositMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        registerMenuItem = new javax.swing.JMenuItem();
+        loginMenuItem = new javax.swing.JMenuItem();
         sellItemMenuItem = new javax.swing.JMenuItem();
         wishMenuItem = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("For Client");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -133,8 +134,16 @@ public class MarketClientView extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        jMenuItem1.setText("exit");
-        fileMenu.add(jMenuItem1);
+        setupMenuItem.setText("Setup");
+        setupMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setupMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(setupMenuItem);
+
+        exitMenuItem.setText("exit");
+        fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
 
@@ -182,13 +191,13 @@ public class MarketClientView extends javax.swing.JFrame {
 
         jMenu2.setText("Market");
 
-        registerMenuItem.setText("Register");
-        registerMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        loginMenuItem.setText("Login");
+        loginMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                registerMenuItemActionPerformed(evt);
+                loginMenuItemActionPerformed(evt);
             }
         });
-        jMenu2.add(registerMenuItem);
+        jMenu2.add(loginMenuItem);
 
         sellItemMenuItem.setText("Sell Item");
         sellItemMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -251,36 +260,23 @@ public class MarketClientView extends javax.swing.JFrame {
 
     // open a new bank account
     private void newAccountMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAccountMenuItemActionPerformed
-        try {
-            // TODO add your handling code here:
-            bankAccount = bankObj.createAccount(clientName);
-            } catch (RemoteException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            java.awt.EventQueue.invokeLater(new Runnable() {
 
-                public void run() {
-                    NewAccountDlg dialog = new NewAccountDlg(MarketClientView.this, true);
-                    dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
-                    });
-                    dialog.setVisible(true);
-                }
-            });
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                NewAccountDlg dialog = new NewAccountDlg(MarketClientView.this, true);
+                dialog.setVisible(true);
+            }
+        });
     }//GEN-LAST:event_newAccountMenuItemActionPerformed
 
     // get the bank account
     private void getAccountMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getAccountMenuItemActionPerformed
-        try {            
-            bankAccount = bankObj.getAccount(clientName);
-            JOptionPane.showConfirmDialog(this, "Got your bank account");
-        } catch (RemoteException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {            
+//            bankAccount = bankObj.getAccount(clientName);
+//            JOptionPane.showConfirmDialog(this, "Got your bank account");
+//        } catch (RemoteException ex) {
+//            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 	}//GEN-LAST:event_getAccountMenuItemActionPerformed
       
 
@@ -301,18 +297,12 @@ public class MarketClientView extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_depositMenuItemActionPerformed
 
-    private void registerMenuItemActionPerformed(java.awt.event.ActionEvent evt) {                                                 
+    private void loginMenuItemActionPerformed(java.awt.event.ActionEvent evt) {                                                 
             // TODO add your handling code here:
             java.awt.EventQueue.invokeLater(new Runnable() {
-
                 public void run() {
                     RegisterInMarketDlg dialog = new RegisterInMarketDlg(MarketClientView.this, true);
                     dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                        @Override
-                        public void windowClosing(java.awt.event.WindowEvent e) {
-                            System.exit(0);
-                        }
                     });
                     dialog.setVisible(true);
                 }
@@ -377,7 +367,7 @@ public class MarketClientView extends javax.swing.JFrame {
                     allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
                     for (Iterator<ItemForSell> it = allItemForSell.iterator(); it.hasNext();) {
                         ItemForSell itemForSell = it.next();
-                        if (!this.clientID.equals(itemForSell.getSellerClientID())) {
+                        if (!marketAccount.getClientID().equals(itemForSell.getSellerClientID())) {
                             itemICanBuy.add(itemForSell);
                         }
                     }
@@ -440,13 +430,23 @@ public class MarketClientView extends javax.swing.JFrame {
         else JOptionPane.showMessageDialog(this, "Invalid Operation!");
     }//GEN-LAST:event_buyItemButtonActionPerformed
 
+    private void setupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setupMenuItemActionPerformed
+        // TODO add your handling code here:
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                SetupServerDlg dialog = new SetupServerDlg(MarketClientView.this, true);
+                dialog.setVisible(true);
+            }
+        });
+    }//GEN-LAST:event_setupMenuItemActionPerformed
+    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {            
-            serverObj.logout(clientID);//GEN-LAST:event_formWindowClosing
+            serverObj.logout(marketAccount.getClientID());         
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }//GEN-LAST:event_formWindowClosing
     
     public void setMarketAccount(ClientAccount marketAcc) {
         this.marketAccount = marketAcc;
@@ -455,14 +455,14 @@ public class MarketClientView extends javax.swing.JFrame {
     public ClientAccount getMarketAccount() {
         return marketAccount;
     }
-    
-    private void setClientName(String name) {
-        this.clientName = name;
+        
+    public void setServerIP(String serverIp) {
+        this.serverIP = serverIp;
     }
     
-    public String getClientName() {
-        return clientName;
-    }
+//    public String getServerIP() {
+//        return serverIP;
+//    }
     
     public MarketServer getServerObj() {
         return serverObj;
@@ -472,12 +472,18 @@ public class MarketClientView extends javax.swing.JFrame {
         return bankAccount;
     }
     
-    public ClientInterface getClientObj() {
-        return clientObj;
+    public Bank getBank() {
+        return bankObj;
     }
     
-    public void setClientID(UUID cID) {
-        this.clientID = cID;
+    public void setBankAccount(BankAccount account) {
+        if (null != account) {
+            this.bankAccount = account;
+        }
+    }
+    
+    public ClientInterface getClientObj() {
+        return clientObj;
     }
     
     public void addMessage(String message) {
@@ -486,14 +492,12 @@ public class MarketClientView extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(final String args[]) {
+    public static void main(final String[] args) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 MarketClientView view = new MarketClientView();
                 view.setVisible(true);
-                view.setClientName(args[0]);
-                
             }
         });
     }
@@ -505,20 +509,21 @@ public class MarketClientView extends javax.swing.JFrame {
     private javax.swing.JMenuItem deleteAccountMenuItem;
     private javax.swing.JMenuItem depositMenuItem;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem getAccountMenuItem;
     private javax.swing.JList itemList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JMenuItem loginMenuItem;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JTextField nameTextField;
     private javax.swing.JMenuItem newAccountMenuItem;
-    private javax.swing.JMenuItem registerMenuItem;
     private javax.swing.JMenuItem sellItemMenuItem;
+    private javax.swing.JMenuItem setupMenuItem;
     private javax.swing.JTextArea textArea;
     private javax.swing.JMenuItem wishMenuItem;
     // End of variables declaration//GEN-END:variables

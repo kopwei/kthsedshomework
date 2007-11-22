@@ -189,6 +189,14 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @throws java.rmi.RemoteException
      */
     public ClientAccount registerAccount(String name, char[] password, BankAccount bankAccount) throws RemoteException {
+        // Check if the account is already registered
+        Collection<ClientAccount> accounts = clientAccountTable.values();
+        for (ClientAccount clientAccount : accounts) {
+            if (clientAccount.getUserName().equals(name)) {
+                throw new RemoteException("You account is already registered");
+            }
+        }
+        // If it is not registered then register it
         ClientAccountImpl account = new ClientAccountImpl(name, password, bankAccount);
         clientAccountTable.put(account.getClientID(), account);
         mainCmd.getMainView().refreshData();
@@ -217,7 +225,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return
      * @throws java.rmi.RemoteException
      */
-    public boolean login(String accountName, char[] password, String ipAddress) throws RemoteException {
+    public boolean login(String accountName, char[] password) throws RemoteException {
         ClientAccount account = getClientAccount(accountName, password);
         if (null != account) {
             return true;
@@ -237,7 +245,23 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         return itemForSellTable.get(id);
     }
 
+    /**
+     * 
+     * @param clientObj
+     * @param client
+     * @throws java.rmi.RemoteException
+     */
     public void addClientNotifyObject(ClientInterface clientObj, ClientAccount client) throws RemoteException {
         notifiableClientTable.put(client.getClientID(), clientObj);
+    }
+
+    /**
+     * 
+     * @param clientTD
+     * @throws java.rmi.RemoteException
+     */
+    public void logout(UUID clientTD) throws RemoteException {
+        notifiableClientTable.remove(clientTD);
+        
     }
 }

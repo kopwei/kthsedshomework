@@ -137,6 +137,11 @@ public class MarketClientView extends javax.swing.JFrame {
         fileMenu.add(setupMenuItem);
 
         exitMenuItem.setText("exit");
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
@@ -443,11 +448,22 @@ public class MarketClientView extends javax.swing.JFrame {
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {            
-            serverObj.logout(marketAccount.getClientID());         
+            serverObj.logout(marketAccount.getClientID());
+            System.exit(0);
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        try {            
+            serverObj.logout(marketAccount.getClientID());
+            System.exit(0);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_exitMenuItemActionPerformed
     
     public void setMarketAccount(ClientAccount marketAcc) {
         this.marketAccount = marketAcc;

@@ -107,7 +107,7 @@ public interface MarketServer extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public void logout(UUID clientTD) throws RemoteException;
+    public void logout(UUID clientID) throws RemoteException;
     
     /**
      * 

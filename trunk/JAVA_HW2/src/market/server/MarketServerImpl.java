@@ -10,7 +10,9 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Vector;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.UUID;
 import market.client.ClientInterface;
 
@@ -252,7 +254,24 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @throws java.rmi.RemoteException
      */
     public void addClientNotifyObject(ClientInterface clientObj, ClientAccount client) throws RemoteException {
+        // Check if it is already added
+        Enumeration<UUID> ids = notifiableClientTable.keys();
+        while (ids.hasMoreElements()) {
+            UUID uuid = ids.nextElement();
+            if (uuid.equals(client.getClientID())) {
+                throw new RemoteException("You have already logged in and you can not login twice");
+            }
+        }
+        // Else admit login
         notifiableClientTable.put(client.getClientID(), clientObj);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public Collection<ClientInterface> getAllClientObj() {
+        return notifiableClientTable.values();
     }
 
     /**
@@ -260,8 +279,8 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @param clientTD
      * @throws java.rmi.RemoteException
      */
-    public void logout(UUID clientTD) throws RemoteException {
-        notifiableClientTable.remove(clientTD);
+    public void logout(UUID clientID) throws RemoteException {
+        notifiableClientTable.remove(clientID);
         
     }
 }

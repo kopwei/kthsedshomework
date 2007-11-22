@@ -10,7 +10,9 @@ import bank.BankImpl;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Collection;
 import javax.swing.JFrame;
+import market.client.ClientInterface;
 
 /**
  *
@@ -71,6 +73,22 @@ public class MarketServerCmd {
      */
     public MarketServerView getMainView() {
         return view;
+    }
+    
+    /**
+     * 
+     */
+    public void Close() {
+        // Notify all logged in clients that the server is down
+        Collection<ClientInterface> clientObjs = ((MarketServerImpl)server).getAllClientObj();
+        for (ClientInterface clientInterface : clientObjs) {
+            try {
+                clientInterface.notifyServerDown();
+            }
+            catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        }
     }
    
     public static void main(String[] args) {

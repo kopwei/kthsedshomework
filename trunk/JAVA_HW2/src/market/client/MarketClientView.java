@@ -415,13 +415,13 @@ public class MarketClientView extends javax.swing.JFrame {
                 String resultStr = null;
                 if (result == true) {
                     resultStr = "Wow! This is yours now.";
+                    itemICanBuy.remove(index);
+                    allItemNameForSell.remove(index);
                 }
                 else {
                     resultStr = "Sorry, buy-action failed. Please try again!";
                 }
                 textArea.append(resultStr + "\n");
-                itemICanBuy.remove(index);
-                allItemNameForSell.remove(index);
                 itemList.setLayoutOrientation(JList.VERTICAL);
                 itemList.setListData(allItemNameForSell);
             } catch (RemoteException ex) {

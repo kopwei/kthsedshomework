@@ -7,14 +7,15 @@ package market.client;
 
 import java.rmi.*;
 import bank.*;
+import java.rmi.server.UnicastRemoteObject;
 /**
  *
  * @author Ricky
  */
-public class ClientImpl implements ClientInterface{
+public class ClientImpl extends UnicastRemoteObject implements ClientInterface{
     private MarketClientView clientView = null;
     
-    public ClientImpl(MarketClientView cv) {
+    public ClientImpl(MarketClientView cv) throws RemoteException{
             this.clientView = cv;
     }
     

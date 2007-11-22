@@ -9,7 +9,6 @@ package market.client;
 import market.server.ClientAccount;
 import market.server.MarketServer;
 import java.rmi.RemoteException;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

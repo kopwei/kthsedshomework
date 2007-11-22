@@ -12,6 +12,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -368,15 +369,30 @@ public class MarketClientView extends javax.swing.JFrame {
             switch (index) {
                 // select items for sell, use item type "unknown" to ask for all the items for sell
                 case 0: Vector<ItemForSell> allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
-                        itemList.setListData(allItemForSell);
+                        Vector<String> allItemNameForSell = new Vector<String>();
+                        for (Iterator it = allItemForSell.iterator(); it.hasNext();) {
+                            ItemForSell object = (ItemForSell) it.next();
+                            allItemNameForSell.add(object.getName());
+                        }
+                        itemList.setListData(allItemNameForSell);
                         break;
                 // select all the items that I wished            
                 case 1: Vector<ItemForSell> wishItems = marketAccount.getWantedItems();
-                        itemList.setListData(wishItems);
+                        Vector<String> wishItemName = new Vector<String>();
+                        for (Iterator it = wishItems.iterator(); it.hasNext();) {
+                            ItemForSell object = (ItemForSell) it.next();
+                            wishItemName.add(object.getName());
+                        }
+                        itemList.setListData(wishItemName);
                         break;
                 // select items that I wanna sell
                 case 2: Vector<ItemForSell> myItemForSell = marketAccount.getSellersItem();
-                        itemList.setListData(myItemForSell);
+                        Vector<String> myItemNameForSell = new Vector<String>();
+                        for (Iterator it = myItemForSell.iterator(); it.hasNext();) {
+                            ItemForSell object = (ItemForSell) it.next();
+                            myItemNameForSell.add(object.getName());
+                        }
+                        itemList.setListData(myItemNameForSell);
                         break;
                 default: break;
             }

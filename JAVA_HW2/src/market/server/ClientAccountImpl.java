@@ -166,6 +166,11 @@ public class ClientAccountImpl extends UnicastRemoteObject implements ClientAcco
         }
         return returnItems;
     }
+    
+    @Override
+    public String toString() {
+        return userName;
+    }
 
     /**
      * 

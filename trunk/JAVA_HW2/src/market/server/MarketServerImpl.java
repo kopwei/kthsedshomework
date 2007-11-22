@@ -150,6 +150,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
             itemForSellTable.remove(item.getItemID());
             buyerAccount.addBoughtItem(item);
             seller.addSoldItem(item);
+            seller.removeItemForSell(item);
             sellerBankAccount.deposit(itemPrice);
             buyerBankAccount.withdraw(itemPrice);
             ClientInterface notifiableClient = notifiableClientTable.get(seller.getClientID());

@@ -42,6 +42,9 @@ public class MarketClientView extends javax.swing.JFrame {
     private Vector<ItemForSell> itemICanBuy = new Vector<ItemForSell>();
     private Vector<ItemForSell> wishItems = new Vector<ItemForSell>();
     private Vector<ItemForSell> myItemForSell = new Vector<ItemForSell>();
+    private Vector<String> allItemNameForSell = new Vector<String>();
+    private Vector<String> wishItemName = new Vector<String>();
+    private Vector<String> myItemNameForSell = new Vector<String>();
     
     /** Creates new form MarketClientView */
     public MarketClientView() {
@@ -371,41 +374,47 @@ public class MarketClientView extends javax.swing.JFrame {
             // comboBox = (JComboBox)evt.getSource();
             int index = comboBox.getSelectedIndex();
             itemList.setLayoutOrientation(JList.VERTICAL);
+            itemICanBuy.clear();
+            allItemNameForSell.clear();
+            wishItemName.clear();
+            myItemNameForSell.clear();
             switch (index) {
                 // select items for sell, use item type "unknown" to ask for all the items for sell
-                case 0: allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
-                        for (Iterator<ItemForSell> it = allItemForSell.iterator(); it.hasNext();) {
-                            ItemForSell itemForSell = it.next();
-                            if (this.clientID != itemForSell.getSellerClientID()) {
-                                itemICanBuy.add(itemForSell);
-                            }
+                case 0:
+                    allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
+                    for (Iterator<ItemForSell> it = allItemForSell.iterator(); it.hasNext();) {
+                        ItemForSell itemForSell = it.next();
+                        if (this.clientID != itemForSell.getSellerClientID()) {
+                            itemICanBuy.add(itemForSell);
                         }
-                        Vector<String> allItemNameForSell = new Vector<String>();
-                        for (Iterator it = itemICanBuy.iterator(); it.hasNext();) {
-                            ItemForSell object = (ItemForSell) it.next();
-                            allItemNameForSell.add(object.getName());
-                        }
-                        itemList.setListData(allItemNameForSell);
-                        break;
+                    }
+
+                    for (Iterator it = itemICanBuy.iterator(); it.hasNext();) {
+                        ItemForSell object = (ItemForSell) it.next();
+                        allItemNameForSell.add(object.getName());
+                    }
+                    itemList.setListData(allItemNameForSell);
+                    break;
                 // select all the items that I wished            
-                case 1: wishItems = marketAccount.getWantedItems();
-                        Vector<String> wishItemName = new Vector<String>();
-                        for (Iterator it = wishItems.iterator(); it.hasNext();) {
-                            ItemForSell object = (ItemForSell) it.next();
-                            wishItemName.add(object.getName());
-                        }
-                        itemList.setListData(wishItemName);
-                        break;
+                case 1:
+                    wishItems = marketAccount.getWantedItems();                   
+                    for (Iterator it = wishItems.iterator(); it.hasNext();) {
+                        ItemForSell object = (ItemForSell) it.next();
+                        wishItemName.add(object.getName());
+                    }
+                    itemList.setListData(wishItemName);
+                    break;
                 // select items that I wanna sell
-                case 2: myItemForSell = marketAccount.getSellersItem();
-                        Vector<String> myItemNameForSell = new Vector<String>();
-                        for (Iterator it = myItemForSell.iterator(); it.hasNext();) {
-                            ItemForSell object = (ItemForSell) it.next();
-                            myItemNameForSell.add(object.getName());
-                        }
-                        itemList.setListData(myItemNameForSell);
-                        break;
-                default: break;
+                case 2:
+                    myItemForSell = marketAccount.getSellersItem();                    
+                    for (Iterator it = myItemForSell.iterator(); it.hasNext();) {
+                        ItemForSell object = (ItemForSell) it.next();
+                        myItemNameForSell.add(object.getName());
+                    }
+                    itemList.setListData(myItemNameForSell);
+                    break;
+                default: 
+                    break;
             }
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);

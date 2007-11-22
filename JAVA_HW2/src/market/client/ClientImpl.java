@@ -26,4 +26,8 @@ public class ClientImpl extends UnicastRemoteObject implements ClientInterface{
     public void notifyItemAvailable(String itemName, float itemPrice) throws RemoteException {
         clientView.addMessage("The item " + itemName + " with your interested price $" + itemPrice + " is available.");
     }
+
+    public void notifyServerDown() throws RemoteException {
+        clientView.addMessage("Server shuts down");
+    }
 }

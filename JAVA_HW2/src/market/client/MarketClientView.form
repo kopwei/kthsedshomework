@@ -101,11 +101,16 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="For Client"/>
+    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="menuBar"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowClosing"/>
+  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -128,7 +133,6 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="nameTextField" min="-2" pref="87" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="startButton" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" alignment="0" min="-2" pref="253" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -156,10 +160,7 @@
                   <Component id="jScrollPane1" alignment="0" pref="196" max="32767" attributes="1"/>
               </Group>
               <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="startButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="buyItemButton" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="buyItemButton" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -181,14 +182,6 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="startButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Start"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="startButtonActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
         <Property name="text" type="java.lang.String" value="Name:"/>

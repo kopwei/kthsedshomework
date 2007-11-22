@@ -42,6 +42,8 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
         passwordField = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Registry");
+        setResizable(false);
 
         jLabel1.setText("Please input your market account password:");
 

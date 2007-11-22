@@ -49,6 +49,20 @@ public class MarketClientView extends javax.swing.JFrame {
     /** Creates new form MarketClientView */
     public MarketClientView() {
         initComponents();
+        try {
+            clientObj = new ClientImpl(this);
+            bankObj = (Bank) Naming.lookup("rmi://192.168.11.3:1099/SEB");
+            serverObj = (MarketServer) Naming.lookup("rmi://192.168.11.3:1099/TaobaoServer");
+            nameTextField.setText(clientName);
+            comboBox.setEnabled(true);
+            comboBox.setEditable(false);
+        } catch (NotBoundException ex) {
+            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (RemoteException ex) {
+            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /** This method is called from within the constructor to
@@ -61,7 +75,6 @@ public class MarketClientView extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         textArea = new javax.swing.JTextArea();
-        startButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         nameTextField = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -84,17 +97,17 @@ public class MarketClientView extends javax.swing.JFrame {
         wishMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("For Client");
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         textArea.setColumns(20);
         textArea.setRows(5);
         jScrollPane1.setViewportView(textArea);
-
-        startButton.setText("Start");
-        startButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                startButtonActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Name:");
 
@@ -208,7 +221,6 @@ public class MarketClientView extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(startButton, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -230,31 +242,12 @@ public class MarketClientView extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
                 .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(startButton)
-                    .addComponent(buyItemButton))
+                .addComponent(buyItemButton)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
-        try {
-            clientObj = new ClientImpl(this);
-            bankObj = (Bank) Naming.lookup("rmi://192.168.11.3:1099/SEB");
-            serverObj = (MarketServer) Naming.lookup("rmi://192.168.11.3:1099/TaobaoServer");
-            nameTextField.setText(clientName);
-            comboBox.setEnabled(true);
-            comboBox.setEditable(false);
-        } catch (NotBoundException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-	}//GEN-LAST:event_startButtonActionPerformed
 
     // open a new bank account
     private void newAccountMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newAccountMenuItemActionPerformed
@@ -384,7 +377,7 @@ public class MarketClientView extends javax.swing.JFrame {
                     allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
                     for (Iterator<ItemForSell> it = allItemForSell.iterator(); it.hasNext();) {
                         ItemForSell itemForSell = it.next();
-                        if (this.clientID != itemForSell.getSellerClientID()) {
+                        if (!this.clientID.equals(itemForSell.getSellerClientID())) {
                             itemICanBuy.add(itemForSell);
                         }
                     }
@@ -442,6 +435,11 @@ public class MarketClientView extends javax.swing.JFrame {
         }
         else JOptionPane.showMessageDialog(this, "Invalid Operation!");
     }//GEN-LAST:event_buyItemButtonActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        serverObj.logout(clientID);
+    }//GEN-LAST:event_formWindowClosing
     
     public void setMarketAccount(ClientAccount marketAcc) {
         this.marketAccount = marketAcc;
@@ -514,7 +512,6 @@ public class MarketClientView extends javax.swing.JFrame {
     private javax.swing.JMenuItem newAccountMenuItem;
     private javax.swing.JMenuItem registerMenuItem;
     private javax.swing.JMenuItem sellItemMenuItem;
-    private javax.swing.JButton startButton;
     private javax.swing.JTextArea textArea;
     private javax.swing.JMenuItem wishMenuItem;
     // End of variables declaration//GEN-END:variables

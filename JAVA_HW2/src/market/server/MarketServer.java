@@ -99,7 +99,15 @@ public interface MarketServer extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public boolean login(String accountName, char[] password, String ipAddress) throws RemoteException;
+    public boolean login(String accountName, char[] password) throws RemoteException;
+    
+    /**
+     * 
+     * @param clientTD
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public void logout(UUID clientTD) throws RemoteException;
     
     /**
      * 

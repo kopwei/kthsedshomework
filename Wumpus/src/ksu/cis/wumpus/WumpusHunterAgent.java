@@ -151,9 +151,9 @@ public class WumpusHunterAgent implements AgentProgram {
         Point lastPosition = agentTrace.peekLast().getLocation();
         Point[] arroundPoint = {
             new Point(xLoc + 1, yLoc), 
-            new Point(xLoc - 1, yLoc), 
-            new Point(xLoc, yLoc - 1),
-            new Point(xLoc, yLoc + 1)
+            new Point(xLoc, yLoc + 1), 
+            new Point(xLoc - 1, yLoc),
+            new Point(xLoc, yLoc - 1)
         };
         for (Point point : arroundPoint) {
             GridState gridState = gridMemory[point.x][point.y];

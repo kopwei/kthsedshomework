@@ -18,33 +18,33 @@ import java.util.Vector;
 
 
 public class WumpusHunterAgent implements AgentProgram {
-    static final int UNVISITED = 0;
-    static final int SAFE = 1;
-    static final int BREEZE = 2;
-    static final int SMELL = 3;
-    static final int WUMPUS = 4;
-    static final int PIT = 5;
-    static final int WALL = 6;
-//    static final int BREEZEANDGOLd = 7;
-//    static final int SMELLANDGOLD = 8;
-    static final int BREEZEANDSMELL = 9;
-//    static final int BREEZESMELLANDGOLD = 10;
-    static final int WUMPUSANDPIT = 11;
-    static final int PIT2 = 12;
-    static final int PIT3 = 13;
-    static final int PIT4 = 14;
-    // constants
-
-    private final int right = 0;
-    private final int left = 1;
-    private final int up = 2;
-    private final int down = 3;
+//    static final int UNVISITED = 0;
+//    static final int SAFE = 1;
+//    static final int BREEZE = 2;
+//    static final int SMELL = 3;
+//    static final int WUMPUS = 4;
+//    static final int PIT = 5;
+//    static final int WALL = 6;
+////    static final int BREEZEANDGOLd = 7;
+////    static final int SMELLANDGOLD = 8;
+//    static final int BREEZEANDSMELL = 9;
+////    static final int BREEZESMELLANDGOLD = 10;
+//    static final int WUMPUSANDPIT = 11;
+//    static final int PIT2 = 12;
+//    static final int PIT3 = 13;
+//    static final int PIT4 = 14;
+//    // constants
+//
+//    private final int right = 0;
+//    private final int left = 1;
+//    private final int up = 2;
+//    private final int down = 3;
 
     // hidden attributes.  xLoc and yLoc are for the agent to "know" where it is
 
     private int xSize,  ySize,  xLoc,  yLoc;
     private Point heading = new Point();
-    private int gridMemory[][];
+    private GridState gridMemory[][];
     private Stack<AgentCoordinate> agentTrace = new Stack<AgentCoordinate>();
     private Point lastHeading = new Point();
     private Point needHeading = new Point();
@@ -57,14 +57,11 @@ public class WumpusHunterAgent implements AgentProgram {
         this.ySize = ySize;
         xLoc = 1;
         yLoc = 1;
-        gridMemory = new int[xSize][ySize];
+        gridMemory = new GridState[ySize][ySize];
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; i < ySize; j++) {
                 if (i == 0 || i== xSize - 1 || j == 0 || j == ySize - 1) {
-                    gridMemory[i][j] = WALL; // set the grid as wall  
-                }
-                else {
-                    gridMemory[i][j] = UNVISITED; // Set the grid as non-visited
+                    gridMemory[i][j].setWall(); // set the grid as wall  
                 }
             }
         }
@@ -233,11 +230,11 @@ public class WumpusHunterAgent implements AgentProgram {
     }
     
     private void calMultiplicity() {
-        for (Iterator<Point> it = surroundingPoints.iterator(); it.hasNext();) {
-            if (gridMemory[it.next().x][it.next().y] == UNVISITED) {
-                multiplicity++;
-            }
-        }
+//        for (Iterator<Point> it = surroundingPoints.iterator(); it.hasNext();) {
+//            if (gridMemory[it.next().x][it.next().y] == UNVISITED) {
+//                multiplicity++;
+//            }
+//        }
     }
     
     private void moveBack() {

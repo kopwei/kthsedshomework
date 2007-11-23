@@ -59,21 +59,40 @@ public class GridState {
     }
     
     public int getDangerLevel() {
-        return pitSuspiciousLevel + wumpusSuspiciousLevel * 2;
+        int danger = 0;
+        if (pitSuspiciousLevel > 0) danger += pitSuspiciousLevel;
+        if (wumpusSuspiciousLevel > 0) danger += wumpusSuspiciousLevel * 2;
+        return danger;
     }
+    
     
             
     ////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////
-            
+           
+    public void setSafe() {
+        pitSuspiciousLevel = -1;
+        wumpusSuspiciousLevel = -1;
+    }
+    
+    public void setDefinetlyNotPit() {
+        pitSuspiciousLevel = -1;
+    }
+    
+    public void setDefinetlyNotWumpus() {
+        wumpusSuspiciousLevel = -1;
+    }
+    
     /**
      * 
      */
     public void setSuspiciousPit() {
         unvisited = false;
-        pitSuspiciousLevel++;
-        if (4 == pitSuspiciousLevel) {
-            wumpusSuspiciousLevel = 0;
+        if (4 != pitSuspiciousLevel) {
+            pitSuspiciousLevel++;
+            if (4 == pitSuspiciousLevel) {
+                wumpusSuspiciousLevel = -1;
+            }
         }
     }
     
@@ -82,42 +101,44 @@ public class GridState {
      */
     public void setSuspiciousWumpus() {
         unvisited = false;
-        wumpusSuspiciousLevel++;
-        if(2 == wumpusSuspiciousLevel) {
-            pitSuspiciousLevel = 0;
-        }    
+        if (2 != wumpusSuspiciousLevel && -1 != wumpusSuspiciousLevel) {
+            wumpusSuspiciousLevel++;
+            if (2 == wumpusSuspiciousLevel) {
+                pitSuspiciousLevel = -1;
+            }
+        }
     }
     
     public void setWumpus() {
         unvisited = false;
         wumpusSuspiciousLevel = 2;
-        pitSuspiciousLevel = 0;
+        pitSuspiciousLevel = -1;
     }
     
     public void setPit() {
         unvisited = false;
         pitSuspiciousLevel = 4;
-        wumpusSuspiciousLevel = 0;
+        wumpusSuspiciousLevel = -1;
     }
     
     public void setWall() {
         unvisited = false;
         isWall = true;
-        pitSuspiciousLevel = 0;
-        wumpusSuspiciousLevel = 0;
+        pitSuspiciousLevel = -1;
+        wumpusSuspiciousLevel = -1;
     }
     
     public void setGold() {
         unvisited = false;
         isGold = true;
-        pitSuspiciousLevel = 0;
-        wumpusSuspiciousLevel = 0;
+        pitSuspiciousLevel = -1;
+        wumpusSuspiciousLevel = -1;
     }
     
     public void setDeadWumpus() {
         unvisited = false;
         isDeadWumpus = true;
-        pitSuspiciousLevel = 0;
-        wumpusSuspiciousLevel = 0;
+        pitSuspiciousLevel = -1;
+        wumpusSuspiciousLevel = -1;
     }
 }

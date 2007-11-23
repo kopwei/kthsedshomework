@@ -30,6 +30,10 @@ public class AgentCoordinate {
         this.unexploredDirections = unexploredDirections;
     }
     
+    public Point getLocation() {
+        return new Point(xLoc, yLoc);
+    }
+    
     public int getX() { return xLoc; }
     public int getY() { return yLoc; }
     

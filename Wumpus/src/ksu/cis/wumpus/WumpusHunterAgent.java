@@ -12,7 +12,6 @@ package ksu.cis.wumpus;
 import java.awt.Point;
 import java.io.*;
 import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
@@ -116,13 +115,50 @@ public class WumpusHunterAgent implements AgentProgram {
     
     private void memorizeState(WumpusPercept percept, AgentThing agent) {
         if (null == percept || null == agent) return;
+        gridMemory[xLoc][yLoc].setSafe();
         if (percept.isGlitter) 
+        {
+            gridMemory[xLoc][yLoc].setGold();
             return;
-            
-        if (percept.isBump) {
-            
         }
-    }    
+        if (percept.isBump) {
+            gridMemory[xLoc + agent.heading.x][yLoc + agent.heading.y].setWall();
+            return;
+        }
+        if (percept.isBreeze) {  
+            Vector<Point> points = getArroundPoints();
+            for (Point point : points) {
+                gridMemory[point.x][point.y].setSuspiciousPit();
+            }
+        }
+        if (percept.isScream) {
+            gridMemory[xLoc][yLoc].setDeadWumpus();
+        }
+        if (percept.isStench) {
+            Vector<Point> points = getArroundPoints();
+            for (Point point : points) {
+                gridMemory[point.x][point.y].setSuspiciousWumpus();
+            }
+        }
+    }
+    
+    private Vector<Point> getArroundPoints() {
+        Vector<Point> pointVector = new Vector<Point>();
+        Point lastPosition = agentTrace.peekLast().getLocation();
+        Point[] arroundPoint = {
+            new Point(lastPosition.x + 1, lastPosition.y), 
+            new Point(lastPosition.x - 1, lastPosition.y), 
+            new Point(lastPosition.x, lastPosition.y - 1),
+            new Point(lastPosition.x, lastPosition.y + 1)
+        };
+        for (Point point : arroundPoint) {
+            GridState gridState = gridMemory[point.x][point.y];
+            if (!gridState.isWall() && !point.equals(lastPosition)) {
+                pointVector.add(point);
+            }
+        }
+        return pointVector;
+    }
             ///////////////
 //            gridMemory[xLoc][yLoc] = SAFE;
 //            
@@ -213,7 +249,7 @@ public class WumpusHunterAgent implements AgentProgram {
             } // down
             if (yLoc - 1 != 0) {
                 surroundingPoints.add(new Point(xLoc, yLoc - 1));
-            } // upper
+            } // uppers
         } else {
             if (lastHeading.equals(new Point(0, 1))) {
                 // check the left,down and right three points

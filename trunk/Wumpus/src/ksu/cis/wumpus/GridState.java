@@ -77,10 +77,16 @@ public class GridState {
     
     public void setDefinetlyNotPit() {
         pitSuspiciousLevel = -1;
+        if (wumpusSuspiciousLevel < 1) {
+            unvisited = true;
+        }
     }
     
     public void setDefinetlyNotWumpus() {
         wumpusSuspiciousLevel = -1;
+        if (pitSuspiciousLevel < 1) {
+            unvisited = true;
+        }
     }
     
     /**
@@ -141,4 +147,5 @@ public class GridState {
         pitSuspiciousLevel = -1;
         wumpusSuspiciousLevel = -1;
     }
+    
 }

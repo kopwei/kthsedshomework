@@ -12,9 +12,7 @@ package ksu.cis.wumpus;
 import java.awt.Point;
 import java.io.*;
 import java.util.ArrayDeque;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.Vector;
 
 
@@ -53,7 +51,7 @@ public class WumpusHunterAgent implements AgentProgram {
     private Point needHeading = new Point();
     private int multiplicity = 0;
     private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
-//    private HashSet<Point> surroundingPoints = new HashSet<Point>();
+    private Vector<Point> arroundPoints = new Vector<Point>();
 
     public WumpusHunterAgent(int xSize, int ySize) {
         this.xSize = xSize;
@@ -132,24 +130,31 @@ public class WumpusHunterAgent implements AgentProgram {
             return;
         }
         if (percept.isBreeze) {  
-            Vector<Point> points = getArroundPoints();
-            for (Point point : points) {
+            fillArroundPoints();
+            for (Point point : arroundPoints) {
                 gridMemory[point.x][point.y].setSuspiciousPit();
             }
         }
         if (percept.isScream) {
+            for (int i = 1; i < xSize - 1; i++) {
+                for (int j = 1; j < ySize - 1; j++) {
+                    if (!gridMemory[i][j].isWall()) {   
+                        gridMemory[i][j].setDefinetlyNotWumpus();
+                    }
+                }
+            }
             gridMemory[xLoc][yLoc].setDeadWumpus();
         }
         if (percept.isStench) {
-            Vector<Point> points = getArroundPoints();
-            for (Point point : points) {
+            fillArroundPoints();
+            for (Point point : arroundPoints) {
                 gridMemory[point.x][point.y].setSuspiciousWumpus();
             }
         }
     }
     
-    private Vector<Point> getArroundPoints() {
-        Vector<Point> pointVector = new Vector<Point>();
+    private void fillArroundPoints() {
+        arroundPoints.clear();
         Point lastPosition = agentTrace.peekLast().getLocation();
         Point[] arroundPoint = {
             new Point(xLoc + 1, yLoc), 
@@ -160,10 +165,9 @@ public class WumpusHunterAgent implements AgentProgram {
         for (Point point : arroundPoint) {
             GridState gridState = gridMemory[point.x][point.y];
             if (!gridState.isWall() && !point.equals(lastPosition)) {
-                pointVector.add(point);
+                arroundPoints.addElement(point);
             }
         }
-        return pointVector;
     }
             ///////////////
 //            gridMemory[xLoc][yLoc] = SAFE;

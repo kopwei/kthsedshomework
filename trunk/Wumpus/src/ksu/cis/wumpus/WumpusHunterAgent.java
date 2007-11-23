@@ -14,6 +14,7 @@ import java.io.*;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -40,6 +41,7 @@ public class WumpusHunterAgent implements AgentProgram {
     private final int down = 1;
     private final int left = 2;
     private final int up = 3;
+    private int currentDirection = 0;
 
     // hidden attributes.  xLoc and yLoc are for the agent to "know" where it is
 
@@ -51,7 +53,7 @@ public class WumpusHunterAgent implements AgentProgram {
     private Point needHeading = new Point();
     private int multiplicity = 0;
     private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
-    private HashSet<Point> surroundingPoints = new HashSet<Point>();
+//    private HashSet<Point> surroundingPoints = new HashSet<Point>();
 
     public WumpusHunterAgent(int xSize, int ySize) {
         this.xSize = xSize;
@@ -219,80 +221,45 @@ public class WumpusHunterAgent implements AgentProgram {
     
     
     
-//    private Action decideAction(Percept perceptArg) {
-//        WumpusPercept percept = (WumpusPercept) perceptArg;
-//        if (percept.isGlitter) {
+//    private Action decideAction() {
+//        GridState gs = gridMemory[xLoc][yLoc];
+//        if (gs.isGold()) {
 //            setActionsToExit();
 //            return new AnAction("grab");
 //        }
+//        
 //        
 //        if (percept.isBump) {
 //            // pop up the field of current position
 //            AgentCoordinate ac = agentTrace.pollLast();
 //            if (ac.getMultiplicity() == 0) {
-//                moveBack();
-//                if (actionPool.isEmpty()) 
-//                actionPool.firstElement();
+//                extremeAction();
+//                if (actionPool.isEmpty()) return new AnAction("climb");
+//                else {
+//                    AnAction actionForNow = (AnAction) actionPool.pollFirst();
+//                    return actionForNow;
+//                }
 //            }
 //            else {
-//                
+//                Random rnd = new Random(System.currentTimeMillis());
+//                int index = rnd.nextInt(ac.getMultiplicity());
+//                Point wantedHeading = ac.getAllUnexploredDirections().get(index);
+//                ac.removeUnexploredDirection(wantedHeading);
+//                setHowToTurn(wantedHeading);
+//                AnAction afn = (AnAction) actionPool.pollFirst();
+//                return afn;
 //            }
 //        }
+//        
+//        if (percept.isBreeze || percept.isStench) {
+//            extremeAction();
+//            AnAction afn = (AnAction) actionPool.pollFirst();
+//            return afn;
+//        }
+//        
+//        
 //    }
 
-    
-    private void checkSurroundingPoints() {
-        if (lastHeading.equals(new Point(1, 0))) {
-            // default action direction: right, then down, then left, and last up
-                // check the upper, right and down three points
-            if (xLoc + 1 != xSize - 1) {
-                surroundingPoints.add(new Point(xLoc + 1, yLoc));
-            } // right
-            if (yLoc + 1 != ySize - 1) {
-                surroundingPoints.add(new Point(xLoc, yLoc + 1));
-            } // down
-            if (yLoc - 1 != 0) {
-                surroundingPoints.add(new Point(xLoc, yLoc - 1));
-            } // uppers
-        } else {
-            if (lastHeading.equals(new Point(0, 1))) {
-                // check the left,down and right three points
-                if (xLoc + 1 != xSize - 1) {
-                    surroundingPoints.add(new Point(xLoc + 1, yLoc));
-                } // right
-                if (yLoc + 1 != ySize - 1) {
-                    surroundingPoints.add(new Point(xLoc, yLoc + 1));
-                } // down
-                if (xLoc - 1 != 0) {
-                    surroundingPoints.add(new Point(xLoc - 1, yLoc));
-                } // left
-            } else {
-                if (lastHeading.equals(new Point(-1, 0))) {
-                    // check the upper, left and down three points
-                    if (yLoc + 1 != ySize - 1) {
-                        surroundingPoints.add(new Point(xLoc, yLoc + 1));
-                    } // down
-                    if (xLoc - 1 != 0) {
-                        surroundingPoints.add(new Point(xLoc - 1, yLoc));
-                    } // left
-                    if (yLoc - 1 != 0) {
-                        surroundingPoints.add(new Point(xLoc, yLoc - 1));
-                    } // upper                        
-                } else { // lastHeading = (0,-1)
-                        // check the left, upper and right three points
-                    if (xLoc + 1 != xSize - 1) {
-                        surroundingPoints.add(new Point(xLoc + 1, yLoc));
-                    } // right
-                    if (xLoc - 1 != 0) {
-                        surroundingPoints.add(new Point(xLoc - 1, yLoc));
-                    } // left
-                    if (yLoc - 1 != 0) {
-                        surroundingPoints.add(new Point(xLoc, yLoc - 1));
-                    } // upper
-                }
-            }
-        }
-    }
     
     private void calMultiplicity() {
 //        for (Iterator<Point> it = surroundingPoints.iterator(); it.hasNext();) {
@@ -307,7 +274,6 @@ public class WumpusHunterAgent implements AgentProgram {
         Point backHeading = new Point();
         backHeading.x = heading.x;
         backHeading.y = heading.y;
-        int currentDirection = 0;
         int backDirection = 0;
 
         // check which direction the heading is
@@ -326,37 +292,14 @@ public class WumpusHunterAgent implements AgentProgram {
         }
         
         while (!agentTrace.isEmpty()) {
-            AgentCoordinate ac = agentTrace.pop();
+            AgentCoordinate ac = agentTrace.pollLast();
             lastPoint.x = ac.getX();
             lastPoint.y = ac.getY();
             backHeading.x = lastPoint.x - xLoc;
             backHeading.y = lastPoint.y - yLoc;
             
-            // check which direction the backheading is
-            if (backHeading.x == 1 && backHeading.y == 0) backDirection = right;
-            else {
-                if(backHeading.x == 0 && backHeading.y == 1) backDirection = down;
-                else {
-                    if(backHeading.x == -1 && backHeading.y == 0) backDirection = left;
-                    else backDirection = up;
-                }
-            }
-            // opposite direction
-            if (Math.abs(backDirection - currentDirection) == 2) {
-                actionPool.add(new AnAction("turn", "right"));
-                actionPool.add(new AnAction("turn", "right"));
-                actionPool.add(new AnAction("forward"));
-            }
-            else {
-                if ((backDirection - currentDirection) == 1 || (backDirection - currentDirection) == -3) {
-                    actionPool.add(new AnAction("turn", "right"));
-                    actionPool.add(new AnAction("forward"));
-                }
-                else {
-                    actionPool.add(new AnAction("turn", "left"));
-                    actionPool.add(new AnAction("forward"));
-                }   
-            }
+            backDirection = setHowToTurn(backHeading);
+            actionPool.add(new AnAction("forward"));
             currentDirection = backDirection;
         }
         actionPool.add(new AnAction("climb"));
@@ -369,7 +312,10 @@ public class WumpusHunterAgent implements AgentProgram {
             if (agentCoordinate.getMultiplicity() == 0) counter++;
             else break;
         }
-
+        if (counter - 1 == agentTrace.size()) {
+            riskLife();
+        }
+        else moveBack(counter);
     }
     
     // find where the wumpus is and kill it when there are no un visited and safe fileds
@@ -378,7 +324,37 @@ public class WumpusHunterAgent implements AgentProgram {
     }
     
     // move back to the field whose multiplicity is not 0 when multiplicity of the current field is 0
-    private void moveBack() {
+    private void moveBack(int counter) {
         
+    }
+    
+    private int setHowToTurn(Point wantedHeading) {
+        // check which direction the backheading is
+        int backDirection = 0;
+        if (wantedHeading.x == 1 && wantedHeading.y == 0) {
+            backDirection = right;
+        } else {
+            if (wantedHeading.x == 0 && wantedHeading.y == 1) {
+                backDirection = down;
+            } else {
+                if (wantedHeading.x == -1 && wantedHeading.y == 0) {
+                    backDirection = left;
+                } else {
+                    backDirection = up;
+                }
+            }
+        }
+        // opposite direction
+        if (Math.abs(backDirection - currentDirection) == 2) {
+            actionPool.add(new AnAction("turn", "right"));
+            actionPool.add(new AnAction("turn", "right"));
+        } else {
+            if ((backDirection - currentDirection) == 1 || (backDirection - currentDirection) == -3) {
+                actionPool.add(new AnAction("turn", "right"));
+            } else {
+                actionPool.add(new AnAction("turn", "left"));
+            }
+        }
+        return backDirection;
     }
 }

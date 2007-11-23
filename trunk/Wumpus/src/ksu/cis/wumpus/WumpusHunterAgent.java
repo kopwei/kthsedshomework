@@ -50,7 +50,7 @@ public class WumpusHunterAgent implements AgentProgram {
     private Point lastHeading = new Point();
     private Point needHeading = new Point();
     private int multiplicity = 0;
-    private Vector<Action> actionPool = new Vector();
+    private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
     private HashSet<Point> surroundingPoints = new HashSet<Point>();
 
     public WumpusHunterAgent(int xSize, int ySize) {
@@ -71,6 +71,10 @@ public class WumpusHunterAgent implements AgentProgram {
     //Main Method
 
     public Action execute(Percept perceptArg, Agent agent) {
+        if (!actionPool.isEmpty()) {
+            return actionPool.pollFirst();
+        }
+        
         //((AgentThing)agent)
         AgentThing agentThing = (AgentThing)agent;
         if (null == perceptArg || null == agentThing) return null;

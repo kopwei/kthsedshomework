@@ -11,9 +11,10 @@ package ksu.cis.wumpus;
 
 import java.awt.Point;
 import java.io.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Stack;
 import java.util.Vector;
 
 
@@ -35,17 +36,18 @@ public class WumpusHunterAgent implements AgentProgram {
 //    static final int PIT4 = 14;
 //    // constants
 //
-//    private final int right = 0;
-//    private final int left = 1;
-//    private final int up = 2;
-//    private final int down = 3;
+
+    private final int right = 0;
+    private final int down = 1;
+    private final int left = 2;
+    private final int up = 3;
 
     // hidden attributes.  xLoc and yLoc are for the agent to "know" where it is
 
     private int xSize,  ySize,  xLoc,  yLoc;
     private Point heading = new Point();
     private GridState gridMemory[][];
-    private Stack<AgentCoordinate> agentTrace = new Stack<AgentCoordinate>();
+    private ArrayDeque<AgentCoordinate> agentTrace = new ArrayDeque<AgentCoordinate>();
     private Point lastHeading = new Point();
     private Point needHeading = new Point();
     private int multiplicity = 0;
@@ -174,6 +176,29 @@ public class WumpusHunterAgent implements AgentProgram {
 //            // remove the foward point from the surrounding points
 //            surroundingPoints.remove(new Point(xLoc + heading.x, yLoc + heading.y));
 //        }
+    
+    
+    
+//    private Action decideAction(Percept perceptArg) {
+//        WumpusPercept percept = (WumpusPercept) perceptArg;
+//        if (percept.isGlitter) {
+//            setActionsToExit();
+//            return new AnAction("grab");
+//        }
+//        
+//        if (percept.isBump) {
+//            // pop up the field of current position
+//            AgentCoordinate ac = agentTrace.pollLast();
+//            if (ac.getMultiplicity() == 0) {
+//                moveBack();
+//                if (actionPool.isEmpty()) 
+//                actionPool.firstElement();
+//            }
+//            else {
+//                
+//            }
+//        }
+//    }
 
     
     private void checkSurroundingPoints() {
@@ -237,6 +262,82 @@ public class WumpusHunterAgent implements AgentProgram {
 //        }
     }
     
+    private void setActionsToExit() {
+        Point lastPoint = new Point();
+        Point backHeading = new Point();
+        backHeading.x = heading.x;
+        backHeading.y = heading.y;
+        int currentDirection = 0;
+        int backDirection = 0;
+
+        // check which direction the heading is
+        if (heading.x == 1 && heading.y == 0) {
+            currentDirection = right;
+        } else {
+            if (heading.x == 0 && heading.y == 1) {
+                currentDirection = down;
+            } else {
+                if (heading.x == -1 && heading.y == 0) {
+                    currentDirection = left;
+                } else {
+                    currentDirection = up;
+                }
+            }
+        }
+        
+        while (!agentTrace.isEmpty()) {
+            AgentCoordinate ac = agentTrace.pop();
+            lastPoint.x = ac.getX();
+            lastPoint.y = ac.getY();
+            backHeading.x = lastPoint.x - xLoc;
+            backHeading.y = lastPoint.y - yLoc;
+            
+            // check which direction the backheading is
+            if (backHeading.x == 1 && backHeading.y == 0) backDirection = right;
+            else {
+                if(backHeading.x == 0 && backHeading.y == 1) backDirection = down;
+                else {
+                    if(backHeading.x == -1 && backHeading.y == 0) backDirection = left;
+                    else backDirection = up;
+                }
+            }
+            // opposite direction
+            if (Math.abs(backDirection - currentDirection) == 2) {
+                actionPool.add(new AnAction("turn", "right"));
+                actionPool.add(new AnAction("turn", "right"));
+                actionPool.add(new AnAction("forward"));
+            }
+            else {
+                if ((backDirection - currentDirection) == 1 || (backDirection - currentDirection) == -3) {
+                    actionPool.add(new AnAction("turn", "right"));
+                    actionPool.add(new AnAction("forward"));
+                }
+                else {
+                    actionPool.add(new AnAction("turn", "left"));
+                    actionPool.add(new AnAction("forward"));
+                }   
+            }
+            currentDirection = backDirection;
+        }
+        actionPool.add(new AnAction("climb"));
+    }
+    
+    private void extremeAction() {
+        int counter = 1;
+        for (Iterator<AgentCoordinate> it = agentTrace.descendingIterator(); it.hasNext();) {
+            AgentCoordinate agentCoordinate = it.next();
+            if (agentCoordinate.getMultiplicity() == 0) counter++;
+            else break;
+        }
+
+    }
+    
+    // find where the wumpus is and kill it when there are no un visited and safe fileds
+    private void riskLife() {
+        
+    }
+    
+    // move back to the field whose multiplicity is not 0 when multiplicity of the current field is 0
     private void moveBack() {
         
     }

@@ -13,6 +13,7 @@ import java.awt.Point;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -225,16 +226,35 @@ public class WumpusHunterAgent implements AgentProgram {
     
     
     
-//    private Action decideAction() {
-//        GridState gs = gridMemory[xLoc][yLoc];
-//        if (gs.isGold()) {
-//            setActionsToExit();
-//            return new AnAction("grab");
-//        }
-//        
-//        
-//        if (percept.isBump) {
-//            // pop up the field of current position
+    private Action decideAction() {
+        GridState gs = gridMemory[xLoc][yLoc];
+        if (gs.isGold()) {
+            setActionsToExit();
+            return new AnAction("grab");
+        }
+        
+        fillArroundPoints();
+        Vector<Point> unvisitedPoints = new Vector<Point>();
+        for (int i = 0; i < arroundPoints.size(); i++) {
+            Point point = arroundPoints.elementAt(i);
+            if (gridMemory[point.x][point.y].isUnvisited()) unvisitedPoints.add(point);
+        }
+
+        if (unvisitedPoints.size() > 0) {
+            Point wantedHeading = new Point();
+            Vector<Point> unexploredDirections = new Vector<Point>();
+            for (int i = 0; i < unvisitedPoints.size(); i++) {
+                Point point = unvisitedPoints.elementAt(i);
+                unexploredDirections.add(new Point(point.x - xLoc, point.y - yLoc));
+            }
+            wantedHeading = unexploredDirections.firstElement();
+            unexploredDirections.remove(0);
+            agentTrace.add(new AgentCoordinate(xLoc, yLoc, unexploredDirections));
+            setHowToTurn(wantedHeading);
+            actionPool.add(new AnAction("forward"));
+            AnAction actionForNow = (AnAction) actionPool.pollFirst();
+            return actionForNow;
+            // pop up the field of current position
 //            AgentCoordinate ac = agentTrace.pollLast();
 //            if (ac.getMultiplicity() == 0) {
 //                extremeAction();
@@ -253,24 +273,12 @@ public class WumpusHunterAgent implements AgentProgram {
 //                AnAction afn = (AnAction) actionPool.pollFirst();
 //                return afn;
 //            }
-//        }
-//        
-//        if (percept.isBreeze || percept.isStench) {
-//            extremeAction();
-//            AnAction afn = (AnAction) actionPool.pollFirst();
-//            return afn;
-//        }
-//        
-//        
-//    }
-
-    
-    private void calMultiplicity() {
-//        for (Iterator<Point> it = surroundingPoints.iterator(); it.hasNext();) {
-//            if (gridMemory[it.next().x][it.next().y] == UNVISITED) {
-//                multiplicity++;
-//            }
-//        }
+        }
+        else {
+            extremeAction();
+            AnAction afn = (AnAction) actionPool.pollFirst();
+            return afn;
+        }
     }
     
     private void setActionsToExit() {

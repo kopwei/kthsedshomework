@@ -62,9 +62,10 @@ public class WumpusHunterAgent implements AgentProgram {
         xLoc = agentThing.location.x;
         yLoc = agentThing.location.y;
         heading = agentThing.heading;
-        
-        if (agentTrace.peekLast().getLocation().equals(agentThing.location)) {
-            agentTrace.removeLast();
+        if (!agentTrace.isEmpty()) {
+            if (agentTrace.peekLast().getLocation().equals(agentThing.location)) {
+                agentTrace.removeLast();
+            }
         }
         
         if (!actionPool.isEmpty()) {
@@ -161,8 +162,9 @@ public class WumpusHunterAgent implements AgentProgram {
             // If it is the first time meet the smell, store the path
             if (isFirstSmell) {
                 for (AgentCoordinate agentCoo : agentTrace) {
-                    pathTofirstSmellField.add(agentCoo.getLocation());
+                    pathTofirstSmellField.addElement(agentCoo.getLocation());
                 }
+                pathTofirstSmellField.addElement(agent.location);
                 isFirstSmell = false;
             }
             // Set all the arround point as suspicious wumpus
@@ -221,6 +223,7 @@ public class WumpusHunterAgent implements AgentProgram {
         Point wumpusPoint = new Point();
         for (int i = 0; i < arroundPoints.size(); i++) {
             Point point = arroundPoints.elementAt(i);
+            // If there is wumpus, shoot it
             if (gridMemory[point.x][point.y].isWumpus() && hasArrow) {
                 setHowToTurn(new Point(point.x, point.y));
                 actionPool.add(new AnAction("shoot"));
@@ -382,6 +385,9 @@ public class WumpusHunterAgent implements AgentProgram {
             }
         }
         // opposite direction
+        if (backDirection == currentDirection) {
+            return backDirection;
+        }
         if (Math.abs(backDirection - currentDirection) == 2) {
             actionPool.add(new AnAction("turn", "right"));
             actionPool.add(new AnAction("turn", "right"));

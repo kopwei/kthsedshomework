@@ -53,6 +53,7 @@ public class WumpusHunterAgent implements AgentProgram {
     private int multiplicity = 0;
     private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
     private Vector<Point> arroundPoints = new Vector<Point>();
+    private boolean arrow = true;
 
     public WumpusHunterAgent(int xSize, int ySize) {
         this.xSize = xSize;
@@ -235,8 +236,16 @@ public class WumpusHunterAgent implements AgentProgram {
         
         fillArroundPoints();
         Vector<Point> unvisitedPoints = new Vector<Point>();
+        Point wumpusPoint = new Point();
         for (int i = 0; i < arroundPoints.size(); i++) {
             Point point = arroundPoints.elementAt(i);
+            if (gridMemory[point.x][point.y].isWumpus()) {
+                setHowToTurn(new Point(point.x, point.y));
+                actionPool.add(new AnAction("shoot"));
+                actionPool.add(new AnAction("forward"));
+                wumpusPoint.x = point.x;
+                wumpusPoint.y = point.y;
+            }
             if (gridMemory[point.x][point.y].isUnvisited()) unvisitedPoints.add(point);
         }
 
@@ -246,6 +255,9 @@ public class WumpusHunterAgent implements AgentProgram {
             for (int i = 0; i < unvisitedPoints.size(); i++) {
                 Point point = unvisitedPoints.elementAt(i);
                 unexploredDirections.add(new Point(point.x - xLoc, point.y - yLoc));
+            }
+            if (actionPool.size() != 0) {
+//                wantedHeading = 
             }
             wantedHeading = unexploredDirections.firstElement();
             unexploredDirections.remove(0);
@@ -282,38 +294,7 @@ public class WumpusHunterAgent implements AgentProgram {
     }
     
     private void setActionsToExit() {
-        Point lastPoint = new Point();
-        Point backHeading = new Point();
-        backHeading.x = heading.x;
-        backHeading.y = heading.y;
-        int backDirection = 0;
-
-        // check which direction the heading is
-        if (heading.x == 1 && heading.y == 0) {
-            currentDirection = right;
-        } else {
-            if (heading.x == 0 && heading.y == 1) {
-                currentDirection = down;
-            } else {
-                if (heading.x == -1 && heading.y == 0) {
-                    currentDirection = left;
-                } else {
-                    currentDirection = up;
-                }
-            }
-        }
-        
-        while (!agentTrace.isEmpty()) {
-            AgentCoordinate ac = agentTrace.pollLast();
-            lastPoint.x = ac.getX();
-            lastPoint.y = ac.getY();
-            backHeading.x = lastPoint.x - xLoc;
-            backHeading.y = lastPoint.y - yLoc;
-            
-            backDirection = setHowToTurn(backHeading);
-            actionPool.add(new AnAction("forward"));
-            currentDirection = backDirection;
-        }
+        moveBack(agentTrace.size());
         actionPool.add(new AnAction("climb"));
     }
     
@@ -337,7 +318,39 @@ public class WumpusHunterAgent implements AgentProgram {
     
     // move back to the field whose multiplicity is not 0 when multiplicity of the current field is 0
     private void moveBack(int counter) {
+        Point lastPoint = new Point();
+        Point backHeading = new Point();
+        backHeading.x = heading.x;
+        backHeading.y = heading.y;
+        int backDirection = 0;
+
+        // check which direction the heading is
+        if (heading.x == 1 && heading.y == 0) {
+            currentDirection = right;
+        } else {
+            if (heading.x == 0 && heading.y == 1) {
+                currentDirection = down;
+            } else {
+                if (heading.x == -1 && heading.y == 0) {
+                    currentDirection = left;
+                } else {
+                    currentDirection = up;
+                }
+            }
+        }
         
+        while (counter != 0) {
+            AgentCoordinate ac = agentTrace.pollLast();
+            lastPoint.x = ac.getX();
+            lastPoint.y = ac.getY();
+            backHeading.x = lastPoint.x - xLoc;
+            backHeading.y = lastPoint.y - yLoc;
+            
+            backDirection = setHowToTurn(backHeading);
+            actionPool.add(new AnAction("forward"));
+            currentDirection = backDirection;
+            counter--;
+        }
     }
     
     private int setHowToTurn(Point wantedHeading) {

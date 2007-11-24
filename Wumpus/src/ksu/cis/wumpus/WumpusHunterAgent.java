@@ -63,11 +63,6 @@ public class WumpusHunterAgent implements AgentProgram {
         xLoc = agentThing.location.x;
         yLoc = agentThing.location.y;
         heading = agentThing.heading;
-        if (!agentTrace.isEmpty()) {
-            if (agentTrace.peekLast().getLocation().equals(agentThing.location)) {
-                agentTrace.removeLast();
-            }
-        }
         
         if (!actionPool.isEmpty()) {
             Action action = actionPool.pollFirst();
@@ -76,6 +71,12 @@ public class WumpusHunterAgent implements AgentProgram {
                 hasArrow = false;
             }
             return action;
+        }
+
+        if (!agentTrace.isEmpty()) {
+            if (agentTrace.peekLast().getLocation().equals(agentThing.location)) {
+                agentTrace.removeLast();
+            }
         }
 
         // check which direction the heading is
@@ -159,6 +160,9 @@ public class WumpusHunterAgent implements AgentProgram {
                 }
             }
             isWumpusDead = true;
+            if (isRepeating) {
+               isRepeating = false;
+            }
             gridMemory[xLoc][yLoc].setDeadWumpus();
         }
         if (percept.isStench) {
@@ -226,18 +230,37 @@ public class WumpusHunterAgent implements AgentProgram {
         
         fillArroundPoints();
         Vector<Point> unvisitedPoints = new Vector<Point>();
+        Vector<Point> isWumpusPoints = new Vector<Point>();
         Point wumpusPoint = new Point();
         for (int i = 0; i < arroundPoints.size(); i++) {
             Point point = arroundPoints.elementAt(i);
             // If there is wumpus, shoot it
             if (gridMemory[point.x][point.y].isWumpus() && hasArrow) {
-                setHowToTurn(new Point(point.x, point.y));
-                actionPool.add(new AnAction("shoot"));
-                actionPool.add(new AnAction("forward"));
-                wumpusPoint.x = point.x;
-                wumpusPoint.y = point.y;
+                isWumpusPoints.add(point);
             }
             if (gridMemory[point.x][point.y].isUnvisited()) unvisitedPoints.add(point);
+        }
+        
+        if (isWumpusPoints.size() > 0) {
+            if (isWumpusPoints.size() > 1) {
+                for (int i = 0; i < isWumpusPoints.size(); i++) {
+                    Point point = isWumpusPoints.elementAt(i);
+                    if (gridMemory[point.x][point.y].isSuspiciousPit()) {
+                        isWumpusPoints.removeElementAt(i);
+                    }
+                }
+                Random rnd = new Random(System.currentTimeMillis());
+                wumpusPoint.setLocation(isWumpusPoints.elementAt(rnd.nextInt(isWumpusPoints.size())));
+            }
+            else {
+                wumpusPoint.setLocation(isWumpusPoints.elementAt(0));
+            }
+            Point wantedHeading = new Point();
+            wantedHeading.x = wumpusPoint.x - xLoc;
+            wantedHeading.y = wumpusPoint.y - yLoc;
+            setHowToTurn(wantedHeading);
+            actionPool.add(new AnAction("shoot"));
+            actionPool.add(new AnAction("forward"));
         }
 
         if (unvisitedPoints.size() > 0) {
@@ -312,6 +335,14 @@ public class WumpusHunterAgent implements AgentProgram {
                 goToFirstSmellField();
                 // surrounding points are all wumpus-suspicious fields
                 fillArroundPoints();
+                // remove those fields been suspected as pit
+                for (int i = 0; i < arroundPoints.size(); i++) {
+                    Point point = arroundPoints.elementAt(i);
+                    if (gridMemory[point.x][point.y].isSuspiciousPit()) {
+                        arroundPoints.removeElementAt(i);
+                    }
+                }
+
                 Random rnd = new Random(System.currentTimeMillis());
                 Point taskPoint = arroundPoints.elementAt(rnd.nextInt(arroundPoints.size()));
                 Point wantedHeading = new Point();
@@ -320,6 +351,8 @@ public class WumpusHunterAgent implements AgentProgram {
                 setHowToTurn(wantedHeading);
                 actionPool.add(new AnAction("shoot"));
                 actionPool.add(new AnAction("forward"));
+                Vector<Point> uned = new Vector<Point>();
+                agentTrace.add(new AgentCoordinate(xLoc, yLoc, uned));
             }
         }
         else moveBack(counter);

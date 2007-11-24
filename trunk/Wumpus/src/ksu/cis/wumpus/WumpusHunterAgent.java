@@ -8,6 +8,7 @@ package ksu.cis.wumpus;
 import java.awt.Point;
 import java.io.*;
 import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
@@ -32,7 +33,7 @@ public class WumpusHunterAgent implements AgentProgram {
 //    private int multiplicity = 0;
     private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
     private Vector<Point> arroundPoints = new Vector<Point>();
-    private Vector<Point> suspiciousWumpusPoints = new Vector<Point>();
+    private HashSet<Point> suspiciousWumpusPoints = new HashSet<Point>();
     private boolean hasArrow = true;
     private boolean isWumpusDead = false;
     private boolean isFirstSmell = true;
@@ -59,6 +60,7 @@ public class WumpusHunterAgent implements AgentProgram {
 
     public Action execute(Percept perceptArg, Agent agent) {
         AgentThing agentThing = (AgentThing)agent;
+        WumpusPercept percept = (WumpusPercept) perceptArg;
         if (null == perceptArg || null == agentThing) return null;
         xLoc = agentThing.location.x;
         yLoc = agentThing.location.y;
@@ -69,6 +71,9 @@ public class WumpusHunterAgent implements AgentProgram {
             // If the action is shoot, then the arrow is gone
             if (action.getName().equals("shoot")) {
                 hasArrow = false;
+            }
+            if (percept.isScream) {
+                setWumpusDead(agentThing.heading);
             }
             return action;
         }
@@ -94,9 +99,9 @@ public class WumpusHunterAgent implements AgentProgram {
             }
         }
         
-        WumpusPercept percept = (WumpusPercept) perceptArg;
+        
         memorizeState(percept, agentThing);
-        return (AnAction)decideAction();
+        return decideAction();
 
 //        if (percept.isGlitter) {
 //            return new AnAction("grab");
@@ -144,26 +149,14 @@ public class WumpusHunterAgent implements AgentProgram {
         }
         if (percept.isBreeze) {
             fillArroundPoints();
-            //if (!isRepeating) {
+            if (!isRepeating) {
                 for (Point point : arroundPoints) {
                     gridMemory[point.x][point.y].setSuspiciousPit();
-                    suspiciousWumpusPoints.addElement(point);
                 }
-            //}
+            }
         }
         if (percept.isScream) {
-            for (int i = 1; i < xSize - 1; i++) {
-                for (int j = 1; j < ySize - 1; j++) {
-                    if (!gridMemory[i][j].isWall()) {   
-                        gridMemory[i][j].setDefinetlyNotWumpus();
-                    }
-                }
-            }
-            isWumpusDead = true;
-            if (isRepeating) {
-                isRepeating = false;
-            }
-            gridMemory[xLoc][yLoc].setDeadWumpus();
+            setWumpusDead(agent.heading);         
         }
         if (percept.isStench) {
             // If it is the first time meet the smell and not the breeze, store the path
@@ -175,10 +168,11 @@ public class WumpusHunterAgent implements AgentProgram {
                 isFirstSmell = false;
             }
             // Set all the arround point as suspicious wumpus
-            if (!isRepeating) {
+            if (!isRepeating && !isWumpusDead) {
                 fillArroundPoints();
                 for (Point point : arroundPoints) {
                     gridMemory[point.x][point.y].setSuspiciousWumpus();
+                    suspiciousWumpusPoints.add(point);
                 }
             }
         }
@@ -447,5 +441,32 @@ public class WumpusHunterAgent implements AgentProgram {
             }
         }
         return backDirection;
+    }
+
+    private void setWumpusDead(Point heading) {
+        if (isRepeating) {
+            isRepeating = false;
+        }
+        
+        if (!isWumpusDead) { 
+            Point deadWumpusPoint = new Point(xLoc + heading.x, yLoc + heading.y);
+            for (int i = 1; i < xSize - 1; i++) {
+                for (int j = 1; j < ySize - 1; j++) {
+                    if (!gridMemory[i][j].isWall()) {
+                        gridMemory[i][j].setDefinetlyNotWumpus();
+                    }
+                }
+            }
+
+            
+            gridMemory[deadWumpusPoint.x][deadWumpusPoint.y].setDeadWumpus();
+            for (Point suspiciousWpPoint : suspiciousWumpusPoints) {
+                if (!suspiciousWpPoint.equals(deadWumpusPoint)) {
+                    gridMemory[suspiciousWpPoint.x][suspiciousWpPoint.y].setUnVisited();
+                    //gridMemory[suspiciousWpPoint.x][suspiciousWpPoint.y].setDefinetlyNotWumpus();
+                }
+            }
+        }
+        isWumpusDead = true;
     }
 }

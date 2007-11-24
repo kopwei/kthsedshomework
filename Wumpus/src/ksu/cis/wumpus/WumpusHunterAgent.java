@@ -286,9 +286,17 @@ public class WumpusHunterAgent implements AgentProgram {
             
         }
         else {
-            extremeAction();
-            AnAction afn = (AnAction) actionPool.pollFirst();
-            return afn;
+            if (actionPool.isEmpty()) {
+                extremeAction();
+                AnAction afn = (AnAction) actionPool.pollFirst();
+                return afn;
+            }
+            else {
+                Vector<Point> uned = new Vector<Point>();
+                agentTrace.add(new AgentCoordinate(xLoc, yLoc, uned));
+                AnAction afn = (AnAction) actionPool.pollFirst();
+                return afn;
+            }
         }
     }
     
@@ -326,27 +334,32 @@ public class WumpusHunterAgent implements AgentProgram {
             else { // Wumpus is not dead and has arrow
                 // go to the position where gets the first smell, and shoot towards a random direction 
                 // where suspects wumpus
-                goToFirstSmellField();
-                // surrounding points are all wumpus-suspicious fields
-                fillArroundPoints();
-                // remove those fields been suspected as pit
-                for (int i = 0; i < arroundPoints.size(); i++) {
-                    Point point = arroundPoints.elementAt(i);
-                    if (gridMemory[point.x][point.y].isSuspiciousPit()) {
-                        arroundPoints.removeElementAt(i);
+                if (!pathTofirstSmellField.isEmpty()) {
+                    goToFirstSmellField();
+                    // surrounding points are all wumpus-suspicious fields
+                    fillArroundPoints();
+                    // remove those fields been suspected as pit
+                    for (int i = 0; i < arroundPoints.size(); i++) {
+                        Point point = arroundPoints.elementAt(i);
+                        if (gridMemory[point.x][point.y].isSuspiciousPit()) {
+                            arroundPoints.removeElementAt(i);
+                        }
                     }
-                }
 
-                Random rnd = new Random(System.currentTimeMillis());
-                Point taskPoint = arroundPoints.elementAt(rnd.nextInt(arroundPoints.size()));
-                Point wantedHeading = new Point();
-                wantedHeading.x = taskPoint.x - xLoc;
-                wantedHeading.y = taskPoint.y - yLoc;
-                setHowToTurn(wantedHeading);
-                actionPool.add(new AnAction("shoot"));
-                actionPool.add(new AnAction("forward"));
-                Vector<Point> uned = new Vector<Point>();
-                agentTrace.add(new AgentCoordinate(xLoc, yLoc, uned));
+                    Random rnd = new Random(System.currentTimeMillis());
+                    Point taskPoint = arroundPoints.elementAt(rnd.nextInt(arroundPoints.size()));
+                    Point wantedHeading = new Point();
+                    wantedHeading.x = taskPoint.x - xLoc;
+                    wantedHeading.y = taskPoint.y - yLoc;
+                    setHowToTurn(wantedHeading);
+                    actionPool.add(new AnAction("shoot"));
+                    actionPool.add(new AnAction("forward"));
+                    Vector<Point> uned = new Vector<Point>();
+                    agentTrace.add(new AgentCoordinate(xLoc, yLoc, uned));
+                }
+                else {
+                    setActionsToExit();
+                }
             }
         }
         else moveBack(counter);

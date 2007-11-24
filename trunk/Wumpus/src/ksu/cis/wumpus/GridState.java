@@ -148,4 +148,8 @@ public class GridState {
         wumpusSuspiciousLevel = -1;
     }
     
+    public void setVisited() {
+        unvisited = false;
+    }
+    
 }

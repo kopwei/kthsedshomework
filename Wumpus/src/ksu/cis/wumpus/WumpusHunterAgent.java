@@ -13,28 +13,10 @@ import java.awt.Point;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.Vector;
 
 
 public class WumpusHunterAgent implements AgentProgram {
-//    static final int UNVISITED = 0;
-//    static final int SAFE = 1;
-//    static final int BREEZE = 2;
-//    static final int SMELL = 3;
-//    static final int WUMPUS = 4;
-//    static final int PIT = 5;
-//    static final int WALL = 6;
-////    static final int BREEZEANDGOLd = 7;
-////    static final int SMELLANDGOLD = 8;
-//    static final int BREEZEANDSMELL = 9;
-////    static final int BREEZESMELLANDGOLD = 10;
-//    static final int WUMPUSANDPIT = 11;
-//    static final int PIT2 = 12;
-//    static final int PIT3 = 13;
-//    static final int PIT4 = 14;
-//    // constants
-//
 
     private final int right = 0;
     private final int down = 1;
@@ -53,7 +35,8 @@ public class WumpusHunterAgent implements AgentProgram {
     private int multiplicity = 0;
     private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
     private Vector<Point> arroundPoints = new Vector<Point>();
-    private boolean arrow = true;
+    private Vector<Point> suspiciousWumpusPoints = new Vector<Point>();
+    private boolean haveArrow = true;
 
     public WumpusHunterAgent(int xSize, int ySize) {
         this.xSize = xSize;
@@ -135,6 +118,7 @@ public class WumpusHunterAgent implements AgentProgram {
             fillArroundPoints();
             for (Point point : arroundPoints) {
                 gridMemory[point.x][point.y].setSuspiciousPit();
+                suspiciousWumpusPoints.addElement(point);
             }
         }
         if (percept.isScream) {
@@ -151,6 +135,12 @@ public class WumpusHunterAgent implements AgentProgram {
             fillArroundPoints();
             for (Point point : arroundPoints) {
                 gridMemory[point.x][point.y].setSuspiciousWumpus();
+            }
+        }
+        else {
+            fillArroundPoints();
+            for (Point point : arroundPoints) {
+                gridMemory[point.x][point.y].setSafe();
             }
         }
     }

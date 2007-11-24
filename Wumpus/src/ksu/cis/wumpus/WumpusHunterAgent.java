@@ -37,6 +37,7 @@ public class WumpusHunterAgent implements AgentProgram {
     private boolean isWumpusDead = false;
     private boolean isFirstSmell = true;
     private Vector<Point> pathTofirstSmellField = new Vector<Point>();
+    private boolean isRepeating = false;
 
     public WumpusHunterAgent(int xSize, int ySize) {
         this.xSize = xSize;
@@ -142,9 +143,11 @@ public class WumpusHunterAgent implements AgentProgram {
         }
         if (percept.isBreeze) {
             fillArroundPoints();
-            for (Point point : arroundPoints) {
-                gridMemory[point.x][point.y].setSuspiciousPit();
-                suspiciousWumpusPoints.addElement(point);
+            if (!isRepeating) {
+                for (Point point : arroundPoints) {
+                    gridMemory[point.x][point.y].setSuspiciousPit();
+                    suspiciousWumpusPoints.addElement(point);
+                }
             }
         }
         if (percept.isScream) {
@@ -168,9 +171,11 @@ public class WumpusHunterAgent implements AgentProgram {
                 isFirstSmell = false;
             }
             // Set all the arround point as suspicious wumpus
-            fillArroundPoints();
-            for (Point point : arroundPoints) {
-                gridMemory[point.x][point.y].setSuspiciousWumpus();
+            if (!isRepeating) {
+                fillArroundPoints();
+                for (Point point : arroundPoints) {
+                    gridMemory[point.x][point.y].setSuspiciousWumpus();
+                }
             }
         }
         if (!percept.isBreeze && !percept.isStench) {
@@ -323,6 +328,7 @@ public class WumpusHunterAgent implements AgentProgram {
     // find where the wumpus is and kill it when there are no un visited and safe fileds
     private void goToFirstSmellField() {
         int counter = 0;
+        isRepeating = true;
         // the number of steps to go back to the last same field
         int counterToGoBack = 0;
         Iterator<AgentCoordinate> it = agentTrace.iterator();

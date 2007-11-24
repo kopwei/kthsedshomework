@@ -162,8 +162,8 @@ public class WumpusHunterAgent implements AgentProgram {
             gridMemory[xLoc][yLoc].setDeadWumpus();
         }
         if (percept.isStench) {
-            // If it is the first time meet the smell, store the path
-            if (isFirstSmell) {
+            // If it is the first time meet the smell and not the breeze, store the path
+            if (isFirstSmell && !percept.isBreeze) {
                 for (AgentCoordinate agentCoo : agentTrace) {
                     pathTofirstSmellField.addElement(agentCoo.getLocation());
                 }

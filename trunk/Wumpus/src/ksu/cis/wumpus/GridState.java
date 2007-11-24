@@ -83,10 +83,10 @@ public class GridState {
     }
     
     public void setDefinetlyNotWumpus() {
-        wumpusSuspiciousLevel = -1;
-        if (pitSuspiciousLevel < 1) {
+        if (pitSuspiciousLevel < 1 && wumpusSuspiciousLevel > 0) {
             unvisited = true;
         }
+        wumpusSuspiciousLevel = -1;
     }
     
     /**

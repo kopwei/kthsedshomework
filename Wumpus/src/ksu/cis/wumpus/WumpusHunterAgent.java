@@ -212,6 +212,7 @@ public class WumpusHunterAgent implements AgentProgram {
 
     
     private Action decideAction() {
+        actionPool.clear();
         GridState gs = gridMemory[xLoc][yLoc];
         if (gs.isGold()) {
             setActionsToExit();
@@ -251,12 +252,14 @@ public class WumpusHunterAgent implements AgentProgram {
                 wantedHeading.y = unexploredDirections.firstElement().y;
                 unexploredDirections.remove(0);
                 setHowToTurn(wantedHeading);
-                actionPool.add(new AnAction("forward"));
             }
             
-            agentTrace.add(new AgentCoordinate(xLoc, yLoc, unexploredDirections));
+            if (heading.getLocation().equals(wantedHeading.getLocation())) {
+                actionPool.add(new AnAction("forward"));
+                agentTrace.add(new AgentCoordinate(xLoc, yLoc, unexploredDirections));
+            }
 
-            AnAction actionForNow = (AnAction) actionPool.pollFirst();
+            AnAction actionForNow = (AnAction) actionPool.pop();
             return actionForNow;
             
         }
@@ -364,6 +367,8 @@ public class WumpusHunterAgent implements AgentProgram {
             backDirection = setHowToTurn(backHeading);
             actionPool.add(new AnAction("forward"));
             currentDirection = backDirection;
+            xLoc = lastPoint.x;
+            yLoc = lastPoint.y;
             counter--;
         }
     }

@@ -38,6 +38,7 @@ public class WumpusHunterAgent implements AgentProgram {
     private Vector<Point> suspiciousWumpusPoints = new Vector<Point>();
     private boolean hasArrow = true;
     private boolean isWumpusDead = false;
+    private boolean isFirstSmell = true;
     private Vector<Point> pathTofirstSmellField = new Vector<Point>();
 
     public WumpusHunterAgent(int xSize, int ySize) {
@@ -140,6 +141,14 @@ public class WumpusHunterAgent implements AgentProgram {
             gridMemory[xLoc][yLoc].setDeadWumpus();
         }
         if (percept.isStench) {
+            // If it is the first time meet the smell, store the path
+            if (isFirstSmell) {
+                for (AgentCoordinate agentCoo : agentTrace) {
+                    pathTofirstSmellField.add(agentCoo.getLocation());
+                }
+                isFirstSmell = false;
+            }
+            // Set all the arround point as suspicious wumpus
             fillArroundPoints();
             for (Point point : arroundPoints) {
                 gridMemory[point.x][point.y].setSuspiciousWumpus();

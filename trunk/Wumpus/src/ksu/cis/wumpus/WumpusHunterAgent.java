@@ -36,7 +36,8 @@ public class WumpusHunterAgent implements AgentProgram {
     private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
     private Vector<Point> arroundPoints = new Vector<Point>();
     private Vector<Point> suspiciousWumpusPoints = new Vector<Point>();
-    private boolean haveArrow = true;
+    private boolean hasArrow = true;
+    private boolean isWumpusDead = false;
 
     public WumpusHunterAgent(int xSize, int ySize) {
         this.xSize = xSize;
@@ -57,7 +58,12 @@ public class WumpusHunterAgent implements AgentProgram {
 
     public Action execute(Percept perceptArg, Agent agent) {
         if (!actionPool.isEmpty()) {
-            return actionPool.pollFirst();
+            Action action = actionPool.pollFirst();
+            // If the action is shoot, then the arrow is gone
+            if (action.getName().equals("shoot")) {
+                hasArrow = false;
+            }
+            return action;
         }
         
         //((AgentThing)agent)
@@ -129,6 +135,7 @@ public class WumpusHunterAgent implements AgentProgram {
                     }
                 }
             }
+            isWumpusDead = true;
             gridMemory[xLoc][yLoc].setDeadWumpus();
         }
         if (percept.isStench) {

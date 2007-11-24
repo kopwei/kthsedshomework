@@ -144,12 +144,12 @@ public class WumpusHunterAgent implements AgentProgram {
         }
         if (percept.isBreeze) {
             fillArroundPoints();
-            if (!isRepeating) {
+            //if (!isRepeating) {
                 for (Point point : arroundPoints) {
                     gridMemory[point.x][point.y].setSuspiciousPit();
                     suspiciousWumpusPoints.addElement(point);
                 }
-            }
+            //}
         }
         if (percept.isScream) {
             for (int i = 1; i < xSize - 1; i++) {
@@ -161,7 +161,7 @@ public class WumpusHunterAgent implements AgentProgram {
             }
             isWumpusDead = true;
             if (isRepeating) {
-               isRepeating = false;
+                isRepeating = false;
             }
             gridMemory[xLoc][yLoc].setDeadWumpus();
         }

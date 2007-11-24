@@ -38,6 +38,7 @@ public class WumpusHunterAgent implements AgentProgram {
     private Vector<Point> suspiciousWumpusPoints = new Vector<Point>();
     private boolean hasArrow = true;
     private boolean isWumpusDead = false;
+    private Vector<Point> pathTofirstSmellField = new Vector<Point>();
 
     public WumpusHunterAgent(int xSize, int ySize) {
         this.xSize = xSize;
@@ -236,7 +237,7 @@ public class WumpusHunterAgent implements AgentProgram {
         Point wumpusPoint = new Point();
         for (int i = 0; i < arroundPoints.size(); i++) {
             Point point = arroundPoints.elementAt(i);
-            if (gridMemory[point.x][point.y].isWumpus()) {
+            if (gridMemory[point.x][point.y].isWumpus() && hasArrow) {
                 setHowToTurn(new Point(point.x, point.y));
                 actionPool.add(new AnAction("shoot"));
                 actionPool.add(new AnAction("forward"));
@@ -254,13 +255,20 @@ public class WumpusHunterAgent implements AgentProgram {
                 unexploredDirections.add(new Point(point.x - xLoc, point.y - yLoc));
             }
             if (actionPool.size() != 0) {
-//                wantedHeading = 
+                wantedHeading.x = wumpusPoint.x;
+                wantedHeading.y = wumpusPoint.y;
+                unexploredDirections.remove(wantedHeading);
             }
-            wantedHeading = unexploredDirections.firstElement();
-            unexploredDirections.remove(0);
+            else {
+                wantedHeading.x = unexploredDirections.firstElement().x;
+                wantedHeading.y = unexploredDirections.firstElement().y;
+                unexploredDirections.remove(0);
+                setHowToTurn(wantedHeading);
+                actionPool.add(new AnAction("forward"));
+            }
+            
             agentTrace.add(new AgentCoordinate(xLoc, yLoc, unexploredDirections));
-            setHowToTurn(wantedHeading);
-            actionPool.add(new AnAction("forward"));
+
             AnAction actionForNow = (AnAction) actionPool.pollFirst();
             return actionForNow;
             // pop up the field of current position
@@ -303,13 +311,21 @@ public class WumpusHunterAgent implements AgentProgram {
             else break;
         }
         if (counter - 1 == agentTrace.size()) {
-            riskLife();
+            if (isWumpusDead || (!isWumpusDead && !hasArrow)) {
+                // if there is unvisited field around the position where gets the first smell, go to there
+                
+            }
+            else { // Wumpus is not dead and has arrow
+                // go to the position where gets the first smell, and shoot towards a random direction 
+                // where suspects wumpus
+
+            }
         }
         else moveBack(counter);
     }
     
     // find where the wumpus is and kill it when there are no un visited and safe fileds
-    private void riskLife() {
+    private void goToFirstSmellField() {
         
     }
     

@@ -3,16 +3,13 @@ package ksu.cis.wumpus;
 /* fill in the methods of this class ... you may add or delete any methods
    algorithms, or data structures you need. */
 
-// Unvisited = 0
-// Safe = 1
-// Breeze = 2
-// Smell = 3
-// Wump
+// Unvisited, Visited (including breeze and smell), unsafe (including pit and wumpus)
 
 import java.awt.Point;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -30,9 +27,9 @@ public class WumpusHunterAgent implements AgentProgram {
     private Point heading = new Point();
     private GridState gridMemory[][];
     private ArrayDeque<AgentCoordinate> agentTrace = new ArrayDeque<AgentCoordinate>();
-    private Point lastHeading = new Point();
-    private Point needHeading = new Point();
-    private int multiplicity = 0;
+//    private Point lastHeading = new Point();
+//    private Point needHeading = new Point();
+//    private int multiplicity = 0;
     private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
     private Vector<Point> arroundPoints = new Vector<Point>();
     private Vector<Point> suspiciousWumpusPoints = new Vector<Point>();
@@ -48,7 +45,8 @@ public class WumpusHunterAgent implements AgentProgram {
         yLoc = 1;
         gridMemory = new GridState[ySize][ySize];
         for (int i = 0; i < xSize; i++) {
-            for (int j = 0; i < ySize; j++) {
+            for (int j = 0; j < ySize; j++) {
+                gridMemory[i][j] = new GridState();
                 if (i == 0 || i== xSize - 1 || j == 0 || j == ySize - 1) {
                     gridMemory[i][j].setWall(); // set the grid as wall  
                 }
@@ -59,6 +57,16 @@ public class WumpusHunterAgent implements AgentProgram {
     //Main Method
 
     public Action execute(Percept perceptArg, Agent agent) {
+        AgentThing agentThing = (AgentThing)agent;
+        if (null == perceptArg || null == agentThing) return null;
+        xLoc = agentThing.location.x;
+        yLoc = agentThing.location.y;
+        heading = agentThing.heading;
+        
+        if (agentTrace.peekLast().getLocation().equals(agentThing.location)) {
+            agentTrace.removeLast();
+        }
+        
         if (!actionPool.isEmpty()) {
             Action action = actionPool.pollFirst();
             // If the action is shoot, then the arrow is gone
@@ -67,46 +75,55 @@ public class WumpusHunterAgent implements AgentProgram {
             }
             return action;
         }
-        
-        //((AgentThing)agent)
-        AgentThing agentThing = (AgentThing)agent;
-        if (null == perceptArg || null == agentThing) return null;
-        xLoc = agentThing.location.x;
-        yLoc = agentThing.location.y;
-        heading = agentThing.heading;
+
+        // check which direction the heading is
+        if (heading.x == 1 && heading.y == 0) {
+            currentDirection = right;
+        } else {
+            if (heading.x == 0 && heading.y == 1) {
+                currentDirection = down;
+            } else {
+                if (heading.x == -1 && heading.y == 0) {
+                    currentDirection = left;
+                } else {
+                    currentDirection = up;
+                }
+            }
+        }
         
         WumpusPercept percept = (WumpusPercept) perceptArg;
         memorizeState(percept, agentThing);
+        return (AnAction)decideAction();
 
-        if (percept.isGlitter) {
-            return new AnAction("grab");
-        }
-
-        if (percept.isBump) {
-            return new AnAction("turn", AIMA.randomChoice("right", "left"));
-        }
-
-        if (percept.isBreeze) {
-            if (AIMA.random() < .60) {
-                return new AnAction("turn", AIMA.randomChoice("right", "left"));
-            }
-        }
-
-        if (percept.isStench) {
-            if (AIMA.random() < .08) {
-                return new AnAction("shoot");
-            } else if (AIMA.random() < .3) {
-                return new AnAction("forward");
-            } else {
-                return new AnAction("turn", AIMA.randomChoice("right", "left"));
-            }
-        }
-
-        if (AIMA.random() < .8) {
-            return new AnAction("forward");
-        } else {
-            return new AnAction("turn", AIMA.randomChoice("right", "left"));
-        }
+//        if (percept.isGlitter) {
+//            return new AnAction("grab");
+//        }
+//
+//        if (percept.isBump) {
+//            return new AnAction("turn", AIMA.randomChoice("right", "left"));
+//        }
+//
+//        if (percept.isBreeze) {
+//            if (AIMA.random() < .60) {
+//                return new AnAction("turn", AIMA.randomChoice("right", "left"));
+//            }
+//        }
+//
+//        if (percept.isStench) {
+//            if (AIMA.random() < .08) {
+//                return new AnAction("shoot");
+//            } else if (AIMA.random() < .3) {
+//                return new AnAction("forward");
+//            } else {
+//                return new AnAction("turn", AIMA.randomChoice("right", "left"));
+//            }
+//        }
+//
+//        if (AIMA.random() < .8) {
+//            return new AnAction("forward");
+//        } else {
+//            return new AnAction("turn", AIMA.randomChoice("right", "left"));
+//        }
 
     }
     
@@ -122,7 +139,7 @@ public class WumpusHunterAgent implements AgentProgram {
             gridMemory[xLoc + agent.heading.x][yLoc + agent.heading.y].setWall();
             return;
         }
-        if (percept.isBreeze) {  
+        if (percept.isBreeze) {
             fillArroundPoints();
             for (Point point : arroundPoints) {
                 gridMemory[point.x][point.y].setSuspiciousPit();
@@ -154,85 +171,43 @@ public class WumpusHunterAgent implements AgentProgram {
                 gridMemory[point.x][point.y].setSuspiciousWumpus();
             }
         }
-        else {
+        if (!percept.isBreeze && !percept.isStench) {
             fillArroundPoints();
             for (Point point : arroundPoints) {
                 gridMemory[point.x][point.y].setSafe();
             }
         }
+        
+        gridMemory[xLoc][yLoc].setVisited();
     }
     
     private void fillArroundPoints() {
         arroundPoints.clear();
-        Point lastPosition = agentTrace.peekLast().getLocation();
         Point[] arroundPoint = {
             new Point(xLoc + 1, yLoc), 
             new Point(xLoc, yLoc + 1), 
             new Point(xLoc - 1, yLoc),
             new Point(xLoc, yLoc - 1)
         };
-        for (Point point : arroundPoint) {
-            GridState gridState = gridMemory[point.x][point.y];
-            if (!gridState.isWall() && !point.equals(lastPosition)) {
-                arroundPoints.addElement(point);
+        if (!agentTrace.isEmpty()) {
+            Point lastPosition = agentTrace.peekLast().getLocation();
+            for (Point point : arroundPoint) {
+                GridState gridState = gridMemory[point.x][point.y];
+                if (!gridState.isWall() && !point.equals(lastPosition)) {
+                    arroundPoints.addElement(point);
+                }
+            }
+        }
+        else {
+            for (Point point : arroundPoint) {
+                GridState gridState = gridMemory[point.x][point.y];
+                if (!gridState.isWall()) {
+                    arroundPoints.addElement(point);
+                }
             }
         }
     }
-            ///////////////
-//            gridMemory[xLoc][yLoc] = SAFE;
-//            
-//            if (agentTrace.empty()) {
-//                lastHeading.x = heading.x;
-//                lastHeading.y = heading.y;
-//            }
-//            else {
-//                lastHeading.x = xLoc - agentTrace.peek().getX();
-//                lastHeading.y = yLoc - agentTrace.peek().getY();
-//            }
-//            
-//            checkSurroundingPoints();
-//            
-//            calMultiplicity();
-//            if (multiplicity == 0) {
-//                // check all fields if there are some ones that robot does not reach
-//                for (int i = 1; i < xSize - 1; i++) {
-//                    for (int j = 1; j < ySize - 1; j++) {
-//                        if (gridMemory[i][j] == UNVISITED) {
-//                            moveBack();
-//                        }
-//                        else {
-//                            // decide where the wumpus is, and shoot
-//                        }
-//                    }
-//                }
-//            }
-//            else {
-//                // there are one or more surrounding fields unvisited
-//                agentTrace.add(new AgentCoordinate(xLoc, yLoc, multiplicity - 1));
-//                for (Iterator<Point> it = surroundingPoints.iterator(); it.hasNext();) {
-//                    if (gridMemory[it.next().x][it.next().y] == UNVISITED) {
-//                        needHeading.x = it.next().x - xLoc;
-//                        needHeading.y = it.next().y - yLoc;
-//                        break;
-//                    }
-//                }
-//                // compare needHeading to current heading, decide how to turn
-//                
-//            }
-//        }
-//        
-//        if (percept.isBump) {
-//            gridMemory[xLoc + heading.x][yLoc + heading.y] = WALL;
-//            // check left and right side of current heading
-//            lastHeading.x = heading.x;
-//            lastHeading.y = heading.y;
-//            
-//            checkSurroundingPoints();
-//            // remove the foward point from the surrounding points
-//            surroundingPoints.remove(new Point(xLoc + heading.x, yLoc + heading.y));
-//        }
-    
-    
+
     
     private Action decideAction() {
         GridState gs = gridMemory[xLoc][yLoc];
@@ -280,25 +255,7 @@ public class WumpusHunterAgent implements AgentProgram {
 
             AnAction actionForNow = (AnAction) actionPool.pollFirst();
             return actionForNow;
-            // pop up the field of current position
-//            AgentCoordinate ac = agentTrace.pollLast();
-//            if (ac.getMultiplicity() == 0) {
-//                extremeAction();
-//                if (actionPool.isEmpty()) return new AnAction("climb");
-//                else {
-//                    AnAction actionForNow = (AnAction) actionPool.pollFirst();
-//                    return actionForNow;
-//                }
-//            }
-//            else {
-//                Random rnd = new Random(System.currentTimeMillis());
-//                int index = rnd.nextInt(ac.getMultiplicity());
-//                Point wantedHeading = ac.getAllUnexploredDirections().get(index);
-//                ac.removeUnexploredDirection(wantedHeading);
-//                setHowToTurn(wantedHeading);
-//                AnAction afn = (AnAction) actionPool.pollFirst();
-//                return afn;
-//            }
+            
         }
         else {
             extremeAction();
@@ -322,12 +279,36 @@ public class WumpusHunterAgent implements AgentProgram {
         if (counter - 1 == agentTrace.size()) {
             if (isWumpusDead || (!isWumpusDead && !hasArrow)) {
                 // if there is unvisited field around the position where gets the first smell, go to there
-                
+                Point lastPoint = pathTofirstSmellField.lastElement();
+                Point[] surroundingSmellPoints = {
+                    new Point(lastPoint.x + 1, lastPoint.y),
+                    new Point(lastPoint.x, lastPoint.y + 1),
+                    new Point(lastPoint.x - 1, lastPoint.y),
+                    new Point(lastPoint.x, lastPoint.y - 1)
+                };
+                for (int i = 0; i < surroundingSmellPoints.length; i++) {
+                    Point point = surroundingSmellPoints[i];
+                    if (gridMemory[point.x][point.y].isUnvisited()) {
+                        goToFirstSmellField();
+                        break;
+                    }
+                }
+                setActionsToExit();
             }
             else { // Wumpus is not dead and has arrow
                 // go to the position where gets the first smell, and shoot towards a random direction 
                 // where suspects wumpus
-
+                goToFirstSmellField();
+                // surrounding points are all wumpus-suspicious fields
+                fillArroundPoints();
+                Random rnd = new Random(System.currentTimeMillis());
+                Point taskPoint = arroundPoints.elementAt(rnd.nextInt(arroundPoints.size()));
+                Point wantedHeading = new Point();
+                wantedHeading.x = taskPoint.x - xLoc;
+                wantedHeading.y = taskPoint.y - yLoc;
+                setHowToTurn(wantedHeading);
+                actionPool.add(new AnAction("shoot"));
+                actionPool.add(new AnAction("forward"));
             }
         }
         else moveBack(counter);
@@ -335,6 +316,30 @@ public class WumpusHunterAgent implements AgentProgram {
     
     // find where the wumpus is and kill it when there are no un visited and safe fileds
     private void goToFirstSmellField() {
+        int counter = 0;
+        // the number of steps to go back to the last same field
+        int counterToGoBack = 0;
+        Iterator<AgentCoordinate> it = agentTrace.iterator();
+        while (it.hasNext() && counter <= pathTofirstSmellField.size()) {
+            AgentCoordinate agentCoordinate = it.next();
+            if (agentCoordinate.getLocation().equals(pathTofirstSmellField.elementAt(counter))) {
+                counter++;
+            }
+            else {
+                break;
+            }
+        }
+        // plus 1 because agentTrace's last record is the last point of current position
+        counterToGoBack = agentTrace.size() - counter + 1;
+        moveBack(counterToGoBack);
+        while (counter < pathTofirstSmellField.size()) {
+            Point wantedHeading = new Point();
+            wantedHeading.x = pathTofirstSmellField.elementAt(counter).x - xLoc;
+            wantedHeading.y = pathTofirstSmellField.elementAt(counter).y - yLoc;
+            setHowToTurn(wantedHeading);
+            actionPool.add(new AnAction("forward"));
+            counter++;
+        }
         
     }
     
@@ -345,21 +350,6 @@ public class WumpusHunterAgent implements AgentProgram {
         backHeading.x = heading.x;
         backHeading.y = heading.y;
         int backDirection = 0;
-
-        // check which direction the heading is
-        if (heading.x == 1 && heading.y == 0) {
-            currentDirection = right;
-        } else {
-            if (heading.x == 0 && heading.y == 1) {
-                currentDirection = down;
-            } else {
-                if (heading.x == -1 && heading.y == 0) {
-                    currentDirection = left;
-                } else {
-                    currentDirection = up;
-                }
-            }
-        }
         
         while (counter != 0) {
             AgentCoordinate ac = agentTrace.pollLast();

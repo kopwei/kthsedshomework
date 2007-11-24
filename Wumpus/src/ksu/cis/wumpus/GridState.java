@@ -152,4 +152,8 @@ public class GridState {
         unvisited = false;
     }
     
+    public void setUnVisited() {
+        unvisited = true;
+    }
+    
 }

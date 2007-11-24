@@ -286,14 +286,14 @@ public class WumpusHunterAgent implements AgentProgram {
             if (isWumpusDead || (!isWumpusDead && !hasArrow)) {
                 // if there is unvisited field around the position where gets the first smell, go to there
                 Point lastPoint = pathTofirstSmellField.lastElement();
-                Point[] surroundingSmellPoints = {
+                Point[] surroundingSmellPoint = {
                     new Point(lastPoint.x + 1, lastPoint.y),
                     new Point(lastPoint.x, lastPoint.y + 1),
                     new Point(lastPoint.x - 1, lastPoint.y),
                     new Point(lastPoint.x, lastPoint.y - 1)
                 };
-                for (int i = 0; i < surroundingSmellPoints.length; i++) {
-                    Point point = surroundingSmellPoints[i];
+                for (int i = 0; i < surroundingSmellPoint.length; i++) {
+                    Point point = surroundingSmellPoint[i];
                     if (gridMemory[point.x][point.y].isUnvisited()) {
                         goToFirstSmellField();
                         break;
@@ -328,7 +328,7 @@ public class WumpusHunterAgent implements AgentProgram {
         Iterator<AgentCoordinate> it = agentTrace.iterator();
         while (it.hasNext() && counter <= pathTofirstSmellField.size()) {
             AgentCoordinate agentCoordinate = it.next();
-            if (agentCoordinate.getLocation().equals(pathTofirstSmellField.elementAt(counter))) {
+            if (agentCoordinate.getLocation().equals(pathTofirstSmellField.elementAt(counter).getLocation())) {
                 counter++;
             }
             else {
@@ -342,8 +342,12 @@ public class WumpusHunterAgent implements AgentProgram {
             Point wantedHeading = new Point();
             wantedHeading.x = pathTofirstSmellField.elementAt(counter).x - xLoc;
             wantedHeading.y = pathTofirstSmellField.elementAt(counter).y - yLoc;
-            setHowToTurn(wantedHeading);
+            currentDirection = setHowToTurn(wantedHeading);
             actionPool.add(new AnAction("forward"));
+            Vector<Point> uned = new Vector<Point>();
+            agentTrace.add(new AgentCoordinate(xLoc, yLoc, uned));
+            xLoc = pathTofirstSmellField.elementAt(counter).x;
+            yLoc = pathTofirstSmellField.elementAt(counter).y;
             counter++;
         }
         

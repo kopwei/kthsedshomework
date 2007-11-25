@@ -443,7 +443,7 @@ public class WumpusHunterAgent implements AgentProgram {
             
             gridMemory[deadWumpusPoint.x][deadWumpusPoint.y].setDeadWumpus();
             for (Point suspiciousWpPoint : suspiciousWumpusPoints) {
-                if (!suspiciousWpPoint.equals(deadWumpusPoint)) {
+                if (!suspiciousWpPoint.getLocation().equals(deadWumpusPoint.getLocation())) {
                     gridMemory[suspiciousWpPoint.x][suspiciousWpPoint.y].setUnVisited();
                     //gridMemory[suspiciousWpPoint.x][suspiciousWpPoint.y].setDefinetlyNotWumpus();
                 }
@@ -452,7 +452,7 @@ public class WumpusHunterAgent implements AgentProgram {
                 Point location = tracePoint.getLocation();
                 if (gridMemory[location.x][location.y].isSmell()) {
                     Vector<Point> arroundPoints = getArroundUnvisitedPoints(location);
-                    tracePoint = new AgentCoordinate(location.x, location.y, arroundPoints);
+                    tracePoint.setUnexploreDirections(arroundPoints);
                 }
             }
         }
@@ -468,7 +468,9 @@ public class WumpusHunterAgent implements AgentProgram {
         Vector<Point> returnVector = new Vector<Point>();
         for (Point point : arroundPoints) {
             if (gridMemory[point.x][point.y].isUnvisited()) {
-                returnVector.add(point);
+                Point _heading = new Point();
+                _heading.setLocation(new Point(point.x - p.x, point.y - p.y));
+                returnVector.add(_heading);
             }
         }
        

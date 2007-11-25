@@ -57,4 +57,8 @@ public class AgentCoordinate {
     public Vector<Point> getAllUnexploredDirections() {
         return unexploredDirections;
     }
+    
+    public void setUnexploreDirections(Vector<Point> unexploreDirections) {
+        this.unexploredDirections = unexploreDirections;
+    }
 }

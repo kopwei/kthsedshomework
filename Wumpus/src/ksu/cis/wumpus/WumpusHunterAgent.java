@@ -32,7 +32,7 @@ public class WumpusHunterAgent implements AgentProgram {
 //    private Point needHeading = new Point();
 //    private int multiplicity = 0;
     private ArrayDeque<Action> actionPool = new ArrayDeque<Action>();
-    private Vector<Point> arroundPoints = new Vector<Point>();
+    private Vector<Point> agentSurroundPoints = new Vector<Point>();
     private HashSet<Point> suspiciousWumpusPoints = new HashSet<Point>();
     private boolean hasArrow = true;
     private boolean isWumpusDead = false;
@@ -97,47 +97,15 @@ public class WumpusHunterAgent implements AgentProgram {
                     currentDirection = up;
                 }
             }
-        }
-        
-        
+        }             
         memorizeState(percept, agentThing);
         return decideAction();
-
-//        if (percept.isGlitter) {
-//            return new AnAction("grab");
-//        }
-//
-//        if (percept.isBump) {
-//            return new AnAction("turn", AIMA.randomChoice("right", "left"));
-//        }
-//
-//        if (percept.isBreeze) {
-//            if (AIMA.random() < .60) {
-//                return new AnAction("turn", AIMA.randomChoice("right", "left"));
-//            }
-//        }
-//
-//        if (percept.isStench) {
-//            if (AIMA.random() < .08) {
-//                return new AnAction("shoot");
-//            } else if (AIMA.random() < .3) {
-//                return new AnAction("forward");
-//            } else {
-//                return new AnAction("turn", AIMA.randomChoice("right", "left"));
-//            }
-//        }
-//
-//        if (AIMA.random() < .8) {
-//            return new AnAction("forward");
-//        } else {
-//            return new AnAction("turn", AIMA.randomChoice("right", "left"));
-//        }
-
     }
     
     private void memorizeState(WumpusPercept percept, AgentThing agent) {
         if (null == percept || null == agent) return;
         gridMemory[xLoc][yLoc].setSafe();
+        gridMemory[xLoc][yLoc].setVisited();
         if (percept.isGlitter) 
         {
             gridMemory[xLoc][yLoc].setGold();
@@ -148,9 +116,9 @@ public class WumpusHunterAgent implements AgentProgram {
             return;
         }
         if (percept.isBreeze) {
-            fillArroundPoints();
+            fillSurroundPoints();
             if (!isRepeating) {
-                for (Point point : arroundPoints) {
+                for (Point point : agentSurroundPoints) {
                     gridMemory[point.x][point.y].setSuspiciousPit();
                 }
             }
@@ -159,6 +127,7 @@ public class WumpusHunterAgent implements AgentProgram {
             setWumpusDead(agent.heading);         
         }
         if (percept.isStench) {
+            gridMemory[xLoc][yLoc].setSmell();
             // If it is the first time meet the smell and not the breeze, store the path
             if (isFirstSmell && !percept.isBreeze) {
                 for (AgentCoordinate agentCoo : agentTrace) {
@@ -169,16 +138,16 @@ public class WumpusHunterAgent implements AgentProgram {
             }
             // Set all the arround point as suspicious wumpus
             if (!isRepeating && !isWumpusDead) {
-                fillArroundPoints();
-                for (Point point : arroundPoints) {
+                fillSurroundPoints();
+                for (Point point : agentSurroundPoints) {
                     gridMemory[point.x][point.y].setSuspiciousWumpus();
                     suspiciousWumpusPoints.add(point);
                 }
             }
         }
         if (!percept.isBreeze && !percept.isStench) {
-            fillArroundPoints();
-            for (Point point : arroundPoints) {
+            fillSurroundPoints();
+            for (Point point : agentSurroundPoints) {
                 gridMemory[point.x][point.y].setSafe();
             }
         }
@@ -186,8 +155,8 @@ public class WumpusHunterAgent implements AgentProgram {
         gridMemory[xLoc][yLoc].setVisited();
     }
     
-    private void fillArroundPoints() {
-        arroundPoints.clear();
+    private void fillSurroundPoints() {
+        agentSurroundPoints.clear();
         Point[] arroundPoint = {
             new Point(xLoc + 1, yLoc), 
             new Point(xLoc, yLoc + 1), 
@@ -199,7 +168,7 @@ public class WumpusHunterAgent implements AgentProgram {
             for (Point point : arroundPoint) {
                 GridState gridState = gridMemory[point.x][point.y];
                 if (!gridState.isWall() && !point.equals(lastPosition)) {
-                    arroundPoints.addElement(point);
+                    agentSurroundPoints.addElement(point);
                 }
             }
         }
@@ -207,7 +176,7 @@ public class WumpusHunterAgent implements AgentProgram {
             for (Point point : arroundPoint) {
                 GridState gridState = gridMemory[point.x][point.y];
                 if (!gridState.isWall()) {
-                    arroundPoints.addElement(point);
+                    agentSurroundPoints.addElement(point);
                 }
             }
         }
@@ -222,12 +191,12 @@ public class WumpusHunterAgent implements AgentProgram {
             return new AnAction("grab");
         }
         
-        fillArroundPoints();
+        fillSurroundPoints();
         Vector<Point> unvisitedPoints = new Vector<Point>();
         Vector<Point> isWumpusPoints = new Vector<Point>();
         Point wumpusPoint = new Point();
-        for (int i = 0; i < arroundPoints.size(); i++) {
-            Point point = arroundPoints.elementAt(i);
+        for (int i = 0; i < agentSurroundPoints.size(); i++) {
+            Point point = agentSurroundPoints.elementAt(i);
             // If there is wumpus, shoot it
             if (gridMemory[point.x][point.y].isWumpus() && hasArrow) {
                 isWumpusPoints.add(point);
@@ -337,17 +306,17 @@ public class WumpusHunterAgent implements AgentProgram {
                 if (!pathTofirstSmellField.isEmpty()) {
                     goToFirstSmellField();
                     // surrounding points are all wumpus-suspicious fields
-                    fillArroundPoints();
+                    fillSurroundPoints();
                     // remove those fields been suspected as pit
-                    for (int i = 0; i < arroundPoints.size(); i++) {
-                        Point point = arroundPoints.elementAt(i);
+                    for (int i = 0; i < agentSurroundPoints.size(); i++) {
+                        Point point = agentSurroundPoints.elementAt(i);
                         if (gridMemory[point.x][point.y].isSuspiciousPit()) {
-                            arroundPoints.removeElementAt(i);
+                            agentSurroundPoints.removeElementAt(i);
                         }
                     }
 
                     Random rnd = new Random(System.currentTimeMillis());
-                    Point taskPoint = arroundPoints.elementAt(rnd.nextInt(arroundPoints.size()));
+                    Point taskPoint = agentSurroundPoints.elementAt(rnd.nextInt(agentSurroundPoints.size()));
                     Point wantedHeading = new Point();
                     wantedHeading.x = taskPoint.x - xLoc;
                     wantedHeading.y = taskPoint.y - yLoc;
@@ -479,7 +448,30 @@ public class WumpusHunterAgent implements AgentProgram {
                     //gridMemory[suspiciousWpPoint.x][suspiciousWpPoint.y].setDefinetlyNotWumpus();
                 }
             }
+            for (AgentCoordinate tracePoint : agentTrace) {
+                Point location = tracePoint.getLocation();
+                if (gridMemory[location.x][location.y].isSmell()) {
+                    Vector<Point> arroundPoints = getArroundUnvisitedPoints(location);
+                    tracePoint = new AgentCoordinate(location.x, location.y, arroundPoints);
+                }
+            }
         }
         isWumpusDead = true;
+    }
+    
+    private Vector<Point> getArroundUnvisitedPoints(Point p) {
+        Vector<Point> arroundPoints = new Vector<Point>(4);
+        arroundPoints.addElement(new Point(p.x + 1, p.y));
+        arroundPoints.addElement(new Point(p.x - 1, p.y));
+        arroundPoints.addElement(new Point(p.x, p.y + 1));
+        arroundPoints.addElement(new Point(p.x, p.y - 1));
+        Vector<Point> returnVector = new Vector<Point>();
+        for (Point point : arroundPoints) {
+            if (gridMemory[point.x][point.y].isUnvisited()) {
+                returnVector.add(point);
+            }
+        }
+       
+        return returnVector;
     }
 }

@@ -15,6 +15,7 @@ public class GridState {
     private boolean isDeadWumpus = false;
     private boolean isGold = false;
     private boolean isWall = false;
+    private boolean isSmell = false;
     private boolean unvisited = true;
     
     public boolean isSuspiciousPit() {
@@ -39,6 +40,10 @@ public class GridState {
     
     public boolean isPit() {
         return (pitSuspiciousLevel == 4);
+    }
+    
+    public boolean isSmell() {
+        return isSmell;
     }
     
     public boolean isSafe() {
@@ -154,6 +159,10 @@ public class GridState {
     
     public void setUnVisited() {
         unvisited = true;
+    }
+    
+    public void setSmell() {
+        isSmell = true;
     }
     
 }

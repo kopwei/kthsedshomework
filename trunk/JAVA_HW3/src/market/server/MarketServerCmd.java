@@ -69,7 +69,7 @@ public class MarketServerCmd {
     }
     
     public void initDataManager(String userName, char[] passWord) {
-        dataMgr = new DataManager(userName, passWord);
+        dataMgr = new DataManager(userName, passWord, bank);
         dataMgr.publishConnection();
     }
     /**

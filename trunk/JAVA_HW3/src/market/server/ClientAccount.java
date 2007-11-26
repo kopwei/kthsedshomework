@@ -34,6 +34,14 @@ public class ClientAccount{
         this.bankAccountName = bankAccountName;
     }
     
+    public ClientAccount(String userName, char[] passWord, String bankAccountName, UUID clientID) {
+        this.userName = userName;
+        this.passWord = passWord;
+        clientAccountID = UUID.randomUUID();
+        this.bankAccountName = bankAccountName;
+        this.clientAccountID = clientID;
+    }
+    
     /**
      * 
      * @return

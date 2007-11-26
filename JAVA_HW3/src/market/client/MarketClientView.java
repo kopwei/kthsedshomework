@@ -83,7 +83,6 @@ public class MarketClientView extends javax.swing.JFrame {
         editMenu = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
         newAccountMenuItem = new javax.swing.JMenuItem();
-        getAccountMenuItem = new javax.swing.JMenuItem();
         deleteAccountMenuItem = new javax.swing.JMenuItem();
         balanceMenuItem = new javax.swing.JMenuItem();
         depositMenuItem = new javax.swing.JMenuItem();
@@ -159,14 +158,6 @@ public class MarketClientView extends javax.swing.JFrame {
             }
         });
         jMenu1.add(newAccountMenuItem);
-
-        getAccountMenuItem.setText("Get Account");
-        getAccountMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                getAccountMenuItemActionPerformed(evt);
-            }
-        });
-        jMenu1.add(getAccountMenuItem);
 
         deleteAccountMenuItem.setText("Delete Account");
         jMenu1.add(deleteAccountMenuItem);
@@ -272,16 +263,7 @@ public class MarketClientView extends javax.swing.JFrame {
         });
     }//GEN-LAST:event_newAccountMenuItemActionPerformed
 
-    // get the bank account
-    private void getAccountMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_getAccountMenuItemActionPerformed
-//        try {            
-//            bankAccount = bankObj.getAccount(clientName);
-//            JOptionPane.showConfirmDialog(this, "Got your bank account");
-//        } catch (RemoteException ex) {
-//            Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-	}//GEN-LAST:event_getAccountMenuItemActionPerformed
-      
+    // get the bank account      
 
     // deposit to bank account
     private void depositMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_depositMenuItemActionPerformed
@@ -450,9 +432,11 @@ public class MarketClientView extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {            
             serverObj.logout(marketAccountID);
-            System.exit(0);
+            
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
 
@@ -536,7 +520,6 @@ public class MarketClientView extends javax.swing.JFrame {
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenuItem getAccountMenuItem;
     private javax.swing.JList itemList;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;

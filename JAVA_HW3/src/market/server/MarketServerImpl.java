@@ -115,18 +115,9 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         dataManager.storeWish(wish);                
     }
 
-    /**
-     * 
-     * @param accountName
-     * @return
-     * @throws java.rmi.RemoteException
-     */
-//    public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException {
-//        if (null == dataManager) {
-//            return null;
-//        }
-//        return dataManager.getClientAccountByNameAndPassword(accountName, password);
-//    }
+    public void setDataManager(DataManager dataManager) {
+        this.dataManager = dataManager;
+    }
     
     /**
      * 
@@ -180,7 +171,11 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @throws java.rmi.RemoteException
      */
     public Vector<ItemForSell> getSellingItemsByType(ItemType type) throws RemoteException {
-        return dataManager.getSellingItemsByType(type);
+        if (null == dataManager) {
+            return null;
+        } else {
+            return dataManager.getSellingItemsByType(type);
+        }
     }
 
     /**

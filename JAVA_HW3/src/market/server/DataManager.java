@@ -201,7 +201,7 @@ public class DataManager {
         try {
             // Prepate the statement with SQL update command
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM marketdata.clientaccounts" +
-                    " WHWERE clientid = ?");
+                    " WHERE clientid = ?");
             stmt.setString(1, clientId.toString());
             ResultSet rs = stmt.executeQuery();
             // Create the client account object and return it
@@ -229,17 +229,18 @@ public class DataManager {
         try {
             // Prepate the statement with SQL update command
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM marketdata.clientaccounts" +
-                    " WHWERE (username = ? AND password = ?)");
+                    " WHERE (username = ? AND password = ?)");
             stmt.setString(1, name);
             stmt.setString(2, new String(password));
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            
             // Create the client account object and return it
             if (rs.next()) {
                 UUID clientID = UUID.fromString(rs.getString("clientid"));
                 String clientName = rs.getString("username");
                 char[] passwordArray = rs.getString("password").toCharArray();
                 String bankAccountName = rs.getString("bankaccount");               
+                stmt.close();
                 return new ClientAccount(clientName, passwordArray, bankAccountName, clientID);
             }
         } catch (SQLException ex) {
@@ -258,11 +259,12 @@ public class DataManager {
             // Create the query statement and query the database
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM marketdata.clientaccounts");
-            stmt.close();
+            
             // Return the client name collection with vector            
             while (rs.next()) {
                 nameVector.add(rs.getString("username"));
             }
+            stmt.close();
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
@@ -277,10 +279,10 @@ public class DataManager {
     public ItemForSell getItemByID(UUID itemId) {
         try {
             // Prepate the statement with SQL update command
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM marketdata.items" + " WHWERE itemid = ?");
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM marketdata.items" + " WHERE itemid = ?");
             stmt.setString(1, itemId.toString());
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            
             if (rs.next()) {
                 UUID sellerId = UUID.fromString(rs.getString("sellerid"));
                 UUID buyerId = UUID.fromString(rs.getString("buyerid"));
@@ -289,6 +291,7 @@ public class DataManager {
                 float price = rs.getFloat("price");
                 ItemStateType state = ItemStateType.valueOf(rs.getString("state"));              
                  // Create the item object and return it
+                stmt.close();
                 return new ItemForSellImpl(itemName, price, type, sellerId, buyerId, itemId, state);
             }
         } catch (SQLException ex) {
@@ -311,10 +314,11 @@ public class DataManager {
                     "WHERE name = ?");
             stmt.setString(1, accountName);
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            
             if (rs.next()) {
                 float balance = rs.getFloat("balance");              
                 // Create the bank account object and return it
+                stmt.close();
                 return new BankAccount(accountName, balance);
             }            
         } catch (SQLException ex) {
@@ -353,7 +357,7 @@ public class DataManager {
                     "WHERE username = ?");
             stmt.setString(1, accountName);
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            
             return rs.next();     
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -382,7 +386,7 @@ public class DataManager {
                 stmt.setString(1, ItemStateType.OnSell.toString());
             }
             ResultSet rs = stmt.executeQuery();
-            stmt.close();         
+            //stmt.close();         
             while (rs.next()) {
                 UUID itemId = UUID.fromString(rs.getString("itemid"));
                 UUID sellerId = UUID.fromString(rs.getString("sellerid"));
@@ -416,7 +420,7 @@ public class DataManager {
             stmt.setFloat(2, wishItem.getPrice());
             stmt.setString(3, ItemStateType.OnSell.toString());
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+           // stmt.close();
             while (rs.next()) {
                 UUID itemId = UUID.fromString(rs.getString("itemid"));
                 UUID sellerId = UUID.fromString(rs.getString("sellerid"));
@@ -451,7 +455,7 @@ public class DataManager {
             stmt.setString(1, publishedItem.getName());
             stmt.setFloat(2, publishedItem.getPrice());
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            //stmt.close();
             while (rs.next()) {
                 UUID wisherID = UUID.fromString(rs.getString("clientid"));
                 float price = rs.getFloat("price");
@@ -474,7 +478,7 @@ public class DataManager {
                     "WHERE name = ?");
             stmt.setString(1, accountName);
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            //stmt.close();
             // Get the balance and return it
             if (rs.next()) {
                 float balance = rs.getFloat("balance");
@@ -498,7 +502,7 @@ public class DataManager {
             stmt.setString(2, accountName);
             // Execute the update
             stmt.executeUpdate();
-            stmt.close();
+            //stmt.close();
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
@@ -519,7 +523,7 @@ public class DataManager {
                 stmt.setString(2, accountName);
                 // Execute the update
                 stmt.executeUpdate();
-                stmt.close();
+                //stmt.close();
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());
             }
@@ -535,7 +539,7 @@ public class DataManager {
                     "sellerid = ?)");   
             stmt.setString(1, sellerID.toString());
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            //stmt.close();
             while (rs.next()) {
                 UUID itemId = UUID.fromString(rs.getString("itemid"));
                 UUID buyerId = UUID.fromString(rs.getString("buyerid"));
@@ -563,7 +567,7 @@ public class DataManager {
                     "buyerid = ?)");   
             stmt.setString(1, buyerID.toString());
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            //stmt.close();
             while (rs.next()) {
                 UUID itemId = UUID.fromString(rs.getString("itemid"));
                 UUID sellerId = UUID.fromString(rs.getString("sellerid"));
@@ -591,7 +595,7 @@ public class DataManager {
                     "clientid = ?)");   
             stmt.setString(1, clientID.toString());
             ResultSet rs = stmt.executeQuery();
-            stmt.close();
+            //stmt.close();
             while (rs.next()) {
                 String itemName = rs.getString("name");
                 float price = rs.getFloat("price");            

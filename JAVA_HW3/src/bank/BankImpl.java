@@ -67,6 +67,10 @@ public class BankImpl extends UnicastRemoteObject implements Bank{
             return account;
         }
     }
+    
+    public void setDataManager(DataManager mgr) {
+        this.dataManager = mgr;
+    }
 
     public synchronized void deleteAccount(String name) throws RemoteException {
         dataManager.removeBankAccount(name);

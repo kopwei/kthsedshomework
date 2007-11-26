@@ -28,11 +28,16 @@ public class MarketServerView extends javax.swing.JFrame {
     public void refreshData() {
         try {
             // Get all client name
-            clientVector = ((MarketServerImpl)mainCmd.getServer()).getAllNotifiableClients();
+            clientVector = ((MarketServerImpl) mainCmd.getServer()).getAllNotifiableClients();
             // Get all items
             itemVector = mainCmd.getServer().getSellingItemsByType(ItemType.Unknown);
-            clientList.setListData(clientVector);
-            itemList.setListData(itemVector);
+            if (null != itemVector) {
+                itemList.setListData(itemVector);
+            }
+            if (null != clientVector) {
+                clientList.setListData(clientVector);
+            }
+
 //            clientList.updateUI();
 //            itemList.updateUI();
         } catch (RemoteException ex) {
@@ -79,6 +84,7 @@ public class MarketServerView extends javax.swing.JFrame {
         aboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Market Server");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -86,19 +92,9 @@ public class MarketServerView extends javax.swing.JFrame {
             }
         });
 
-        clientList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         clientList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         clientListScrollPane.setViewportView(clientList);
 
-        itemList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         itemList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         itemList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

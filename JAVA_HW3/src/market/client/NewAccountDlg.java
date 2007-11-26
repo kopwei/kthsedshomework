@@ -23,6 +23,7 @@ public class NewAccountDlg extends javax.swing.JDialog {
         super(parent, modal);
         mainView = parent;
         initComponents();
+        this.setLocationRelativeTo(parent);
         this.setResizable(false);
     }
     

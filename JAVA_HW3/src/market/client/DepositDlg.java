@@ -22,8 +22,9 @@ public class DepositDlg extends javax.swing.JDialog {
     public DepositDlg(MarketClientView parent, boolean modal) {
         super(parent, modal);
         this.clientView = parent;
-        this.bankAccountName = parent.getBankAccountName();
+        this.bankAccountName = parent.getBankAccountName();      
         initComponents();
+        this.setLocationRelativeTo(parent);
     }
     
     /** This method is called from within the constructor to

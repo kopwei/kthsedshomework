@@ -280,6 +280,12 @@ public class MarketServerView extends javax.swing.JFrame {
         String userName = userNameTextField.getText();
         char[] password = passwordField.getPassword();
         mainCmd.initDataManager(userName, password);
+        passwordField.setText("");
+        passwordField.setEnabled(false);
+        userNameTextField.setText("");
+        userNameTextField.setEnabled(false);
+        okButton.setEnabled(false);
+        
 //        char[] passworda = {'h', 'e', 'l', 'l', 'o'};
 //        ClientAccount account = new ClientAccount("hel", passworda, "hello");
 //        mainCmd.getDataManager().storeClientAccount(account);

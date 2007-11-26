@@ -15,12 +15,17 @@ public class BankAccount{
     private String accountName = null;
     private float balance = 0;
         
-    public BankAccount(String name){
+    public BankAccount(String name, float balance){
         this.accountName = name;
+        this.balance = balance;
     }
     
     public String getAccountName() {
         return accountName;
+    }
+    
+    public float getBalance() {
+        return balance;
     }
 
 //    /**

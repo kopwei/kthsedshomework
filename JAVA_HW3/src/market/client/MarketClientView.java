@@ -371,7 +371,7 @@ public class MarketClientView extends javax.swing.JFrame {
             switch (index) {
                 // select items for sell, use item type "unknown" to ask for all the items for sell
                 case 0:
-                    allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
+                    allItemForSell = serverObj.getSellingItemsByType(ItemType.Unknown);
                     for (Iterator<ItemForSell> it = allItemForSell.iterator(); it.hasNext();) {
                         ItemForSell itemForSell = it.next();
                         if (!marketAccountID.equals(itemForSell.getSellerClientID())) {

@@ -43,7 +43,7 @@ public class BankImpl extends UnicastRemoteObject implements Bank{
             //throw new Rejected("Rejected: BankAccount for: " + name + " already exists: " + account);
         }
         else {
-            account = new BankAccount(name);
+            account = new BankAccount(name, 0.0f);
             dataManager.storeBankAccount(account);
             System.out.println("Account is created for " + name);
         }

@@ -12,11 +12,15 @@ package bank;
  * @author Kop
  */
 public class BankAccount{
-    private String _name = null;
+    private String accountName = null;
     private float balance = 0;
         
     public BankAccount(String name){
-        this._name = name;
+        this.accountName = name;
+    }
+    
+    public String getAccountName() {
+        return accountName;
     }
 
 //    /**
@@ -24,7 +28,7 @@ public class BankAccount{
 //     * @param numberOfDeposit, the number of deposit, e.g. the original balance is 20, if the
 //     * deposit number is 30, then the final balance will be 50
 //     */
-//    public synchronized void deposit(float numberOfDeposit) throws RemoteException{
+//    public synchronized void deposit(float numberOfDeposit){
 //         if (numberOfDeposit < 0) {
 //             return;
 //            // throw new Rejected("Rejected: BankAccount " + name + ": Illegal value: " + value + " for deposit.");
@@ -41,7 +45,7 @@ public class BankAccount{
 //     * @return return true indicate that the decreasing action succeeds, otherwise the decreasing
 //     * fails
 //     */
-//    public synchronized boolean withdraw(float numberOfWithdraw) throws RemoteException{
+//    public synchronized boolean withdraw(float numberOfWithdraw){
 //        if (numberOfWithdraw < 0) {
 //            return false;
 //            // throw new Rejected("Rejected: BankAccount " + name + ": Illegal vaule: " + value + " for withdraw.");
@@ -59,8 +63,8 @@ public class BankAccount{
 //     * This method is used to get the current balance of the bank account
 //     * @return the balance value
 //     */
-//    public synchronized float getBalance() throws RemoteException{
+//    public synchronized float getBalance(){
 //        return balance;
 //    }
-//    
+    
 }

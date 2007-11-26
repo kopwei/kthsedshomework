@@ -73,14 +73,14 @@ public class BankImpl extends UnicastRemoteObject implements Bank{
     }
 
     public float getBalance(String accountName) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return dataManager.getBankBalance(accountName);      
     }
 
     public void deposit(String accountName, float depositNumber) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        dataManager.deposit(accountName, depositNumber);
     }
 
     public boolean withdraw(String accountName, float withDrawNumber) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return dataManager.withDraw(accountName, withDrawNumber);
     }
 }

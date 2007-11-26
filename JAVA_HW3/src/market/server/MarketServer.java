@@ -50,10 +50,28 @@ public interface MarketServer extends Remote{
 //     */
 //    public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException;
     
+    /**
+     * 
+     * @param sellerID
+     * @return
+     * @throws java.rmi.RemoteException
+     */
     public Vector<ItemForSell> getSellingItems(UUID sellerID) throws RemoteException;
     
+    /**
+     * 
+     * @param buyerID
+     * @return
+     * @throws java.rmi.RemoteException
+     */
     public Vector<ItemForSell> getBoughtItems(UUID buyerID) throws RemoteException;
     
+    /**
+     * 
+     * @param clientID
+     * @return
+     * @throws java.rmi.RemoteException
+     */
     public Vector<ItemForSell> getWishItems(UUID clientID) throws RemoteException;;
     
     /**

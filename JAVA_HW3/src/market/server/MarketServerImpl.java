@@ -307,15 +307,33 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         mainCmd.getMainView().refreshData();
     }
 
+    /**
+     * 
+     * @param sellerID
+     * @return
+     * @throws java.rmi.RemoteException
+     */
     public Vector<ItemForSell> getSellingItems(UUID sellerID) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return dataManager.getSellingItems(sellerID);
     }
 
+    /**
+     * 
+     * @param buyerID
+     * @return
+     * @throws java.rmi.RemoteException
+     */
     public Vector<ItemForSell> getBoughtItems(UUID buyerID) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return dataManager.getBoughtItems(buyerID);
     }
 
+    /**
+     * 
+     * @param clientID
+     * @return
+     * @throws java.rmi.RemoteException
+     */
     public Vector<ItemForSell> getWishItems(UUID clientID) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return dataManager.getWishItems(clientID);
     }
 }

@@ -130,7 +130,23 @@ public class DataManager {
         // TODO: need implementation here      
     }
     
-    public void withDraw(String accountName, float number) {
+    public boolean withDraw(String accountName, float number) {
         // TODO: need implementation here
+        return true;
+    }
+    
+    public Vector<ItemForSell> getSellingItems(UUID sellerID) {
+        // TODO: need implementation here
+        return null;
+    }
+
+    public Vector<ItemForSell> getBoughtItems(UUID buyerID) {
+        // TODO: need implementation here
+        return null;
+    }
+
+    public Vector<ItemForSell> getWishItems(UUID clientID) {
+        // TODO: need implementation here
+        return null;
     }
 }

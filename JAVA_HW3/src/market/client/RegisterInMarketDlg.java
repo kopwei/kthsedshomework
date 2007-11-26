@@ -9,8 +9,6 @@ package market.client;
 import market.server.MarketServer;
 import java.rmi.RemoteException;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -77,7 +75,6 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(accountNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(userNameTestField)
                     .addComponent(passWordLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
@@ -85,8 +82,9 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
                         .addComponent(OkButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(bankAccountNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bankAccountNameTextField))
+                    .addComponent(bankAccountNameTextField)
+                    .addComponent(accountNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bankAccountNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -138,7 +136,7 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
             clientView.setBankAccountName(bankAccountName);
             this.dispose();
         } catch (RemoteException ex) {
-            Logger.getLogger(RegisterInMarketDlg.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(rootPane, "Login failed with invalid password", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_OkButtonActionPerformed
 

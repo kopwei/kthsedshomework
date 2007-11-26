@@ -390,12 +390,11 @@ public class DataManager {
             while (rs.next()) {
                 UUID itemId = UUID.fromString(rs.getString("itemid"));
                 UUID sellerId = UUID.fromString(rs.getString("sellerid"));
-                UUID buyerId = UUID.fromString(rs.getString("buyerid"));
                 String itemName = rs.getString("name");
                 float price = rs.getFloat("price");
                 ItemStateType state = ItemStateType.valueOf(rs.getString("state"));              
                  // Create the item object and return it
-                items.addElement(new ItemForSellImpl(itemName, price, type, sellerId, buyerId, itemId, state));
+                items.addElement(new ItemForSellImpl(itemName, price, type, sellerId, null, itemId, state));
             }
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -542,13 +541,12 @@ public class DataManager {
             //stmt.close();
             while (rs.next()) {
                 UUID itemId = UUID.fromString(rs.getString("itemid"));
-                UUID buyerId = UUID.fromString(rs.getString("buyerid"));
                 ItemType type = ItemType.valueOf(rs.getString("itemtype"));
                 String itemName = rs.getString("name");
                 float price = rs.getFloat("price");
                 ItemStateType state = ItemStateType.valueOf(rs.getString("state"));              
                  // Create the item object and return it
-                items.addElement(new ItemForSellImpl(itemName, price, type, sellerID, buyerId, itemId, state));
+                items.addElement(new ItemForSellImpl(itemName, price, type, sellerID, null, itemId, state));
             }
             
         } catch (SQLException ex) {

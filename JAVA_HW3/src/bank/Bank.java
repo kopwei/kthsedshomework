@@ -20,15 +20,7 @@ public interface Bank extends Remote{
      * @throws java.rmi.RemoteException
      */
     public boolean createAccount(String name) throws RemoteException;
-    
-    /**
-     * Get the account object according to name
-     * @param name account name
-     * @return the account
-     * @throws java.rmi.RemoteException
-     */
-    //public BankAccount getAccount(String name) throws RemoteException;
-    
+        
     /**
      * Delete the account according to name 
      * @param name the account name

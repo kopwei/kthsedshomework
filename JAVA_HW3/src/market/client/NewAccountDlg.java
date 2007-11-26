@@ -6,10 +6,7 @@
 
 package market.client;
 
-import bank.BankAccount;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -95,7 +92,7 @@ public class NewAccountDlg extends javax.swing.JDialog {
                 mainView.setBankAccountName(accountName);
             }
         } catch (RemoteException ex) {
-            Logger.getLogger(NewAccountDlg.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed

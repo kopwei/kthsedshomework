@@ -5,12 +5,15 @@
 
 package market.server;
 
+import bank.Bank;
 import bank.BankAccount;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.Vector;
@@ -24,10 +27,12 @@ public class DataManager {
     private String userName = null;
     private char[] passWord = null;
     private Connection con = null;
+    private Bank bankObj = null;
     
-    public DataManager(String userName, char[] passWord) {
+    public DataManager(String userName, char[] passWord, Bank bankObj) {
         this.userName = userName;
         this.passWord = passWord;
+        this.bankObj = bankObj;
     }
     
     
@@ -45,13 +50,16 @@ public class DataManager {
     
     public void storeClientAccount(ClientAccount account) {
         try {
+            // Prepate the statement with SQL update command
             PreparedStatement stmt = con.prepareStatement("INSERT INTO marketdata.clientaccounts " +
                     "(clientid, username, password, bankaccount) VALUES (?, ?, ?, ?)");
             stmt.setString(1, account.getClientID().toString());
             stmt.setString(2, account.getUserName());
-            stmt.setString(3, account.getPassword().toString());
+            stmt.setString(3, new String(account.getPassword()));
             stmt.setString(4, account.getBankAccountName());
+            // Execute and update the data
             int count = stmt.executeUpdate();
+            stmt.close();
             // TODO: need implementation here
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
@@ -59,26 +67,121 @@ public class DataManager {
     }
     
     public void storeWish(ItemForSell wishItem) {
-        // TODO: need implementation here
+        try {
+            // Cast the item into item implementation object
+            ItemForSellImpl wishItemImpl = (ItemForSellImpl)wishItem;
+            if (null == wishItemImpl) {
+                return;
+            }
+            // Prepate the statement with SQL update command
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO marketdata.wishes (name," +
+                    "price, clientid) VALES(?, ?, ?)");
+            stmt.setString(1, wishItem.getName());
+            stmt.setFloat(2, wishItem.getPrice());
+            stmt.setString(3, wishItemImpl.getWisherClientID().toString());
+            // Execute and update the data
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } catch(RemoteException ex) {
+            System.err.println(ex.getMessage());
+        }
     }
     
     public void storeItem(ItemForSell item) {
-        // TODO: need implementation here
+        try {
+            // Cast the item into item implementation object
+            ItemForSellImpl itemImpl = (ItemForSellImpl)item;
+            if (null == itemImpl) {
+                return;
+            }
+            // Prepate the statement with SQL update command
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO marketdata.items (itemid, name," +
+                    "price, state, sellerid, buyerid) VALUES(?, ?, ?, ?, ?, ?)");
+            stmt.setString(1, item.getItemID().toString());
+            stmt.setString(2, item.getName());
+            stmt.setString(3, Float.toString(itemImpl.getPrice()));
+            // Prepare for the state
+            stmt.setInt(4, item.getState().ordinal());
+            stmt.setString(5, itemImpl.getSellerClientID().toString());
+            stmt.setString(6, null);
+            
+            // Execute and update the data
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } catch(RemoteException ex) {
+            System.err.println(ex.getMessage());
+        }
     }
     
     public void storeBankAccount(BankAccount account) {
-        // TODO: need implementation here
+        try {
+            // Prepate the statement with SQL update command
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO marketdata.bankaccounts (" +
+                    "name, balance) VALUEs(?, ?)");
+            // Execute and update the data
+            stmt.setString(1, account.getAccountName());
+            float accountBalance = bankObj.getBalance(account.getAccountName());
+            stmt.setFloat(2, accountBalance);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } catch(RemoteException ex) {
+            System.err.println(ex.getMessage());
+        }
     }
     
     public void updateItem(ItemForSell item) {
-        // TODO: need implementation here
+        try {
+            // Cast the item into item implementation object
+            ItemForSellImpl itemImpl = (ItemForSellImpl)item;
+            if (null == itemImpl) {
+                return;
+            }
+            // Prepate the statement with SQL update command
+            PreparedStatement stmt = con.prepareStatement("UPDATE marketdata.items SET " +
+                    "state = ?, buyerid = ? WHERE itemid = ?");         
+            // Prepare for the state
+            stmt.setString(1, Integer.toString(item.getState().ordinal()));
+            if (null != itemImpl.getBuyerClientID()) {
+                stmt.setString(2, itemImpl.getBuyerClientID().toString());
+            }
+            stmt.setString(3, item.getItemID().toString());
+            
+            // Execute and update the data
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        } catch(RemoteException ex) {
+            System.err.println(ex.getMessage());
+        }
     }
-//    public void setItemState(ItemStateType type) {
-//        // TODO: need implementation here
-//    }
-//    
+
     public ClientAccount getClientAccountByID(UUID clientId) {
-        // TODO: need implementation here
+        try {
+            // Prepate the statement with SQL update command
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM marketdata.clientaccounts" +
+                    " WHWERE clientid = ?");
+            stmt.setString(1, clientId.toString());
+            ResultSet rs = stmt.executeQuery();
+            // Create the client account object and return it
+            if (rs.next()) {
+                UUID clientID = UUID.fromString(rs.getString("clientid"));
+                String clientName = rs.getString("username");
+                char[] password = rs.getString("password").toCharArray();
+                String bankAccountName = rs.getString("bankaccount");
+                stmt.close();
+                return new ClientAccount(clientName, password, bankAccountName, clientID);
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
         return null;
     }
     

@@ -99,6 +99,14 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
     
     /**
      * 
+     * @return
+     */
+    public UUID getBuyerClientID() {
+        return buyerID;
+    }
+    
+    /**
+     * 
      * @param buyerID
      */
     public void setBuyerID(UUID buyerID) {

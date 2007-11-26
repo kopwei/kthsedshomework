@@ -32,7 +32,7 @@ public interface MarketServer extends Remote{
      * @param type
      * @throws java.rmi.RemoteException
      */
-    public void publishItemForSell(String itemName, float price, ItemType type, ClientAccount sellerAccount) throws RemoteException;
+    public void publishItemForSell(String itemName, float price, ItemType type, UUID sellerAccountID) throws RemoteException;
     
     /**
      * 
@@ -40,22 +40,21 @@ public interface MarketServer extends Remote{
      * @param price
      * @throws java.rmi.RemoteException
      */
-    public void publishWishItem(String itemName, float price, ClientAccount buyerAccount) throws RemoteException;
+    public void publishWishItem(String itemName, float price, UUID buyerAccountID) throws RemoteException;
     
-    /**
-     * 
-     * @param accountName
-     * @return
-     * @throws java.rmi.RemoteException
-     */
-    public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException;
+//    /**
+//     * 
+//     * @param accountName
+//     * @return
+//     * @throws java.rmi.RemoteException
+//     */
+//    public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException;
     
-    /**
-     * 
-     * @return
-     * @throws java.rmi.RemoteException
-     */
-    public Vector<String> getAllClientName() throws RemoteException;
+    public Vector<ItemForSell> getSellingItems(UUID sellerID) throws RemoteException;
+    
+    public Vector<ItemForSell> getBoughtItems(UUID buyerID) throws RemoteException;
+    
+    public Vector<ItemForSell> getWishItems(UUID clientID) throws RemoteException;;
     
     /**
      * 
@@ -72,7 +71,7 @@ public interface MarketServer extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public boolean buyItem(ItemForSell item, ClientAccount buyerAccount) throws RemoteException;
+    public boolean buyItem(ItemForSell item, UUID buyerAccountID) throws RemoteException;
     
     /**
      * 
@@ -95,11 +94,11 @@ public interface MarketServer extends Remote{
      * 
      * @param accountName
      * @param password
-     * @param ipAddress
+     * @param bankAccountName
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ClientAccount login(String accountName, char[] password,BankAccount bankAccount) throws RemoteException;
+    public UUID login(String accountName, char[] password, String bankAccountName) throws RemoteException;
     
     /**
      * 
@@ -115,5 +114,5 @@ public interface MarketServer extends Remote{
      * @param client
      * @throws java.rmi.RemoteException
      */
-    public void addClientNotifyObject(ClientInterface clientObj, ClientAccount client) throws RemoteException;
+    public void addClientNotifyObject(ClientInterface clientObj, UUID clientID) throws RemoteException;
 }

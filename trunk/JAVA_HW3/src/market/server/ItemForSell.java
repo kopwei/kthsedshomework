@@ -51,6 +51,13 @@ public interface ItemForSell extends Remote{
     ItemType getType() throws RemoteException;
     
     /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    ItemStateType getState() throws RemoteException;
+    
+    /**
      * This method is used to check if the item matches another
      * @param anotherItem
      * @return

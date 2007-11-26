@@ -10,6 +10,7 @@ import bank.BankAccount;
 import market.server.ClientAccount;
 import market.server.MarketServer;
 import java.rmi.RemoteException;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -130,11 +131,10 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(rootPane, "Invalid input");
                 return;
             }
-            BankAccount bankAccount = clientView.getBank().getAccount(bankAccountName);
-            ClientAccount marketAcc = serverObj.login(userName, password, bankAccount);                                        
-            clientView.setMarketAccount(marketAcc);
+            UUID marketAccID = serverObj.login(userName, password, bankAccountName);                                        
+            clientView.setMarketAccountID(marketAccID);
             // give the client interface object to server
-            serverObj.addClientNotifyObject(clientView.getClientObj(), marketAcc);
+            serverObj.addClientNotifyObject(clientView.getClientObj(), marketAccID);
             clientView.addMessage("Registration in market succeeds");
             this.dispose();
         } catch (RemoteException ex) {

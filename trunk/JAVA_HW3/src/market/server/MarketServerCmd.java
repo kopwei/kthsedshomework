@@ -24,6 +24,7 @@ public class MarketServerCmd {
     private MarketServer server;
     private Bank bank;
     private MarketServerView view;
+    private DataManager dataMgr = null;
     
     public MarketServerCmd() {
         // Create the server with a defined name
@@ -33,7 +34,6 @@ public class MarketServerCmd {
 //            if (System.getSecurityManager() == null) {
 //                System.setSecurityManager (new RMISecurityManager());
 //            }
-
             // Bind the server
             server = new MarketServerImpl(this, "Taobao Market");
             bank = new BankImpl();
@@ -54,6 +54,7 @@ public class MarketServerCmd {
             //Logger.getLogger(MarketServerCmd.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(ex.getMessage());
         }
+               
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -63,6 +64,13 @@ public class MarketServerCmd {
         });
     }
     
+    public DataManager getDataManager() {
+        return dataMgr;
+    }
+    
+    public void initDataManager(String userName, char[] passWord) {
+        dataMgr = new DataManager(userName, passWord);
+    }
     /**
      * Get the server object
      * @return

@@ -16,13 +16,13 @@ import java.util.logging.Logger;
  * @author  Ricky
  */
 public class DepositDlg extends javax.swing.JDialog {
-    private BankAccount bankAccount = null;
+    private String bankAccountName = null;
     private MarketClientView clientView = null;
     /** Creates new form DepositDlg */
     public DepositDlg(MarketClientView parent, boolean modal) {
         super(parent, modal);
         this.clientView = parent;
-        this.bankAccount = parent.getBankAccount();
+        this.bankAccountName = parent.getBankAccountName();
         initComponents();
     }
     
@@ -111,13 +111,13 @@ public class DepositDlg extends javax.swing.JDialog {
             // TODO add your handling code here:
             String depositStr = textField.getText();
             float depositAmount = Float.parseFloat(depositStr);
-            bankAccount.deposit(depositAmount);//GEN-LAST:event_okButtonActionPerformed
+            clientView.getBank().deposit(bankAccountName, depositAmount);
             clientView.addMessage("deposit: $" + depositAmount);
             this.dispose();
         } catch (RemoteException ex) {
             Logger.getLogger(DepositDlg.class.getName()).log(Level.SEVERE, null, ex);
         }
-}
+}//GEN-LAST:event_okButtonActionPerformed
     
     /**
      * @param args the command line arguments

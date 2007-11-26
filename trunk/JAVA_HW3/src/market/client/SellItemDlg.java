@@ -120,13 +120,13 @@ public class SellItemDlg extends javax.swing.JDialog {
             // TODO add your handling code here:
             String itemName = sellItemNameTextField.getText();
             float itemPrice = Float.parseFloat(sellItemPricejTextField.getText());
-            serverObj.publishItemForSell(itemName, itemPrice, ItemType.Unknown, clientView.getMarketAccount());//GEN-LAST:event_okButtonActionPerformed
+            serverObj.publishItemForSell(itemName, itemPrice, ItemType.Unknown, clientView.getMarketAccountID());
             clientView.addMessage("Your item for sell is submitted: Item name: " + itemName + ", Price: $" + itemPrice);
             this.dispose();
         } catch (RemoteException ex) {
             Logger.getLogger(SellItemDlg.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }//GEN-LAST:event_okButtonActionPerformed
     
     /**
      * @param args the command line arguments

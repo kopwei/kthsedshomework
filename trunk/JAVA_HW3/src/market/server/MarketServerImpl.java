@@ -5,15 +5,19 @@
 
 package market.server;
 
-import bank.BankAccount;
+import bank.Bank;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Vector;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import market.client.ClientInterface;
 
 /**
@@ -21,12 +25,14 @@ import market.client.ClientInterface;
  * @author Kop
  */
 public class MarketServerImpl extends UnicastRemoteObject implements MarketServer{
-    private Hashtable<UUID, ClientAccount> clientAccountTable = new Hashtable<UUID, ClientAccount>();
+    //private Hashtable<UUID, ClientAccount> clientAccountTable = new Hashtable<UUID, ClientAccount>();
     private Hashtable<UUID, ClientInterface> notifiableClientTable = new Hashtable<UUID, ClientInterface>();
-    private Hashtable<UUID, ItemForSell> itemForSellTable = new Hashtable<UUID, ItemForSell>();
-    private Hashtable<String, ItemForSell> itemWantedTable = new Hashtable<String, ItemForSell>();
+    //private Hashtable<UUID, ItemForSell> itemForSellTable = new Hashtable<UUID, ItemForSell>();
+    //private Hashtable<String, ItemForSell> itemWantedTable = new Hashtable<String, ItemForSell>();
     private String marketName = "No_Name";
     private MarketServerCmd mainCmd;
+    private DataManager dataManager = null;
+    private Bank bank = null;
     
     /**
      * Default constructor
@@ -43,8 +49,16 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      */
     public MarketServerImpl(MarketServerCmd cmd, String marketName) throws RemoteException {
         super();
-        this.marketName = marketName;
-        this.mainCmd = cmd;
+        try {
+            this.marketName = marketName;
+            this.mainCmd = cmd;
+            this.dataManager = cmd.getDataManager();
+            bank = (Bank) Naming.lookup("rmi://localhost/SEB");
+        } catch (NotBoundException ex) {
+            Logger.getLogger(MarketServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(MarketServerImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -55,27 +69,28 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @param sellerAccount
      * @throws java.rmi.RemoteException
      */
-    public void publishItemForSell(String itemName, float price, ItemType type, ClientAccount sellerAccount) throws RemoteException {
-        UUID clientID = sellerAccount.getClientID();
-        ClientAccount account = clientAccountTable.get(clientID);
+    public void publishItemForSell(String itemName, float price, ItemType type, UUID sellerID) throws RemoteException {
+        if (null == dataManager) {
+            return;
+        }
+        ClientAccount account = dataManager.getClientAccountByID(sellerID);
         if (null == account) {
             return;
         }
-        ItemForSell item = new ItemForSellImpl(itemName, price, type, clientID);
-        account.addItemForSell(item);
-        itemForSellTable.put(item.getItemID(), item);
-        Collection<ItemForSell> wantedItems = itemWantedTable.values();
-        for (ItemForSell wanted : wantedItems) {
-            if (wanted.match(item) && wanted.getPrice() >= item.getPrice()) {
-                // TODO: We have notify
-                ClientInterface client = notifiableClientTable.get(wanted.getSellerClientID());
-                try {
+        ItemForSell item = new ItemForSellImpl(itemName, price, type, sellerID);
+        dataManager.storeItem(item);
+        
+        
+        Collection<ItemForSell> wantedItems = dataManager.getMatchedWishItems(item);
+        for (ItemForSell wanted : wantedItems) {         
+            // We have notify the notifiable clients
+            ClientInterface client = notifiableClientTable.get(wanted.getSellerClientID());
+            try {
                 client.notifyItemAvailable(itemName, price);
-                }
-                catch(Exception e) {
-                    System.err.println(e.getMessage());
-                }
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
             }
+            
         }
         mainCmd.getMainView().refreshData();
     }
@@ -87,15 +102,17 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @param buyerAccount
      * @throws java.rmi.RemoteException
      */
-    public void publishWishItem(String itemName, float price, ClientAccount buyerAccount) throws RemoteException {
-        UUID clientID = buyerAccount.getClientID();
-        ClientAccount account = clientAccountTable.get(clientID);
+    public void publishWishItem(String itemName, float price, UUID buyerAccountID) throws RemoteException {
+        if (null == dataManager) {
+            return;
+        }
+        ClientAccount account = dataManager.getClientAccountByID(buyerAccountID);
         if (null == account) {
             return;
         }
-        ItemForSell item = new ItemForSellImpl(itemName, price, clientID);
-        account.addWantedItem(item);
-        itemWantedTable.put(itemName, item);                
+        ItemForSell wish = new ItemForSellImpl(itemName, price, buyerAccountID);
+        //account.addWantedItem(item);
+        dataManager.storeWish(wish);                
     }
 
     /**
@@ -104,30 +121,19 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException {
-        Collection<ClientAccount> accounts = clientAccountTable.values();
-        for (ClientAccount clientAccount : accounts) {
-            if (clientAccount.getUserName().equals(accountName) && 
-                    clientAccount.isValidPassword(password)) {
-                return clientAccount;
-            }
-        }
-        return null;
-    }
+//    public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException {
+//        if (null == dataManager) {
+//            return null;
+//        }
+//        return dataManager.getClientAccountByNameAndPassword(accountName, password);
+//    }
     
     /**
      * 
      * @return
      * @throws java.rmi.RemoteException
      */
-    public Vector<String> getAllClientName() throws RemoteException {
-        Collection<ClientAccount> clientAccounts = clientAccountTable.values();
-        Vector<String> clientNames = new Vector<String>(clientAccounts.size());
-        for (ClientAccount account : clientAccounts) {
-            clientNames.add(account.getUserName());
-        }
-        return clientNames;
-    }
+    
     
     /**
      * 
@@ -136,26 +142,28 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return
      * @throws java.rmi.RemoteException
      */
-    public boolean buyItem(ItemForSell item, ClientAccount buyerAccount) throws RemoteException {
-        float itemPrice = item.getPrice();
-        BankAccount buyerBankAccount = buyerAccount.getBankAccount();
+    public boolean buyItem(ItemForSell item, UUID buyerAccountID) throws RemoteException {
+        ItemForSellImpl itemForSell = (ItemForSellImpl)item;
+        float itemPrice = itemForSell.getPrice();
+        ClientAccount buyerAccount = dataManager.getClientAccountByID(buyerAccountID);
+        String buyerBankAccountName = buyerAccount.getBankAccountName();
+        // BankAccount buyerBankAccount = dataManager.getBankAccountByName(buyerAccount.getBankAccountName());
         // Check if the buyer is able to buy the item
-        if (buyerBankAccount.getBalance() < itemPrice) {
+        if (bank.getBalance(buyerBankAccountName) < itemPrice) {
             return false;
         }
         else {
             // If the buyer can afford the item then deals
-            ClientAccount seller = clientAccountTable.get(item.getSellerClientID());
-            BankAccount sellerBankAccount = seller.getBankAccount();
-            itemForSellTable.remove(item.getItemID());
-            buyerAccount.addBoughtItem(item);
-            seller.addSoldItem(item);
-            seller.removeItemForSell(item);
-            sellerBankAccount.deposit(itemPrice);
-            buyerBankAccount.withdraw(itemPrice);
+            ClientAccount seller = dataManager.getClientAccountByID(itemForSell.getSellerClientID());
+            String sellerBankAccountName = seller.getBankAccountName();
+            itemForSell.setSold();
+            dataManager.updateItem(itemForSell);
+            
+            bank.deposit(sellerBankAccountName, itemPrice);
+            bank.withdraw(buyerBankAccountName, itemPrice);
             ClientInterface notifiableClient = notifiableClientTable.get(seller.getClientID());
             try {
-                notifiableClient.notifyItemSoldout(item.getName(), itemPrice);
+                notifiableClient.notifyItemSoldout(itemForSell.getName(), itemPrice);
             } catch(Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -173,7 +181,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      */
     public Vector<ItemForSell> getSellsItemsByType(ItemType type) throws RemoteException {
         Vector<ItemForSell> retVector = new Vector<ItemForSell>();
-        Collection<ItemForSell> col =  itemForSellTable.values();
+        Collection<ItemForSell> col =  dataManager.getAllSellingItems();
         // Iterate the item collection
         for (ItemForSell item : col) {
             if (item.getType() == type || ItemType.Unknown == type) {
@@ -191,19 +199,19 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return
      * @throws java.rmi.RemoteException
      */
-    private ClientAccount registerAccount(String name, char[] password, BankAccount bankAccount) throws RemoteException {
+    private UUID registerAccount(String name, char[] password, String bankAccountName) throws RemoteException {
         // Check if the account is already registered
-        Collection<ClientAccount> accounts = clientAccountTable.values();
+        Collection<ClientAccount> accounts = dataManager.getAllClientAccounts();
         for (ClientAccount clientAccount : accounts) {
             if (clientAccount.getUserName().equals(name)) {
                 throw new RemoteException("You account is already registered");
             }
         }
         // If it is not registered then register it
-        ClientAccountImpl account = new ClientAccountImpl(name, password, bankAccount);
-        clientAccountTable.put(account.getClientID(), account);
+        ClientAccount account = new ClientAccount(name, password, bankAccountName);
+        dataManager.storeClientAccount(account);
         mainCmd.getMainView().refreshData();
-        return account;
+        return account.getClientID();
     }
 
     /**
@@ -213,7 +221,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @throws java.rmi.RemoteException
      */
     public String getClientNameByID(UUID clientID) throws RemoteException {
-        ClientAccount account = clientAccountTable.get(clientID);
+        ClientAccount account = dataManager.getClientAccountByID(clientID);
         if (null == account) return null;
         else {
             return account.getUserName();
@@ -228,13 +236,13 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return
      * @throws java.rmi.RemoteException
      */
-    public ClientAccount login(String accountName, char[] password,BankAccount bankAccount) throws RemoteException {
-        ClientAccount account = getClientAccount(accountName, password);
+    public UUID login(String accountName, char[] password, String bankAccountName) throws RemoteException {
+        ClientAccount account = dataManager.getClientAccountByNameAndPassword(accountName, password);
         if (null != account) {
-            return account;
+            return account.getClientID();
         }
         else {
-            return registerAccount(accountName, password, bankAccount);
+            return registerAccount(accountName, password, bankAccountName);
         }
     }
 
@@ -245,7 +253,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @throws java.rmi.RemoteException
      */
     public ItemForSell getItemByID(UUID id) throws RemoteException {
-        return itemForSellTable.get(id);
+        return dataManager.getItemByID(id);
     }
 
     /**
@@ -254,17 +262,17 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @param client
      * @throws java.rmi.RemoteException
      */
-    public void addClientNotifyObject(ClientInterface clientObj, ClientAccount client) throws RemoteException {
+    public void addClientNotifyObject(ClientInterface clientObj, UUID clientID) throws RemoteException {
         // Check if it is already added
         Enumeration<UUID> ids = notifiableClientTable.keys();
         while (ids.hasMoreElements()) {
             UUID uuid = ids.nextElement();
-            if (uuid.equals(client.getClientID())) {
+            if (uuid.equals(clientID)) {
                 throw new RemoteException("You have already logged in and you can not login twice");
             }
         }
         // Else admit login
-        notifiableClientTable.put(client.getClientID(), clientObj);
+        notifiableClientTable.put(clientID, clientObj);
         mainCmd.getMainView().refreshData();
     }
     
@@ -273,7 +281,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         Vector<ClientAccount> returnVec = new Vector<ClientAccount>();
         while (notifiableClientIDs.hasMoreElements()) {
             UUID uuid = notifiableClientIDs.nextElement();
-            ClientAccount client = clientAccountTable.get(uuid);
+            ClientAccount client = dataManager.getClientAccountByID(uuid);
             if (null != client) {
                 returnVec.add(client);
             }
@@ -297,5 +305,17 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
     public void logout(UUID clientID) throws RemoteException {
         notifiableClientTable.remove(clientID);
         mainCmd.getMainView().refreshData();
+    }
+
+    public Vector<ItemForSell> getSellingItems(UUID sellerID) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Vector<ItemForSell> getBoughtItems(UUID buyerID) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Vector<ItemForSell> getWishItems(UUID clientID) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

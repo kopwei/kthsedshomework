@@ -6,8 +6,6 @@
 
 package market.client;
 
-import bank.BankAccount;
-import market.server.ClientAccount;
 import market.server.MarketServer;
 import java.rmi.RemoteException;
 import java.util.UUID;
@@ -28,6 +26,7 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
         this.clientView = parent;
         serverObj = parent.getServerObj();
         initComponents();
+        this.setLocationRelativeTo(parent);
     }
     
     /** This method is called from within the constructor to
@@ -136,6 +135,7 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
             // give the client interface object to server
             serverObj.addClientNotifyObject(clientView.getClientObj(), marketAccID);
             clientView.addMessage("Registration in market succeeds");
+            clientView.setBankAccountName(bankAccountName);
             this.dispose();
         } catch (RemoteException ex) {
             Logger.getLogger(RegisterInMarketDlg.class.getName()).log(Level.SEVERE, null, ex);

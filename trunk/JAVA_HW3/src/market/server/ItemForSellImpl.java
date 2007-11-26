@@ -178,7 +178,7 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * @throws java.rmi.RemoteException
      */
     public ItemStateType getState() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return state;
     }
     
     /**

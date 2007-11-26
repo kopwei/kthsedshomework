@@ -35,13 +35,14 @@ public class MarketServerCmd {
 //                System.setSecurityManager (new RMISecurityManager());
 //            }
             // Bind the server
-            server = new MarketServerImpl(this, "Taobao Market");
-            bank = new BankImpl();
             InetAddress add = Inet4Address.getLocalHost();
             String ip = add.getHostAddress();
             Registry registry = LocateRegistry.getRegistry (ip, 1099);
+            bank = new BankImpl();
+            registry.rebind("SEB", bank);           
+            server = new MarketServerImpl(this, "Taobao Market");
             registry.rebind("TaobaoServer", server);
-            registry.rebind("SEB", bank);
+            
             //Naming.rebind("taobao", server);
 //        } catch (AlreadyBoundException ex) {
 //            Logger.getLogger(MarketServerCmd.class.getName()).log(Level.SEVERE, null, ex);
@@ -71,6 +72,9 @@ public class MarketServerCmd {
     public void initDataManager(String userName, char[] passWord) {
         dataMgr = new DataManager(userName, passWord, bank);
         dataMgr.publishConnection();
+        ((BankImpl)bank).setDataManager(dataMgr);
+        ((MarketServerImpl)server).setDataManager(dataMgr);
+        
     }
     /**
      * Get the server object

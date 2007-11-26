@@ -45,14 +45,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newAccountMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="getAccountMenuItem">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Get Account"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="getAccountMenuItemActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="deleteAccountMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Delete Account"/>

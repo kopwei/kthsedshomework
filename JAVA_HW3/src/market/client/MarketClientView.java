@@ -11,6 +11,7 @@ import market.server.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -25,11 +26,11 @@ public class MarketClientView extends javax.swing.JFrame {
     // use it to accept bank interface object
     private Bank bankObj = null;
     // use it to accept bank account interface object
-    private BankAccount bankAccount = null;
+    private String bankAccountName = null;
     // use it to accept market server interface object
     private MarketServer serverObj = null;
     // use it to accept market account object
-    private ClientAccount marketAccount = null;
+    private UUID marketAccountID = null;
     // use it to accept client interface object
     private ClientInterface clientObj = null;
     //private String clientName = null;
@@ -318,7 +319,7 @@ public class MarketClientView extends javax.swing.JFrame {
     private void balanceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanceMenuItemActionPerformed
         // TODO add your handling code here:
         try {            
-            float _balance = bankAccount.getBalance();                                               
+            float _balance = bankObj.getBalance(bankAccountName);                                               
             textArea.append("Balance of your account: $" + _balance + "\n");
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
@@ -373,7 +374,7 @@ public class MarketClientView extends javax.swing.JFrame {
                     allItemForSell = serverObj.getSellsItemsByType(ItemType.Unknown);
                     for (Iterator<ItemForSell> it = allItemForSell.iterator(); it.hasNext();) {
                         ItemForSell itemForSell = it.next();
-                        if (!marketAccount.getClientID().equals(itemForSell.getSellerClientID())) {
+                        if (!marketAccountID.equals(itemForSell.getSellerClientID())) {
                             itemICanBuy.add(itemForSell);
                         }
                     }
@@ -386,7 +387,7 @@ public class MarketClientView extends javax.swing.JFrame {
                     break;
                 // select all the items that I wished            
                 case 1:
-                    wishItems = marketAccount.getWantedItems();                   
+                    wishItems = serverObj.getWishItems(marketAccountID);                   
                     for (Iterator it = wishItems.iterator(); it.hasNext();) {
                         ItemForSell object = (ItemForSell) it.next();
                         wishItemName.add(object.getName());
@@ -395,7 +396,7 @@ public class MarketClientView extends javax.swing.JFrame {
                     break;
                 // select items that I wanna sell
                 case 2:
-                    myItemForSell = marketAccount.getSellersItem();                    
+                    myItemForSell = serverObj.getSellingItems(marketAccountID);                    
                     for (Iterator it = myItemForSell.iterator(); it.hasNext();) {
                         ItemForSell object = (ItemForSell) it.next();
                         myItemNameForSell.add(object.getName());
@@ -416,7 +417,7 @@ public class MarketClientView extends javax.swing.JFrame {
             try {
                 int index = itemList.getSelectedIndex();
                 ItemForSell itemForSell = itemICanBuy.elementAt(index);
-                boolean result = serverObj.buyItem(itemForSell, marketAccount);
+                boolean result = serverObj.buyItem(itemForSell, marketAccountID);
                 String resultStr = null;
                 if (result == true) {
                     resultStr = "Wow! This is yours now.";
@@ -448,7 +449,7 @@ public class MarketClientView extends javax.swing.JFrame {
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {            
-            serverObj.logout(marketAccount.getClientID());
+            serverObj.logout(marketAccountID);
             System.exit(0);
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
@@ -457,7 +458,7 @@ public class MarketClientView extends javax.swing.JFrame {
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         try {            
-            serverObj.logout(marketAccount.getClientID());
+            serverObj.logout(marketAccountID);
             System.exit(0);
         } catch (RemoteException ex) {
             Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
@@ -465,12 +466,12 @@ public class MarketClientView extends javax.swing.JFrame {
         
     }//GEN-LAST:event_exitMenuItemActionPerformed
     
-    public void setMarketAccount(ClientAccount marketAcc) {
-        this.marketAccount = marketAcc;
+    public void setMarketAccountID(UUID marketAccID) {
+        this.marketAccountID = marketAccID;
     }
     
-    public ClientAccount getMarketAccount() {
-        return marketAccount;
+    public UUID getMarketAccountID() {
+        return marketAccountID;
     }
         
     public void setServerIP(String serverIp) {
@@ -494,18 +495,16 @@ public class MarketClientView extends javax.swing.JFrame {
         return serverObj;
     }
     
-    public BankAccount getBankAccount() {
-        return bankAccount;
+    public String getBankAccountName() {
+        return bankAccountName;
     }
     
     public Bank getBank() {
         return bankObj;
     }
     
-    public void setBankAccount(BankAccount account) {
-        if (null != account) {
-            this.bankAccount = account;
-        }
+    public void setBankAccountName(String accountName) {
+        this.bankAccountName = accountName;
     }
     
     public ClientInterface getClientObj() {

@@ -19,7 +19,7 @@ public interface Bank extends Remote{
      * @return the created account
      * @throws java.rmi.RemoteException
      */
-    public BankAccount createAccount(String name) throws RemoteException;
+    public boolean createAccount(String name) throws RemoteException;
     
     /**
      * Get the account object according to name
@@ -27,7 +27,7 @@ public interface Bank extends Remote{
      * @return the account
      * @throws java.rmi.RemoteException
      */
-    public BankAccount getAccount(String name) throws RemoteException;
+    //public BankAccount getAccount(String name) throws RemoteException;
     
     /**
      * Delete the account according to name 
@@ -35,5 +35,30 @@ public interface Bank extends Remote{
      * @return the delete action succeeds or not
      * @throws java.rmi.RemoteException
      */
-    public boolean deleteAccount(BankAccount acc) throws RemoteException;
+    public void deleteAccount(String name) throws RemoteException;
+    
+    /**
+     * Get the balance of the account according to the account name
+     * @param accountName
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public float getBalance(String accountName) throws RemoteException;
+    
+    /**
+     * This method is used to increase the account balance
+     * @param accountName
+     * @param depositNumber
+     * @throws java.rmi.RemoteException
+     */
+    public void deposit(String accountName, float depositNumber) throws RemoteException;
+    
+    /**
+     * This method is used to decrease the account balance
+     * @param accountName
+     * @param withDrawNumber
+     * @return indicates if the action suceeds
+     * @throws java.rmi.RemoteException
+     */
+    public boolean withdraw(String accountName, float withDrawNumber) throws RemoteException;
 }

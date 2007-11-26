@@ -121,13 +121,13 @@ public class WishItemDlg extends javax.swing.JDialog {
             // TODO add your handling code here:
             String itemName = wishItemNameTextField.getText();
             float itemPrice = Float.parseFloat(wishItemPriceTextField.getText());
-            serverObj.publishWishItem(itemName, itemPrice, clientView.getMarketAccount());//GEN-LAST:event_okButtonActionPerformed
+            serverObj.publishWishItem(itemName, itemPrice, clientView.getMarketAccountID());
             clientView.addMessage("Your wished item is submitted: Item name: " + itemName + ", Price: $" + itemPrice);
             this.dispose();
         } catch (RemoteException ex) {
             Logger.getLogger(WishItemDlg.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }//GEN-LAST:event_okButtonActionPerformed
     
     /**
      * @param args the command line arguments

@@ -7,15 +7,16 @@ package bank;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Hashtable;
+//import java.util.Hashtable;
+import market.server.DataManager;
 
 /**
  *
  * @author Kop
  */
 public class BankImpl extends UnicastRemoteObject implements Bank{
-    private Hashtable clientAccountsTable = new Hashtable();
-
+    //private Hashtable clientAccountsTable = new Hashtable();
+    private DataManager dataManager = null;
     /**
      * Constructor for initialize bank name
      * @param bankName the name of the bank
@@ -24,22 +25,29 @@ public class BankImpl extends UnicastRemoteObject implements Bank{
    public BankImpl() throws RemoteException {
         super();
     }
+   
+   public BankImpl(DataManager mgr) throws RemoteException {
+       super();
+       this.dataManager = mgr;
+   }
     /**
      * Create a new bank account
      * @param name account name
      * @return the created account
      * @throws java.rmi.RemoteException
      */
-   public synchronized BankAccount createAccount(String name) throws RemoteException {
-        BankAccountImpl account = (BankAccountImpl) clientAccountsTable.get(name);
+   public synchronized boolean createAccount(String name) throws RemoteException {
+        BankAccount account = dataManager.getBankAccountByName(name);
         if (account != null) {
             System.out.println("Account [" + name + "] exists!");
             //throw new Rejected("Rejected: BankAccount for: " + name + " already exists: " + account);
         }
-        account = new BankAccountImpl(name);
-        clientAccountsTable.put(name, account);
-        System.out.println("Account is created for " + name);
-        return (BankAccount)account;
+        else {
+            account = new BankAccount(name);
+            dataManager.storeBankAccount(account);
+            System.out.println("Account is created for " + name);
+        }
+        return true;
     }
 
     /**
@@ -49,30 +57,30 @@ public class BankImpl extends UnicastRemoteObject implements Bank{
      * @throws java.rmi.RemoteException
      */
     public BankAccount getAccount(String name) throws RemoteException {
-        BankAccountImpl account = (BankAccountImpl) clientAccountsTable.get(name);
+        BankAccount account = dataManager.getBankAccountByName(name);
         if (account == null) {
             System.out.println("Account [" + name + "] does not exist!");
             //throw new Rejected("Rejected: BankAccount for: " + name + " does not exist!");
-            return (BankAccount)account;
+            return account;
         }
         else {
-            return (BankAccount)account;
+            return account;
         }
     }
 
-    public boolean deleteAccount(BankAccount acc) throws RemoteException {
-        if ((acc != null) && (clientAccountsTable.contains(acc))) {
-            java.util.Enumeration en = clientAccountsTable.keys();
-            while(en.hasMoreElements()) {
-                String name = (String)en.nextElement();
-                BankAccount ba = (BankAccount) clientAccountsTable.get(name);
-                if (ba.equals(acc)) {
-                    clientAccountsTable.remove(name);
-                    System.out.println("Account for: " + name + " is deleted");
-                    return true;
-                }
-            }
-        }
-        return false;
+    public void deleteAccount(String name) throws RemoteException {
+        dataManager.removeBankAccount(name);
+    }
+
+    public float getBalance(String accountName) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void deposit(String accountName, float depositNumber) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public boolean withdraw(String accountName, float withDrawNumber) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

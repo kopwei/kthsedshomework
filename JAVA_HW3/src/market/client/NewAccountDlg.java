@@ -88,8 +88,11 @@ public class NewAccountDlg extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane, "Error", "Invalid Input", JOptionPane.ERROR_MESSAGE);
         }
         try {
-            BankAccount account = mainView.getBank().createAccount(bankAccountTextField.getText());
-            mainView.setBankAccount(account);
+            String accountName = bankAccountTextField.getText();
+            boolean bRes = mainView.getBank().createAccount(accountName);
+            if (bRes) {
+                mainView.setBankAccountName(accountName);
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(NewAccountDlg.class.getName()).log(Level.SEVERE, null, ex);
         }

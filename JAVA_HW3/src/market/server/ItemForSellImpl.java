@@ -17,21 +17,24 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
     private String name = null;
     private float price = 0;    
     private ItemType type = ItemType.Unknown;
+    private ItemStateType state = ItemStateType.OnSell;
     private UUID itemId = null;
-    private UUID clientID = null;
+    private UUID sellerID = null;
+    private UUID buyerID = null;
+    private UUID wisherID = null;
     
     /**
      * Constructor for initiating the Item
      * @param name
      * @param price
      */
-    public ItemForSellImpl(String name, float price, ItemType type, UUID clientID) throws RemoteException {
+    public ItemForSellImpl(String name, float price, ItemType type,UUID sellerID) throws RemoteException {
         super();
         this.name = name;
         this.price = price;
         this.type = type;
         this.itemId = UUID.randomUUID();
-        this.clientID = clientID;
+        this.sellerID = sellerID;
     }
     /**
      * 
@@ -39,11 +42,11 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * @param price
      * @throws java.rmi.RemoteException
      */
-    public ItemForSellImpl(String name, float price, UUID clientID) throws RemoteException {
+    public ItemForSellImpl(String name, float price, UUID wisherID) throws RemoteException {
         super();
         this.name = name;
         this.price = price;
-        this.clientID = clientID;
+        this.wisherID = wisherID;
     }
         
     /**
@@ -83,7 +86,23 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * @return
      */
     public UUID getSellerClientID() {
-        return clientID;
+        return sellerID;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public UUID getWisherClientID() {
+        return wisherID;
+    }
+    
+    /**
+     * 
+     * @param buyerID
+     */
+    public void setBuyerID(UUID buyerID) {
+        this.buyerID = buyerID;
     }
 
     /**
@@ -121,5 +140,21 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
         buffer.append("Price: " + price + "\n");
         //buffer.append("Seller : ");
         return buffer.toString();
+    }
+
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public ItemStateType getState() throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    /**
+     * 
+     */
+    public void setSold() {
+        this.state = ItemStateType.Sold;
     }
 }

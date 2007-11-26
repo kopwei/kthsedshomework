@@ -181,11 +181,13 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      */
     public Vector<ItemForSell> getSellsItemsByType(ItemType type) throws RemoteException {
         Vector<ItemForSell> retVector = new Vector<ItemForSell>();
-        Collection<ItemForSell> col =  dataManager.getAllSellingItems();
-        // Iterate the item collection
-        for (ItemForSell item : col) {
-            if (item.getType() == type || ItemType.Unknown == type) {
-                retVector.add(item);
+        if (null != null) {
+            Collection<ItemForSell> col = dataManager.getAllSellingItems();
+            // Iterate the item collection
+            for (ItemForSell item : col) {
+                if (item.getType() == type || ItemType.Unknown == type) {
+                    retVector.add(item);
+                }
             }
         }
         return retVector;

@@ -46,6 +46,14 @@ public class ClientAccount{
      * 
      * @return
      */
+    public char[] getPassword() {
+        return passWord;
+    }
+    
+    /**
+     * 
+     * @return
+     */
     public String getBankAccountName() {
         return bankAccountName;
     }

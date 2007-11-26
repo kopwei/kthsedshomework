@@ -10,10 +10,11 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.UUID;
 import java.util.Vector;
+
 
 /**
  *
@@ -23,8 +24,6 @@ public class DataManager {
     private String userName = null;
     private char[] passWord = null;
     private Connection con = null;
-    private Statement stmt = null;
-    
     
     public DataManager(String userName, char[] passWord) {
         this.userName = userName;
@@ -36,16 +35,27 @@ public class DataManager {
         try {
             InetAddress add = Inet4Address.getLocalHost();
             String ip = add.getHostAddress();
-            String connectionString = "jdbc:mysql://" + ip.toString() + ":3306/mysql";
-            con = DriverManager.getConnection(connectionString, userName, new String(passWord));
-            stmt = con.createStatement();            
+            String connectionString = "jdbc:mysql://" + ip.toString() + ":3306/mysql";         
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con = DriverManager.getConnection(connectionString, userName, new String(passWord));     
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
         }   
     }
     
     public void storeClientAccount(ClientAccount account) {
-        // TODO: need implementation here
+        try {
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO marketdata.clientaccounts " +
+                    "(clientid, username, password, bankaccount) VALUES (?, ?, ?, ?)");
+            stmt.setString(1, account.getClientID().toString());
+            stmt.setString(2, account.getUserName());
+            stmt.setString(3, account.getPassword().toString());
+            stmt.setString(4, account.getBankAccountName());
+            int count = stmt.executeUpdate();
+            // TODO: need implementation here
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
     }
     
     public void storeWish(ItemForSell wishItem) {

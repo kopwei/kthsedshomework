@@ -68,19 +68,19 @@ public class BankImpl extends UnicastRemoteObject implements Bank{
         }
     }
 
-    public void deleteAccount(String name) throws RemoteException {
+    public synchronized void deleteAccount(String name) throws RemoteException {
         dataManager.removeBankAccount(name);
     }
 
-    public float getBalance(String accountName) throws RemoteException {
+    public synchronized float getBalance(String accountName) throws RemoteException {
         return dataManager.getBankBalance(accountName);      
     }
 
-    public void deposit(String accountName, float depositNumber) throws RemoteException {
+    public synchronized void deposit(String accountName, float depositNumber) throws RemoteException {
         dataManager.deposit(accountName, depositNumber);
     }
 
-    public boolean withdraw(String accountName, float withDrawNumber) throws RemoteException {
+    public synchronized boolean withdraw(String accountName, float withDrawNumber) throws RemoteException {
         return dataManager.withDraw(accountName, withDrawNumber);
     }
 }

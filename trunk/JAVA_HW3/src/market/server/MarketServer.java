@@ -97,7 +97,7 @@ public interface MarketServer extends Remote{
      * @return
      * @throws java.rmi.RemoteException
      */
-    public Vector<ItemForSell> getSellsItemsByType(ItemType type) throws RemoteException;
+    public Vector<ItemForSell> getSellingItemsByType(ItemType type) throws RemoteException;
     
   
     /**

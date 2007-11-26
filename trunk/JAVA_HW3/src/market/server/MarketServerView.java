@@ -30,7 +30,7 @@ public class MarketServerView extends javax.swing.JFrame {
             // Get all client name
             clientVector = ((MarketServerImpl)mainCmd.getServer()).getAllNotifiableClients();
             // Get all items
-            itemVector = mainCmd.getServer().getSellsItemsByType(ItemType.Unknown);
+            itemVector = mainCmd.getServer().getSellingItemsByType(ItemType.Unknown);
             clientList.setListData(clientVector);
             itemList.setListData(itemVector);
 //            clientList.updateUI();

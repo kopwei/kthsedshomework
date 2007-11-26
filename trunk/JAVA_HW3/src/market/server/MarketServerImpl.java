@@ -179,18 +179,8 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @return the retVector of items
      * @throws java.rmi.RemoteException
      */
-    public Vector<ItemForSell> getSellsItemsByType(ItemType type) throws RemoteException {
-        Vector<ItemForSell> retVector = new Vector<ItemForSell>();
-        if (null != null) {
-            Collection<ItemForSell> col = dataManager.getAllSellingItems();
-            // Iterate the item collection
-            for (ItemForSell item : col) {
-                if (item.getType() == type || ItemType.Unknown == type) {
-                    retVector.add(item);
-                }
-            }
-        }
-        return retVector;
+    public Vector<ItemForSell> getSellingItemsByType(ItemType type) throws RemoteException {
+        return dataManager.getSellingItemsByType(type);
     }
 
     /**
@@ -203,11 +193,8 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      */
     private UUID registerAccount(String name, char[] password, String bankAccountName) throws RemoteException {
         // Check if the account is already registered
-        Collection<ClientAccount> accounts = dataManager.getAllClientAccounts();
-        for (ClientAccount clientAccount : accounts) {
-            if (clientAccount.getUserName().equals(name)) {
-                throw new RemoteException("You account is already registered");
-            }
+        if (dataManager.isClientAccountExist(name)) {
+            throw new RemoteException("You account is already registered");
         }
         // If it is not registered then register it
         ClientAccount account = new ClientAccount(name, password, bankAccountName);

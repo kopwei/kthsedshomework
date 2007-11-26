@@ -36,6 +36,28 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
         this.itemId = UUID.randomUUID();
         this.sellerID = sellerID;
     }
+    
+    /**
+     * 
+     * @param name
+     * @param price
+     * @param type
+     * @param sellerID
+     * @param buyerID
+     * @param itemID
+     * @throws java.rmi.RemoteException
+     */
+    public ItemForSellImpl(String name, float price, ItemType type,UUID sellerID, UUID buyerID, UUID itemID, ItemStateType state) throws RemoteException {
+        super();
+        this.name = name;
+        this.price = price;
+        this.type = type;
+        this.itemId = UUID.randomUUID();
+        this.sellerID = sellerID;
+        this.buyerID = buyerID;
+        this.itemId = itemID;
+        this.state = state;
+    }
     /**
      * 
      * @param name

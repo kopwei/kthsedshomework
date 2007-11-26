@@ -58,12 +58,11 @@ public class ClientAccount{
         return clientAccountID;
     }
 
-    /**
-     * 
-     * @param password
-     * @return
-     * @throws java.rmi.RemoteException
-     */
+   /**
+    * 
+    * @param password
+    * @return
+    */
     public boolean isValidPassword(char[] password) {
         if (password.equals(this.passWord)) {
             return true;
@@ -71,6 +70,11 @@ public class ClientAccount{
         else {
             return false;
         }
+    }
+    
+    @Override
+    public String toString() {
+        return userName;
     }
     
 
@@ -171,10 +175,7 @@ public class ClientAccount{
 //        return returnItems;
 //    }
     
-    @Override
-    public String toString() {
-        return userName;
-    }
+    
 
 //    /**
 //     * 

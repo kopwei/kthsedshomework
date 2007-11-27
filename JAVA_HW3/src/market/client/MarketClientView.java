@@ -48,6 +48,7 @@ public class MarketClientView extends javax.swing.JFrame {
     private Vector<String> myItemNameForSell = new Vector<String>();
     private Vector<String> itemsNameIveBought = new Vector<String>();
     private Vector<String> myItemsNameSoldOut = new Vector<String>();
+    private Vector<String> itemPrice = new Vector<String>();
 
     
     /** Creates new form MarketClientView */
@@ -81,6 +82,9 @@ public class MarketClientView extends javax.swing.JFrame {
         itemList = new javax.swing.JList();
         comboBox = new javax.swing.JComboBox();
         buyItemButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        itemPriceList = new javax.swing.JList();
+        jLabel2 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         setupMenuItem = new javax.swing.JMenuItem();
@@ -114,6 +118,11 @@ public class MarketClientView extends javax.swing.JFrame {
         nameTextField.setEditable(false);
 
         itemList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        itemList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                itemListMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(itemList);
 
         comboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All items for sell", "My Wish", "My items for sell", "My items sold out", "Items I've bought" }));
@@ -130,6 +139,11 @@ public class MarketClientView extends javax.swing.JFrame {
                 buyItemButtonActionPerformed(evt);
             }
         });
+
+        itemPriceList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane3.setViewportView(itemPriceList);
+
+        jLabel2.setText("Price");
 
         fileMenu.setText("File");
 
@@ -226,12 +240,19 @@ public class MarketClientView extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(comboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                    .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(buyItemButton))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(351, Short.MAX_VALUE)
+                .addComponent(buyItemButton)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -241,12 +262,14 @@ public class MarketClientView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
-                .addGap(11, 11, 11)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buyItemButton)
                 .addContainerGap())
         );
@@ -351,6 +374,7 @@ public class MarketClientView extends javax.swing.JFrame {
             // comboBox = (JComboBox)evt.getSource();
             int index = comboBox.getSelectedIndex();
             itemList.setLayoutOrientation(JList.VERTICAL);
+            itemPriceList.setLayoutOrientation(JList.VERTICAL);
             itemICanBuy.clear();
             allItemNameForSell.clear();
             wishItemName.clear();
@@ -370,7 +394,9 @@ public class MarketClientView extends javax.swing.JFrame {
 
                     for (Iterator it = itemICanBuy.iterator(); it.hasNext();) {
                         ItemForSell object = (ItemForSell) it.next();
-                        allItemNameForSell.add(object.getName());
+                        if (!allItemNameForSell.contains(object.getName())) {
+                            allItemNameForSell.add(object.getName());
+                        }
                     }
                     itemList.setListData(allItemNameForSell);
                     break;
@@ -397,7 +423,9 @@ public class MarketClientView extends javax.swing.JFrame {
                     myItemsSoldOut = serverObj.getSoldItems(marketAccountID);
                     for (Iterator<ItemForSell> it = myItemsSoldOut.iterator(); it.hasNext();) {
                         ItemForSell object = it.next();
-                        myItemsNameSoldOut.add(object.getName());
+                        if (!myItemsNameSoldOut.contains(object.getName())) {
+                            myItemsNameSoldOut.add(object.getName());
+                        }
                     }
                     itemList.setListData(myItemsNameSoldOut);
                     break;
@@ -406,7 +434,9 @@ public class MarketClientView extends javax.swing.JFrame {
                     itemsIveBought = serverObj.getBoughtItems(marketAccountID);
                     for (Iterator<ItemForSell> it = itemsIveBought.iterator(); it.hasNext();) {
                         ItemForSell object = it.next();
-                        itemsNameIveBought.add(object.getName());
+                        if (!itemsNameIveBought.contains(object.getName())) {
+                            itemsNameIveBought.add(object.getName());
+                        }
                     }
                     itemList.setListData(itemsNameIveBought);
                     break;
@@ -420,23 +450,32 @@ public class MarketClientView extends javax.swing.JFrame {
 
     private void buyItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyItemButtonActionPerformed
         // TODO add your handling code here:
-        if ((comboBox.getSelectedIndex() == 0) && (itemList.getSelectedIndex() != -1)) {
+        if ((comboBox.getSelectedIndex() == 0) && (itemList.getSelectedIndex() != -1) && (itemPriceList.getSelectedIndex() != -1)) {
             try {
-                int index = itemList.getSelectedIndex();
-                ItemForSell itemForSell = itemICanBuy.elementAt(index);
-                boolean result = serverObj.buyItem(itemForSell, marketAccountID);
-                String resultStr = null;
-                if (result == true) {
-                    resultStr = "Wow! This is yours now.";
-                    itemICanBuy.remove(index);
-                    allItemNameForSell.remove(index);
+                String name = allItemNameForSell.elementAt(itemList.getSelectedIndex());
+                Float price = Float.parseFloat(itemPrice.elementAt(itemPriceList.getSelectedIndex()));
+                for (Iterator<ItemForSell> it = itemICanBuy.iterator(); it.hasNext();) {
+                    ItemForSell object = it.next();
+                    if (name.equals(object.getName()) && price == object.getPrice()) {
+                        boolean result = serverObj.buyItem(object, marketAccountID);
+                        String resultStr = null;
+                        if (result == true) {
+                            resultStr = "Wow! This is yours now.";
+                            itemICanBuy.remove(object);
+                            if (itemPrice.size() == 1) {
+                                allItemNameForSell.remove(name);
+                            }
+                            itemPrice.remove(itemPriceList.getSelectedIndex());
+                            itemList.setLayoutOrientation(JList.VERTICAL);
+                            itemPriceList.setLayoutOrientation(JList.VERTICAL);
+                            itemList.setListData(allItemNameForSell);
+                            itemPriceList.setListData(itemPrice);
+                        } else {
+                            resultStr = "Sorry, buy-action failed. Please try again!";
+                        }
+                        textArea.append(resultStr + "\n");
+                    }
                 }
-                else {
-                    resultStr = "Sorry, buy-action failed. Please try again!";
-                }
-                textArea.append(resultStr + "\n");
-                itemList.setLayoutOrientation(JList.VERTICAL);
-                itemList.setListData(allItemNameForSell);
             } catch (RemoteException ex) {
                 Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -474,6 +513,69 @@ public class MarketClientView extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
+        // TODO add your handling code here:
+        if (itemList.getSelectedIndex() != -1) {
+            try {
+                itemPrice.clear();
+                int index = comboBox.getSelectedIndex();
+                itemPriceList.setLayoutOrientation(JList.VERTICAL);
+                switch (index) {
+                    case 0:
+                        String name1 = allItemNameForSell.elementAt(itemList.getSelectedIndex());
+                        for (Iterator<ItemForSell> it = itemICanBuy.iterator(); it.hasNext();) {
+                            ItemForSell object = it.next();
+                            if (name1.equals(object.getName())) {
+                                itemPrice.addElement(Float.toString(object.getPrice()));
+                            }
+                        }
+                        break;
+                    case 1:
+                        String name2 = wishItemName.elementAt(itemList.getSelectedIndex());
+                        for (Iterator<ItemForSell> it = wishItems.iterator(); it.hasNext();) {
+                            ItemForSell object = it.next();
+                            if (name2.equals(object.getName())) {
+                                itemPrice.addElement(Float.toString(object.getPrice()));
+                            }
+                        }
+                        break;
+                    case 2:
+                        String name3 = myItemNameForSell.elementAt(itemList.getSelectedIndex());
+                        for (Iterator<ItemForSell> it = myItemForSell.iterator(); it.hasNext();) {
+                            ItemForSell object = it.next();
+                            if (name3.equals(object.getName())) {
+                                itemPrice.addElement(Float.toString(object.getPrice()));
+                            }
+                        }
+                        break;
+                    case 3:
+                        String name4 = myItemsNameSoldOut.elementAt(itemList.getSelectedIndex());
+                        for (Iterator<ItemForSell> it = myItemsSoldOut.iterator(); it.hasNext();) {
+                            ItemForSell object = it.next();
+                            if (name4.equals(object.getName())) {
+                                itemPrice.addElement(Float.toString(object.getPrice()));
+                            }
+                        }
+                        break;
+                    case 4:
+                        String name5 = itemsNameIveBought.elementAt(itemList.getSelectedIndex());
+                        for (Iterator<ItemForSell> it = itemsIveBought.iterator(); it.hasNext();) {
+                            ItemForSell object = it.next();
+                            if (name5.equals(object.getName())) {
+                                itemPrice.addElement(Float.toString(object.getPrice()));
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                itemPriceList.setListData(itemPrice);
+            } catch (RemoteException ex) {
+                Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_itemListMouseClicked
     
     public void setMarketAccountID(UUID marketAccID) {
         this.marketAccountID = marketAccID;
@@ -546,11 +648,14 @@ public class MarketClientView extends javax.swing.JFrame {
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JList itemList;
+    private javax.swing.JList itemPriceList;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JMenuItem loginMenuItem;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JTextField nameTextField;

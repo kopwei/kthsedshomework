@@ -9,6 +9,6 @@ package ontologies;
  *
  * @author Kop
  */
-public class MobilePhoneOntology {
+public class DutchAuctionOntology {
 
 }

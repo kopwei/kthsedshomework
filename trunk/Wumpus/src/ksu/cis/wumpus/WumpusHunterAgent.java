@@ -202,7 +202,7 @@ public class WumpusHunterAgent implements AgentProgram {
             if (gridMemory[point.x][point.y].isWumpus() && hasArrow) {
                 isWumpusPoints.add(point);
             }
-            if (gridMemory[point.x][point.y].isUnvisited() && !gridMemory[point.x][point.y].isSuspiciousPit() && !gridMemory[point.x][point.y].isSuspiciousWumpus()) {
+            if (gridMemory[point.x][point.y].isUnvisited() && !(gridMemory[point.x][point.y].getDangerLevel() > 0)) {
                 unvisitedPoints.add(point);
             }
         }

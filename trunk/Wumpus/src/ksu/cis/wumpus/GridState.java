@@ -16,6 +16,7 @@ public class GridState {
     private boolean isGold = false;
     private boolean isWall = false;
     private boolean isSmell = false;
+    private boolean isBreeze = false;
     private boolean unvisited = true;
     
     public boolean isSuspiciousPit() {
@@ -44,6 +45,10 @@ public class GridState {
     
     public boolean isSmell() {
         return isSmell;
+    }
+    
+    public boolean isBreeze() {
+        return isBreeze;
     }
     
     public boolean isSafe() {
@@ -168,6 +173,10 @@ public class GridState {
     
     public void setSmell() {
         isSmell = true;
+    }
+    
+    public void setBreeze() {
+        isBreeze = true;
     }
     
 }

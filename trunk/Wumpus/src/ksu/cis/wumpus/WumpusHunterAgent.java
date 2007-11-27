@@ -115,7 +115,8 @@ public class WumpusHunterAgent implements AgentProgram {
             gridMemory[xLoc + agent.heading.x][yLoc + agent.heading.y].setWall();
             return;
         }
-        if (percept.isBreeze) {
+        if (percept.isBreeze && !gridMemory[xLoc][yLoc].isBreeze()) {
+            gridMemory[xLoc][yLoc].setBreeze();
             fillSurroundPoints();
             if (!isRepeating) {
                 for (Point point : agentSurroundPoints) {
@@ -126,7 +127,7 @@ public class WumpusHunterAgent implements AgentProgram {
         if (percept.isScream) {
             setWumpusDead(agent.heading);         
         }
-        if (percept.isStench) {
+        if (percept.isStench && !gridMemory[xLoc][yLoc].isSmell() && !gridMemory[xLoc][yLoc].isDeadWumpus()) {
             gridMemory[xLoc][yLoc].setSmell();
             // If it is the first time meet the smell and not the breeze, store the path
             if (isFirstSmell && !percept.isBreeze) {
@@ -140,9 +141,7 @@ public class WumpusHunterAgent implements AgentProgram {
             if (!isRepeating && !isWumpusDead) {
                 fillSurroundPoints();
                 for (Point point : agentSurroundPoints) {
-                    if (suspiciousWumpusPoints.add(point)) {
-                        gridMemory[point.x][point.y].setSuspiciousWumpus();
-                    }
+                    gridMemory[point.x][point.y].setSuspiciousWumpus();
                 }
             }
         }
@@ -185,7 +184,7 @@ public class WumpusHunterAgent implements AgentProgram {
 
     
     private Action decideAction() {
-        actionPool.clear();
+          actionPool.clear();
         GridState gs = gridMemory[xLoc][yLoc];
         if (gs.isGold()) {
             setActionsToExit();

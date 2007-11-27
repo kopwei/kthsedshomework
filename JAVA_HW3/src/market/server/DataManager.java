@@ -10,6 +10,8 @@ import bank.BankAccount;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.rmi.RemoteException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,6 +20,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.UUID;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -68,12 +72,19 @@ public class DataManager {
                     "(clientid, username, password, bankaccount) VALUES (?, ?, ?, ?)");
             stmt.setString(1, account.getClientID().toString());
             stmt.setString(2, account.getUserName());
-            stmt.setString(3, new String(account.getPassword()));
+            char[] password = account.getPassword();
+            String passwordStr = new String(password);
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            String digestedString = new String(md.digest(passwordStr.getBytes()));
+            
+            stmt.setString(3, digestedString);
             stmt.setString(4, account.getBankAccountName());
             // Execute and update the data
             int count = stmt.executeUpdate();
             stmt.close();
             // TODO: need implementation here
+        } catch (NoSuchAlgorithmException ex) {
+            System.err.println(ex.getMessage());
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
@@ -231,7 +242,10 @@ public class DataManager {
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM marketdata.clientaccounts" +
                     " WHERE (username = ? AND password = ?)");
             stmt.setString(1, name);
-            stmt.setString(2, new String(password));
+            String passwordStr = new String(password);
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            String digestedString = new String(md.digest(passwordStr.getBytes()));
+            stmt.setString(2, digestedString);
             ResultSet rs = stmt.executeQuery();
             
             // Create the client account object and return it
@@ -243,6 +257,8 @@ public class DataManager {
                 stmt.close();
                 return new ClientAccount(clientName, passwordArray, bankAccountName, clientID);
             }
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(DataManager.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }

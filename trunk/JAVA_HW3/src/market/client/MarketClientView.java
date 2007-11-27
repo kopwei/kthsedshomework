@@ -41,9 +41,14 @@ public class MarketClientView extends javax.swing.JFrame {
     private Vector<ItemForSell> itemICanBuy = new Vector<ItemForSell>();
     private Vector<ItemForSell> wishItems = new Vector<ItemForSell>();
     private Vector<ItemForSell> myItemForSell = new Vector<ItemForSell>();
+    private Vector<ItemForSell> itemsIveBought = new Vector<ItemForSell>();
+    private Vector<ItemForSell> myItemsSoldOut = new Vector<ItemForSell>();
     private Vector<String> allItemNameForSell = new Vector<String>();
     private Vector<String> wishItemName = new Vector<String>();
     private Vector<String> myItemNameForSell = new Vector<String>();
+    private Vector<String> itemsNameIveBought = new Vector<String>();
+    private Vector<String> myItemsNameSoldOut = new Vector<String>();
+
     
     /** Creates new form MarketClientView */
     public MarketClientView() {
@@ -111,7 +116,7 @@ public class MarketClientView extends javax.swing.JFrame {
         itemList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(itemList);
 
-        comboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All items for sell", "My Wish", "My items for sell" }));
+        comboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All items for sell", "My Wish", "My items for sell", "My items sold out", "Items I've bought" }));
         comboBox.setEnabled(false);
         comboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -350,6 +355,8 @@ public class MarketClientView extends javax.swing.JFrame {
             allItemNameForSell.clear();
             wishItemName.clear();
             myItemNameForSell.clear();
+            itemsNameIveBought.clear();
+            myItemsNameSoldOut.clear();
             switch (index) {
                 // select items for sell, use item type "unknown" to ask for all the items for sell
                 case 0:
@@ -384,6 +391,24 @@ public class MarketClientView extends javax.swing.JFrame {
                         myItemNameForSell.add(object.getName());
                     }
                     itemList.setListData(myItemNameForSell);
+                    break;
+                // select items that I have sold out
+                case 3:
+                    myItemsSoldOut = serverObj.getSoldItems(marketAccountID);
+                    for (Iterator<ItemForSell> it = myItemsSoldOut.iterator(); it.hasNext();) {
+                        ItemForSell object = it.next();
+                        myItemsNameSoldOut.add(object.getName());
+                    }
+                    itemList.setListData(myItemsNameSoldOut);
+                    break;
+                // select items that I have bought
+                case 4:
+                    itemsIveBought = serverObj.getBoughtItems(marketAccountID);
+                    for (Iterator<ItemForSell> it = itemsIveBought.iterator(); it.hasNext();) {
+                        ItemForSell object = it.next();
+                        itemsNameIveBought.add(object.getName());
+                    }
+                    itemList.setListData(itemsNameIveBought);
                     break;
                 default: 
                     break;

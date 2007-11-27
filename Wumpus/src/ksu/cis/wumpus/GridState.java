@@ -76,6 +76,9 @@ public class GridState {
     ////////////////////////////////////////////////////////////////////////////////////////////
            
     public void setSafe() {
+        if (pitSuspiciousLevel > 0 || wumpusSuspiciousLevel > 0) {
+            unvisited = true;
+        }
         pitSuspiciousLevel = -1;
         wumpusSuspiciousLevel = -1;
     }

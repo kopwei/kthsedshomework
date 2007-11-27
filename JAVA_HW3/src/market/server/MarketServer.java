@@ -42,13 +42,14 @@ public interface MarketServer extends Remote{
      */
     public void publishWishItem(String itemName, float price, UUID buyerAccountID) throws RemoteException;
     
-//    /**
-//     * 
-//     * @param accountName
-//     * @return
-//     * @throws java.rmi.RemoteException
-//     */
-//    public ClientAccount getClientAccount(String accountName,char[] password) throws RemoteException;
+    
+    /**
+     * 
+     * @param sellerID
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public Vector<ItemForSell> getSoldItems(UUID sellerID) throws RemoteException;
     
     /**
      * 

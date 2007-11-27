@@ -140,8 +140,9 @@ public class WumpusHunterAgent implements AgentProgram {
             if (!isRepeating && !isWumpusDead) {
                 fillSurroundPoints();
                 for (Point point : agentSurroundPoints) {
-                    gridMemory[point.x][point.y].setSuspiciousWumpus();
-                    suspiciousWumpusPoints.add(point);
+                    if (suspiciousWumpusPoints.add(point)) {
+                        gridMemory[point.x][point.y].setSuspiciousWumpus();
+                    }
                 }
             }
         }

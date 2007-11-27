@@ -486,6 +486,11 @@ public class DataManager {
         return items;
     }
     
+    /**
+     * 
+     * @param accountName
+     * @return
+     */
     public float getBankBalance(String accountName) {
         try {
             // Prepate the statement with SQL update command
@@ -505,6 +510,11 @@ public class DataManager {
         return 0.0f;
     }
     
+    /**
+     * 
+     * @param accountName
+     * @param number
+     */
     public void deposit(String accountName, float number) {
         if (number < 0) {
             return;
@@ -523,6 +533,12 @@ public class DataManager {
         }
     }
     
+    /**
+     * 
+     * @param accountName
+     * @param number
+     * @return
+     */
     public boolean withDraw(String accountName, float number) {
         // Check if the balance is ready for withdraw
         float balance = getBankBalance(accountName);
@@ -546,61 +562,79 @@ public class DataManager {
         return true;
     }
     
+    /**
+     * 
+     * @param sellerID
+     * @return
+     */
     public Vector<ItemForSell> getSellingItems(UUID sellerID) {
-        Vector<ItemForSell> items = new Vector<ItemForSell>();
-        try {
-            // Prepate the statement with SQL update command
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM marketdata.items WHERE (" +
-                    "sellerid = ?)");   
-            stmt.setString(1, sellerID.toString());
-            ResultSet rs = stmt.executeQuery();
-            //stmt.close();
-            while (rs.next()) {
-                UUID itemId = UUID.fromString(rs.getString("itemid"));
-                ItemType type = ItemType.valueOf(rs.getString("itemtype"));
-                String itemName = rs.getString("name");
-                float price = rs.getFloat("price");
-                ItemStateType state = ItemStateType.valueOf(rs.getString("state"));              
-                 // Create the item object and return it
-                items.addElement(new ItemForSellImpl(itemName, price, type, sellerID, null, itemId, state));
-            }
-            
-        } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
-        } catch(RemoteException ex) {
-            System.err.println(ex.getMessage());
-        }
-        return items;
+        return getClientItemByState(sellerID, ItemStateType.OnSell, true);
     }
 
+    /**
+     * 
+     * @param buyerID
+     * @return
+     */
     public Vector<ItemForSell> getBoughtItems(UUID buyerID) {
+        return getClientItemByState(buyerID, ItemStateType.Sold, false);
+    }
+    
+    /**
+     * 
+     * @param sellerID
+     * @return
+     */
+    public Vector<ItemForSell> getSoldItems(UUID sellerID) {
+        return getClientItemByState(sellerID, ItemStateType.Sold, true);
+    }
+    
+
+    private Vector<ItemForSell> getClientItemByState(UUID clientID, ItemStateType state, boolean isSelling) {
         Vector<ItemForSell> items = new Vector<ItemForSell>();
+        PreparedStatement stmt;
         try {
             // Prepate the statement with SQL update command
-            PreparedStatement stmt = con.prepareStatement("SELECT * FROM marketdata.items WHERE (" +
-                    "buyerid = ?)");   
-            stmt.setString(1, buyerID.toString());
+            if (isSelling) {
+                stmt = con.prepareStatement("SELECT * FROM marketdata.items WHERE (" + 
+                        "sellerid = ? AND state = ?)");
+            }
+            else {
+                stmt = con.prepareStatement("SELECT * FROM marketdata.items WHERE (" + 
+                        "buyerid = ? AND state = ?)");
+            }
+            stmt.setString(1, clientID.toString());
+            stmt.setString(2, state.toString());
             ResultSet rs = stmt.executeQuery();
             //stmt.close();
             while (rs.next()) {
                 UUID itemId = UUID.fromString(rs.getString("itemid"));
-                UUID sellerId = UUID.fromString(rs.getString("sellerid"));
+                UUID sellerID = UUID.fromString(rs.getString("sellerid"));
                 ItemType type = ItemType.valueOf(rs.getString("itemtype"));
                 String itemName = rs.getString("name");
                 float price = rs.getFloat("price");
-                ItemStateType state = ItemStateType.valueOf(rs.getString("state"));              
-                 // Create the item object and return it
-                items.addElement(new ItemForSellImpl(itemName, price, type, sellerId, buyerID, itemId, state));
+                // Create the item object and return it
+                if (state.equals(ItemStateType.OnSell)) {
+                    items.addElement(new ItemForSellImpl(itemName, price, type, sellerID, null, itemId, state));
+                }
+                else {
+                    UUID buyerID = UUID.fromString(rs.getString("buyerid"));
+                    items.addElement(new ItemForSellImpl(itemName, price, type, clientID, buyerID, itemId, state));
+                }
             }
-            
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
-        } catch(RemoteException ex) {
+        } catch (RemoteException ex) {
             System.err.println(ex.getMessage());
         }
         return items;
     }
-
+    
+    /**
+     * 
+     * @param clientID
+     * @return
+     */
     public Vector<ItemForSell> getWishItems(UUID clientID) {
         Vector<ItemForSell> items = new Vector<ItemForSell>();
         try {

@@ -101,8 +101,9 @@ public class GridState {
      * 
      */
     public void setSuspiciousPit() {
-        unvisited = false;
-        if (4 != pitSuspiciousLevel) {
+        //
+        if (4 != pitSuspiciousLevel && -1 != pitSuspiciousLevel) {
+            unvisited = false;
             pitSuspiciousLevel++;
             if (4 == pitSuspiciousLevel) {
                 wumpusSuspiciousLevel = -1;
@@ -114,8 +115,9 @@ public class GridState {
      * 
      */
     public void setSuspiciousWumpus() {
-        unvisited = false;
+        //unvisited = false;
         if (2 != wumpusSuspiciousLevel && -1 != wumpusSuspiciousLevel) {
+            unvisited = false;
             wumpusSuspiciousLevel++;
             if (2 == wumpusSuspiciousLevel) {
                 pitSuspiciousLevel = -1;
@@ -124,33 +126,33 @@ public class GridState {
     }
     
     public void setWumpus() {
-        unvisited = false;
+        //unvisited = false;
         wumpusSuspiciousLevel = 2;
         pitSuspiciousLevel = -1;
     }
     
     public void setPit() {
-        unvisited = false;
+        //unvisited = false;
         pitSuspiciousLevel = 4;
         wumpusSuspiciousLevel = -1;
     }
     
     public void setWall() {
-        unvisited = false;
+        //unvisited = false;
         isWall = true;
         pitSuspiciousLevel = -1;
         wumpusSuspiciousLevel = -1;
     }
     
     public void setGold() {
-        unvisited = false;
+        //unvisited = false;
         isGold = true;
         pitSuspiciousLevel = -1;
         wumpusSuspiciousLevel = -1;
     }
     
     public void setDeadWumpus() {
-        unvisited = false;
+        //unvisited = false;
         isDeadWumpus = true;
         pitSuspiciousLevel = -1;
         wumpusSuspiciousLevel = -1;

@@ -76,24 +76,24 @@ public class GridState {
     ////////////////////////////////////////////////////////////////////////////////////////////
            
     public void setSafe() {
-        if (pitSuspiciousLevel > 0 || wumpusSuspiciousLevel > 0) {
-            unvisited = true;
-        }
+//        if (pitSuspiciousLevel > 0 || wumpusSuspiciousLevel > 0) {
+//            unvisited = true;
+//        }
         pitSuspiciousLevel = -1;
         wumpusSuspiciousLevel = -1;
     }
     
     public void setDefinetlyNotPit() {
         pitSuspiciousLevel = -1;
-        if (wumpusSuspiciousLevel < 1) {
-            unvisited = true;
-        }
+//        if (wumpusSuspiciousLevel < 1) {
+//            unvisited = true;
+//        }
     }
     
     public void setDefinetlyNotWumpus() {
-        if (pitSuspiciousLevel < 1 && wumpusSuspiciousLevel > 0) {
-            unvisited = true;
-        }
+//        if (pitSuspiciousLevel < 1 && wumpusSuspiciousLevel > 0) {
+//            unvisited = true;
+//        }
         wumpusSuspiciousLevel = -1;
     }
     
@@ -103,7 +103,7 @@ public class GridState {
     public void setSuspiciousPit() {
         //
         if (4 != pitSuspiciousLevel && -1 != pitSuspiciousLevel) {
-            unvisited = false;
+//            unvisited = false;
             pitSuspiciousLevel++;
             if (4 == pitSuspiciousLevel) {
                 wumpusSuspiciousLevel = -1;
@@ -117,7 +117,7 @@ public class GridState {
     public void setSuspiciousWumpus() {
         //unvisited = false;
         if (2 != wumpusSuspiciousLevel && -1 != wumpusSuspiciousLevel) {
-            unvisited = false;
+//            unvisited = false;
             wumpusSuspiciousLevel++;
             if (2 == wumpusSuspiciousLevel) {
                 pitSuspiciousLevel = -1;

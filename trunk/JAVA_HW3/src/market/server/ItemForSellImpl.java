@@ -99,7 +99,7 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * 
      * @return
      */
-    public UUID getItemID() {
+    public UUID getItemID() throws RemoteException{
         return itemId;
     }
     
@@ -107,7 +107,7 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * 
      * @return
      */
-    public UUID getSellerClientID() {
+    public UUID getSellerClientID() throws RemoteException{
         return sellerID;
     }
     
@@ -115,7 +115,7 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * 
      * @return
      */
-    public UUID getWisherClientID() {
+    public UUID getWisherClientID() throws RemoteException{
         return wisherID;
     }
     
@@ -123,7 +123,7 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * 
      * @return
      */
-    public UUID getBuyerClientID() {
+    public UUID getBuyerClientID() throws RemoteException{
         return buyerID;
     }
     

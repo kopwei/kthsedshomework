@@ -27,8 +27,9 @@ public class AuctionOntology extends Ontology{
     public static final String ITEMNAME = "Name";
     public static final String MOBILE_PHONE = "MobilePhone";
     public static final String PHONETYPE = "PhoneType";
-    public static final String CRY = "Cry";
+    public static final String INITAUCTION = "InitialAuction";
     public static final String INITPRICE = "InitialPrice";
+    public static final String CRY = "Cry";
     public static final String CRYPRICE = "CryPrice";
     
     private static AuctionOntology ontology;
@@ -52,10 +53,16 @@ public class AuctionOntology extends Ontology{
             add(itemSchema, Item.class);
             add(phoneSchema, MobilePhone.class);
             
+            PredicateSchema initAuctionSchema = new PredicateSchema(INITAUCTION);
+            initAuctionSchema.add(ITEM, itemSchema);
+            initAuctionSchema.add(INITPRICE, floatSchema);
+            
             PredicateSchema crySchema = new PredicateSchema(CRY);
             crySchema.add(MOBILE_PHONE, phoneSchema);
             crySchema.add(CRYPRICE, floatSchema);
             
+            add(initAuctionSchema, InitAuction.class);
+            add(crySchema, Cry.class);
             
             
             

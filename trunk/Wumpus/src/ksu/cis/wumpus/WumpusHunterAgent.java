@@ -184,7 +184,7 @@ public class WumpusHunterAgent implements AgentProgram {
 
     
     private Action decideAction() {
-          actionPool.clear();
+        actionPool.clear();
         GridState gs = gridMemory[xLoc][yLoc];
         if (gs.isGold()) {
             setActionsToExit();
@@ -195,13 +195,14 @@ public class WumpusHunterAgent implements AgentProgram {
         Vector<Point> unvisitedPoints = new Vector<Point>();
         Vector<Point> isWumpusPoints = new Vector<Point>();
         Point wumpusPoint = new Point();
+        Point wantedHeading = new Point();
         for (int i = 0; i < agentSurroundPoints.size(); i++) {
             Point point = agentSurroundPoints.elementAt(i);
             // If there is wumpus, shoot it
             if (gridMemory[point.x][point.y].isWumpus() && hasArrow) {
                 isWumpusPoints.add(point);
             }
-            if (gridMemory[point.x][point.y].isUnvisited() && !(gridMemory[point.x][point.y].getDangerLevel() > 0)) {
+            if (gridMemory[point.x][point.y].isUnvisited() && gridMemory[point.x][point.y].getDangerLevel() <= 0) {
                 unvisitedPoints.add(point);
             }
         }
@@ -220,24 +221,19 @@ public class WumpusHunterAgent implements AgentProgram {
             else {
                 wumpusPoint.setLocation(isWumpusPoints.elementAt(0));
             }
-            Point wantedHeading = new Point();
             wantedHeading.x = wumpusPoint.x - xLoc;
             wantedHeading.y = wumpusPoint.y - yLoc;
             setHowToTurn(wantedHeading);
             actionPool.add(new AnAction("shoot"));
-            actionPool.add(new AnAction("forward"));
         }
 
         if (unvisitedPoints.size() > 0) {
-            Point wantedHeading = new Point();
             Vector<Point> unexploredDirections = new Vector<Point>();
             for (int i = 0; i < unvisitedPoints.size(); i++) {
                 Point point = unvisitedPoints.elementAt(i);
                 unexploredDirections.add(new Point(point.x - xLoc, point.y - yLoc));
             }
             if (actionPool.size() != 0) {
-                wantedHeading.x = wumpusPoint.x;
-                wantedHeading.y = wumpusPoint.y;
                 unexploredDirections.remove(wantedHeading);
             }
             else {
@@ -263,8 +259,11 @@ public class WumpusHunterAgent implements AgentProgram {
                 return afn;
             }
             else {
-                Vector<Point> uned = new Vector<Point>();
-                agentTrace.add(new AgentCoordinate(xLoc, yLoc, uned));
+                if (heading.getLocation().equals(wantedHeading.getLocation())) {
+                    actionPool.add(new AnAction("forward"));
+                    Vector<Point> uned = new Vector<Point>();
+                    agentTrace.add(new AgentCoordinate(xLoc, yLoc, uned));
+                }
                 AnAction afn = (AnAction) actionPool.pollFirst();
                 return afn;
             }
@@ -284,35 +283,36 @@ public class WumpusHunterAgent implements AgentProgram {
             else break;
         }
         if (counter - 1 == agentTrace.size()) {
-            if (isWumpusDead || (!isWumpusDead && !hasArrow)) {
-                // if there is unvisited field around the position where gets the first smell, go to there
-                Point lastPoint = pathTofirstSmellField.lastElement();
-                Point[] surroundingSmellPoint = {
-                    new Point(lastPoint.x + 1, lastPoint.y),
-                    new Point(lastPoint.x, lastPoint.y + 1),
-                    new Point(lastPoint.x - 1, lastPoint.y),
-                    new Point(lastPoint.x, lastPoint.y - 1)
-                };
-                for (int i = 0; i < surroundingSmellPoint.length; i++) {
-                    Point point = surroundingSmellPoint[i];
-                    if (gridMemory[point.x][point.y].isUnvisited()) {
-                        goToFirstSmellField();
-                        break;
+            if (!pathTofirstSmellField.isEmpty()) {
+                if (isWumpusDead || (!isWumpusDead && !hasArrow)) {
+                    // if there is unvisited field around the position where gets the first smell, go to there
+                    Point lastPoint = pathTofirstSmellField.lastElement();
+                    Point[] surroundingSmellPoint = {new Point(lastPoint.x + 1, lastPoint.y),
+                            new Point(lastPoint.x, lastPoint.y + 1),
+                            new Point(lastPoint.x - 1, lastPoint.y),
+                            new Point(lastPoint.x, lastPoint.y - 1)};
+                    int n = 0;
+                    for (int i = 0; i < surroundingSmellPoint.length; i++) {
+                        Point point = surroundingSmellPoint[i];
+                        if (gridMemory[point.x][point.y].isUnvisited() && gridMemory[point.x][point.y].getDangerLevel() <= 0) {
+                            goToFirstSmellField();
+                            break;
+                        }
+                        n++;
                     }
-                }
-                setActionsToExit();
-            }
-            else { // Wumpus is not dead and has arrow
+                    if (n == surroundingSmellPoint.length) {
+                        setActionsToExit();
+                    }
+                } else { // Wumpus is not dead and has arrow
                 // go to the position where gets the first smell, and shoot towards a random direction 
                 // where suspects wumpus
-                if (!pathTofirstSmellField.isEmpty()) {
                     goToFirstSmellField();
                     // surrounding points are all wumpus-suspicious fields
                     fillSurroundPoints();
                     // remove those fields been suspected as pit
                     for (int i = 0; i < agentSurroundPoints.size(); i++) {
                         Point point = agentSurroundPoints.elementAt(i);
-                        if (gridMemory[point.x][point.y].isSuspiciousPit()) {
+                        if (!gridMemory[point.x][point.y].isSuspiciousWumpus() || (gridMemory[point.x][point.y].isSuspiciousWumpus() && gridMemory[point.x][point.y].isSuspiciousPit())) {
                             agentSurroundPoints.removeElementAt(i);
                         }
                     }
@@ -328,9 +328,8 @@ public class WumpusHunterAgent implements AgentProgram {
                     Vector<Point> uned = new Vector<Point>();
                     agentTrace.add(new AgentCoordinate(xLoc, yLoc, uned));
                 }
-                else {
-                    setActionsToExit();
-                }
+            } else {
+                setActionsToExit();
             }
         }
         else moveBack(counter);
@@ -342,19 +341,23 @@ public class WumpusHunterAgent implements AgentProgram {
         isRepeating = true;
         // the number of steps to go back to the last same field
         int counterToGoBack = 0;
-        Iterator<AgentCoordinate> it = agentTrace.iterator();
-        while (it.hasNext() && counter <= pathTofirstSmellField.size()) {
-            AgentCoordinate agentCoordinate = it.next();
-            if (agentCoordinate.getLocation().equals(pathTofirstSmellField.elementAt(counter).getLocation())) {
-                counter++;
+        if (!agentTrace.isEmpty()) {
+            Iterator<AgentCoordinate> it = agentTrace.iterator();
+            while (it.hasNext() && counter <= pathTofirstSmellField.size()) {
+                AgentCoordinate agentCoordinate = it.next();
+                if (agentCoordinate.getLocation().equals(pathTofirstSmellField.elementAt(counter).getLocation())) {
+                    counter++;
+                } else {
+                    break;
+                }
             }
-            else {
-                break;
-            }
+            // plus 1 because agentTrace's last record is the last point of current position
+            counterToGoBack = agentTrace.size() - counter + 1;
+            moveBack(counterToGoBack);
         }
-        // plus 1 because agentTrace's last record is the last point of current position
-        counterToGoBack = agentTrace.size() - counter + 1;
-        moveBack(counterToGoBack);
+        else {
+            counter++;
+        }
         while (counter < pathTofirstSmellField.size()) {
             Point wantedHeading = new Point();
             wantedHeading.x = pathTofirstSmellField.elementAt(counter).x - xLoc;

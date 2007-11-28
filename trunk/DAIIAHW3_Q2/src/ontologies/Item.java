@@ -14,6 +14,7 @@ import jade.content.Concept;
 public class Item implements Concept{
     private String name = null;
     private float initialPrice = 0.0f;
+    private float currentPrice = 0.0f;
     
     public void setName(String name) {
         this.name = name;
@@ -23,12 +24,20 @@ public class Item implements Concept{
         this.initialPrice = price;
     }
     
+    public void setCurrentPrice(float price) {
+        currentPrice = price;
+    }
+    
     public String getName() {
         return name;
     }
     
     public float getInitPrice() {
         return initialPrice;
+    }
+    
+    public float getCurrentPrice() {
+        return currentPrice;
     }
 
 }

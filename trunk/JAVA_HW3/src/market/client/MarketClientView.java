@@ -372,9 +372,11 @@ public class MarketClientView extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             // comboBox = (JComboBox)evt.getSource();
+            itemPrice.clear();
             int index = comboBox.getSelectedIndex();
             itemList.setLayoutOrientation(JList.VERTICAL);
             itemPriceList.setLayoutOrientation(JList.VERTICAL);
+            itemPriceList.setListData(itemPrice);
             itemICanBuy.clear();
             allItemNameForSell.clear();
             wishItemName.clear();
@@ -405,7 +407,9 @@ public class MarketClientView extends javax.swing.JFrame {
                     wishItems = serverObj.getWishItems(marketAccountID);                   
                     for (Iterator it = wishItems.iterator(); it.hasNext();) {
                         ItemForSell object = (ItemForSell) it.next();
-                        wishItemName.add(object.getName());
+                        if (!wishItemName.contains(object.getName())) {
+                            wishItemName.add(object.getName());
+                        }
                     }
                     itemList.setListData(wishItemName);
                     break;
@@ -414,7 +418,9 @@ public class MarketClientView extends javax.swing.JFrame {
                     myItemForSell = serverObj.getSellingItems(marketAccountID);                    
                     for (Iterator it = myItemForSell.iterator(); it.hasNext();) {
                         ItemForSell object = (ItemForSell) it.next();
-                        myItemNameForSell.add(object.getName());
+                        if (!myItemNameForSell.contains(object.getName())) {
+                            myItemNameForSell.add(object.getName());
+                        }
                     }
                     itemList.setListData(myItemNameForSell);
                     break;
@@ -452,6 +458,7 @@ public class MarketClientView extends javax.swing.JFrame {
         // TODO add your handling code here:
         if ((comboBox.getSelectedIndex() == 0) && (itemList.getSelectedIndex() != -1) && (itemPriceList.getSelectedIndex() != -1)) {
             try {
+                ItemForSell _object = null;
                 String name = allItemNameForSell.elementAt(itemList.getSelectedIndex());
                 Float price = Float.parseFloat(itemPrice.elementAt(itemPriceList.getSelectedIndex()));
                 for (Iterator<ItemForSell> it = itemICanBuy.iterator(); it.hasNext();) {
@@ -461,7 +468,7 @@ public class MarketClientView extends javax.swing.JFrame {
                         String resultStr = null;
                         if (result == true) {
                             resultStr = "Wow! This is yours now.";
-                            itemICanBuy.remove(object);
+                            _object = object;
                             if (itemPrice.size() == 1) {
                                 allItemNameForSell.remove(name);
                             }
@@ -476,6 +483,7 @@ public class MarketClientView extends javax.swing.JFrame {
                         textArea.append(resultStr + "\n");
                     }
                 }
+                itemICanBuy.remove(_object);
             } catch (RemoteException ex) {
                 Logger.getLogger(MarketClientView.class.getName()).log(Level.SEVERE, null, ex);
             }

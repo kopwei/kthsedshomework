@@ -6,6 +6,7 @@
 package agents;
 
 import jade.core.Agent;
+import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -28,9 +29,8 @@ public class Initiator extends Agent{
         SearchConstraints sc = new SearchConstraints();
         // We want to receive at most 10 results
         sc.setMaxResults(10L);
-        
-//        addBehaviour(new ManagerSubsciption(this, DFService.createSubscriptionMessage(this, 
-//                getDefaultDF(), templateDFD, sc)));
+        addBehaviour(new InitiatorSubscription(this, DFService.createSubscriptionMessage(this, 
+                getDefaultDF(), templateDFD, sc)));
     }
     
     // Put agent clean-up operations here

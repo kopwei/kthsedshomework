@@ -5,30 +5,21 @@
 
 package ontologies;
 
-import jade.content.Concept;
+import jade.content.Predicate;
 
 /**
  *
  * @author Kop
  */
-public class ParticipantPropose implements Concept{
-    private MobilePhone phone = null;
+public class ParticipantPropose implements Predicate{
+
     private float cryPrice = 0.0f;
-    
-    public void setPhone(MobilePhone phone) {
-        this.phone = phone;
-    }
-    
-    public void setCryPrice(float price) {
+
+    public void setProposePrice(float price) {
         this.cryPrice = price;
     }
-    
-    public MobilePhone getPhone() {
-        return phone;
-    }
-    
-    public float getPrice() {
+  
+    public float getProposePrice() {
         return cryPrice;
     }
-
 }

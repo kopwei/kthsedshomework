@@ -5,27 +5,19 @@
 
 package ontologies;
 
-import jade.content.Concept;
+import jade.content.Predicate;
 
 /**
  *
  * @author Kop
  */
-public class InitiatorCFP implements Concept{
+public class InitiatorCFP implements Predicate{
     private Item item = null;
     private float currentPrice = 0.0f;
-    
-    public void setItem(Item item) {
-        this.item = item;
-    }
-    
+
     public void setCurrentPrice(float price) {
         this.currentPrice = price;
-    }
-    
-    public Item getItem() {
-        return item;
-    }
+    } 
     
     public float getCurrentPrice() {
         return currentPrice;

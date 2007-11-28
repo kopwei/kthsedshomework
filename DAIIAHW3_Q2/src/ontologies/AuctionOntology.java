@@ -11,6 +11,7 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.ReflectiveIntrospector;
 import jade.content.schema.ConceptSchema;
+import jade.content.schema.PredicateSchema;
 import jade.content.schema.PrimitiveSchema;
 
 /**
@@ -53,20 +54,18 @@ public class AuctionOntology extends Ontology{
             add(itemSchema, Item.class);
             add(phoneSchema, MobilePhone.class);
             
-            ConceptSchema initAuctionSchema = new ConceptSchema(INITAUCTION);
+            PredicateSchema initAuctionSchema = new PredicateSchema(INITAUCTION);
             initAuctionSchema.add(ITEM, itemSchema);
             initAuctionSchema.add(INITPRICE, floatSchema);
                      
-            ConceptSchema proposeSchema = new ConceptSchema(PROPOSE);
-            proposeSchema.add(MOBILE_PHONE, phoneSchema);
-            proposeSchema.add(PROPOSEPRICE, floatSchema);
+            PredicateSchema participantProposeSchema = new PredicateSchema(PROPOSE);
+            participantProposeSchema.add(PROPOSEPRICE, floatSchema);
             
-            ConceptSchema cfpSchema = new ConceptSchema(CFP);
-            cfpSchema.add(ITEM, itemSchema);
+            PredicateSchema cfpSchema = new PredicateSchema(CFP);
             cfpSchema.add(CURRENTPRICE, floatSchema);
             
             add(initAuctionSchema, AuctionInitiation.class);
-            add(proposeSchema, ParticipantPropose.class);
+            add(participantProposeSchema, ParticipantPropose.class);
             add(cfpSchema, InitiatorCFP.class);
                         
         } catch (OntologyException ex) {

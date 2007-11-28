@@ -5,29 +5,19 @@
 
 package ontologies;
 
-import jade.content.Concept;
+import jade.content.Predicate;
 
 /**
  *
  * @author Kop
  */
-public class AuctionInitiation implements Concept{
-    private Item item = null;
-    private float initPrice = 0.0f;
-    
+public class AuctionInitiation implements Predicate{
+    private Item item = null;   
     public void setItem(Item item) {
         this.item = item;
     }
     
-    public void setInitPrice(float price) {
-        this.initPrice = price;
-    }
-    
     public Item getItem() {
         return item;
-    }
-    
-    public float getInitPrice() {
-        return initPrice;
     }
 }

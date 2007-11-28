@@ -13,31 +13,31 @@ import jade.content.Concept;
  */
 public class Item implements Concept{
     private String name = null;
-    private float initialPrice = 0.0f;
-    private float currentPrice = 0.0f;
+    //private float initialPrice = 0.0f;
+    private float proposedPrice = 0.0f;
     
     public void setName(String name) {
         this.name = name;
     }
     
-    public void setInitPrice(float price) {
-        this.initialPrice = price;
-    }
-    
-    public void setCurrentPrice(float price) {
-        currentPrice = price;
+//    public void setInitPrice(float price) {
+//        this.initialPrice = price;
+//    }
+//    
+    public void setProposedPrice(float price) {
+        this.proposedPrice = price;
     }
     
     public String getName() {
         return name;
     }
     
-    public float getInitPrice() {
-        return initialPrice;
-    }
-    
-    public float getCurrentPrice() {
-        return currentPrice;
+//    public float getInitPrice() {
+//        return initialPrice;
+//    }
+//    
+    public float getProposedPrice() {
+        return proposedPrice;
     }
 
 }

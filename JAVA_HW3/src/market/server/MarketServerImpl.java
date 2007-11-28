@@ -134,8 +134,8 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @throws java.rmi.RemoteException
      */
     public boolean buyItem(ItemForSell item, UUID buyerAccountID) throws RemoteException {
-        ItemForSellImpl itemForSell = (ItemForSellImpl)item;
-        float itemPrice = itemForSell.getPrice();
+        //ItemForSellImpl itemForSell = (ItemForSellImpl)item;
+        float itemPrice = item.getPrice();
         ClientAccount buyerAccount = dataManager.getClientAccountByID(buyerAccountID);
         String buyerBankAccountName = buyerAccount.getBankAccountName();
         // BankAccount buyerBankAccount = dataManager.getBankAccountByName(buyerAccount.getBankAccountName());
@@ -145,16 +145,16 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         }
         else {
             // If the buyer can afford the item then deals
-            ClientAccount seller = dataManager.getClientAccountByID(itemForSell.getSellerClientID());
+            ClientAccount seller = dataManager.getClientAccountByID(item.getSellerClientID());
             String sellerBankAccountName = seller.getBankAccountName();
-            itemForSell.setSold();
-            dataManager.updateItem(itemForSell);
+            item.setSold();
+            dataManager.updateItem(item);
             
             bank.deposit(sellerBankAccountName, itemPrice);
             bank.withdraw(buyerBankAccountName, itemPrice);
             ClientInterface notifiableClient = notifiableClientTable.get(seller.getClientID());
             try {
-                notifiableClient.notifyItemSoldout(itemForSell.getName(), itemPrice);
+                notifiableClient.notifyItemSoldout(item.getName(), itemPrice);
             } catch(Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -328,6 +328,6 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
      * @throws java.rmi.RemoteException
      */
     public Vector<ItemForSell> getSoldItems(UUID sellerID) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return dataManager.getSoldItems(sellerID);
     }
 }

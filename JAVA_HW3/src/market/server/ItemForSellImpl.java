@@ -184,7 +184,7 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
     /**
      * 
      */
-    public void setSold() {
+    public void setSold() throws RemoteException{
         this.state = ItemStateType.Sold;
     }
 }

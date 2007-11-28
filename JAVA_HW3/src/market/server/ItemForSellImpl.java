@@ -131,7 +131,7 @@ public class ItemForSellImpl extends UnicastRemoteObject implements ItemForSell 
      * 
      * @param buyerID
      */
-    public void setBuyerID(UUID buyerID) {
+    public void setBuyerID(UUID buyerID) throws RemoteException{
         this.buyerID = buyerID;
     }
 

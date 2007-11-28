@@ -148,6 +148,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
             ClientAccount seller = dataManager.getClientAccountByID(item.getSellerClientID());
             String sellerBankAccountName = seller.getBankAccountName();
             item.setSold();
+            item.setBuyerID(buyerAccountID);
             dataManager.updateItem(item);
             
             bank.deposit(sellerBankAccountName, itemPrice);

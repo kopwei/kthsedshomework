@@ -37,6 +37,12 @@ public interface ItemForSell extends Remote{
 
     /**
      * 
+     * @param buyerID
+     * @throws java.rmi.RemoteException
+     */
+    public void setBuyerID(UUID buyerID) throws RemoteException;
+    /**
+     * 
      * @return
      * @throws java.rmi.RemoteException
      */

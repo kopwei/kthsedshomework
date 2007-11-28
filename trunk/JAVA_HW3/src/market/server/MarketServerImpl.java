@@ -84,7 +84,7 @@ public class MarketServerImpl extends UnicastRemoteObject implements MarketServe
         Collection<ItemForSell> wantedItems = dataManager.getMatchedWishItems(item);
         for (ItemForSell wanted : wantedItems) {         
             // We have notify the notifiable clients
-            ClientInterface client = notifiableClientTable.get(wanted.getSellerClientID());
+            ClientInterface client = notifiableClientTable.get(wanted.getWisherClientID());
             try {
                 client.notifyItemAvailable(itemName, price);
             } catch (Exception e) {

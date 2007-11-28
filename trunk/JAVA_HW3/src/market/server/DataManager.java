@@ -103,7 +103,7 @@ public class DataManager {
             }
             // Prepate the statement with SQL update command
             PreparedStatement stmt = con.prepareStatement("INSERT INTO marketdata.wishes (name," +
-                    "price, clientid) VALES(?, ?, ?)");
+                    "price, clientid) VALUES(?, ?, ?)");
             stmt.setString(1, wishItem.getName());
             stmt.setFloat(2, wishItem.getPrice());
             stmt.setString(3, wishItem.getWisherClientID().toString());

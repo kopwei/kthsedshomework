@@ -522,7 +522,7 @@ public class DataManager {
         try {
             // Prepate the statement with SQL update command
             PreparedStatement stmt = con.prepareStatement("UPDATE marketdata.bankaccounts " +
-                    "SET banlance = banlance + ? WHERE name = ?");
+                    "SET balance = balance + ? WHERE name = ?");
             stmt.setFloat(1, number);
             stmt.setString(2, accountName);
             // Execute the update

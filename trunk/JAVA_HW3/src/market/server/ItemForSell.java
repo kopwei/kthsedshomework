@@ -15,6 +15,8 @@ import java.util.UUID;
  */
 public interface ItemForSell extends Remote{
 
+    public void setSold() throws RemoteException;
+
     /**
      * 
      * @return

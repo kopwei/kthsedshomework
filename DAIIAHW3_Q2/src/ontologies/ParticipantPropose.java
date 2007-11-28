@@ -13,13 +13,13 @@ import jade.content.Predicate;
  */
 public class ParticipantPropose implements Predicate{
 
-    private float cryPrice = 0.0f;
+    private boolean accept = false;
 
-    public void setProposePrice(float price) {
-        this.cryPrice = price;
+    public void setAcceptance(boolean isAccept) {
+        this.accept = isAccept;
     }
   
-    public float getProposePrice() {
-        return cryPrice;
+    public boolean getAcceptance() {
+        return accept;
     }
 }

@@ -11,10 +11,7 @@ import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.ReflectiveIntrospector;
 import jade.content.schema.ConceptSchema;
-import jade.content.schema.PredicateSchema;
 import jade.content.schema.PrimitiveSchema;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -29,8 +26,11 @@ public class AuctionOntology extends Ontology{
     public static final String PHONETYPE = "PhoneType";
     public static final String INITAUCTION = "InitialAuction";
     public static final String INITPRICE = "InitialPrice";
-    public static final String CRY = "Cry";
-    public static final String CRYPRICE = "CryPrice";
+    public static final String CFP = "CFP";
+    public static final String CURRENTPRICE = "CurrentPrice";
+    public static final String PROPOSE = "Propose";
+    public static final String PROPOSEPRICE = "ProposePrice";
+    
     
     private static AuctionOntology ontology;
     
@@ -53,19 +53,22 @@ public class AuctionOntology extends Ontology{
             add(itemSchema, Item.class);
             add(phoneSchema, MobilePhone.class);
             
-            PredicateSchema initAuctionSchema = new PredicateSchema(INITAUCTION);
+            ConceptSchema initAuctionSchema = new ConceptSchema(INITAUCTION);
             initAuctionSchema.add(ITEM, itemSchema);
             initAuctionSchema.add(INITPRICE, floatSchema);
+                     
+            ConceptSchema proposeSchema = new ConceptSchema(PROPOSE);
+            proposeSchema.add(MOBILE_PHONE, phoneSchema);
+            proposeSchema.add(PROPOSEPRICE, floatSchema);
             
-            PredicateSchema crySchema = new PredicateSchema(CRY);
-            crySchema.add(MOBILE_PHONE, phoneSchema);
-            crySchema.add(CRYPRICE, floatSchema);
+            ConceptSchema cfpSchema = new ConceptSchema(CFP);
+            cfpSchema.add(ITEM, itemSchema);
+            cfpSchema.add(CURRENTPRICE, floatSchema);
             
-            add(initAuctionSchema, InitAuction.class);
-            add(crySchema, Cry.class);
-            
-            
-            
+            add(initAuctionSchema, AuctionInitiation.class);
+            add(proposeSchema, ParticipantPropose.class);
+            add(cfpSchema, InitiatorCFP.class);
+                        
         } catch (OntologyException ex) {
             System.err.println(ex.getMessage());
         }

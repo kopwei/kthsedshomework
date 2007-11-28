@@ -5,11 +5,13 @@
 
 package ontologies;
 
+import jade.content.Concept;
+
 /**
  *
  * @author Kop
  */
-public class Cry {
+public class ParticipantPropose implements Concept{
     private MobilePhone phone = null;
     private float cryPrice = 0.0f;
     

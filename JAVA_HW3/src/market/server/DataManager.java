@@ -97,8 +97,8 @@ public class DataManager {
     public void storeWish(ItemForSell wishItem) {
         try {
             // Cast the item into item implementation object
-            ItemForSellImpl wishItemImpl = (ItemForSellImpl)wishItem;
-            if (null == wishItemImpl) {
+            //ItemForSellImpl wishItemImpl = (ItemForSellImpl)wishItem;
+            if (null == wishItem) {
                 return;
             }
             // Prepate the statement with SQL update command
@@ -106,7 +106,7 @@ public class DataManager {
                     "price, clientid) VALES(?, ?, ?)");
             stmt.setString(1, wishItem.getName());
             stmt.setFloat(2, wishItem.getPrice());
-            stmt.setString(3, wishItemImpl.getWisherClientID().toString());
+            stmt.setString(3, wishItem.getWisherClientID().toString());
             // Execute and update the data
             stmt.executeUpdate();
             stmt.close();
@@ -124,8 +124,8 @@ public class DataManager {
     public void storeItem(ItemForSell item) {
         try {
             // Cast the item into item implementation object
-            ItemForSellImpl itemImpl = (ItemForSellImpl)item;
-            if (null == itemImpl) {
+            //ItemForSellImpl itemImpl = (ItemForSellImpl)item;
+            if (null == item) {
                 return;
             }
             // Prepate the statement with SQL update command
@@ -133,12 +133,12 @@ public class DataManager {
                     "price, state, sellerid, buyerid, itemtype) VALUES(?, ?, ?, ?, ?, ?, ?)");
             stmt.setString(1, item.getItemID().toString());
             stmt.setString(2, item.getName());
-            stmt.setString(3, Float.toString(itemImpl.getPrice()));
+            stmt.setString(3, Float.toString(item.getPrice()));
             // Prepare for the state
             stmt.setString(4, item.getState().toString());
-            stmt.setString(5, itemImpl.getSellerClientID().toString());
+            stmt.setString(5, item.getSellerClientID().toString());
             stmt.setString(6, null);
-            stmt.setString(7, itemImpl.getType().toString());
+            stmt.setString(7, item.getType().toString());
             
             // Execute and update the data
             stmt.executeUpdate();
@@ -179,8 +179,8 @@ public class DataManager {
     public void updateItem(ItemForSell item) {
         try {
             // Cast the item into item implementation object
-            ItemForSellImpl itemImpl = (ItemForSellImpl)item;
-            if (null == itemImpl) {
+            //ItemForSellImpl itemImpl = (ItemForSellImpl)item;
+            if (null == item) {
                 return;
             }
             // Prepate the statement with SQL update command
@@ -188,8 +188,8 @@ public class DataManager {
                     "state = ?, buyerid = ? WHERE itemid = ?");         
             // Prepare for the state
             stmt.setString(1, item.getState().toString());
-            if (null != itemImpl.getBuyerClientID()) {
-                stmt.setString(2, itemImpl.getBuyerClientID().toString());
+            if (null != item.getBuyerClientID()) {
+                stmt.setString(2, item.getBuyerClientID().toString());
             }
             stmt.setString(3, item.getItemID().toString());
             

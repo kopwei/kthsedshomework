@@ -15,6 +15,24 @@ import java.util.UUID;
  */
 public interface ItemForSell extends Remote{
 
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public UUID getBuyerClientID() throws RemoteException;
+
+    /**
+     * 
+     * @return
+     * @throws java.rmi.RemoteException
+     */
+    public UUID getWisherClientID() throws RemoteException;
+
+    /**
+     * 
+     * @throws java.rmi.RemoteException
+     */
     public void setSold() throws RemoteException;
 
     /**

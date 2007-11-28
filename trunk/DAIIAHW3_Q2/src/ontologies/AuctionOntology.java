@@ -42,6 +42,7 @@ public class AuctionOntology extends Ontology{
             //add(new )
             PrimitiveSchema stringSchema = (PrimitiveSchema) getSchema(BasicOntology.STRING);
             PrimitiveSchema floatSchema = (PrimitiveSchema) getSchema(BasicOntology.FLOAT);
+            PrimitiveSchema booleanSchema = (PrimitiveSchema) getSchema(BasicOntology.BOOLEAN);
             //PrimitiveSchema floatSchema = (PrimitiveSchema) getSchema(BasicOntology.FLOAT);
             
             ConceptSchema itemSchema = new ConceptSchema(ITEM);         
@@ -59,7 +60,7 @@ public class AuctionOntology extends Ontology{
             initAuctionSchema.add(INITPRICE, floatSchema);
                      
             PredicateSchema participantProposeSchema = new PredicateSchema(PROPOSE);
-            participantProposeSchema.add(PROPOSEPRICE, floatSchema);
+            participantProposeSchema.add(PROPOSEPRICE, booleanSchema);
             
             PredicateSchema cfpSchema = new PredicateSchema(CFP);
             cfpSchema.add(CURRENTPRICE, floatSchema);

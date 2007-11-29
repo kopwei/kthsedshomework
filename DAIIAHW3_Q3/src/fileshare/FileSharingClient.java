@@ -13,6 +13,7 @@ import jade.domain.FIPAAgentManagement.SearchConstraints;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 
 /**
@@ -26,9 +27,8 @@ public class FileSharingClient extends Agent{
     private ClientFileSharingBehaviour clientBehaviour = null;
     private ClientDownloadBehaviour downloadBehaviour = null;
     
-    private int cost = 0;
-    private int utility = 0;
-    private Hashtable<AID, Integer> benifitTable = new Hashtable<AID, Integer>();
+    private int profit = 0;
+    private Hashtable<AID, Integer> benefitTable = new Hashtable<AID, Integer>();
     
     //private HashSet<AID> clientPeers = null;
     
@@ -115,6 +115,31 @@ public class FileSharingClient extends Agent{
         //System.out.println()
         fileManager.readFullFile();
     }
+         
+    public void increaseBenefit(AID agent) {
+        // Increase the benefit
+        Integer benefit = benefitTable.get(agent);
+        if (null != benefit) {
+            benefit = new Integer(benefit.intValue() + 1);
+        }
+    }
     
+    public int getUtility() {
+        Collection<Integer> benefits = benefitTable.values();
+        int sumBenefit = 0;
+        for (Integer integer : benefits) {
+            sumBenefit += integer.intValue();
+        }
+        return profit - sumBenefit;
+    }
     
+    public void increaseProfit() {
+        profit += 1;
+    }
+    
+    public int getAverageBenefit() {
+        // TODO: need implementation here
+        return 0;
+    }
+        
 }

@@ -6,7 +6,6 @@
 package fileshare;
 
 import jade.core.Agent;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import java.io.IOException;
@@ -48,9 +47,13 @@ public class ClientBlockUploader{
                     availableBlocks.addElement(integer);
                 }
             }
+            // Here we have to add something to think before upload the block
+            int requesterUtility = content.getUtility();
+            int myUtility = clientAgent.getUtility();
+            boolean shouldTransmit = requesterUtility < myUtility || requesterUtility <= 0;
             // If there are blocks available then randomly select a block and reply it
-            if (availableBlocks.size() > 0) {
-                ArrayList<Integer>  availableBlockList = new ArrayList<Integer>(availableBlocks.size());
+            if (availableBlocks.size() > 0 && shouldTransmit) {
+                ArrayList<Integer> availableBlockList = new ArrayList<Integer>(availableBlocks.size());
                 for (Integer integer : availableBlocks) {
                     if (null != integer) {
                         availableBlockList.add(integer);
@@ -71,8 +74,9 @@ public class ClientBlockUploader{
                 replyMessage.addReceiver(proposeMsg.getSender());
                 clientAgent.send(replyMessage);
                 System.out.println("I replie the block " + index + " to agent " + proposeMsg.getSender().getName() + "\n And the block content is " + block);
-            }
-            // If there is no block available,then reject the propose
+                // Increase the benefit to others
+                clientAgent.increaseBenefit(proposeMsg.getSender());
+            } // If there is no block available,then reject the propose
             else {
                 ACLMessage replyMsg = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
                 replyMsg.addReceiver(proposeMsg.getSender());

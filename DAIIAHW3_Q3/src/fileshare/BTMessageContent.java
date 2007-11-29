@@ -22,6 +22,7 @@ public class BTMessageContent implements Serializable{
     private String fileName = null;
     private String blockContent = null;
     private int blockIndex = -1;
+    private int utility = 0;
     
     /**
      * 
@@ -93,37 +94,12 @@ public class BTMessageContent implements Serializable{
     public int getBlockIndex() {
         return blockIndex;
     }
-    /**
-     * This method is used to get the set of AID from the message content
-     * @param msg input message
-     * @return the HashSet of the AID
-     */
-//    public static HashSet<AID> getAIDFromMessage(ACLMessage msg) {
-//        // Step 1) Check the message's validity
-//        if (null == msg) {
-//            return null;
-//        }
-//        HashSet<AID> peers = new HashSet<AID>();
-//        String content = msg.getContent();
-//        String[] aidString = content.split(",");
-//        for (String string : aidString) {
-//            peers.add(new AID(string, true));
-//        }
-//        return peers;
-//    }
-//    
-//    public static String getFileNameFromMessage(ACLMessage msg) {
-//        
-//    }
-//    
-//    public static ArrayList<Integer> getLostBlocksNumberFromMessage(ACLMessage msg) {
-//        // Step 1) Check the message's validity
-//        if (null == msg) {
-//            return null;
-//        }
-//        ArrayList<Integer> lostBlockNumbers = new ArrayList<Integer>();
-//        String[] numbers = msg.getContent().split(",");
-//        msg.setC
-//        return lostBlockNumbers;
-//    }
+    
+    public void setUtility(int utility) {
+        this.utility = utility;
+    }
+    
+    public int getUtility() {
+        return utility;
+    }
 }

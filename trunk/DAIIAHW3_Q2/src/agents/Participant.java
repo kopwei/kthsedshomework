@@ -10,6 +10,7 @@ import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.leap.LEAPCodec;
+import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
@@ -34,7 +35,7 @@ public class Participant extends Agent{
     private String auctionProtocol = null;
     private float percent = 0;
     private ContentManager manager = (ContentManager)getContentManager();
-    private Codec codec = new LEAPCodec();
+    private Codec codec = new SLCodec();
     private Ontology ontology = AuctionOntology.getInstance();
 
     @Override
@@ -81,9 +82,11 @@ public class Participant extends Agent{
         }
         
         if (auctionProtocol.equals("EnglishAuction")) {
+            System.out.println("English Auction Starts");
             addBehaviour(new ParticipantEnglishAuctionBehaviour(this));
         }
         if (auctionProtocol.equals("DutchAuction")) {
+            System.out.println("Dutch Auction Starts");
             addBehaviour(new ParticipantDutchAuctionBehaviour(this));
         }
     }

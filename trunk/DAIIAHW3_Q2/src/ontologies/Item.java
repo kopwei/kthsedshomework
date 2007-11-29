@@ -24,7 +24,7 @@ public class Item implements Concept{
 //        this.initialPrice = price;
 //    }
 //    
-    public void setProposedPrice(float price) {
+    public void setItemProposedPrice(float price) {
         this.proposedPrice = price;
     }
     
@@ -36,7 +36,7 @@ public class Item implements Concept{
 //        return initialPrice;
 //    }
 //    
-    public float getProposedPrice() {
+    public float getItemProposedPrice() {
         return proposedPrice;
     }
 

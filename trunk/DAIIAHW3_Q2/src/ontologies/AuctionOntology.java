@@ -25,12 +25,14 @@ public class AuctionOntology extends Ontology{
     public static final String ITEMNAME = "Name";
     public static final String MOBILE_PHONE = "MobilePhone";
     public static final String PHONETYPE = "PhoneType";
+    public static final String ITEMPROPOSEPRICE = "ItemProposedPrice";
     public static final String INITAUCTION = "InitialAuction";
+    
     public static final String INITPRICE = "InitialPrice";
     public static final String CFP = "CFP";
     public static final String CURRENTPRICE = "CurrentPrice";
     public static final String PROPOSE = "Propose";
-    public static final String PROPOSEPRICE = "ProposePrice";
+    public static final String ACCEPTANCE = "Acceptance";
     
     
     private static AuctionOntology ontology;
@@ -47,7 +49,7 @@ public class AuctionOntology extends Ontology{
             
             ConceptSchema itemSchema = new ConceptSchema(ITEM);         
             itemSchema.add(ITEMNAME, stringSchema);
-            itemSchema.add(INITPRICE, floatSchema);            
+            itemSchema.add(ITEMPROPOSEPRICE, floatSchema);            
             
             ConceptSchema phoneSchema = new ConceptSchema(MOBILE_PHONE);
             phoneSchema.addSuperSchema(itemSchema);
@@ -57,10 +59,9 @@ public class AuctionOntology extends Ontology{
             
             PredicateSchema initAuctionSchema = new PredicateSchema(INITAUCTION);
             initAuctionSchema.add(ITEM, itemSchema);
-            initAuctionSchema.add(INITPRICE, floatSchema);
                      
             PredicateSchema participantProposeSchema = new PredicateSchema(PROPOSE);
-            participantProposeSchema.add(PROPOSEPRICE, booleanSchema);
+            participantProposeSchema.add(ACCEPTANCE, booleanSchema);
             
             PredicateSchema cfpSchema = new PredicateSchema(CFP);
             cfpSchema.add(CURRENTPRICE, floatSchema);

@@ -12,7 +12,6 @@ import jade.content.Predicate;
  * @author Kop
  */
 public class InitiatorCFP implements Predicate{
-    private Item item = null;
     private float currentPrice = 0.0f;
 
     public void setCurrentPrice(float price) {

@@ -10,6 +10,7 @@ import jade.content.ContentManager;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.leap.LEAPCodec;
+import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
 import jade.content.onto.UngroundedException;
@@ -30,7 +31,7 @@ public class ParticipantDutchAuctionBehaviour extends SimpleBehaviour{
     private boolean finished = false;
     
     private ContentManager manager = null;
-    private Codec codec = new LEAPCodec();
+    private Codec codec = new SLCodec();
     private Ontology ontology = AuctionOntology.getInstance();
     private float percent = 0;
     private float maxAcceptedPrice = 0;
@@ -39,7 +40,9 @@ public class ParticipantDutchAuctionBehaviour extends SimpleBehaviour{
     ParticipantDutchAuctionBehaviour(Participant a) {
         super(a);
         manager = a.getContentManager();
-        percent = a.getPercent();
+        manager.registerLanguage(codec);
+	manager.registerOntology(ontology);
+        percent = a.getPercent();        
     }
 
     @Override
@@ -58,8 +61,7 @@ public class ParticipantDutchAuctionBehaviour extends SimpleBehaviour{
                     }
 
                     if (currentPrice <= maxAcceptedPrice) {
-                        ACLMessage reply = msg.createReply();
-                        reply.setPerformative(ACLMessage.PROPOSE);
+                        ACLMessage reply = new ACLMessage(ACLMessage.PROPOSE);
                         reply.addReceiver(msg.getSender());
                         reply.setLanguage(codec.getName());
                         reply.setOntology(ontology.getName());

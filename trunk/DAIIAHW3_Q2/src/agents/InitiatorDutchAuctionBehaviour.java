@@ -46,6 +46,8 @@ public class InitiatorDutchAuctionBehaviour extends SimpleBehaviour{
         super(agent);
         this.participants = participants;
         this.manager = myAgent.getContentManager();
+        manager.registerLanguage(codec);
+	manager.registerOntology(ontology);
     }
 
     @Override
@@ -61,7 +63,7 @@ public class InitiatorDutchAuctionBehaviour extends SimpleBehaviour{
 
             // Prepare the message content
             Item mobilePhone = new MobilePhone();
-            mobilePhone.setProposedPrice(30f);
+            mobilePhone.setItemProposedPrice(30f);
             mobilePhone.setName("Nokia N82");
 
             AuctionInitiation init = new AuctionInitiation();
@@ -69,9 +71,9 @@ public class InitiatorDutchAuctionBehaviour extends SimpleBehaviour{
 
             manager.fillContent(initMsg, init);
             myAgent.send(initMsg);
-            float bestPrice = iterateForBestPrice(mobilePhone, 2000.0f);
+            float bestPrice = iterateForBestPrice(mobilePhone, 100.0f);
             finished = true;
-            if (bestPrice > mobilePhone.getProposedPrice()) {
+            if (bestPrice > mobilePhone.getItemProposedPrice()) {
                 System.out.println("The best price is " + bestPrice);
                 System.out.println("The winner is " + winner.getLocalName());
             }
@@ -98,6 +100,8 @@ public class InitiatorDutchAuctionBehaviour extends SimpleBehaviour{
         }
         try {
             ACLMessage cfpMessage = new ACLMessage(ACLMessage.CFP);
+            cfpMessage.setLanguage(codec.getName());
+            cfpMessage.setOntology(ontology.getName());
             for (AID agentID : participants) {
                 cfpMessage.addReceiver(agentID);
             }

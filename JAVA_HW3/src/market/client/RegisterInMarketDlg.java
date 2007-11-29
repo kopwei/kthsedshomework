@@ -124,7 +124,7 @@ public class RegisterInMarketDlg extends javax.swing.JDialog {
             char[] password = passwordField.getPassword();
             String bankAccountName = bankAccountNameTextField.getText();
             
-            if (userName.length() < 1 || password.length < 6 || bankAccountName.length() < 1) {
+            if (userName.length() < 1 || password.length < 8 || bankAccountName.length() < 1) {
                 JOptionPane.showMessageDialog(rootPane, "Invalid input");
                 return;
             }

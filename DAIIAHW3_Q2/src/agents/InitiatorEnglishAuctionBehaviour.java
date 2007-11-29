@@ -68,15 +68,19 @@ public class InitiatorEnglishAuctionBehaviour extends SimpleBehaviour{
             manager.fillContent(initMsg, init);
             myAgent.send(initMsg);
             float bestPrice = iterateForBestPrice(participants, mobilePhone, 10.0f);
-            finished = true;
+            
             if (bestPrice > mobilePhone.getProposedPrice()) {
                 System.out.println("The best price is " + bestPrice);
                 System.out.println("The winner is " + winner.getLocalName());
+                ACLMessage winningMessage = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                winningMessage.addReceiver(winner);
+                myAgent.send(winningMessage);
             }
             else {
                 System.out.println("The best price is " + bestPrice);
                 System.out.println("But it doesn't meet the lowest price, the auction ends");
             }
+            finished = true;
         } catch (CodecException ex) {
             System.err.println(ex.getMessage());
         } catch (OntologyException ex) {

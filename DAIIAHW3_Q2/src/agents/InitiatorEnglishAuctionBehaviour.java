@@ -16,6 +16,8 @@ import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import ontologies.AuctionInitiation;
 import ontologies.AuctionOntology;
 import ontologies.InitiatorCFP;
@@ -44,7 +46,9 @@ public class InitiatorEnglishAuctionBehaviour extends SimpleBehaviour{
     public InitiatorEnglishAuctionBehaviour(Agent agent, ArrayList<AID> participants) {
         super(agent);
         this.participants = participants;
-        this.manager = myAgent.getContentManager();
+        this.manager = (ContentManager)(myAgent.getContentManager());
+        manager.registerLanguage(codec);
+	manager.registerOntology(ontology);
     }
     @Override
     public void action() {
@@ -59,7 +63,7 @@ public class InitiatorEnglishAuctionBehaviour extends SimpleBehaviour{
 
             // Prepare the message content
             Item mobilePhone = new MobilePhone();
-            mobilePhone.setProposedPrice(30f);
+            mobilePhone.setItemProposedPrice(30f);
             mobilePhone.setName("Nokia N82");
 
             AuctionInitiation init = new AuctionInitiation();
@@ -67,9 +71,9 @@ public class InitiatorEnglishAuctionBehaviour extends SimpleBehaviour{
 
             manager.fillContent(initMsg, init);
             myAgent.send(initMsg);
-            float bestPrice = iterateForBestPrice(participants, mobilePhone, 10.0f);
+            float bestPrice = iterateForBestPrice(participants, mobilePhone, 40.0f);
             
-            if (bestPrice > mobilePhone.getProposedPrice()) {
+            if (bestPrice > mobilePhone.getItemProposedPrice()) {
                 System.out.println("The best price is " + bestPrice);
                 System.out.println("The winner is " + winner.getLocalName());
                 ACLMessage winningMessage = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
@@ -97,6 +101,8 @@ public class InitiatorEnglishAuctionBehaviour extends SimpleBehaviour{
     private float iterateForBestPrice(ArrayList<AID> agentIDs, Item item, float currentPrice) {
         try {
             ACLMessage cfpMessage = new ACLMessage(ACLMessage.CFP);
+            cfpMessage.setLanguage(codec.getName());
+            cfpMessage.setOntology(ontology.getName());
             for (AID agentID : agentIDs) {
                 cfpMessage.addReceiver(agentID);
             }
@@ -113,9 +119,9 @@ public class InitiatorEnglishAuctionBehaviour extends SimpleBehaviour{
             //HashMap<AID, Integer> ctors = new HashMap<AID, Integer>();
             ArrayList<AID> acceptedAgents = new ArrayList<AID>();
             while (participantNumber < agentIDs.size()) {
-                ACLMessage replyMsg = myAgent.blockingReceive();
-                if (null != replyMsg) {
-                    participantNumber++;
+                ACLMessage replyMsg = myAgent.blockingReceive(5000);
+                participantNumber++;
+                if (null != replyMsg) {                    
                     if (replyMsg.getPerformative() == ACLMessage.PROPOSE) {
                         ParticipantPropose propose = (ParticipantPropose) (manager.extractContent(replyMsg));
                         if (propose.getAcceptance()) {
@@ -124,23 +130,28 @@ public class InitiatorEnglishAuctionBehaviour extends SimpleBehaviour{
                     }
                 }
             }
+            Thread.sleep(3000);
+            System.out.println("This round " + acceptedAgents.size() + " agents accept");
             if (acceptedAgents.size() == 0) {
                 return currentPrice;
             }
             if (acceptedAgents.size() == 1) {
                 winner = acceptedAgents.get(0);
-                if( currentPrice > item.getProposedPrice()) {
+                //if( currentPrice > item.getItemProposedPrice()) {
                     return currentPrice;               
-                }
-                else {
-                    currentPrice += 1;
-                    return iterateForBestPrice(agentIDs, item, currentPrice);
-                }
+                //}
+//                else {
+//                    currentPrice += 1;
+//                    return iterateForBestPrice(agentIDs, item, currentPrice);
+//                }
             }
             else {
                 currentPrice += 1;
                 return iterateForBestPrice(agentIDs, item, currentPrice);
             }
+        } catch (InterruptedException ex) {
+             System.err.println(ex.getMessage());
+            return 0.0f;
         } catch (CodecException ex) {
             System.err.println(ex.getMessage());
             return 0.0f;

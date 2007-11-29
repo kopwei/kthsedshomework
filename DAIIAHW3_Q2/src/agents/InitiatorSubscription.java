@@ -5,6 +5,7 @@
 
 package agents;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -33,7 +34,17 @@ public class InitiatorSubscription extends SubscriptionInitiator{
                 arrRegisteredContractorDescs.add(dfResults[0]);
             }
             if (arrRegisteredContractorDescs.size() == 3) {
-                //myAgent.addBehaviour(new (arrRegisteredContractorDescs));
+                ArrayList<AID> participants = new ArrayList<AID>();
+                for (DFAgentDescription desc : arrRegisteredContractorDescs) {
+                    participants.add(desc.getName());
+                }
+                Object[] params = myAgent.getArguments();
+                if (null != params) {
+                    if (params[0].toString().equals("EnglishAuction"))
+                        myAgent.addBehaviour(new InitiatorEnglishAuctionBehaviour(myAgent, participants));
+                    if (params[0].toString().equals("DutchAuction"))
+                        myAgent.addBehaviour(new InitiatorDutchAuctionBehaviour(myAgent, participants));
+                }
             }
         }
         catch (FIPAException fe) {

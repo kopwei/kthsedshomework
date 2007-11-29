@@ -118,9 +118,9 @@ public class FileSharingClient extends Agent{
          
     public void increaseBenefit(AID agent) {
         // Increase the benefit
-        Integer benefit = benefitTable.get(agent);
-        if (null != benefit) {
-            benefit = new Integer(benefit.intValue() + 1);
+        if (null != benefitTable.get(agent)) {
+            int value = benefitTable.get(agent).intValue();
+            benefitTable.put(agent, new Integer(value + 1));
         }
         else {
             benefitTable.put(agent, new Integer(1));
@@ -133,7 +133,12 @@ public class FileSharingClient extends Agent{
         for (Integer integer : benefits) {
             sumBenefit += integer.intValue();
         }
-        return profit - sumBenefit * 15;
+        if (fileManager.isFull()) {
+            return profit - sumBenefit * 2;
+        }
+        else {
+            return profit - sumBenefit * 3;
+        }
     }
     
     public void increaseProfit() {

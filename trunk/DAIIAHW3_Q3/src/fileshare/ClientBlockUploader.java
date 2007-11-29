@@ -48,7 +48,7 @@ public class ClientBlockUploader{
             // Here we have to add something to think before upload the block
             int requesterUtility = content.getUtility();
             int myUtility = clientAgent.getUtility();
-            boolean shouldTransmit = requesterUtility < myUtility || requesterUtility <= 0;
+            boolean shouldTransmit = requesterUtility <= myUtility || requesterUtility <= 1;
             // If there are blocks available then randomly select a block and reply it
             if (availableBlocks.size() > 0 && shouldTransmit) {
                 ArrayList<Integer> availableBlockList = new ArrayList<Integer>(availableBlocks.size());

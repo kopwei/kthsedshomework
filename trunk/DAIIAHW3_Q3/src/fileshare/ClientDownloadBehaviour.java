@@ -73,7 +73,9 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
                 return;
             }
             myPeerList = new ArrayList(peerSet);
-            Collections.shuffle(myPeerList);
+            if (myPeerList.size() > 3) {
+                Collections.shuffle(myPeerList);
+            }
         }
         try {
             // Step 2) check the lost blocks and prepare for the message
@@ -86,7 +88,7 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
             proposeMessage.setContentObject(messageContent);
             proposeMessage.addReceiver(myPeerList.get(peerPointer));
             clientAgent.send(proposeMessage);
-            System.out.println("I send the propose message to " + myPeerList.get(peerPointer).getName() + " and waiting for his reply");
+            //System.out.println("I send the propose message to " + myPeerList.get(peerPointer).getName() + " and waiting for his reply");
             peerPointer++;
             isWaitingForProposeReply = true;
         } catch (IOException ex) {

@@ -80,6 +80,7 @@ public class ClientDownloadBehaviour extends SimpleBehaviour{
             ArrayList<Integer> lostBlocks = clientAgent.getFileManager().getLostBlockNumbers();
             BTMessageContent messageContent = new BTMessageContent();
             messageContent.setBlockNumbers(lostBlocks);
+            messageContent.setUtility(clientAgent.getUtility());
             // Prepare the message and send it
             ACLMessage proposeMessage = new ACLMessage(ACLMessage.PROPOSE);
             proposeMessage.setContentObject(messageContent);

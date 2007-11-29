@@ -12,8 +12,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -32,10 +30,6 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     public ClientFileSharingBehaviour(Agent a) {
         super(a);
         clientAgent = (FileSharingClient)a;
-        if (null != clientAgent) {
-            //peerListQueryBehaviour = new PeerListQueryBehaviour(clientAgent);
-            //uploader = new ClientBlockUploader(clientAgent);
-        }
     }
     
     @Override
@@ -51,11 +45,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
             clientAgent.send(registerMessage);
             registered = true;
         }
-        // Step 2) If the blocks are not full, query for peer list
-//        if (!clientAgent.getFileManager().isFull()) {
-//            myAgent.addBehaviour(peerListQueryBehaviour);
-//        }
-        // Step 3) Start to receiving files
+        // Step 2) Start to receiving files
         receivingMessages();
     }
 
@@ -144,11 +134,12 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
             if (null == clientAgent.getFileManager().getBlockAt(index)) {
                 clientAgent.getFileManager().insertBlock(index, content.getBlockContent());
                 System.out.println("I have received the block no " + index);
+                clientAgent.increaseProfit();
             }
             // Release the download behaviour
             clientAgent.getDownloadBehaviour().notifyProposeReplied();
         } catch (UnreadableException ex) {
-            Logger.getLogger(ClientFileSharingBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
     }
     
@@ -162,6 +153,10 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
         clientAgent.getDownloadBehaviour().notifyProposeReplied();
     }
     
+    /**
+     * 
+     * @param msg
+     */
     private void handleInformMessage(ACLMessage msg) {
         // Update the peer set
         try {
@@ -176,7 +171,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
             System.out.println();           
         }   
         catch (UnreadableException ex) {
-            Logger.getLogger(ClientFileSharingBehaviour.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
     }
 }

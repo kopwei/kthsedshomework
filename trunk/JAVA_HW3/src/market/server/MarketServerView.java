@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,7 +23,7 @@ public class MarketServerView extends javax.swing.JFrame {
         mainCmd = cmd;
         initComponents();
         
-        refreshData();
+        //refreshData();
     }
     
     public void refreshData() {
@@ -279,12 +280,16 @@ public class MarketServerView extends javax.swing.JFrame {
     private void initDataManager() {
         String userName = userNameTextField.getText();
         char[] password = passwordField.getPassword();
-        mainCmd.initDataManager(userName, password);
-        passwordField.setText("");
-        passwordField.setEnabled(false);
         userNameTextField.setText("");
-        userNameTextField.setEnabled(false);
-        okButton.setEnabled(false);
+        passwordField.setText("");
+        if (mainCmd.initDataManager(userName, password)) {            
+            passwordField.setEnabled(false);            
+            userNameTextField.setEnabled(false);
+            okButton.setEnabled(false);
+        }
+        else {
+            JOptionPane.showMessageDialog(rootPane, "Login to database failed, please check the username and password.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
         
 //        char[] passworda = {'h', 'e', 'l', 'l', 'o'};
 //        ClientAccount account = new ClientAccount("hel", passworda, "hello");

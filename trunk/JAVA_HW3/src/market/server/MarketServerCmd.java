@@ -69,12 +69,17 @@ public class MarketServerCmd {
         return dataMgr;
     }
     
-    public void initDataManager(String userName, char[] passWord) {
+    public boolean initDataManager(String userName, char[] passWord) {
         dataMgr = new DataManager(userName, passWord, bank);
-        dataMgr.publishConnection();
-        ((BankImpl)bank).setDataManager(dataMgr);
-        ((MarketServerImpl)server).setDataManager(dataMgr);
-        
+        boolean connectionSuccess = dataMgr.publishConnection();
+        if (connectionSuccess) {
+            ((BankImpl) bank).setDataManager(dataMgr);
+            ((MarketServerImpl) server).setDataManager(dataMgr);
+            view.refreshData();
+            return true;
+        } else {
+            return false;
+        }
     }
     /**
      * Get the server object

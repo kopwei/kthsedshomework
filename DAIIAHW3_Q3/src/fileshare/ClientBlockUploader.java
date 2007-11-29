@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -73,7 +71,7 @@ public class ClientBlockUploader{
                 replyMessage.setContentObject(replyContent);
                 replyMessage.addReceiver(proposeMsg.getSender());
                 clientAgent.send(replyMessage);
-                System.out.println("I replie the block " + index + " to agent " + proposeMsg.getSender().getName() + "\n And the block content is " + block);
+                System.out.println("I replie the block " + index + " to agent " + proposeMsg.getSender().getName());
                 // Increase the benefit to others
                 clientAgent.increaseBenefit(proposeMsg.getSender());
             } // If there is no block available,then reject the propose
@@ -81,11 +79,10 @@ public class ClientBlockUploader{
                 ACLMessage replyMsg = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
                 replyMsg.addReceiver(proposeMsg.getSender());
                 clientAgent.send(replyMsg);
-                System.out.println("I don't have any block to agent " + proposeMsg.getSender().getName());
+                //System.out.println("I don't have any block to agent " + proposeMsg.getSender().getName());
             }
         }
         catch (IOException ex) {
-            Logger.getLogger(ClientBlockUploader.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(ex.getMessage());
         }        catch (UnreadableException ue) {
             System.err.println(ue.getMessage());

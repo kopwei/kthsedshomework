@@ -113,7 +113,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
     private void handleProposeMessage(ACLMessage msg) {
         // Set the upload message and start the upload behaviour
         uploader = new ClientBlockUploader(myAgent, msg);
-         System.out.println("I received a propose message from " + msg.getSender().getName());
+         //System.out.println("I received a propose message from " + msg.getSender().getName());
          uploader.action();
     }
     
@@ -149,7 +149,7 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
      */
     private void handleRejectMessage(ACLMessage msg) {
         // Release the download behaviour
-        System.out.println("I received a reject message from " + msg.getSender().getName());
+        //System.out.println("I received a reject message from " + msg.getSender().getName());
         clientAgent.getDownloadBehaviour().notifyProposeReplied();
     }
     
@@ -161,14 +161,14 @@ public class ClientFileSharingBehaviour extends SimpleBehaviour{
         // Update the peer set
         try {
             BTMessageContent content = (BTMessageContent) msg.getContentObject();
-            System.out.println("I received a inform message, from " + msg.getSender().getName() + " content is " + content);
+            //System.out.println("I received a inform message, from " + msg.getSender().getName() + " content is " + content);
             if (null == content) return;
             this.peerSet = content.getAIDCollection();
             clientAgent.getDownloadBehaviour().setPeerUpdatedState(true);
-            for (AID aid : peerSet) {
-               System.out.print(aid.getName());
-            }
-            System.out.println();           
+//            for (AID aid : peerSet) {
+//               System.out.print(aid.getName());
+//            }
+//            System.out.println();           
         }   
         catch (UnreadableException ex) {
             System.err.println(ex.getMessage());

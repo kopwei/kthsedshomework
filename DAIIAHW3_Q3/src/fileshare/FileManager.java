@@ -22,9 +22,9 @@ public class FileManager {
     public FileManager(String fileName, int blockNumber){
         this.fileName = fileName;
         fileBlocks = new ArrayList<String>(blockNumber);
-//        for (int i = 0; i < blockNumber; i++) {
-//            fileBlocks.add(null);
-//        }
+        for (int i = 0; i < blockNumber; i++) {
+            fileBlocks.add(null);
+        }
     }
     
     /**

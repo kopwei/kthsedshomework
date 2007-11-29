@@ -49,15 +49,17 @@ public class DataManager {
     /**
      * 
      */
-    public void publishConnection() {
+    public boolean publishConnection() {
         try {
             InetAddress add = Inet4Address.getLocalHost();
             String ip = add.getHostAddress();
             String connectionString = "jdbc:mysql://" + ip.toString() + ":3306/mysql";         
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            con = DriverManager.getConnection(connectionString, userName, new String(passWord));     
+            con = DriverManager.getConnection(connectionString, userName, new String(passWord));  
+            return true;
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
+            return false;
         }   
     }
     

@@ -119,7 +119,7 @@ public class FileSharingClient extends Agent{
     public void increaseBenefit(AID agent) {
         // Increase the benefit
         if (null != benefitTable.get(agent)) {
-            int value = benefitTable.get(agent).intValue();
+            int value = benefitTable.get(agent);
             benefitTable.put(agent, new Integer(value + 1));
         }
         else {

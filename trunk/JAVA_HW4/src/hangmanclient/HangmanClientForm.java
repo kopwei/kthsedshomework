@@ -35,9 +35,9 @@ public class HangmanClientForm extends Form implements CommandListener{
         super(title);
         initImages();
         enterField = new TextField("Input a letter or a word", "", 50, TextField.ANY);
-        wordField = new StringItem("Current Word:  ", " ", StringItem.PLAIN);
+        wordField = new StringItem("Current Word:  ", "\n", StringItem.PLAIN);
         wordField.setLabel("Word To Guess");
-        guessedField = new StringItem("The words you guessed: ", "",  StringItem.PLAIN);
+        guessedField = new StringItem("The words you guessed: ", "\n",  StringItem.PLAIN);
         guessedField.setLabel("Guessd Words");
         imageItem = new ImageItem(null, images[0], ImageItem.LAYOUT_NEWLINE_BEFORE | 
                 ImageItem.LAYOUT_CENTER, null);
@@ -61,6 +61,7 @@ public class HangmanClientForm extends Form implements CommandListener{
             mainCmd.terminate(false);
         } else if (c == sendCommand) {
             mainCmd.send(enterField.getString());
+            enterField.setString("");
         }
     }
     
@@ -83,6 +84,13 @@ public class HangmanClientForm extends Form implements CommandListener{
     }
     public void setDanger(int dangerLevel) {
         // TODO: Need implementation here
+        if (dangerLevel > 7) {
+            dangerLevel = 7;
+        }
+        if (dangerLevel < 0) {
+            dangerLevel = 0;
+        }
+        imageItem.setImage(images[dangerLevel]);
     }
   
 }

@@ -21,6 +21,7 @@ public class HangmanClientComminicator {
     
     public HangmanClientComminicator(HangmanClientCmd cmd) {
         mainCmd = cmd;
+        clientSocket = cmd.getConnection();
     }
     public String getNewWord() {
         HangmanMessage replyMessage = null;
@@ -70,39 +71,43 @@ public class HangmanClientComminicator {
     private HangmanMessage requestServer(HangmanMessage requestMessage) {
         
         HangmanMessage replyMessage = new HangmanMessage();
-        // Create a client socket which communicate with the server
-        try {
-            if (null == clientSocket) {
-                String socketURL = "socket://" + mainCmd.getServerIP() + ":" + mainCmd.getServerPort();
-                clientSocket  = (StreamConnection) Connector.open(socketURL);
-                int a = 10;
-            }
-        } 
-        catch (Exception ex) {
-            System.err.println(ex.getMessage());
-            return null;
-        }
         // Check the validity
         if (null == clientSocket) {
-            return null;
+            try {
+                String socketURL = "socket://" + mainCmd.getServerIP() + ":" + mainCmd.getServerPort();
+                clientSocket = (StreamConnection) Connector.open(socketURL);
+                mainCmd.setConnectionSocket(clientSocket);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         // Send the message object to server and wait for reply
         try {
-            OutputStream os = clientSocket.openOutputStream();
+            OutputStream os = mainCmd.getOutputStream();
+            if (null == os) {
+                os = mainCmd.getConnection().openOutputStream();
+                mainCmd.setOutputStream(os);
+            }
             os.write(requestMessage.persist());
             os.flush();
             //objOut.close();
+            //os.close();
         }
         catch (IOException ie) {
             System.err.println(ie.getMessage());
         }
         try {
             // Get the reply message from the server
-            InputStream is = clientSocket.openInputStream();
+            InputStream is = mainCmd.getInputStream();
+            if (null == is) {
+                is = clientSocket.openInputStream();
+                mainCmd.setInputStream(is);
+            }
             final int MAX_LENGTH = 128;
             byte[] buf = new byte[MAX_LENGTH];
             is.read(buf);
             replyMessage.resurrect(buf);
+            //is.close();
             //objInput.close();
         }
         catch (IOException ie) {

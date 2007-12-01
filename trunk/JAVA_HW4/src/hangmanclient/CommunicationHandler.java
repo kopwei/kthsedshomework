@@ -49,13 +49,10 @@ public class CommunicationHandler extends Thread{
             if (null != msg) {
                 String text = msg.getContent();
                 mainCmd.setString(text);
-                if (msg.getHangmanMessageType().equals(HangmanMessageType.CorrectInput)) {
-                    
-                } else if (msg.getHangmanMessageType().equals(HangmanMessageType.WrongInput)) {
-                    
+                if (msg.getHangmanMessageType().equals(HangmanMessageType.WrongInput)) {
+                    mainCmd.increaseDanger();               
                 }
-            }
-           
+            }          
         }
     }
 }

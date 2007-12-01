@@ -5,6 +5,9 @@
 
 package hangmanclient;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.microedition.io.StreamConnection;
 import javax.microedition.lcdui.Display;
 import javax.microedition.midlet.MIDletStateChangeException;
 
@@ -24,8 +27,10 @@ public class HangmanClientCmd {
     
     private int dangerLevel = 0;
     
+    private StreamConnection connection = null;
+    private OutputStream outStream = null;
+    private InputStream inputStream = null;
     
-
     HangmanClientCmd(HangmanClient app) {
         mainApp = app;
         display = Display.getDisplay(mainApp);
@@ -56,6 +61,27 @@ public class HangmanClientCmd {
         return this.serverIP;
     }
     
+    public StreamConnection getConnection() {
+        return this.connection;
+    }
+    
+    public OutputStream getOutputStream() {
+        return outStream;
+    }
+    
+    public InputStream getInputStream() {
+        return inputStream;
+    }
+    
+    public void setConnectionSocket(StreamConnection con) {
+        this.connection = con;
+    }
+    public void setOutputStream(OutputStream stream) {
+        this.outStream = stream;
+    }
+    public void setInputStream(InputStream stream) {
+        this.inputStream = stream;
+    }
     public String getServerPort() {
         return this.serverPort;
     }

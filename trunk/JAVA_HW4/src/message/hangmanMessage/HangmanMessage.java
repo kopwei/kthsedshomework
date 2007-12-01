@@ -32,7 +32,7 @@ public class HangmanMessage extends SimpleMessage implements Persistent{
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         DataOutputStream dout = new DataOutputStream(bout);
         
-        dout.writeUTF(messageType.toString());
+        dout.writeUTF(messageType);
         //System.out.println("The message type wrote is " + messageType.toString());
         dout.writeUTF(this.getContent());
         //System.out.println("The content wrote is " + this.getContent());

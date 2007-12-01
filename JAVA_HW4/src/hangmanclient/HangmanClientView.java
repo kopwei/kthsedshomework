@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package hello;
+package hangmanclient;
 
 import java.io.OutputStream;
 import javax.microedition.io.Connector;
@@ -14,11 +14,12 @@ import javax.microedition.lcdui.*;
 /**
  * @author Kop
  */
-public class Midlet extends MIDlet implements CommandListener{
+public class HangmanClientView extends MIDlet implements CommandListener{
     private Form connectForm;
     private Form clientForm;
     
     private TextField serverIP;
+    private ImageItem image;
     
     private Command exitCommand;
     private Command connectCommand;
@@ -29,21 +30,27 @@ public class Midlet extends MIDlet implements CommandListener{
     private StreamConnection sc;
     private OutputStream os;
     
-    public Midlet() {
+    private HangmanClientCmd mainCmd = null;
+    
+    public HangmanClientView() {
         super();
         display = Display.getDisplay(this);
         connectForm = new Form("Connect");
         serverIP = new TextField("Server IP", "localhost", 50, 0);
+        
         connectCommand = new Command("Connect", Command.SCREEN, 1);
         exitCommand = new Command("Exit", Command.EXIT, 0);
         sendCommand = new Command("Send", Command.SCREEN, 1);
         exitCommand2 = new Command("Exit", Command.EXIT, 0);
+        
+        mainCmd = new HangmanClientCmd(this);
     }
     
     public void startApp() {
         connectForm.addCommand(connectCommand);
         connectForm.addCommand(exitCommand);
         connectForm.append(serverIP);
+       //connect
         
         connectForm.setCommandListener(this);
         display.setCurrent(connectForm);
@@ -61,7 +68,7 @@ public class Midlet extends MIDlet implements CommandListener{
                 destroyApp(false);
                 notifyDestroyed();
             } else if (c == connectCommand) {
-                sc = (StreamConnection) Connector.open("socket://" + serverIP.getString() + ":4444");
+                //sc = 
                 
             }
         } catch (Exception e) {

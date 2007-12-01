@@ -4,7 +4,7 @@
  * Created on November 12, 2007, 10:56 PM
  */
 
-package hangmanclient;
+package client;
 
 /**
  *
@@ -39,7 +39,7 @@ public class ClientPropertyInputDlg extends javax.swing.JDialog {
         cancelButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(hangmanclient.HangmanClientApp.class).getContext().getResourceMap(ClientPropertyInputDlg.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(client.HangmanClientApp.class).getContext().getResourceMap(ClientPropertyInputDlg.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
         setName("Form"); // NOI18N
         setResizable(false);

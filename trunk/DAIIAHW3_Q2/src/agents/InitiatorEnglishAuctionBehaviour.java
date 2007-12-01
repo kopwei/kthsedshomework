@@ -137,17 +137,12 @@ public class InitiatorEnglishAuctionBehaviour extends SimpleBehaviour{
             }
             if (acceptedAgents.size() == 1) {
                 winner = acceptedAgents.get(0);
-                //if( currentPrice > item.getItemProposedPrice()) {
-                    return currentPrice;               
-                //}
-//                else {
-//                    currentPrice += 1;
-//                    return iterateForBestPrice(agentIDs, item, currentPrice);
-//                }
-            }
-            else {
+
+                return currentPrice;
+
+            } else {
                 currentPrice += 1;
-                return iterateForBestPrice(agentIDs, item, currentPrice);
+                return iterateForBestPrice(acceptedAgents, item, currentPrice);
             }
         } catch (InterruptedException ex) {
              System.err.println(ex.getMessage());

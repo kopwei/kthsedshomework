@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package hangmanclient;
+package client;
 
 import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
@@ -80,7 +80,7 @@ public class HangmanClientCmd {
         if (isVictory(msg.getContent())) {
             mainView.victory();
         }
-        if (msg.getHangmanMessageType() == HangmanMessageType.WrongInput) {
+        if (msg.getHangmanMessageType().equals(HangmanMessageType.WrongInput)) {
             increaseDanger();
         }
     }

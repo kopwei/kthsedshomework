@@ -2,7 +2,7 @@
  * HangmanClientView.java
  */
 
-package hangmanclient;
+package client;
 
 //import com.sun.org.apache.bcel.internal.generic.LoadInstruction;
 import org.jdesktop.application.Action;
@@ -258,7 +258,7 @@ public class HangmanClientView extends FrameView {
         mainPanel.setPreferredSize(new java.awt.Dimension(500, 365));
 
         textFieldChar10.setEditable(false);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(hangmanclient.HangmanClientApp.class).getContext().getResourceMap(HangmanClientView.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(client.HangmanClientApp.class).getContext().getResourceMap(HangmanClientView.class);
         textFieldChar10.setFont(resourceMap.getFont("textFieldChar9.font")); // NOI18N
         textFieldChar10.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         textFieldChar10.setText(resourceMap.getString("textFieldChar10.text")); // NOI18N
@@ -463,7 +463,7 @@ public class HangmanClientView extends FrameView {
         });
         gameMenu.add(setUpMenuItem);
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(hangmanclient.HangmanClientApp.class).getContext().getActionMap(HangmanClientView.class, this);
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(client.HangmanClientApp.class).getContext().getActionMap(HangmanClientView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         gameMenu.add(exitMenuItem);

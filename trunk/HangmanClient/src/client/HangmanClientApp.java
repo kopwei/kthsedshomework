@@ -2,7 +2,7 @@
  * HangmanClientApp.java
  */
 
-package hangmanclient;
+package client;
 
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;

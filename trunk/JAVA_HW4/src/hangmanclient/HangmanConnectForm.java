@@ -40,7 +40,7 @@ public class HangmanConnectForm extends Form implements CommandListener{
     }
     public void commandAction(Command c, Displayable s) {
         try {
-            if (c == connectCommand) {
+            if (c.getLabel().equals("Connect")) {
                 mainCmd.connect();            
             }
         } catch (Exception e) {
@@ -51,4 +51,6 @@ public class HangmanConnectForm extends Form implements CommandListener{
     public String getServerIP() {
         return serverIP.getString();
     }
+
+
 }

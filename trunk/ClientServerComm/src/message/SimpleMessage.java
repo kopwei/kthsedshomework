@@ -15,8 +15,12 @@ import java.io.Serializable;
 
 public class SimpleMessage implements Serializable{
     private MessageType messageType = MessageType.UnknownMessage;
-    private String content;
+    private String content = "Hello";
     
+    public SimpleMessage() {
+        messageType = MessageType.UnknownMessage;
+        String content = "Hello";
+    }
     /**
      * 
      * @return

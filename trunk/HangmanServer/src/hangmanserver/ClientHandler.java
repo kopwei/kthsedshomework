@@ -7,9 +7,11 @@ package hangmanserver;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
+import java.io.OutputStream;
 import java.net.Socket;
 
 import java.util.logging.Level;
@@ -27,7 +29,7 @@ public class ClientHandler extends Thread {
     // The correct word from the dictionary
     private char[] word;
     // The current word which the client will see
-    private char[] currentWord;
+    private char[] currentWord = {'H', 'L', 'L'};
     private boolean running = true;
     
     public ClientHandler(Socket socket, HangmanServerViewCmd cmd) {
@@ -38,20 +40,19 @@ public class ClientHandler extends Thread {
     @Override 
     public void run() {
         // Prepare for listening  to the input message object
-        Object messageObject = null;
-        ObjectInputStream reader = null;
+        HangmanMessage messageObject = new HangmanMessage();
+        InputStream reader = null;
         while (running) {
             try {
-                reader = new ObjectInputStream(clientSocket.getInputStream());
+                reader = clientSocket.getInputStream();
             } catch (IOException ie) {
             }
             try {
+                final int MAX_LENGTH = 128;
+                byte[] buf = new byte[MAX_LENGTH];
+                reader.read(buf);
+                messageObject.resurrect(buf);
                 // Read the object out;
-                messageObject = reader.readObject();
-            //reader.close();
-            } catch (ClassNotFoundException e1) {
-                System.out.println(e1.toString());
-                return;
             } catch (OptionalDataException e2) {
                 System.out.println(e2.toString());
                 return;
@@ -59,10 +60,9 @@ public class ClientHandler extends Thread {
                 System.out.println(e3.toString());
                 return;
             }
-            if (null != messageObject) {
+            if (null != messageObject.getContent()) {
                 // Transform the message
-                HangmanMessage message = (HangmanMessage) messageObject;
-                processMessage(message);
+                processMessage(messageObject);
             }
         }
         try {
@@ -203,10 +203,10 @@ public class ClientHandler extends Thread {
         if (null == clientSocket) {
             return;
         }
-        ObjectOutputStream out = null;
+        OutputStream out = null;
         try {
-            out = new ObjectOutputStream(clientSocket.getOutputStream());
-            out.writeObject(message);
+            out = clientSocket.getOutputStream();
+            out.write(message.persist());
             out.flush();
         }
         catch (IOException ie) {

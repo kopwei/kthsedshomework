@@ -12,7 +12,7 @@ import javax.microedition.midlet.MIDletStateChangeException;
  *
  * @author Kop
  */
-public class HangmanClient extends MIDlet{
+public class HangmanClient extends MIDlet {
     
     private HangmanClientCmd mainCmd = null;
 

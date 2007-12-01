@@ -17,7 +17,7 @@ import message.hangmanMessage.HangmanMessageType;
  */
 public class HangmanClientComminicator {
     private HangmanClientCmd mainCmd;
-    private StreamConnection clientSocket = null;
+    private SocketConnection clientSocket = null;
     
     public HangmanClientComminicator(HangmanClientCmd cmd) {
         mainCmd = cmd;
@@ -73,11 +73,14 @@ public class HangmanClientComminicator {
         // Create a client socket which communicate with the server
         try {
             if (null == clientSocket) {
-                clientSocket  = (StreamConnection) Connector.open("socket://" + mainCmd.getServerIP() + ":4444");
+                String socketURL = "socket://" + mainCmd.getServerIP() + ":4444";
+                clientSocket  = (SocketConnection) Connector.open(socketURL);
+                int a = 10;
             }
-        }
-        catch (IOException ie) {
-            System.err.println(ie.getMessage());
+        } 
+        catch (Exception ex) {
+            System.err.println(ex.getMessage());
+            return null;
         }
         // Check the validity
         if (null == clientSocket) {

@@ -17,7 +17,8 @@ public class HangmanClientCmd {
     private Display display;
     private HangmanClientForm clientForm = null;
     private HangmanConnectForm connectForm = null;
-    private HangmanClientComminicator communicator = null;
+    private CommunicationHandler handler = null;
+    
     
 
     HangmanClientCmd(HangmanClient app) {
@@ -25,7 +26,6 @@ public class HangmanClientCmd {
         display = Display.getDisplay(mainApp);
         clientForm = new HangmanClientForm(this, "Welcome");
         connectForm = new HangmanConnectForm(this, "Connect");
-        communicator = new HangmanClientComminicator(this);
     }
     
     public HangmanClient getApplication() {
@@ -36,6 +36,8 @@ public class HangmanClientCmd {
         connectForm.initialize();
         clientForm.initialize();        
         display.setCurrent(connectForm);
+//        connectForm.setCommandListener(this);
+//        clientForm.setCommandListener(this);
     }
     
     public void terminate(boolean unconditional) {
@@ -57,20 +59,19 @@ public class HangmanClientCmd {
         display.setCurrent(clientForm);
     }
 
+    public void setString(String word) {
+        // TODO: Need implementation here
+        clientForm.setText(word);
+    }
     
     public boolean connect() {
-        // TODO add your handling code here:
         // Check the validity of server IP and port
         if (null != connectForm.getServerIP()) {
-            String newWord = communicator.getNewWord();
-            if (null != newWord) {
-                changeToClientForm();
-                clientForm.setText(newWord);
-                clientForm.setDanger(0);
-                return true;
-            } else {
-                return false;
-            }
+            changeToClientForm();
+            handler = new CommunicationHandler(this);
+            handler.setCommandString(CommunicationHandler.STARTROUND);
+            handler.start();
+            return true;
         } // If the IP and port are not properly set, then warn user
         else {
             return false;

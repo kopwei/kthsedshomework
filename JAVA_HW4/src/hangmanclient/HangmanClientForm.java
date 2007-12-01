@@ -16,6 +16,8 @@ import javax.microedition.lcdui.*;
  */
 public class HangmanClientForm extends Form implements CommandListener{   
     private TextField enterField;
+    private StringItem wordField;
+    
     private Image[] images = new Image[8];
     private ImageItem imageItem;
     
@@ -32,7 +34,8 @@ public class HangmanClientForm extends Form implements CommandListener{
     public HangmanClientForm(HangmanClientCmd cmd, String title) {
         super(title);
         initImages();
-        enterField = new TextField("Input a letter or a word", "", 50, TextField.ANY);      
+        enterField = new TextField("Input a letter or a word", "", 50, TextField.ANY);
+        wordField = new StringItem("Current Word", "", StringItem.PLAIN);
         imageItem = new ImageItem(null, images[0], ImageItem.LAYOUT_NEWLINE_BEFORE | 
                 ImageItem.LAYOUT_CENTER, null);
         sendCommand = new Command("Send", Command.SCREEN, 1);
@@ -45,7 +48,7 @@ public class HangmanClientForm extends Form implements CommandListener{
         addCommand(exitCommand);     
         append(enterField);
         append(imageItem);
-        setCommandListener(this);
+        setCommandListener(this);       
     }
 
     public void commandAction(Command c, Displayable s) {
@@ -69,11 +72,10 @@ public class HangmanClientForm extends Form implements CommandListener{
     }
         
     public void setText(String word) {
-        // TODO: Need implementation here
+        wordField.setText(word);
     }
     public void setDanger(int dangerLevel) {
         // TODO: Need implementation here
     }
-    
-    
+  
 }

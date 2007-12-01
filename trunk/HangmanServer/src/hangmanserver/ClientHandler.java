@@ -8,14 +8,10 @@ package hangmanserver;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import message.hangmanMessage.*;
 
 /**
@@ -68,7 +64,7 @@ public class ClientHandler extends Thread {
         try {
             clientSocket.close();
         } catch (IOException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
     }
 
@@ -104,7 +100,7 @@ public class ClientHandler extends Thread {
         currentWord = new char[length];
         // Use underline to fill the char array
         for (char c : currentWord) {
-            c = '_';
+            c = '@';
         }
         mainCmd.getMainView().addNewMessage("The new word for client " + 
                 clientSocket.getInetAddress().toString() +
@@ -190,7 +186,7 @@ public class ClientHandler extends Thread {
     private void replyClient() {
         // Prepare the reply message and reply it to client
         HangmanMessage replyMessage = new HangmanMessage();
-        replyMessage.setHangmanMessageType(HangmanMessageType.StartNewRound);
+        replyMessage.setHangmanMessageType(HangmanMessageType.Unknown);
         replyMessage.setContent(new String(currentWord));
         replyClient(replyMessage);
     }

@@ -19,6 +19,11 @@ public class HangmanClientCmd {
     private HangmanConnectForm connectForm = null;
     private CommunicationHandler handler = null;
     
+    private String serverIP = null;
+    private String serverPort = null;
+    
+    private int dangerLevel = 0;
+    
     
 
     HangmanClientCmd(HangmanClient app) {
@@ -36,8 +41,6 @@ public class HangmanClientCmd {
         connectForm.initialize();
         clientForm.initialize();        
         display.setCurrent(connectForm);
-//        connectForm.setCommandListener(this);
-//        clientForm.setCommandListener(this);
     }
     
     public void terminate(boolean unconditional) {
@@ -48,12 +51,14 @@ public class HangmanClientCmd {
             System.err.println(ex.getMessage());
         }
     }
-    
+        
     public String getServerIP() {
-        //TODO: need implementation here
-        return connectForm.getServerIP();
+        return this.serverIP;
     }
     
+    public String getServerPort() {
+        return this.serverPort;
+    }
     private void changeToClientForm() {
         // TODO: Need implementation here
         display.setCurrent(clientForm);
@@ -64,9 +69,29 @@ public class HangmanClientCmd {
         clientForm.setText(word);
     }
     
-    public boolean connect() {
+    public boolean send(String str) {
+        if (null != str) {
+            handler = new CommunicationHandler(this);
+            handler.setCommandString(CommunicationHandler.CHECKINPUT);
+            handler.setInputString(str);
+            handler.start();
+            return true;
+            
+        } else {
+            return false;
+        }
+    }
+    
+    public void increaseDanger() {
+        dangerLevel++;
+        clientForm.setDanger(dangerLevel);
+    }
+    
+    public boolean connect(String ip, String portnumber) {
         // Check the validity of server IP and port
-        if (null != connectForm.getServerIP()) {
+        if (null != ip && null != portnumber) {
+            this.serverIP = ip;
+            this.serverPort = portnumber;
             changeToClientForm();
             handler = new CommunicationHandler(this);
             handler.setCommandString(CommunicationHandler.STARTROUND);

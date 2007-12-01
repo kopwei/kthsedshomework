@@ -6,6 +6,7 @@
 package hangmanclient;
 
 import message.hangmanMessage.HangmanMessage;
+import message.hangmanMessage.HangmanMessageType;
 
 /**
  *
@@ -44,7 +45,16 @@ public class CommunicationHandler extends Thread{
             }
         }
         else if (commandStr.equals(CHECKINPUT) && null != inputStr) {
-           HangmanMessage msg = communicator.checkInput(inputStr);
+            HangmanMessage msg = communicator.checkInput(inputStr);
+            if (null != msg) {
+                String text = msg.getContent();
+                mainCmd.setString(text);
+                if (msg.getHangmanMessageType().equals(HangmanMessageType.CorrectInput)) {
+                    
+                } else if (msg.getHangmanMessageType().equals(HangmanMessageType.WrongInput)) {
+                    
+                }
+            }
            
         }
     }

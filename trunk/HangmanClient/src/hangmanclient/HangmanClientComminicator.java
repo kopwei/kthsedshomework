@@ -6,8 +6,10 @@
 package hangmanclient;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import message.hangmanMessage.HangmanMessage;
@@ -27,6 +29,7 @@ public class HangmanClientComminicator {
         // Create a start new round message and request the server
         HangmanMessage requestMessage = new HangmanMessage();
         requestMessage.setHangmanMessageType(HangmanMessageType.StartNewRound);
+        //requestMessage.setContent("");
         HangmanMessage replyMessage = requestServer(requestMessage);
         if (null != replyMessage) {
             return replyMessage.getContent();
@@ -66,9 +69,9 @@ public class HangmanClientComminicator {
     
     private HangmanMessage requestServer(HangmanMessage requestMessage) {
         
-        HangmanMessage replyMessage = null;
-        ObjectOutputStream objOut = null;
-        ObjectInputStream objInput = null;
+        HangmanMessage replyMessage = new HangmanMessage();
+        OutputStream objOut = null;
+        InputStream objInput = null;
         // Create a client socket which communicate with the server
         try {
             if (null == clientSocket) {
@@ -87,8 +90,8 @@ public class HangmanClientComminicator {
         }
         // Send the message object to server and wait for reply
         try {
-            objOut = new ObjectOutputStream(clientSocket.getOutputStream());
-            objOut.writeObject(requestMessage);
+            objOut = clientSocket.getOutputStream();
+            objOut.write(requestMessage.persist());
             objOut.flush();
             //objOut.close();
         }
@@ -97,12 +100,12 @@ public class HangmanClientComminicator {
         }
         try {
             // Get the reply message from the server
-            objInput = new ObjectInputStream(clientSocket.getInputStream());
-            replyMessage = (HangmanMessage)(objInput.readObject());
+            objInput = clientSocket.getInputStream();
+            final int MAX_LENGTH = 128;
+            byte[] buf = new byte[MAX_LENGTH];
+            objInput.read(buf);
+            replyMessage.resurrect(buf);
             //objInput.close();
-        }
-        catch (ClassNotFoundException ce) {
-            return null;
         }
         catch (IOException ie) {
             System.err.println(ie.getMessage());

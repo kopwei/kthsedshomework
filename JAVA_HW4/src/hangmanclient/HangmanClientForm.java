@@ -6,8 +6,8 @@
 package hangmanclient;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import javax.microedition.io.StreamConnection;
+import java.util.Hashtable;
+import java.util.Vector;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 
@@ -17,6 +17,7 @@ import javax.microedition.lcdui.*;
 public class HangmanClientForm extends Form implements CommandListener{   
     private TextField enterField;
     private StringItem wordField;
+    private StringItem guessedField;
     
     private Image[] images = new Image[8];
     private ImageItem imageItem;
@@ -25,17 +26,19 @@ public class HangmanClientForm extends Form implements CommandListener{
     private Command sendCommand;
     private Command exitCommand;
     
-    
-    private StreamConnection sc;
-    private OutputStream os;
+    private Hashtable guessedWords = new Hashtable();
     
     private HangmanClientCmd mainCmd = null;
+    
     
     public HangmanClientForm(HangmanClientCmd cmd, String title) {
         super(title);
         initImages();
         enterField = new TextField("Input a letter or a word", "", 50, TextField.ANY);
-        wordField = new StringItem("Current Word", "", StringItem.PLAIN);
+        wordField = new StringItem("Current Word:  ", " ", StringItem.PLAIN);
+        wordField.setLabel("Word To Guess");
+        guessedField = new StringItem("The words you guessed: ", "",  StringItem.PLAIN);
+        guessedField.setLabel("Guessd Words");
         imageItem = new ImageItem(null, images[0], ImageItem.LAYOUT_NEWLINE_BEFORE | 
                 ImageItem.LAYOUT_CENTER, null);
         sendCommand = new Command("Send", Command.SCREEN, 1);
@@ -47,6 +50,8 @@ public class HangmanClientForm extends Form implements CommandListener{
         addCommand(sendCommand);
         addCommand(exitCommand);     
         append(enterField);
+        append(wordField);
+        append(guessedField);
         append(imageItem);
         setCommandListener(this);       
     }
@@ -54,7 +59,9 @@ public class HangmanClientForm extends Form implements CommandListener{
     public void commandAction(Command c, Displayable s) {
         if (c == exitCommand) {
             mainCmd.terminate(false);
-        } 
+        } else if (c == sendCommand) {
+            mainCmd.send(enterField.getString());
+        }
     }
     
     private boolean initImages() {

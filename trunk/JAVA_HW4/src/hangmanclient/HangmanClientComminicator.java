@@ -23,20 +23,24 @@ public class HangmanClientComminicator {
         mainCmd = cmd;
     }
     public String getNewWord() {
-        // Create a start new round message and request the server
-        HangmanMessage requestMessage = new HangmanMessage();
-        requestMessage.setHangmanMessageType(HangmanMessageType.StartNewRound);
-        HangmanMessage replyMessage = requestServer(requestMessage);
+        HangmanMessage replyMessage = null;
+        // Create a connect new round message and request the server
+        try {
+            HangmanMessage requestMessage = new HangmanMessage();
+            requestMessage.setHangmanMessageType(HangmanMessageType.StartNewRound);
+            replyMessage = requestServer(requestMessage);
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
         if (null != replyMessage) {
             return replyMessage.getContent();
-        }
-        else {
+        } else {
             return null;
         }
     }
     
     public HangmanMessage checkInput(String inputString) {
-        // Create a start new round message and request the server
+        // Create a connect new round message and request the server
         HangmanMessage requestMessage = new HangmanMessage();
         requestMessage.setHangmanMessageType(HangmanMessageType.CheckInput);
         requestMessage.setContent(inputString);

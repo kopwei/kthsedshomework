@@ -77,22 +77,19 @@ public class ClientHandler extends Thread {
         if (null == message) {
             return;
         }
+        String type = message.getHangmanMessageType();
         // Process the message according to message type
-        switch (message.getHangmanMessageType()) {
-            case StartNewRound:
-                startNewRound();
-                break;
-            case CheckInput:
-                checkInput(message);
-                break;
-            case GameOver:
-                gameOver();
-                break;
-            case Terminate:
-                terminateClient();
-                break;
-        default:
-            break;
+        if (type.equals(HangmanMessageType.StartNewRound)) {
+            startNewRound();
+        }
+        if (type.equals(HangmanMessageType.CheckInput)) {
+            checkInput(message);
+        }
+        if (type.equals(HangmanMessageType.GameOver)) {
+            gameOver();
+        }
+        if (type.equals(HangmanMessageType.Terminate)) {
+            terminateClient();
         }
     }
     

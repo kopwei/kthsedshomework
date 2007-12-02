@@ -15,6 +15,8 @@ import message.hangmanMessage.HangmanMessageType;
 public class CommunicationHandler extends Thread{
     public static final String STARTROUND = "StartNewRound";
     public static final String CHECKINPUT = "CheckInput";
+    public static final String TERMINATE = "Terminate";
+    public static final String GAMEOVER = "GameOver";
     
     private HangmanClientComminicator communicator = null;
     private HangmanClientCmd mainCmd = null;
@@ -53,6 +55,16 @@ public class CommunicationHandler extends Thread{
                     mainCmd.increaseDanger();               
                 }
             }          
+        }
+        else if (commandStr.equals(TERMINATE)) {
+            communicator.terminate();
+        }
+        else if (commandStr.equals(GAMEOVER)) {
+            HangmanMessage msg = communicator.gameOver();
+            if (null != msg) {
+                String text = msg.getContent();
+                mainCmd.setString(text);
+            }
         }
     }
 }

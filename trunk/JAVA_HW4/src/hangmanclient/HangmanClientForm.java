@@ -6,8 +6,8 @@
 package hangmanclient;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 
@@ -16,7 +16,9 @@ import javax.microedition.lcdui.*;
  */
 public class HangmanClientForm extends Form implements CommandListener{   
     private TextField enterField;
+    private StringItem wordFieldLabel;
     private StringItem wordField;
+    private StringItem guessedFieldLabel;
     private StringItem guessedField;
     
     private Image[] images = new Image[8];
@@ -24,6 +26,7 @@ public class HangmanClientForm extends Form implements CommandListener{
     
     
     private Command sendCommand;
+    private Command restartCommand;
     private Command exitCommand;
     
     private Hashtable guessedWords = new Hashtable();
@@ -35,33 +38,65 @@ public class HangmanClientForm extends Form implements CommandListener{
         super(title);
         initImages();
         enterField = new TextField("Input a letter or a word", "", 50, TextField.ANY);
-        wordField = new StringItem("Current Word:  ", "\n", StringItem.PLAIN);
-        wordField.setLabel("Word To Guess");
-        guessedField = new StringItem("The words you guessed: ", "\n",  StringItem.PLAIN);
-        guessedField.setLabel("Guessd Words");
+        wordFieldLabel = new StringItem("", "", StringItem.PLAIN);
+        wordFieldLabel.setLabel("Word to Guess");
+        wordField = new StringItem("Current Word: ", "", StringItem.PLAIN);
+        guessedFieldLabel = new StringItem("", "", StringItem.PLAIN);
+        guessedFieldLabel.setLabel("GuessedLabel");
+        guessedField = new StringItem("The words you guessed:", "",  StringItem.PLAIN);
         imageItem = new ImageItem(null, images[0], ImageItem.LAYOUT_NEWLINE_BEFORE | 
                 ImageItem.LAYOUT_CENTER, null);
-        sendCommand = new Command("Send", Command.SCREEN, 1);
-        exitCommand = new Command("Exit", Command.EXIT, 0);            
+        sendCommand = new Command("Send", Command.BACK, 0);
+        restartCommand = new Command("Restart", Command.ITEM, 1);
+        exitCommand = new Command("Exit", Command.EXIT, 2);            
         mainCmd = cmd;
     }
    
     public void initialize() {    
         addCommand(sendCommand);
+        addCommand(restartCommand);
         addCommand(exitCommand);     
         append(enterField);
+        //append(wordFieldLabel);
         append(wordField);
+        //append(guessedFieldLabel);
         append(guessedField);
         append(imageItem);
         setCommandListener(this);       
     }
-
+    
+    public void victory() {
+        removeCommand(sendCommand);
+    }
+    
+    public void lose() {
+        removeCommand(sendCommand);        
+    }
+    
+    
     public void commandAction(Command c, Displayable s) {
         if (c == exitCommand) {
-            mainCmd.terminate(false);
+            mainCmd.terminate(true);
         } else if (c == sendCommand) {
-            mainCmd.send(enterField.getString());
+            String enteredText = enterField.getString();
+            guessedWords.put(enteredText, "");
+            mainCmd.send(enteredText);
+            
             enterField.setString("");
+            Enumeration e = guessedWords.keys();
+            StringBuffer buffer = new StringBuffer();
+            while (e.hasMoreElements()) {
+                String str = e.nextElement().toString();
+                buffer.append(str);
+                buffer.append(", ");
+            }
+            guessedField.setText(buffer.toString());
+        } else if (c == restartCommand) {
+            addCommand(sendCommand);
+            enterField.setString("");
+            guessedField.setText("");
+            guessedWords.clear();
+            mainCmd.restart();
         }
     }
     

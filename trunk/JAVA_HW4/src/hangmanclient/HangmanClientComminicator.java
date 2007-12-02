@@ -63,9 +63,14 @@ public class HangmanClientComminicator {
     }
     
     public void terminate() {
-        HangmanMessage requestMessage = new HangmanMessage();
-        requestMessage.setHangmanMessageType(HangmanMessageType.Terminate);
-        requestServer(requestMessage);
+        try {
+            HangmanMessage requestMessage = new HangmanMessage();
+            requestMessage.setHangmanMessageType(HangmanMessageType.Terminate);
+            requestServer(requestMessage);
+            clientSocket.close();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
     private HangmanMessage requestServer(HangmanMessage requestMessage) {

@@ -5,33 +5,30 @@
 
 package agents;
 
+import jade.content.ContentManager;
+import jade.content.lang.sl.SLCodec;
+import jade.core.AID;
 import jade.core.Agent;
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.SearchConstraints;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.mobility.MobilityOntology;
 
 /**
  *
- * @author Kop
+ * @author Ricky
  */
 public class ContractManager extends Agent{
+    private AID controller;
+//    private Location destination;
+//    private HashSet<AID> contractorCollection = new HashSet<AID>();
+    
     @Override
     protected void setup() {
-        // Step 1) prepare for the DFDescription template
-        DFAgentDescription templateDFD = new DFAgentDescription();
-        ServiceDescription templateSD = new ServiceDescription();
-        templateSD.setType("jade-contractor");
-        //templateSD.addProperties(new Property("", ""));
-        templateDFD.addServices(templateSD);
+        Object[] args = getArguments();
+        controller = (AID) args[0];
+        //destination = here();
         
-        // Prepare the search constraints
-        SearchConstraints sc = new SearchConstraints();
-        // We want to receive at most 10 results
-        sc.setMaxResults(10L);
+        System.out.println(getLocalName() + " is created");
         
-        addBehaviour(new ManagerSubsciption(this, DFService.createSubscriptionMessage(this, 
-                getDefaultDF(), templateDFD, sc)));
+        addBehaviour(new ManagerCNPBehaviour(this));
     }
     
     // Put agent clean-up operations here
@@ -40,5 +37,12 @@ public class ContractManager extends Agent{
         // Printout a dismissal message
         System.out.println("Manager agent " + getAID().getName() + " terminating.");
     }
-
+    
+//    private void setDestination(Location location) {
+//        destination = location;
+//    }
+    
+    public AID getController() {
+        return controller;
+    }
 }

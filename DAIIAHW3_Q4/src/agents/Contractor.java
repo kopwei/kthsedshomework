@@ -2,19 +2,23 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package agents;
 
+import jade.content.Concept;
+import jade.content.ContentElement;
+import jade.content.lang.Codec.CodecException;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.OntologyException;
+import jade.content.onto.UngroundedException;
+import jade.content.onto.basic.Action;
+import jade.core.AID;
 import jade.core.Agent;
+import jade.core.Location;
 import jade.core.behaviours.*;
-import jade.core.behaviours.ReceiverBehaviour.NotYetReady;
-import jade.core.behaviours.ReceiverBehaviour.TimedOut;
-import jade.domain.DFService;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
-import jade.domain.FIPAException;
+import jade.domain.mobility.CloneAction;
+import jade.domain.mobility.MobilityOntology;
+import jade.domain.mobility.MoveAction;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,71 +30,113 @@ import java.util.logging.Logger;
  *
  * @author Ricky
  */
-public class Contractor extends Agent{
+public class Contractor extends Agent {
+
     private int lowestLine = 0;
     private int initialPrice = 0;
-    
+    private Location destination;
+    private AID controller;
+
     @Override
     protected void setup() {
-        // set the lowest line
         try {
             Object[] args = getArguments();
             if (null == args) {
                 doDelete();
-            }        
-            lowestLine = Integer.parseInt(args[0].toString());
+            }
+            controller = (AID) args[0];
+            destination = here();
+            // Register languager and ontology
+            getContentManager().registerLanguage(new SLCodec());
+            getContentManager().registerOntology(MobilityOntology.getInstance());
         } catch (Exception ex) {
             Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
         }
-        // DF service registration
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
-        ServiceDescription sd = new ServiceDescription();
-        sd.setType("jade-contractor");
-        sd.setName("HW2-Q1-contractor");
-        dfd.addServices(sd);
-        
-        try {
-            DFService.register(this, dfd);
-        }
-        catch (FIPAException fe) {fe.printStackTrace();}
-       
-        ACLMessage firstRequest = blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.REQUEST));
-        ACLMessage firstOffer = firstRequest.createReply();
-        Random rnd = new Random(System.currentTimeMillis());
-        initialPrice = lowestLine + rnd.nextInt(20) + 1;
-        firstOffer.setPerformative(ACLMessage.INFORM);
-        firstOffer.setContent(Integer.toString(initialPrice));
-        System.out.println(getLocalName() + ": My first offer is " + firstOffer);
-        send(firstOffer);
+
+        System.out.println(getLocalName() + " is created.");
 
         addBehaviour(new CyclicBehaviour(this) {
-            //private ReceiverBehaviour be = new ReceiverBehaviour(myAgent, -1, MessageTemplate.MatchPerformative(ACLMessage.INFORM));
-            @Override
-            public void action() {
-                ACLMessage msg = myAgent.blockingReceive(MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 
-                if (msg != null) {
-                    String lowestPrice = msg.getContent();
-                    System.out.println(myAgent.getLocalName() + ": get manager's msg, content is " + lowestPrice);
-                    
-                    int lp = Integer.parseInt(lowestPrice);
-                    int nextOffer = lp - 1;
-                    // can I make a better offer?
-                    ACLMessage reply = msg.createReply();
+                    //private ReceiverBehaviour be = new ReceiverBehaviour(myAgent, -1, MessageTemplate.MatchPerformative(ACLMessage.INFORM));
 
-                    if (lowestLine <= nextOffer) {
-                        // create the reply
-                        System.out.println(myAgent.getLocalName() + ": I can accept, my new offer is " + nextOffer);
-                        reply.setPerformative(ACLMessage.INFORM);
-                        reply.setContent(Integer.toString(nextOffer));
-                    } else {
-                        System.out.println(myAgent.getLocalName() + ": I can not accept.");
-                        reply.setPerformative(ACLMessage.REFUSE);
+                    @Override
+                public void action() {
+                        try {
+                            ACLMessage msg = myAgent.blockingReceive();
+                            System.out.println(getLocalName() + ": got a message from " + msg.getSender().getLocalName());
+                            switch (msg.getPerformative()) {
+                                case ACLMessage.REQUEST:
+                                    if (msg.getSender().equals(controller)) {
+                                        try {
+                                            ContentElement content = getContentManager().extractContent(msg);
+                                            Concept concept = ((Action) content).getAction();
+                                            if (concept instanceof CloneAction) {
+                                                CloneAction ca = (CloneAction) concept;
+                                                String newName = ca.getNewName();
+                                                Location location = ca.getMobileAgentDescription().getDestination();
+                                                destination = location;
+                                                System.out.println(getLocalName() + ": got a clone action to " + destination.getName());
+                                                doClone(location, newName);
+                                            }
+                                            if (concept instanceof MoveAction) {
+                                                MoveAction ma = (MoveAction) concept;
+                                                Location location = ma.getMobileAgentDescription().getDestination();
+                                                System.out.println(getLocalName() + ": got a move action to " + destination.getName());
+                                                doMove(destination = location);
+                                            }
+                                        } catch (CodecException ex) {
+                                            Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
+                                        } catch (UngroundedException ex) {
+                                            Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
+                                        } catch (OntologyException ex) {
+                                            Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    } else {
+                                        ACLMessage firstOffer = msg.createReply();
+                                        firstOffer.setPerformative(ACLMessage.INFORM);
+                                        firstOffer.setContent(Integer.toString(initialPrice));
+                                        System.out.println(getLocalName() + ": My first offer is " + firstOffer);
+                                        send(firstOffer);
+                                    }
+                                    break;
+                                case ACLMessage.INFORM:
+                                    if (msg != null) {
+                                        String lowestPrice = msg.getContent();
+                                        System.out.println(myAgent.getLocalName() + ": get manager's msg, content is " + lowestPrice);
+
+                                        int lp = Integer.parseInt(lowestPrice);
+                                        int nextOffer = lp - 1;
+
+                                        ACLMessage reply = msg.createReply();
+
+                                        if (lowestLine <= nextOffer) {
+                                            // create the reply
+                                            System.out.println(myAgent.getLocalName() + ": I can accept, my new offer is " + nextOffer);
+                                            reply.setPerformative(ACLMessage.INFORM);
+                                            reply.setContent(Integer.toString(nextOffer));
+                                        } else {
+                                            System.out.println(myAgent.getLocalName() + ": I can not accept.");
+                                            reply.setPerformative(ACLMessage.REFUSE);
+                                        }
+                                        send(reply);
+                                    }
+                                    break;
+                                case ACLMessage.UNKNOWN:
+                                    // set the lowest line
+                                    System.out.println(getLocalName() + ": Please set the lowest offer:");
+                                    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                                    lowestLine = Integer.parseInt(br.readLine());
+
+                                    Random rnd = new Random(System.currentTimeMillis());
+                                    initialPrice = lowestLine + rnd.nextInt(10) + 1;
+                                    break;
+                                default:
+                                    break;
+                            }
+                        } catch (IOException ex) {
+                            Logger.getLogger(Contractor.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                    send(reply);
-                }
-            }
-        });
+                });
     }
 }

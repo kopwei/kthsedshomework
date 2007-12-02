@@ -99,9 +99,11 @@ public class ClientHandler extends Thread {
         int length = word.length;
         currentWord = new char[length];
         // Use underline to fill the char array
-        for (char c : currentWord) {
-            c = '@';
+        for (int i = 0; i < length; i++) {
+            currentWord[i] = '_';
+
         }
+
         mainCmd.getMainView().addNewMessage("The new word for client " + 
                 clientSocket.getInetAddress().toString() +
                 " is " + newWord + "\n");
@@ -144,7 +146,7 @@ public class ClientHandler extends Thread {
         }
 
         HangmanMessage replyMessage = new HangmanMessage();
-        replyMessage.setContent(new String(currentWord));
+        replyMessage.setContent(String.valueOf(currentWord));
         // If the input char is in the word then reply with the word which the character visible
         if (bFound) {
             replyMessage.setHangmanMessageType(HangmanMessageType.CorrectInput);
@@ -187,7 +189,7 @@ public class ClientHandler extends Thread {
         // Prepare the reply message and reply it to client
         HangmanMessage replyMessage = new HangmanMessage();
         replyMessage.setHangmanMessageType(HangmanMessageType.Unknown);
-        replyMessage.setContent(new String(currentWord));
+        replyMessage.setContent(String.valueOf(currentWord));
         replyClient(replyMessage);
     }
     

@@ -5,6 +5,7 @@
 
 package hangmanclient;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.microedition.io.StreamConnection;
@@ -50,11 +51,30 @@ public class HangmanClientCmd {
     
     public void terminate(boolean unconditional) {
         try {
+            handler = new CommunicationHandler(this);
+            handler.setCommandString(CommunicationHandler.TERMINATE);
+            handler.start();
             mainApp.destroyApp(unconditional);
             mainApp.notifyDestroyed();
         } catch (MIDletStateChangeException ex) {
             System.err.println(ex.getMessage());
         }
+    }
+    
+    public void victory() {
+        // Tell the server thr round is over
+        handler = new CommunicationHandler(this);
+        handler.setCommandString(CommunicationHandler.GAMEOVER);
+        handler.start();
+        clientForm.victory();
+    }
+    
+    public void lose() {
+        // Tell the server thr round is over and display the whole word
+        handler = new CommunicationHandler(this);
+        handler.setCommandString(CommunicationHandler.GAMEOVER);
+        handler.start();
+        clientForm.lose();
     }
         
     public String getServerIP() {
@@ -111,6 +131,23 @@ public class HangmanClientCmd {
     public void increaseDanger() {
         dangerLevel++;
         clientForm.setDanger(dangerLevel);
+        if (dangerLevel == 7) {
+            lose();
+        }
+    }
+    
+    public boolean restart() {
+        if (null != serverIP && null != serverPort) {
+            this.dangerLevel = 0;
+            clientForm.setDanger(dangerLevel);
+            handler = new CommunicationHandler(this);
+            handler.setCommandString(CommunicationHandler.STARTROUND);
+            handler.start();
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
     public boolean connect(String ip, String portnumber) {
@@ -119,6 +156,8 @@ public class HangmanClientCmd {
             this.serverIP = ip;
             this.serverPort = portnumber;
             changeToClientForm();
+            this.dangerLevel = 0;
+            clientForm.setDanger(dangerLevel);
             handler = new CommunicationHandler(this);
             handler.setCommandString(CommunicationHandler.STARTROUND);
             handler.start();

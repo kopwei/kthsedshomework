@@ -4,7 +4,6 @@
  */
 package hangmanclient;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.microedition.io.StreamConnection;
@@ -28,6 +27,7 @@ public class HangmanClientCmd {
         private StreamConnection connection = null;
         private OutputStream outStream = null;
         private InputStream inputStream = null;
+        //private boolean terminated = false;
 
         HangmanClientCmd(HangmanClient app) {
                 mainApp = app;
@@ -48,6 +48,7 @@ public class HangmanClientCmd {
 
         public void terminate(boolean unconditional) {
                 try {
+                        //terminated = true;
                         handler = new CommunicationHandler(this);
                         handler.setCommandString(CommunicationHandler.TERMINATE);
                         handler.start();
@@ -58,16 +59,15 @@ public class HangmanClientCmd {
                 }
         }
 
-        public void victory() {
+        private void victory() {
                 // Tell the server thr round is over
-                handler = new CommunicationHandler(this);
-                handler.setCommandString(CommunicationHandler.GAMEOVER);
-                handler.start();
+                //terminated = true;
                 clientForm.victory();
         }
 
-        public void lose() {
+        private void lose() {
                 // Tell the server thr round is over and display the whole word
+                //terminated = true;
                 handler = new CommunicationHandler(this);
                 handler.setCommandString(CommunicationHandler.GAMEOVER);
                 handler.start();
@@ -114,6 +114,19 @@ public class HangmanClientCmd {
         public void setString(String word) {
                 // TODO: Need implementation here
                 clientForm.setText(word);
+                char[] charArray = word.toCharArray();
+                boolean isVictory = true;
+                for (int i = 0; i < charArray.length; i++) {
+                        char c = charArray[i];
+                        if (c == '_') {
+                                isVictory = false;
+                                break;
+                        }
+                }
+                if (isVictory) {
+                        victory();
+                }
+                
         }
 
         public boolean send(String str) {

@@ -14,7 +14,7 @@ import javax.microedition.lcdui.*;
  * @author Kop
  */
 public class HangmanClientForm extends Form implements CommandListener {
-
+        private Ticker titleTicker;
         private TextField enterField;
         private StringItem wordFieldLabel;
         private StringItem wordField;
@@ -31,6 +31,7 @@ public class HangmanClientForm extends Form implements CommandListener {
         public HangmanClientForm(HangmanClientCmd cmd, String title) {
                 super(title);
                 initImages();
+                titleTicker = new Ticker("Welcome to Hangman World");
                 enterField = new TextField("Input a letter or a word", "", 50, TextField.ANY);
                 wordFieldLabel = new StringItem("", "", StringItem.PLAIN);
                 wordFieldLabel.setLabel("Word to Guess");
@@ -50,6 +51,7 @@ public class HangmanClientForm extends Form implements CommandListener {
                 addCommand(sendCommand);
                 addCommand(restartCommand);
                 addCommand(exitCommand);
+                setTicker(titleTicker);
                 append(enterField);
                 //append(wordFieldLabel);
                 append(wordField);
@@ -72,18 +74,21 @@ public class HangmanClientForm extends Form implements CommandListener {
                         mainCmd.terminate(true);
                 } else if (c == sendCommand) {
                         String enteredText = enterField.getString();
-                        guessedWords.put(enteredText, "");
-                        mainCmd.send(enteredText);
-
                         enterField.setString("");
-                        Enumeration e = guessedWords.keys();
-                        StringBuffer buffer = new StringBuffer();
-                        while (e.hasMoreElements()) {
-                                String str = e.nextElement().toString();
-                                buffer.append(str);
-                                buffer.append(", ");
+                       boolean valid = isValidString(enteredText);
+                        if (valid) {
+                                guessedWords.put(enteredText, "");
+                                mainCmd.send(enteredText);
+                                
+                                Enumeration e = guessedWords.keys();
+                                StringBuffer buffer = new StringBuffer();
+                                while (e.hasMoreElements()) {
+                                        String str = e.nextElement().toString();
+                                        buffer.append(str);
+                                        buffer.append(", ");
+                                }                      
+                                guessedField.setText(buffer.toString());
                         }
-                        guessedField.setText(buffer.toString());
                 } else if (c == restartCommand) {
                         addCommand(sendCommand);
                         enterField.setString("");
@@ -120,5 +125,35 @@ public class HangmanClientForm extends Form implements CommandListener {
                         dangerLevel = 0;
                 }
                 imageItem.setImage(images[dangerLevel]);
+        }
+        
+        /**
+         * 
+         * @param enteredText
+         * @return
+         */
+        private boolean isValidString(String enteredText) {
+                // Step 1) Check the input length
+                 if (enteredText.length() < 1)
+                         return false;
+                 // Step 2) Check if there is some forbidden character
+                 char[] charArray = enteredText.toCharArray();
+                 for (int i = 0; i < charArray.length; i++) {
+                        char c = charArray[i];
+                        if (!Character.isLowerCase(c)) {
+                                return false;
+                        }
+                 }
+                Enumeration e = guessedWords.keys();
+                boolean valid = true;
+                // Step 3) check if the word is already guessed
+                while (e.hasMoreElements()) {
+                        String str = e.nextElement().toString();
+                        if (str.equals(enteredText)) {
+                                valid = false;
+                                break;
+                        }
+                }
+                return valid;
         }
 }

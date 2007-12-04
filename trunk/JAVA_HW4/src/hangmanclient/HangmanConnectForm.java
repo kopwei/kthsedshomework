@@ -46,6 +46,9 @@ public class HangmanConnectForm extends Form implements CommandListener {
                         if (c.getLabel().equals("Connect")) {
                                 mainCmd.connect(serverIP.getString(), serverPort.getString());
                         }
+                        if (c.getLabel().equals("Exit")) {
+                            mainCmd.terminate(true);
+                        }
                 } catch (Exception e) {
 
                 }

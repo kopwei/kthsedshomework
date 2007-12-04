@@ -7,8 +7,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
     <managed-bean>
-        <managed-bean-name>SessionBean1</managed-bean-name>
-        <managed-bean-class>gnomeshop.SessionBean1</managed-bean-class>
+        <managed-bean-name>SessionBean</managed-bean-name>
+        <managed-bean-class>gnomeshop.SessionBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
@@ -17,13 +17,28 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>ApplicationBean1</managed-bean-name>
-        <managed-bean-class>gnomeshop.ApplicationBean1</managed-bean-class>
+        <managed-bean-name>ApplicationBean</managed-bean-name>
+        <managed-bean-class>gnomeshop.ApplicationBean</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>RequestBean1</managed-bean-name>
-        <managed-bean-class>gnomeshop.RequestBean1</managed-bean-class>
+        <managed-bean-name>RequestBean</managed-bean-name>
+        <managed-bean-class>gnomeshop.RequestBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Register</managed-bean-name>
+        <managed-bean-class>gnomeshop.Register</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Login</managed-bean-name>
+        <managed-bean-class>gnomeshop.Login</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Search</managed-bean-name>
+        <managed-bean-class>gnomeshop.Search</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 </faces-config>

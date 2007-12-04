@@ -1,18 +1,18 @@
 /*
- * ApplicationBean1.java
+ * SessionBean.java
  *
  * Created on Dec 4, 2007, 10:07:03 PM
  */
  
 package gnomeshop;
 
-import com.sun.rave.web.ui.appbase.AbstractApplicationBean;
+import com.sun.rave.web.ui.appbase.AbstractSessionBean;
 import javax.faces.FacesException;
 
 /**
- * <p>Application scope data bean for your application.  Create properties
- *  here to represent cached data that should be made available to all users
- *  and pages in the application.</p>
+ * <p>Session scope data bean for your application.  Create properties
+ *  here to represent cached data that should be made available across
+ *  multiple HTTP requests for an individual user.</p>
  *
  * <p>An instance of this class will be created for you automatically,
  * the first time your application evaluates a value binding expression
@@ -21,7 +21,7 @@ import javax.faces.FacesException;
  *
  * @author Kop
  */
-public class ApplicationBean1 extends AbstractApplicationBean {
+public class SessionBean extends AbstractSessionBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -34,22 +34,21 @@ public class ApplicationBean1 extends AbstractApplicationBean {
     // </editor-fold>
 
     /**
-     * <p>Construct a new application data bean instance.</p>
+     * <p>Construct a new session data bean instance.</p>
      */
-    public ApplicationBean1() {
+    public SessionBean() {
     }
 
     /**
      * <p>This method is called when this bean is initially added to
-     * application scope.  Typically, this occurs as a result of evaluating
+     * session scope.  Typically, this occurs as a result of evaluating
      * a value binding or method binding expression, which utilizes the
      * managed bean facility to instantiate this bean and store it into
-     * application scope.</p>
+     * session scope.</p>
      * 
-     * <p>You may customize this method to initialize and cache application wide
-     * data values (such as the lists of valid options for dropdown list
-     * components), or to allocate resources that are required for the
-     * lifetime of the application.</p>
+     * <p>You may customize this method to initialize and cache data values
+     * or resources that are required for the lifetime of a particular
+     * user session.</p>
      */
     @Override
     public void init() {
@@ -65,7 +64,7 @@ public class ApplicationBean1 extends AbstractApplicationBean {
         try {
             _init();
         } catch (Exception e) {
-            log("ApplicationBean1 Initialization Failure", e);
+            log("SessionBean1 Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -76,9 +75,35 @@ public class ApplicationBean1 extends AbstractApplicationBean {
     }
 
     /**
+     * <p>This method is called when the session containing it is about to be
+     * passivated.  Typically, this occurs in a distributed servlet container
+     * when the session is about to be transferred to a different
+     * container instance, after which the <code>activate()</code> method
+     * will be called to indicate that the transfer is complete.</p>
+     * 
+     * <p>You may customize this method to release references to session data
+     * or resources that can not be serialized with the session itself.</p>
+     */
+    @Override
+    public void passivate() {
+    }
+
+    /**
+     * <p>This method is called when the session containing it was
+     * reactivated.</p>
+     * 
+     * <p>You may customize this method to reacquire references to session
+     * data or resources that could not be serialized with the
+     * session itself.</p>
+     */
+    @Override
+    public void activate() {
+    }
+
+    /**
      * <p>This method is called when this bean is removed from
-     * application scope.  Typically, this occurs as a result of
-     * the application being shut down by its owning container.</p>
+     * session scope.  Typically, this occurs as a result of
+     * the session timing out or being terminated by the application.</p>
      * 
      * <p>You may customize this method to clean up resources allocated
      * during the execution of the <code>init()</code> method, or
@@ -87,18 +112,14 @@ public class ApplicationBean1 extends AbstractApplicationBean {
     @Override
     public void destroy() {
     }
-
+    
     /**
-     * <p>Return an appropriate character encoding based on the
-     * <code>Locale</code> defined for the current JavaServer Faces
-     * view.  If no more suitable encoding can be found, return
-     * "UTF-8" as a general purpose default.</p>
+     * <p>Return a reference to the scoped data bean.</p>
      *
-     * <p>The default implementation uses the implementation from
-     * our superclass, <code>AbstractApplicationBean</code>.</p>
+     * @return reference to the scoped data bean
      */
-    @Override
-    public String getLocaleCharacterEncoding() {
-        return super.getLocaleCharacterEncoding();
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
     }
+
 }

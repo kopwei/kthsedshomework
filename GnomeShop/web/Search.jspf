@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : Search
+    Created on : Dec 4, 2007, 11:17:37 PM
+    Author     : Kop
+-->
+<div style="-rave-layout: grid; width: 400px; height: 200px" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
+    <f:subview id="Search">
+        <webuijsf:dropDown binding="#{Search.categoryDropDown}" id="categoryDropDown" items="#{Search.categoryDropDownDefaultOptions.options}" style="left: 96px; top: 72px; position: absolute"/>
+        <webuijsf:label binding="#{Search.categoryLabel}" id="categoryLabel" style="left: 24px; top: 72px; position: absolute" text="Categories"/>
+        <webuijsf:label binding="#{Search.keywordLabel}" id="keywordLabel" style="position: absolute; left: 24px; top: 24px" text="Key Word"/>
+        <webuijsf:textField binding="#{Search.keywordField}" id="keywordField" style="position: absolute; left: 96px; top: 24px"/>
+        <h:commandButton binding="#{Search.searchButton}" id="searchButton" style="position: absolute; left: 240px; top: 72px" value="Search"/>
+    </f:subview>
+</div>

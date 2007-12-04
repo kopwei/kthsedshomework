@@ -29,6 +29,6 @@ public class HangmanClient extends MIDlet {
         }
 
         protected void destroyApp(boolean arg0) throws MIDletStateChangeException {
-                mainCmd.terminate(arg0);
+                //mainCmd.terminate(arg0);
         }
 }

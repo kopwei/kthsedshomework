@@ -1,19 +1,25 @@
 /*
- * Page1.java
+ * Register.java
  *
- * Created on Dec 4, 2007, 10:07:03 PM
+ * Created on Dec 4, 2007, 11:01:53 PM
  */
  
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
+import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
+import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
+import com.sun.webui.jsf.component.PasswordField;
+import com.sun.webui.jsf.component.TextField;
 import javax.faces.FacesException;
+import javax.faces.component.html.HtmlCommandButton;
+import javax.faces.event.ValueChangeEvent;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -24,7 +30,7 @@ import javax.faces.FacesException;
  *
  * @author Kop
  */
-public class Page1 extends AbstractPageBean {
+public class Register extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -94,13 +100,130 @@ public class Page1 extends AbstractPageBean {
     public void setForm1(Form f) {
         this.form1 = f;
     }
+        private Label userNameLabel = new Label();
+
+        public Label getUserNameLabel() {
+                return userNameLabel;
+        }
+
+        public void setUserNameLabel(Label l) {
+                this.userNameLabel = l;
+        }
+        private TextField userNameField = new TextField();
+
+        public TextField getUserNameField() {
+                return userNameField;
+        }
+
+        public void setUserNameField(TextField tf) {
+                this.userNameField = tf;
+        }
+        private Label passwordLabel = new Label();
+
+        public Label getPasswordLabel() {
+                return passwordLabel;
+        }
+
+        public void setPasswordLabel(Label l) {
+                this.passwordLabel = l;
+        }
+        private PasswordField passwordField = new PasswordField();
+
+        public PasswordField getPasswordField() {
+                return passwordField;
+        }
+
+        public void setPasswordField(PasswordField pf) {
+                this.passwordField = pf;
+        }
+        private Label firstNameLabel = new Label();
+
+        public Label getFirstNameLabel() {
+                return firstNameLabel;
+        }
+
+        public void setFirstNameLabel(Label l) {
+                this.firstNameLabel = l;
+        }
+        private TextField firstNameField = new TextField();
+
+        public TextField getFirstNameField() {
+                return firstNameField;
+        }
+
+        public void setFirstNameField(TextField tf) {
+                this.firstNameField = tf;
+        }
+        private Label lastNameLabel = new Label();
+
+        public Label getLastNameLabel() {
+                return lastNameLabel;
+        }
+
+        public void setLastNameLabel(Label l) {
+                this.lastNameLabel = l;
+        }
+        private TextField lastNameField = new TextField();
+
+        public TextField getLastNameField() {
+                return lastNameField;
+        }
+
+        public void setLastNameField(TextField tf) {
+                this.lastNameField = tf;
+        }
+        private Label emailLabel = new Label();
+
+        public Label getEmailLabel() {
+                return emailLabel;
+        }
+
+        public void setEmailLabel(Label l) {
+                this.emailLabel = l;
+        }
+        private TextField emailField = new TextField();
+
+        public TextField getEmailField() {
+                return emailField;
+        }
+
+        public void setEmailField(TextField tf) {
+                this.emailField = tf;
+        }
+        private Label phoneLabel = new Label();
+
+        public Label getPhoneLabel() {
+                return phoneLabel;
+        }
+
+        public void setPhoneLabel(Label l) {
+                this.phoneLabel = l;
+        }
+        private TextField phoneField = new TextField();
+
+        public TextField getPhoneField() {
+                return phoneField;
+        }
+
+        public void setPhoneField(TextField tf) {
+                this.phoneField = tf;
+        }
+        private HtmlCommandButton submitButton = new HtmlCommandButton();
+
+        public HtmlCommandButton getSubmitButton() {
+                return submitButton;
+        }
+
+        public void setSubmitButton(HtmlCommandButton hcb) {
+                this.submitButton = hcb;
+        }
 
     // </editor-fold>
 
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public Page1() {
+    public Register() {
     }
 
     /**
@@ -129,7 +252,7 @@ public class Page1 extends AbstractPageBean {
         try {
             _init();
         } catch (Exception e) {
-            log("Page1 Initialization Failure", e);
+            log("Register Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -173,33 +296,39 @@ public class Page1 extends AbstractPageBean {
     @Override
     public void destroy() {
     }
+
+        /**
+         * <p>Return a reference to the scoped data bean.</p>
+         *
+         * @return reference to the scoped data bean
+         */
+        protected ApplicationBean getApplicationBean() {
+                return (ApplicationBean) getBean("ApplicationBean");
+        }
+
+        /**
+         * <p>Return a reference to the scoped data bean.</p>
+         *
+         * @return reference to the scoped data bean
+         */
+        protected RequestBean getRequestBean() {
+                return (RequestBean) getBean("RequestBean");
+        }
+
+        /**
+         * <p>Return a reference to the scoped data bean.</p>
+         *
+         * @return reference to the scoped data bean
+         */
+        protected SessionBean getSessionBean() {
+                return (SessionBean) getBean("SessionBean");
+        }
+
+        public String submitButton_action() {
+                // TODO: Process the button click action. Return value is a navigation
+                // case name where null will return to the same page.
+                return null;
+        }
     
-    /**
-     * <p>Return a reference to the scoped data bean.</p>
-     *
-     * @return reference to the scoped data bean
-     */
-    protected SessionBean getSessionBean() {
-        return (SessionBean) getBean("SessionBean");
-    }
-
-    /**
-     * <p>Return a reference to the scoped data bean.</p>
-     *
-     * @return reference to the scoped data bean
-     */
-    protected RequestBean getRequestBean() {
-        return (RequestBean) getBean("RequestBean");
-    }
-
-    /**
-     * <p>Return a reference to the scoped data bean.</p>
-     *
-     * @return reference to the scoped data bean
-     */
-    protected ApplicationBean getApplicationBean() {
-        return (ApplicationBean) getBean("ApplicationBean");
-    }
-
 }
 

@@ -1,5 +1,5 @@
 /*
- * RequestBean1.java
+ * RequestBean.java
  *
  * Created on Dec 4, 2007, 10:07:03 PM
  */
@@ -22,7 +22,7 @@ import javax.faces.FacesException;
  *
  * @author Kop
  */
-public class RequestBean1 extends AbstractRequestBean {
+public class RequestBean extends AbstractRequestBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -37,7 +37,7 @@ public class RequestBean1 extends AbstractRequestBean {
     /**
      * <p>Construct a new request data bean instance.</p>
      */
-    public RequestBean1() {
+    public RequestBean() {
     }
 
     /**
@@ -92,8 +92,8 @@ public class RequestBean1 extends AbstractRequestBean {
      *
      * @return reference to the scoped data bean
      */
-    protected SessionBean1 getSessionBean1() {
-        return (SessionBean1) getBean("SessionBean1");
+    protected SessionBean getSessionBean() {
+        return (SessionBean) getBean("SessionBean");
     }
 
     /**
@@ -101,8 +101,8 @@ public class RequestBean1 extends AbstractRequestBean {
      *
      * @return reference to the scoped data bean
      */
-    protected ApplicationBean1 getApplicationBean1() {
-        return (ApplicationBean1) getBean("ApplicationBean1");
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
     }
 
 }

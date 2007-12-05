@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+    Document   : Footer
+    Created on : Dec 5, 2007, 1:52:41 PM
+    Author     : Kop
+-->
+<div style="height: 50px; width: 600px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core">
+    <f:subview id="Footer"/>
+</div>

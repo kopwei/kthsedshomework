@@ -13,12 +13,22 @@
                     <webuijsf:link binding="#{Login.link1}" id="link1" url="/resources/stylesheet.css"/>
                 </webuijsf:head>
                 <webuijsf:body binding="#{Login.body1}" id="body1" style="-rave-layout: grid">
-                    <webuijsf:form binding="#{Login.form1}" id="form1">
-                        <webuijsf:label binding="#{Login.userNameLabel}" id="userNameLabel" style="position: absolute; left: 24px; top: 24px" text="User Name"/>
-                        <webuijsf:textField binding="#{Login.userNameField}" id="userNameField" style="left: 96px; top: 24px; position: absolute"/>
-                        <webuijsf:label binding="#{Login.passwordLabel}" id="passwordLabel" style="position: absolute; left: 24px; top: 72px" text="Password"/>
-                        <webuijsf:passwordField binding="#{Login.passwordField}" id="passwordField" style="position: absolute; left: 96px; top: 72px"/>
-                        <webuijsf:button binding="#{Login.button1}" id="button1" style="left: 167px; top: 120px; position: absolute" text="Login"/>
+                    <webuijsf:form binding="#{Login.form1}" id="form1" style="color: #3366ff">
+                        <webuijsf:label binding="#{Login.userNameLabel}" id="userNameLabel" style="left: 264px; top: 96px; position: absolute" text="User Name"/>
+                        <webuijsf:textField binding="#{Login.userNameField}" id="userNameField" style="left: 336px; top: 96px; position: absolute"/>
+                        <webuijsf:label binding="#{Login.passwordLabel}" id="passwordLabel" style="left: 264px; top: 120px; position: absolute" text="Password"/>
+                        <webuijsf:passwordField binding="#{Login.passwordField}" id="passwordField" style="left: 336px; top: 120px; position: absolute"/>
+                        <h:commandButton action="#{Login.loginButton_action}" binding="#{Login.loginButton}" id="loginButton"
+                            style="left: 408px; top: 144px; position: absolute; width: 50px" value="Submit"/>
+                        <div style="left: 0px; top: 0px; position: absolute">
+                            <jsp:directive.include file="Header.jspf"/>
+                        </div>
+                        <div style="left: 0px; top: 72px; position: absolute">
+                            <jsp:directive.include file="Search.jspf"/>
+                        </div>
+                        <div style="left: 216px; top: 528px; position: absolute">
+                            <jsp:directive.include file="Footer.jspf"/>
+                        </div>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

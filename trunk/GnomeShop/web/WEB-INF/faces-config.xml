@@ -41,4 +41,19 @@
         <managed-bean-class>gnomeshop.Search</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Header</managed-bean-name>
+        <managed-bean-class>gnomeshop.Header</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Footer</managed-bean-name>
+        <managed-bean-class>gnomeshop.Footer</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>index</managed-bean-name>
+        <managed-bean-class>gnomeshop.index</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>

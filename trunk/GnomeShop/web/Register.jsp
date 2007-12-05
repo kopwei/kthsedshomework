@@ -14,22 +14,32 @@
                 </webuijsf:head>
                 <webuijsf:body binding="#{Register.body1}" id="body1" style="-rave-layout: grid">
                     <webuijsf:form binding="#{Register.form1}" id="form1">
-                        <webuijsf:label binding="#{Register.userNameLabel}" id="userNameLabel" style="left: 48px; top: 24px; position: absolute; width: 70px" text="User Name"/>
-                        <webuijsf:textField binding="#{Register.userNameField}" id="userNameField" style="left: 120px; top: 24px; position: absolute"/>
-                        <webuijsf:label binding="#{Register.passwordLabel}" id="passwordLabel" style="left: 48px; top: 72px; position: absolute; width: 70px" text="Password"/>
-                        <webuijsf:passwordField binding="#{Register.passwordField}" id="passwordField" style="left: 120px; top: 72px; position: absolute"/>
-                        <webuijsf:label binding="#{Register.firstNameLabel}" id="firstNameLabel" style="left: 48px; top: 120px; position: absolute; width: 70px" text="First Name"/>
-                        <webuijsf:textField binding="#{Register.firstNameField}" id="firstNameField" style="left: 120px; top: 120px; position: absolute"/>
-                        <webuijsf:label binding="#{Register.lastNameLabel}" id="lastNameLabel" style="left: 48px; top: 168px; position: absolute; width: 70px" text="Last Name"/>
-                        <webuijsf:textField binding="#{Register.lastNameField}" id="lastNameField" style="left: 120px; top: 168px; position: absolute"/>
+                        <webuijsf:label binding="#{Register.userNameLabel}" id="userNameLabel" style="left: 264px; top: 96px; position: absolute; width: 70px" text="User Name"/>
+                        <webuijsf:textField binding="#{Register.userNameField}" id="userNameField" style="left: 336px; top: 96px; position: absolute"/>
+                        <webuijsf:label binding="#{Register.passwordLabel}" id="passwordLabel" style="left: 264px; top: 144px; position: absolute; width: 70px" text="Password"/>
+                        <webuijsf:passwordField binding="#{Register.passwordField}" id="passwordField" style="left: 336px; top: 144px; position: absolute"/>
+                        <webuijsf:label binding="#{Register.firstNameLabel}" id="firstNameLabel"
+                            style="left: 264px; top: 192px; position: absolute; width: 70px" text="First Name"/>
+                        <webuijsf:textField binding="#{Register.firstNameField}" id="firstNameField" style="left: 336px; top: 192px; position: absolute"/>
+                        <webuijsf:label binding="#{Register.lastNameLabel}" id="lastNameLabel" style="left: 264px; top: 240px; position: absolute; width: 70px" text="Last Name"/>
+                        <webuijsf:textField binding="#{Register.lastNameField}" id="lastNameField" style="left: 336px; top: 240px; position: absolute"/>
                         <webuijsf:label binding="#{Register.emailLabel}" for="emailField" id="emailLabel"
-                            style="left: 48px; top: 216px; position: absolute; width: 72px" text="E-Mail"/>
-                        <webuijsf:textField binding="#{Register.emailField}" id="emailField" style="left: 120px; top: 216px; position: absolute"/>
-                        <webuijsf:label binding="#{Register.phoneLabel}" id="phoneLabel" style="position: absolute; left: 48px; top: 264px" text="Phone No"/>
-                        <webuijsf:textField binding="#{Register.phoneField}" id="phoneField" style="position: absolute; left: 120px; top: 264px"/>
+                            style="left: 264px; top: 288px; position: absolute; width: 72px" text="E-Mail"/>
+                        <webuijsf:textField binding="#{Register.emailField}" id="emailField" style="left: 336px; top: 288px; position: absolute"/>
+                        <webuijsf:label binding="#{Register.phoneLabel}" id="phoneLabel" style="left: 264px; top: 336px; position: absolute" text="Phone No"/>
+                        <webuijsf:textField binding="#{Register.phoneField}" id="phoneField" style="left: 336px; top: 336px; position: absolute"/>
                         <h:commandButton action="#{Register.submitButton_action}" binding="#{Register.submitButton}" id="submitButton"
-                            style="left: 192px; top: 312px; position: absolute" value="Submit"/>
+                            style="left: 408px; top: 384px; position: absolute" value="Submit"/>
                         <f:validator/>
+                        <div style="left: 0px; top: 0px; position: absolute">
+                            <jsp:directive.include file="Header.jspf"/>
+                        </div>
+                        <div style="left: 0px; top: 72px; position: absolute">
+                            <jsp:directive.include file="Search.jspf"/>
+                        </div>
+                        <div style="left: 216px; top: 528px; position: absolute">
+                            <jsp:directive.include file="Footer.jspf"/>
+                        </div>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

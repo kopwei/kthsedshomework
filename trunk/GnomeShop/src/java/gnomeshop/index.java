@@ -1,24 +1,19 @@
 /*
- * Login.java
+ * index.java
  *
- * Created on Dec 4, 2007, 11:15:18 PM
+ * Created on Dec 5, 2007, 11:17:13 PM
  */
  
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
-import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
-import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import com.sun.webui.jsf.component.PasswordField;
-import com.sun.webui.jsf.component.TextField;
 import javax.faces.FacesException;
-import javax.faces.component.html.HtmlCommandButton;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -29,7 +24,7 @@ import javax.faces.component.html.HtmlCommandButton;
  *
  * @author Kop
  */
-public class Login extends AbstractPageBean {
+public class index extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -99,58 +94,13 @@ public class Login extends AbstractPageBean {
     public void setForm1(Form f) {
         this.form1 = f;
     }
-        private Label userNameLabel = new Label();
-
-        public Label getUserNameLabel() {
-                return userNameLabel;
-        }
-
-        public void setUserNameLabel(Label l) {
-                this.userNameLabel = l;
-        }
-        private TextField userNameField = new TextField();
-
-        public TextField getUserNameField() {
-                return userNameField;
-        }
-
-        public void setUserNameField(TextField tf) {
-                this.userNameField = tf;
-        }
-        private Label passwordLabel = new Label();
-
-        public Label getPasswordLabel() {
-                return passwordLabel;
-        }
-
-        public void setPasswordLabel(Label l) {
-                this.passwordLabel = l;
-        }
-        private PasswordField passwordField = new PasswordField();
-
-        public PasswordField getPasswordField() {
-                return passwordField;
-        }
-
-        public void setPasswordField(PasswordField pf) {
-                this.passwordField = pf;
-        }
-        private HtmlCommandButton loginButton = new HtmlCommandButton();
-
-        public HtmlCommandButton getLoginButton() {
-                return loginButton;
-        }
-
-        public void setLoginButton(HtmlCommandButton hcb) {
-                this.loginButton = hcb;
-        }
 
     // </editor-fold>
 
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public Login() {
+    public index() {
     }
 
     /**
@@ -179,7 +129,7 @@ public class Login extends AbstractPageBean {
         try {
             _init();
         } catch (Exception e) {
-            log("Login Initialization Failure", e);
+            log("index Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -224,37 +174,32 @@ public class Login extends AbstractPageBean {
     public void destroy() {
     }
 
-        /**
-         * <p>Return a reference to the scoped data bean.</p>
-         *
-         * @return reference to the scoped data bean
-         */
-        protected ApplicationBean getApplicationBean() {
-                return (ApplicationBean) getBean("ApplicationBean");
-        }
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
+    }
 
-        /**
-         * <p>Return a reference to the scoped data bean.</p>
-         *
-         * @return reference to the scoped data bean
-         */
-        protected RequestBean getRequestBean() {
-                return (RequestBean) getBean("RequestBean");
-        }
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean getSessionBean() {
+        return (SessionBean) getBean("SessionBean");
+    }
 
-        /**
-         * <p>Return a reference to the scoped data bean.</p>
-         *
-         * @return reference to the scoped data bean
-         */
-        protected SessionBean getSessionBean() {
-                return (SessionBean) getBean("SessionBean");
-        }
-
-        public String loginButton_action() {
-                // TODO: Process the action. Return value is a navigation
-                // case name where null will return to the same page.
-                return null;
-        }
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean getRequestBean() {
+        return (RequestBean) getBean("RequestBean");
+    }
+    
 }
 

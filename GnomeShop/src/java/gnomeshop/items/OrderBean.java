@@ -3,6 +3,8 @@
  */
 package gnomeshop.items;
 
+import java.util.UUID;
+
 /**
  * @author Kop
  *
@@ -12,11 +14,79 @@ package gnomeshop.items;
  * This class represents an order entity
  */
 public class OrderBean {
+    private UUID orderId;
+    private UUID memberId;
 	private String contactName;
 	private String deliveryAddress;
 	private String creditCardName;
 	private String creditCardNumber;
 	private String creditCardExpiryDate;
+    
+    /**
+     * Constructor used to initialize the information
+     * @param memberId The member id of the order
+     * @param contactName Order's contact name
+     * @param deliveryAddress Order's delivery address
+     * @param creditCardName Order's credit card name
+     * @param creditCardNumber Order's credit card number
+     * @param creditCardExpiryDate Order's credit card expire date
+     */
+    public OrderBean(String memberId, String contactName, String deliveryAddress, String creditCardName, 
+            String creditCardNumber, String creditCardExpiryDate) {
+        this.orderId = UUID.randomUUID();
+        this.memberId = UUID.fromString(memberId);
+        this.contactName = contactName;
+        this.deliveryAddress = deliveryAddress;
+        this.creditCardName = creditCardName;
+        this.creditCardNumber = creditCardNumber;
+        this.creditCardExpiryDate = creditCardExpiryDate;
+    }
+    
+    /**
+     * Constructor used to re-construct the object with the information read out of the database
+     * @param orderId The order's ID
+     * @param memberId The member id of the order
+     * @param contactName Order's contact name
+     * @param deliveryAddress Order's delivery address
+     * @param creditCardName Order's credit card name
+     * @param creditCardNumber Order's credit card number
+     * @param creditCardExpiryDate Order's credit card expire date
+     */
+    public OrderBean(String orderId, String memberId, String contactName, String deliveryAddress, String creditCardName, 
+            String creditCardNumber, String creditCardExpiryDate) {
+        this.orderId = UUID.fromString(orderId);
+        this.memberId = UUID.fromString(memberId);
+        this.contactName = contactName;
+        this.deliveryAddress = deliveryAddress;
+        this.creditCardName = creditCardName;
+        this.creditCardNumber = creditCardNumber;
+        this.creditCardExpiryDate = creditCardExpiryDate;
+    }
+    
+    /**
+     * This method is used to get the unique id of the order
+     * @return The order id
+     */
+    public String getOrderId() {
+        return orderId.toString();
+    }
+
+    /**
+     * This method is used to get the member id of the current order
+     * @return member's id
+     */
+    public String getMemberId() {
+        return memberId.toString();
+    }
+
+    /**
+     * This method is used to set the member id of the current order
+     * @param memberId member's id
+     */
+    public void setMemberId(String memberId) {
+        this.memberId = UUID.fromString(memberId);
+    }
+    
 	/**
 	 * This method is used to set the name of the contact person
 	 * @param contactName the contactName to set

@@ -8,6 +8,8 @@ package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractSessionBean;
 import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 /**
  * <p>Session scope data bean for your application.  Create properties
@@ -112,6 +114,16 @@ public class SessionBean extends AbstractSessionBean {
     @Override
     public void destroy() {
     }
+    
+    public void logout(){
+               
+        FacesContext fc = javax.faces.context.FacesContext.getCurrentInstance();
+//        ((HttpSession)fc.getExternalContext().getSession(false)).invalidate();
+//        ApplicationBean ap = getApplicationBean();
+//        NavigationHandler nh = ap.getNavigationHandler();
+//        nh.handleNavigation(fc,null,"logout");
+    }
+
     
     /**
      * <p>Return a reference to the scoped data bean.</p>

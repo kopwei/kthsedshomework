@@ -79,7 +79,7 @@ public class DatabaseUtil {
 	 */
 	public ProductBean getProductDetails(String productId) {
 		// Prepared the return object and the query string
-		String sql= "SELECT ProductId, Name, Description, Price FROM Products" + " WHERE ProductId = " + productId;
+		String sql= "SELECT ProductId, Name, Description, Price, Quantity FROM Products" + " WHERE ProductId = " + productId;
 		ProductBean result = null;
 		try {
 			Class.forName(jdbcDriver);
@@ -92,7 +92,8 @@ public class DatabaseUtil {
 				String name = resultSet.getString(2);
 				String description = resultSet.getString(3);
 				float price = resultSet.getFloat(4);
-				result = new ProductBean(id, name, description, price);
+                int quantity = resultSet.getInt(5);
+				result = new ProductBean(id, name, description, price, quantity);
 			}
 			// Close the database connection
 			resultSet.close();
@@ -173,6 +174,111 @@ public class DatabaseUtil {
 		}		
 		return products;
 	}
+    
+    /**
+     * This method is used to store a product into the database
+     * @param product The product to be stored
+     */
+    public synchronized  void insertProduct(ProductBean product) {
+        // Verify the input parameter
+        if (null == product || 0 >= product.getQuantity()) {
+            return;
+        }
+        // Prepare the SQL arguments and sql statement
+        String productId = product.getId();
+        String productName = product.getName();
+        float price = product.getPrice();
+        String description = product.getDescription();
+        int quantiry = product.getQuantity();
+        
+        String sql = "INSERT INTO Products (ProductId, Name," +
+                    "Description, Price, Quantity) VALUES(" + productId + ", " + productName +", " + price + ", " +
+                    description + ", " + quantiry+ ")";
+        try {
+			// Create the connection and execute the update command
+			Class.forName(jdbcDriver);
+			Connection connection = DriverManager.getConnection(dbUrl);
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(sql);
+            statement.close();
+			connection.close();
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    /**
+     * This method is used to store a member into the database
+     * @param member The member to be stored
+     */
+    public synchronized  void insertMember(MemberBean member) {
+        // Verify the input parameter
+        if (null == member) {
+            return;
+        }
+        // Prepare the SQL arguments and sql statement
+        String memberId = member.getMemberId();
+        String userName = member.getUserName();
+        String passWord = member.getPassWord();
+        String firstName = member.getFirstName();
+        String lastName = member.getLastName();
+        String telephone = member.getTelephone();
+        String email = member.getEmail();
+        int memberLevel = member.getMemberLevel();
+        
+        String sql = "INSERT INTO members (member_id, username, password, member_level, first_name" +
+                    "last_name, email, phone) VALUES(" + memberId + ", " + userName +", " + passWord + ", " +
+                    memberLevel + ", " + firstName+ ", " + lastName + ",  "  + email + ", " + telephone + " )";
+        try {
+			// Create the connection and execute the update command
+			Class.forName(jdbcDriver);
+			Connection connection = DriverManager.getConnection(dbUrl);
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(sql);
+            statement.close();
+			connection.close();
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    /**
+     * This method is used to get the detailed information of the order according to the given member id
+     * @param memberId The member's Id
+     * @return The collection of orders
+     */
+    public ArrayList<OrderBean> getOrderByMemberId(String memberId) {
+        // Prepared the return array and the query string 
+        ArrayList<OrderBean> orders = new ArrayList<OrderBean>();
+        String sql = "SELECT OrderId,  DeliveryAddress, CCName, CCNumber, CCExpireDate  FROM Products" + 
+                " WHERE member_id = " + memberId;
+		try {
+			// Create the connection and execute the query command
+			Class.forName(jdbcDriver);
+			Connection connection = DriverManager.getConnection(dbUrl);
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sql);
+			// Get the query result and fill the return array list
+			while (resultSet.next()) {
+				String orderId = resultSet.getString(1);
+				String deliveryAddress = resultSet.getString(2);
+                String ccName = resultSet.getString(3);
+                String ccNumber = resultSet.getString(4);
+                String ccExpireDate = resultSet.getString(5);
+				OrderBean order = new OrderBean(orderId, memberId, ccName, deliveryAddress, ccName, 
+                        ccNumber, ccExpireDate);
+				orders.add(order);
+			}
+			// Close the database connection
+			resultSet.close();
+			statement.close();
+			connection.close();	
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.err.println(e.getMessage());
+		}		
+		return orders;
+    }
 	
 	/**
 	 * This method is used to store a order into the database
@@ -180,10 +286,9 @@ public class DatabaseUtil {
 	 * @param shoppingCart The shopping cart with the order
 	 */
 	public synchronized void insertOrder(OrderBean order, ShoppingCartBean shoppingCart) {
-		// Create the order id and prepare the order information
-		long orderId = System.currentTimeMillis();
 		@SuppressWarnings("unused")
-		ArrayList<ProductBean> products = new ArrayList<ProductBean>();
+        // Prepare the SQL arguments
+        String orderId = order.getOrderId();
 		String contactName = order.getContactName();
 		String deliveryAddress = order.getDeliveryAddress();
 		String creditCardName = order.getCreditCardName();

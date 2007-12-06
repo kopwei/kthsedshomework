@@ -190,6 +190,13 @@ public class DatabaseUtil {
         }
         return products;
     }
+    
+    public ArrayList<MemberBean> getAllMembers() {
+        // Prepared the return array and the query string 
+        ArrayList<MemberBean> members = new ArrayList<MemberBean>();
+        
+        return members;
+    }
 
     /**
      * This method is used to store a product into the database

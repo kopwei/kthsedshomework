@@ -7,18 +7,17 @@
 <div style="background-color: rgb(255, 255, 153); height: 60px; width: 800px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
     <f:subview id="Header">
-        <table style="left: 168px; top: 24px; position: absolute">
-            <tr>
-                <td>
-                    <a href="Admin.jsp"> Admin </a>
-                </td>
-                <td>
-                    <a href="Registet.jsp"> Register </a>
-                </td>
-                <td>
-                    <a href="Login.jsp"> Login </a>
-                </td>
-            </tr>
-        </table>
+        <webuijsf:hyperlink actionExpression="#{Header.loginHyperlink_action}" binding="#{Header.loginHyperlink}" id="loginHyperlink"
+            style="color: #0000cc;left: 240px; top: 24px; position: absolute" text="Login"/>
+        <webuijsf:hyperlink actionExpression="#{Header.homeHyperlink_action}" binding="#{Header.homeHyperlink}" id="homeHyperlink"
+            style="color: #0000cc; left: 96px; top: 24px; position: absolute" text="Home"/>
+        <webuijsf:hyperlink actionExpression="#{Header.adminHyperlink_action}" binding="#{Header.adminHyperlink}" id="adminHyperlink"
+            style="color: #0000cc;position: absolute; left: 144px; top: 24px" text="Admin"/>
+        <webuijsf:hyperlink actionExpression="#{Header.registerHyperlink_action}" binding="#{Header.registerHyperlink}" id="registerHyperlink"
+            style="color: #0000cc;position: absolute; left: 192px; top: 24px" text="Register"/>
+        <webuijsf:hyperlink actionExpression="#{Header.shoppingCartHyperlink_action}" binding="#{Header.shoppingCartHyperlink}" id="shoppingCartHyperlink"
+            style="color: #0000cc;left: 278px; top: 24px; position: absolute" text="ShoppingCart"/>
+        <webuijsf:hyperlink actionExpression="#{Header.manageHyperlink_action}" binding="#{Header.manageHyperlink}" id="manageHyperlink"
+            style="color: #0000cc;left: 360px; top: 24px; position: absolute" text="Manage"/>
     </f:subview>
 </div>

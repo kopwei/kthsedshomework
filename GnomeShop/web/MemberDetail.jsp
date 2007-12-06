@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
-    Document   : ManageGnomePage
-    Created on : Dec 6, 2007, 8:31:27 PM
+    Document   : MemberDetail
+    Created on : Dec 6, 2007, 10:27:13 PM
     Author     : Kop
 -->
 <jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
     <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
     <f:view>
-        <webuijsf:page binding="#{ManageGnomePage.page1}" id="page1">
-            <webuijsf:html binding="#{ManageGnomePage.html1}" id="html1">
-                <webuijsf:head binding="#{ManageGnomePage.head1}" id="head1">
-                    <webuijsf:link binding="#{ManageGnomePage.link1}" id="link1" url="/resources/stylesheet.css"/>
+        <webuijsf:page binding="#{MemberDetail.page1}" id="page1">
+            <webuijsf:html binding="#{MemberDetail.html1}" id="html1">
+                <webuijsf:head binding="#{MemberDetail.head1}" id="head1">
+                    <webuijsf:link binding="#{MemberDetail.link1}" id="link1" url="/resources/stylesheet.css"/>
                 </webuijsf:head>
-                <webuijsf:body binding="#{ManageGnomePage.body1}" id="body1" style="-rave-layout: grid">
-                    <webuijsf:form binding="#{ManageGnomePage.form1}" id="form1">
-                        <div style="left: 0px; top: 0px; position: absolute">
+                <webuijsf:body binding="#{MemberDetail.body1}" id="body1" style="-rave-layout: grid">
+                    <webuijsf:form binding="#{MemberDetail.form1}" id="form1">
+                        <div style="position: absolute; left: 0px; top: 0px">
                             <jsp:directive.include file="Header.jspf"/>
                         </div>
                         <div style="position: absolute; left: 0px; top: 72px">

@@ -1,7 +1,7 @@
 /*
- * ManageGnomePage.java
+ * MemberDetail.java
  *
- * Created on Dec 6, 2007, 8:31:27 PM
+ * Created on Dec 6, 2007, 10:27:13 PM
  */
  
 package gnomeshop;
@@ -11,6 +11,7 @@ import com.sun.webui.jsf.component.Body;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
+import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
 import javax.faces.FacesException;
@@ -24,7 +25,7 @@ import javax.faces.FacesException;
  *
  * @author Kop
  */
-public class ManageGnomePage extends AbstractPageBean {
+public class MemberDetail extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -100,7 +101,7 @@ public class ManageGnomePage extends AbstractPageBean {
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public ManageGnomePage() {
+    public MemberDetail() {
     }
 
     /**
@@ -129,7 +130,7 @@ public class ManageGnomePage extends AbstractPageBean {
         try {
             _init();
         } catch (Exception e) {
-            log("ManageGnomePage Initialization Failure", e);
+            log("MemberDetail Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -179,15 +180,6 @@ public class ManageGnomePage extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected RequestBean getRequestBean() {
-        return (RequestBean) getBean("RequestBean");
-    }
-
-    /**
-     * <p>Return a reference to the scoped data bean.</p>
-     *
-     * @return reference to the scoped data bean
-     */
     protected ApplicationBean getApplicationBean() {
         return (ApplicationBean) getBean("ApplicationBean");
     }
@@ -199,6 +191,15 @@ public class ManageGnomePage extends AbstractPageBean {
      */
     protected SessionBean getSessionBean() {
         return (SessionBean) getBean("SessionBean");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean getRequestBean() {
+        return (RequestBean) getBean("RequestBean");
     }
     
 }

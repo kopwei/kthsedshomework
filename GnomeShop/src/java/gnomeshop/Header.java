@@ -7,11 +7,7 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractFragmentBean;
-import com.sun.webui.jsf.component.StaticText;
-import com.sun.webui.jsf.component.Table;
-import com.sun.webui.jsf.component.TableColumn;
-import com.sun.webui.jsf.component.TableRowGroup;
-import com.sun.webui.jsf.model.DefaultTableDataProvider;
+import com.sun.webui.jsf.component.Hyperlink;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlGraphicImage;
 
@@ -42,6 +38,60 @@ public class Header extends AbstractFragmentBean {
 
     public void setImage1(HtmlGraphicImage hgi) {
         this.image1 = hgi;
+    }
+    private Hyperlink loginHyperlink = new Hyperlink();
+
+    public Hyperlink getLoginHyperlink() {
+        return loginHyperlink;
+    }
+
+    public void setLoginHyperlink(Hyperlink h) {
+        this.loginHyperlink = h;
+    }
+    private Hyperlink homeHyperlink = new Hyperlink();
+
+    public Hyperlink getHomeHyperlink() {
+        return homeHyperlink;
+    }
+
+    public void setHomeHyperlink(Hyperlink h) {
+        this.homeHyperlink = h;
+    }
+    private Hyperlink adminHyperlink = new Hyperlink();
+
+    public Hyperlink getAdminHyperlink() {
+        return adminHyperlink;
+    }
+
+    public void setAdminHyperlink(Hyperlink h) {
+        this.adminHyperlink = h;
+    }
+    private Hyperlink registerHyperlink = new Hyperlink();
+
+    public Hyperlink getRegisterHyperlink() {
+        return registerHyperlink;
+    }
+
+    public void setRegisterHyperlink(Hyperlink h) {
+        this.registerHyperlink = h;
+    }
+    private Hyperlink shoppingCartHyperlink = new Hyperlink();
+
+    public Hyperlink getShoppingCartHyperlink() {
+        return shoppingCartHyperlink;
+    }
+
+    public void setShoppingCartHyperlink(Hyperlink h) {
+        this.shoppingCartHyperlink = h;
+    }
+    private Hyperlink manageHyperlink = new Hyperlink();
+
+    public Hyperlink getManageHyperlink() {
+        return manageHyperlink;
+    }
+
+    public void setManageHyperlink(Hyperlink h) {
+        this.manageHyperlink = h;
     }
     // </editor-fold>
 
@@ -129,31 +179,36 @@ public class Header extends AbstractFragmentBean {
     public String loginHyperlink_action() {
         // TODO: Process the action. Return value is a navigation
         // case name where null will return to the same page.
-        return "login";
+        return "Login";
     }
 
     public String manageHyperlink_action() {
         // TODO: Process the action. Return value is a navigation
         // case name where null will return to the same page.
-        return null;
+        return "Manage";
     }
 
     public String registerHyperlink_action() {
         // TODO: Process the action. Return value is a navigation
         // case name where null will return to the same page.
-        return null;
+        return "Register";
     }
 
     public String adminHyperlink_action() {
         // TODO: Process the action. Return value is a navigation
         // case name where null will return to the same page.
-        return "case1";
+        return "Admin";
     }
 
     public String shoppingCartHyperlink_action() {
         // TODO: Process the action. Return value is a navigation
         // case name where null will return to the same page.
-        return null;
+        return "ShoppingCart";
     }
-
+    
+    public String homeHyperlink_action() {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        return "Home";
+    }
 }

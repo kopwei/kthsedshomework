@@ -7,6 +7,7 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractFragmentBean;
+import com.sun.webui.jsf.component.Label;
 import javax.faces.FacesException;
 
 /**
@@ -27,6 +28,15 @@ public class Footer extends AbstractFragmentBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
+    }
+    private Label label1 = new Label();
+
+    public Label getLabel1() {
+        return label1;
+    }
+
+    public void setLabel1(Label l) {
+        this.label1 = l;
     }
     // </editor-fold>
 

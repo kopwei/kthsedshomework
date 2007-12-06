@@ -7,6 +7,7 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractSessionBean;
+import com.sun.sql.rowset.CachedRowSetXImpl;
 import gnomeshop.items.MemberBean;
 import javax.faces.FacesException;
 

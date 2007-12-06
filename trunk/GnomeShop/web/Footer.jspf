@@ -4,6 +4,8 @@
     Created on : Dec 5, 2007, 1:52:41 PM
     Author     : Kop
 -->
-<div style="height: 50px; width: 600px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core">
-    <f:subview id="Footer"/>
+<div style="background-color: rgb(0, 153, 153); height: 50px; width: 600px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
+    <f:subview id="Footer">
+        <webuijsf:label binding="#{Footer.label1}" id="label1" style="left: 144px; top: 24px; position: absolute" text="Welcome to Gnomeshop By Wei Zhenfang and Yan Yi"/>
+    </f:subview>
 </div>

@@ -1,12 +1,11 @@
 /*
- * AdminPage.java
+ * Manage.java
  *
- * Created on Dec 6, 2007, 8:30:35 PM
+ * Created on Dec 6, 2007, 8:31:27 PM
  */
  
 package gnomeshop;
 
-import com.sun.rave.faces.data.DefaultTableDataModel;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
 import com.sun.webui.jsf.component.Form;
@@ -14,14 +13,7 @@ import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import gnomeshop.items.MemberBean;
-import java.util.ArrayList;
 import javax.faces.FacesException;
-import javax.faces.component.UIColumn;
-import javax.faces.component.html.HtmlDataTable;
-import javax.faces.component.html.HtmlOutputText;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -32,7 +24,7 @@ import javax.servlet.ServletContext;
  *
  * @author Kop
  */
-public class AdminPage extends AbstractPageBean {
+public class Manage extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -104,12 +96,11 @@ public class AdminPage extends AbstractPageBean {
     }
 
     // </editor-fold>
-    ArrayList<MemberBean> users = new ArrayList<MemberBean>();
-    
+
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public AdminPage() {
+    public Manage() {
     }
 
     /**
@@ -131,20 +122,14 @@ public class AdminPage extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        // Get DatabaseUtil instance
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != dbUtil) {
-            users = dbUtil.getAllMembers();
-        }
+        
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
         try {
             _init();
         } catch (Exception e) {
-            log("AdminPage Initialization Failure", e);
+            log("ManageGnomePage Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         

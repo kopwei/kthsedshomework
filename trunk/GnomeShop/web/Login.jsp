@@ -6,7 +6,7 @@
 -->
 <jsp:root version="2.1" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
     xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
-    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" />
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
     <f:view>
         <webuijsf:page binding="#{Login.page1}" id="page1">
             <webuijsf:html binding="#{Login.html1}" id="html1">
@@ -26,8 +26,8 @@
                         <div style="left: 216px; top: 528px; position: absolute">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
-                        <webuijsf:textField binding="#{Login.userNameField}" id="userNameField" label="User Name" required="true" style="left: 240px; top: 96px; position: absolute"/>
-                        <webuijsf:passwordField binding="#{Login.passwordField}" id="passwordField" label="Password" required="true" style="left: 240px; top: 144px; position: absolute"/>
+                        <webuijsf:textField binding="#{Login.userNameField}" id="userNameField" label="User Name" style="left: 240px; top: 96px; position: absolute"/>
+                        <webuijsf:passwordField binding="#{Login.passwordField}" id="passwordField" label="Password" style="left: 240px; top: 144px; position: absolute"/>
                         <h:commandButton binding="#{Login.logoutButton}" id="logoutButton" style="left: 288px; top: 192px; position: absolute; width: 72px" value="Logout"/>
                     </webuijsf:form>
                 </webuijsf:body>

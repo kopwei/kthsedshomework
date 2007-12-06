@@ -87,8 +87,46 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>ManageGnomePage</managed-bean-name>
-        <managed-bean-class>gnomeshop.ManageGnomePage</managed-bean-class>
+        <managed-bean-name>Manage</managed-bean-name>
+        <managed-bean-class>gnomeshop.Manage</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ShoppingCart</managed-bean-name>
+        <managed-bean-class>gnomeshop.ShoppingCart</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>           
+            <from-outcome>Login</from-outcome>
+            <to-view-id>/Login.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Home</from-outcome>
+            <to-view-id>/index.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Manage</from-outcome>
+            <to-view-id>/Manage.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Admin</from-outcome>
+            <to-view-id>/AdminPage.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Register</from-outcome>
+            <to-view-id>/Register.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>ShoppingCart</from-outcome>
+            <to-view-id>/ShoppingCart.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <managed-bean>
+        <managed-bean-name>MemberDetail</managed-bean-name>
+        <managed-bean-class>gnomeshop.MemberDetail</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 </faces-config>

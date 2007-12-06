@@ -167,4 +167,10 @@ public class Search extends AbstractFragmentBean {
                 return (SessionBean) getBean("SessionBean");
         }
 
+    public String searchButton_action() {
+        // TODO: Process the button click action. Return value is a navigation
+        // case name where null will return to the same page.
+        return null;
+    }
+
 }

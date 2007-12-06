@@ -3,6 +3,8 @@
  */
 package gnomeshop.items;
 
+import java.util.UUID;
+
 /**
  * @author Kop
  *
@@ -12,7 +14,7 @@ package gnomeshop.items;
  * This category class is used to define a category entity
  */
 public class Category {
-	private String id;
+	private UUID id;
 	private String description;
 	
 	/**
@@ -21,7 +23,7 @@ public class Category {
 	 * @param description The brief description of the category
 	 */
 	public Category(String id, String description) {
-		this.id = id;
+		this.id = UUID.fromString(id);
 		this.description = description;
 	}
 	
@@ -30,7 +32,7 @@ public class Category {
 	 * @return The category ID
 	 */
 	public String getId() {
-		return id;
+		return id.toString();
 	}
 	
 	/**
@@ -38,7 +40,7 @@ public class Category {
 	 * @param id The category ID
 	 */
 	public void setId(String id) {
-		this.id = id;
+		this.id = UUID.fromString(id);
 	}
 	
 	/**

@@ -4,9 +4,21 @@
     Created on : Dec 5, 2007, 1:52:06 PM
     Author     : Kop
 -->
-<div style="height: 60px; width: 800px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
+<div style="background-color: rgb(255, 255, 153); height: 60px; width: 800px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
     <f:subview id="Header">
-        <webuijsf:hyperlink actionExpression="#{Header.indexHyperlink_action}" binding="#{Header.indexHyperlink}" id="indexHyperlink"
-            style="left: 72px; top: 24px; position: absolute" text="Home"/>
+        <table style="left: 168px; top: 24px; position: absolute">
+            <tr>
+                <td>
+                    <a href="Admin.jsp"> Admin </a>
+                </td>
+                <td>
+                    <a href="Registet.jsp"> Register </a>
+                </td>
+                <td>
+                    <a href="Login.jsp"> Login </a>
+                </td>
+            </tr>
+        </table>
     </f:subview>
 </div>

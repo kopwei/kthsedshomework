@@ -29,8 +29,7 @@
                         <webuijsf:label binding="#{Register.phoneLabel}" id="phoneLabel" style="left: 264px; top: 336px; position: absolute" text="Phone No"/>
                         <webuijsf:textField binding="#{Register.phoneField}" id="phoneField" style="left: 336px; top: 336px; position: absolute"/>
                         <h:commandButton action="#{Register.submitButton_action}" binding="#{Register.submitButton}" id="submitButton"
-                            style="left: 408px; top: 384px; position: absolute" value="Submit"/>
-                        <f:validator/>
+                            style="left: 408px; top: 384px; position: absolute; width: 50px" value="Submit"/>
                         <div style="left: 0px; top: 0px; position: absolute">
                             <jsp:directive.include file="Header.jspf"/>
                         </div>

@@ -1,23 +1,19 @@
 /*
- * Login.java
+ * ManageGnomePage.java
  *
- * Created on Dec 4, 2007, 11:15:18 PM
+ * Created on Dec 6, 2007, 8:31:27 PM
  */
  
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
-import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import com.sun.webui.jsf.component.PasswordField;
-import com.sun.webui.jsf.component.TextField;
 import javax.faces.FacesException;
-import javax.faces.component.html.HtmlCommandButton;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -28,7 +24,7 @@ import javax.faces.component.html.HtmlCommandButton;
  *
  * @author Kop
  */
-public class Login extends AbstractPageBean {
+public class ManageGnomePage extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -98,78 +94,13 @@ public class Login extends AbstractPageBean {
     public void setForm1(Form f) {
         this.form1 = f;
     }
-        private TextField userNameField = new TextField();
-
-        public TextField getUserNameField() {
-                return userNameField;
-        }
-
-        public void setUserNameField(TextField tf) {
-                this.userNameField = tf;
-        }
-        private PasswordField passwordField = new PasswordField();
-
-        public PasswordField getPasswordField() {
-                return passwordField;
-        }
-
-        public void setPasswordField(PasswordField pf) {
-                this.passwordField = pf;
-        }
-        private HtmlCommandButton loginButton = new HtmlCommandButton();
-
-        public HtmlCommandButton getLoginButton() {
-                return loginButton;
-        }
-
-        public void setLoginButton(HtmlCommandButton hcb) {
-                this.loginButton = hcb;
-        }
-    private TextField userNameField1 = new TextField();
-
-    public TextField getUserNameField1() {
-        return userNameField1;
-    }
-
-    public void setUserNameField1(TextField tf) {
-        this.userNameField1 = tf;
-    }
-    private PasswordField passwordField2 = new PasswordField();
-
-    public PasswordField getPasswordField2() {
-        return passwordField2;
-    }
-
-    public void setPasswordField2(PasswordField pf) {
-        this.passwordField2 = pf;
-    }
 
     // </editor-fold>
 
-    private LoginManager loginMgr;
-    private Button button1 = new Button();
-
-    public Button getButton1() {
-        return button1;
-    }
-
-    public void setButton1(Button b) {
-        this.button1 = b;
-    }
-    private HtmlCommandButton logoutButton = new HtmlCommandButton();
-
-    public HtmlCommandButton getLogoutButton() {
-        return logoutButton;
-    }
-
-    public void setLogoutButton(HtmlCommandButton hcb) {
-        this.logoutButton = hcb;
-    }
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public Login() {
-        
+    public ManageGnomePage() {
     }
 
     /**
@@ -191,7 +122,6 @@ public class Login extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        loginMgr = (LoginManager)getBean("LoginManager");
         
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
@@ -199,7 +129,7 @@ public class Login extends AbstractPageBean {
         try {
             _init();
         } catch (Exception e) {
-            log("Login Initialization Failure", e);
+            log("ManageGnomePage Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -207,7 +137,6 @@ public class Login extends AbstractPageBean {
         // Perform application initialization that must complete
         // *after* managed components are initialized
         // TODO - add your own initialization code here
-        
     }
 
     /**
@@ -245,50 +174,32 @@ public class Login extends AbstractPageBean {
     public void destroy() {
     }
 
-        /**
-         * <p>Return a reference to the scoped data bean.</p>
-         *
-         * @return reference to the scoped data bean
-         */
-        protected ApplicationBean getApplicationBean() {
-                return (ApplicationBean) getBean("ApplicationBean");
-        }
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean getRequestBean() {
+        return (RequestBean) getBean("RequestBean");
+    }
 
-        /**
-         * <p>Return a reference to the scoped data bean.</p>
-         *
-         * @return reference to the scoped data bean
-         */
-        protected RequestBean getRequestBean() {
-                return (RequestBean) getBean("RequestBean");
-        }
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
+    }
 
-        /**
-         * <p>Return a reference to the scoped data bean.</p>
-         *
-         * @return reference to the scoped data bean
-         */
-        protected SessionBean getSessionBean() {
-                return (SessionBean) getBean("SessionBean");
-        }
-        
-        public LoginManager getLoginMgr() {
-            return loginMgr;
-        }
-
-        public String loginButton_action() {
-                // TODO: Process the action. Return value is a navigation
-                // case name where null will return to the same page.
-            
-            loginMgr.setUserName(getUserNameField().getText().toString());
-            loginMgr.setPassWord(getPasswordField().getPassword().toString());
-            return loginMgr.loginUser();            
-        }
-        
-        public String logoutButton_action() {
-                // TODO: Process the action. Return value is a navigation
-                // case name where null will return to the same page.
-            return loginMgr.logoutUser();            
-        }
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean getSessionBean() {
+        return (SessionBean) getBean("SessionBean");
+    }
+    
 }
 

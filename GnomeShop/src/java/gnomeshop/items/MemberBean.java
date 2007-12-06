@@ -50,21 +50,22 @@ public class MemberBean {
      * @param memberId Member's ID
      * @param userName Member's user name
      * @param passWord Member's password
+     * @param memberLevel Member's authority level
      * @param firstName Member's first name
      * @param lastName Member's last name
      * @param telephone Member's telephone number
      * @param emailAddress Member's email address
      */
-    public MemberBean(String memberId, String userName, String passWord, String firstName, String lastName, 
+    public MemberBean(String memberId, String userName, String passWord, int memberLevel, String firstName, String lastName, 
             String telephone, String emailAddress) {
-        this.memberId = UUID.randomUUID();
+        this.memberId = UUID.fromString(memberId);
         this.userName = userName;
         this.passWord = passWord;
+        this.memberLevel = memberLevel;
         this.firstName = firstName;
         this.lastName = lastName;
         this.telephone = telephone;
         this.email = emailAddress;
-        this.memberLevel = NORMALMEMBER;
     }
 
      public String getMemberId() {

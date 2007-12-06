@@ -27,6 +27,31 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
+        <managed-bean-name>LoginManager</managed-bean-name>
+        <managed-bean-class>gnomeshop.LoginManager</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ProductBean</managed-bean-name>
+        <managed-bean-class>gnomeshop.items.ProductBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ShoppingCartBean</managed-bean-name>
+        <managed-bean-class>gnomeshop.items.ShoppingCartBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>OrderBean</managed-bean-name>
+        <managed-bean-class>gnomeshop.items.OrderBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>MemberBean</managed-bean-name>
+        <managed-bean-class>gnomeshop.items.MemberBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
         <managed-bean-name>Register</managed-bean-name>
         <managed-bean-class>gnomeshop.Register</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
@@ -54,6 +79,16 @@
     <managed-bean>
         <managed-bean-name>index</managed-bean-name>
         <managed-bean-class>gnomeshop.index</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>AdminPage</managed-bean-name>
+        <managed-bean-class>gnomeshop.AdminPage</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ManageGnomePage</managed-bean-name>
+        <managed-bean-class>gnomeshop.ManageGnomePage</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
 </faces-config>

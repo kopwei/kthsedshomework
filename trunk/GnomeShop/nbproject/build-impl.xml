@@ -493,10 +493,12 @@
         <copy-ear-war file="${libs.woodstock-components.classpath.libfile.1}" propname="included.lib.libs.woodstock-components.classpath.1.X"/>
         <basename file="${libs.woodstock-theme-default.classpath}" property="included.lib.libs.woodstock-theme-default.classpath"/>
         <copy-ear-war file="${libs.woodstock-theme-default.classpath}" propname="included.lib.libs.woodstock-theme-default.classpath.X"/>
+        <basename file="${libs.MySQLDriver.classpath}" property="included.lib.libs.MySQLDriver.classpath"/>
+        <copy-ear-war file="${libs.MySQLDriver.classpath}" propname="included.lib.libs.MySQLDriver.classpath.X"/>
         <copy file="${libs.exceptionhandler-runtime.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Class-Path" value="${included.lib.libs.jsf12.classpath.1.X} ${included.lib.libs.jsf12.classpath.2.X} ${included.lib.libs.jsf12.classpath.3.X} ${included.lib.libs.jsf12.classpath.4.X} ${included.lib.libs.jsf12.classpath.5.X} ${included.lib.libs.jsf12.classpath.6.X} ${included.lib.libs.jstl11.classpath.1.X} ${included.lib.libs.jstl11.classpath.2.X} ${included.lib.libs.jsf12-support.classpath.1.X} ${included.lib.libs.jsf12-support.classpath.2.X} ${included.lib.libs.jsf12-support.classpath.3.X} ${included.lib.libs.jsf12-support.classpath.4.X} ${included.lib.libs.woodstock-components.classpath.1.X} ${included.lib.libs.woodstock-components.classpath.2.X} ${included.lib.libs.woodstock-components.classpath.3.X} ${included.lib.libs.woodstock-components.classpath.4.X} ${included.lib.libs.woodstock-components.classpath.5.X} ${included.lib.libs.woodstock-components.classpath.6.X} ${included.lib.libs.woodstock-components.classpath.7.X} ${included.lib.libs.woodstock-theme-default.classpath} "/>
+            <attribute name="Class-Path" value="${included.lib.libs.jsf12.classpath.1.X} ${included.lib.libs.jsf12.classpath.2.X} ${included.lib.libs.jsf12.classpath.3.X} ${included.lib.libs.jsf12.classpath.4.X} ${included.lib.libs.jsf12.classpath.5.X} ${included.lib.libs.jsf12.classpath.6.X} ${included.lib.libs.jstl11.classpath.1.X} ${included.lib.libs.jstl11.classpath.2.X} ${included.lib.libs.jsf12-support.classpath.1.X} ${included.lib.libs.jsf12-support.classpath.2.X} ${included.lib.libs.jsf12-support.classpath.3.X} ${included.lib.libs.jsf12-support.classpath.4.X} ${included.lib.libs.woodstock-components.classpath.1.X} ${included.lib.libs.woodstock-components.classpath.2.X} ${included.lib.libs.woodstock-components.classpath.3.X} ${included.lib.libs.woodstock-components.classpath.4.X} ${included.lib.libs.woodstock-components.classpath.5.X} ${included.lib.libs.woodstock-components.classpath.6.X} ${included.lib.libs.woodstock-components.classpath.7.X} ${included.lib.libs.woodstock-theme-default.classpath} ${included.lib.libs.MySQLDriver.classpath} "/>
         </manifest>
         <delete dir="${dist.ear.dir}/temp"/>
     </target>
@@ -521,6 +523,7 @@
         <copy file="${libs.woodstock-components.classpath.libfile.2}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.woodstock-components.classpath.libfile.1}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.woodstock-theme-default.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        <copy file="${libs.MySQLDriver.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
         <copy file="${libs.exceptionhandler-runtime.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,library-inclusion-in-manifest" name="do-ear-dist">

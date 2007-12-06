@@ -7,9 +7,8 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractSessionBean;
+import gnomeshop.items.MemberBean;
 import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 /**
  * <p>Session scope data bean for your application.  Create properties
@@ -35,6 +34,7 @@ public class SessionBean extends AbstractSessionBean {
     }
     // </editor-fold>
 
+    private MemberBean currentMember = null;
     /**
      * <p>Construct a new session data bean instance.</p>
      */
@@ -115,14 +115,16 @@ public class SessionBean extends AbstractSessionBean {
     public void destroy() {
     }
     
-    public void logout(){
-               
-        FacesContext fc = javax.faces.context.FacesContext.getCurrentInstance();
-//        ((HttpSession)fc.getExternalContext().getSession(false)).invalidate();
-//        ApplicationBean ap = getApplicationBean();
-//        NavigationHandler nh = ap.getNavigationHandler();
-//        nh.handleNavigation(fc,null,"logout");
-    }
+////    public void logout(){
+////               
+////        FacesContext fc = javax.faces.context.FacesContext.getCurrentInstance();
+//////        ((HttpSession)fc.getExternalContext().getSession(false)).invalidate();
+//////        ApplicationBean ap = getApplicationBean();
+//////        NavigationHandler nh = ap.getNavigationHandler();
+//////        nh.handleNavigation(fc,null,"logout");
+////    }
+    
+    
 
     
     /**
@@ -132,6 +134,14 @@ public class SessionBean extends AbstractSessionBean {
      */
     protected ApplicationBean getApplicationBean() {
         return (ApplicationBean) getBean("ApplicationBean");
+    }
+    
+    /**
+     * This method is used to set the current logined member
+     * @param currentMember The login member
+     */
+    public void setCurrentMember(MemberBean currentMember) {
+        this.currentMember = currentMember;
     }
 
 }

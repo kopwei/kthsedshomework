@@ -7,10 +7,13 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractFragmentBean;
-import com.sun.webui.jsf.component.DropDown;
-import com.sun.webui.jsf.component.Hyperlink;
-import com.sun.webui.jsf.model.SingleSelectOptionsList;
+import com.sun.webui.jsf.component.StaticText;
+import com.sun.webui.jsf.component.Table;
+import com.sun.webui.jsf.component.TableColumn;
+import com.sun.webui.jsf.component.TableRowGroup;
+import com.sun.webui.jsf.model.DefaultTableDataProvider;
 import javax.faces.FacesException;
+import javax.faces.component.html.HtmlGraphicImage;
 
 /**
  * <p>Fragment bean that corresponds to a similarly named JSP page
@@ -31,15 +34,15 @@ public class Header extends AbstractFragmentBean {
      */
     private void _init() throws Exception {
     }
-        private Hyperlink indexHyperlink = new Hyperlink();
+    private HtmlGraphicImage image1 = new HtmlGraphicImage();
 
-        public Hyperlink getIndexHyperlink() {
-                return indexHyperlink;
-        }
+    public HtmlGraphicImage getImage1() {
+        return image1;
+    }
 
-        public void setIndexHyperlink(Hyperlink h) {
-                this.indexHyperlink = h;
-        }
+    public void setImage1(HtmlGraphicImage hgi) {
+        this.image1 = hgi;
+    }
     // </editor-fold>
 
     public Header() {
@@ -118,6 +121,36 @@ public class Header extends AbstractFragmentBean {
         }
 
     public String indexHyperlink_action() {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        return null;
+    }
+
+    public String loginHyperlink_action() {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        return "login";
+    }
+
+    public String manageHyperlink_action() {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        return null;
+    }
+
+    public String registerHyperlink_action() {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        return null;
+    }
+
+    public String adminHyperlink_action() {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        return "case1";
+    }
+
+    public String shoppingCartHyperlink_action() {
         // TODO: Process the action. Return value is a navigation
         // case name where null will return to the same page.
         return null;

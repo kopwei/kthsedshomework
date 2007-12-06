@@ -7,15 +7,12 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractFragmentBean;
-import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.DropDown;
 import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.TextField;
 import com.sun.webui.jsf.model.SingleSelectOptionsList;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlCommandButton;
-import javax.faces.component.html.HtmlOutputFormat;
-import javax.faces.component.html.HtmlOutputText;
 
 /**
  * <p>Fragment bean that corresponds to a similarly named JSP page
@@ -62,15 +59,6 @@ public class Search extends AbstractFragmentBean {
 
         public void setCategoryLabel(Label l) {
                 this.categoryLabel = l;
-        }
-        private Label keywordLabel = new Label();
-
-        public Label getKeywordLabel() {
-                return keywordLabel;
-        }
-
-        public void setKeywordLabel(Label l) {
-                this.keywordLabel = l;
         }
         private TextField keywordField = new TextField();
 

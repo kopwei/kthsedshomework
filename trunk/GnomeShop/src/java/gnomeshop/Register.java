@@ -8,7 +8,6 @@ package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
-import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
@@ -17,9 +16,11 @@ import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
 import com.sun.webui.jsf.component.PasswordField;
 import com.sun.webui.jsf.component.TextField;
+import gnomeshop.items.MemberBean;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlCommandButton;
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -326,7 +327,19 @@ public class Register extends AbstractPageBean {
 
         public String submitButton_action() {
                 // TODO: Process the button click action. Return value is a navigation
-                // case name where null will return to the same page.
+                // Get DatabaseUtil instance
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+		DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
+		if (null != dbUtil) {
+                    String userName = userNameField.getText().toString();
+                    String passWord = passwordField.getPassword().toString();
+                    String firstName = firstNameField.getText().toString();
+                    String lastName = lastNameField.getText().toString();
+                    String email = emailField.getText().toString();
+                    String telephone = phoneField.getText().toString();
+                    dbUtil.insertMember(new MemberBean(userName, passWord, firstName, lastName, telephone, email));
+                }
                 return null;
         }
     

@@ -4,12 +4,13 @@
     Created on : Dec 4, 2007, 11:17:37 PM
     Author     : Kop
 -->
-<div style="height: 500px; width: 200px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
+<div style="background-color: rgb(255, 153, 51); height: 500px; width: 200px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
     <f:subview id="Search">
         <webuijsf:dropDown binding="#{Search.categoryDropDown}" id="categoryDropDown" items="#{Search.categoryDropDownDefaultOptions.options}" style="left: 72px; top: 120px; position: absolute"/>
         <webuijsf:label binding="#{Search.categoryLabel}" id="categoryLabel" style="left: 0px; top: 120px; position: absolute" text="Categories"/>
-        <webuijsf:label binding="#{Search.keywordLabel}" id="keywordLabel" style="left: 0px; top: 24px; position: absolute; width: 72px" text="Key Word"/>
-        <webuijsf:textField binding="#{Search.keywordField}" id="keywordField" style="left: 72px; top: 24px; position: absolute"/>
-        <h:commandButton binding="#{Search.searchButton}" id="searchButton" style="left: 120px; top: 48px; position: absolute" value="Search"/>
+        <webuijsf:textField binding="#{Search.keywordField}" id="keywordField" label="Key Word" style="left: 0px; top: 24px; position: absolute"/>
+        <h:commandButton action="#{Search.searchButton_action}" binding="#{Search.searchButton}" id="searchButton"
+            style="left: 120px; top: 72px; position: absolute" value="Search"/>
     </f:subview>
 </div>

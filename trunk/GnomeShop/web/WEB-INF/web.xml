@@ -30,6 +30,10 @@
         <filter-name>UploadFilter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
+    <listener>
+        <description>The application context listener</description>
+        <listener-class>gnomeshop.AppContextListener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -73,7 +77,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/Login.jsp</welcome-file>
+        <welcome-file>faces/Register.jsp</welcome-file>
         </welcome-file-list>
     <error-page>
         <exception-type>javax.servlet.ServletException</exception-type>

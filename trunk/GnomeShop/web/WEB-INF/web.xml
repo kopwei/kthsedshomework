@@ -34,7 +34,7 @@
         <description>The application context listener</description>
         <listener-class>gnomeshop.AppContextListener</listener-class>
     </listener>
-    <servlet>
+    <listener><description>The application action listener</description><listener-class>gnomeshop.AppActionListener</listener-class></listener><servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <init-param>
@@ -64,6 +64,9 @@
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>ExceptionHandlerServlet</servlet-name>
+        <url-pattern>/error/ExceptionHandler</url-pattern>
+    </servlet-mapping><servlet-mapping>
         <servlet-name>ExceptionHandlerServlet</servlet-name>
         <url-pattern>/error/ExceptionHandler</url-pattern>
     </servlet-mapping>
@@ -106,5 +109,4 @@
         <res-ref-name>jdbc/webshop_MySQL</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
-    </resource-ref>
-    </web-app>
+    </resource-ref></web-app>

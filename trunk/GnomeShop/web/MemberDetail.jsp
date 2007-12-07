@@ -34,11 +34,17 @@
                         <webuijsf:label binding="#{MemberDetail.label5}" id="label5" style="position: absolute; left: 240px; top: 192px" text="Telephone"/>
                         <webuijsf:staticText binding="#{MemberDetail.telephoneText}" id="telephoneText" style="position: absolute; left: 336px; top: 192px" text="#{MemberDetail.member.telephone}"/>
                         <webuijsf:label binding="#{MemberDetail.label6}" id="label6" style="position: absolute; left: 240px; top: 216px" text="Blocked"/>
-                        <webuijsf:checkbox binding="#{MemberDetail.blockCheckbox}" id="blockCheckbox" readOnly="true" selected="#{MemberDetail.member.blocked}" style="position: absolute; left: 336px; top: 216px"/>
-                        <webuijsf:button actionExpression="#{MemberDetail.blockButton_action}" binding="#{MemberDetail.blockButton}" id="blockButton"
-                            rendered="#{!MemberDetail.member.blocked}" style="left: 336px; top: 264px; position: absolute; width: 50px" text="Block"/>
-                        <webuijsf:button actionExpression="#{MemberDetail.unblockButton_action}" binding="#{MemberDetail.unblockButton}" id="unblockButton"
-                            rendered="#{MemberDetail.member.blocked}" style="left: 336px; top: 264px; position: absolute; width: 50px" text="Unblock"/>
+                        <webuijsf:checkbox binding="#{MemberDetail.blockCheckbox}" id="blockCheckbox" readOnly="true" style="position: absolute; left: 336px; top: 216px"/>
+                        <webuijsf:hyperlink  binding="#{MemberDetail.blockHyperlink}"
+                            id="blockHyperlink" style="left: 336px; top: 264px; position: absolute" text="Block" url="/faces/MemberDetail.jsp">
+                            <f:param name="memberid" value="#{MemberDetail.member.memberId}"/>
+                            <f:param name="block" value = "true"/>
+                        </webuijsf:hyperlink>
+                        <webuijsf:hyperlink  binding="#{MemberDetail.unblockHyperlink}"
+                            id="unblockHyperlink" style="position: absolute; left: 264px; top: 264px" text="Unblock" url="/faces/MemberDetail.jsp">
+                            <f:param name="memberid" value="#{MemberDetail.member.memberId}"/>
+                            <f:param name="block" value = "false"/>
+                        </webuijsf:hyperlink>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

@@ -8,11 +8,11 @@ package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
-import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.Checkbox;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
+import com.sun.webui.jsf.component.Hyperlink;
 import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
@@ -32,8 +32,9 @@ import javax.servlet.ServletContext;
  * @author Kop
  */
 public class MemberDetail extends AbstractPageBean {
+    private MemberBean member = null;
+    private StaticText userNameText = new StaticText();
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
-
     /**
      * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
      * This method is automatically generated, so any user-specified code inserted
@@ -103,25 +104,6 @@ public class MemberDetail extends AbstractPageBean {
     }
 
     // </editor-fold>
-    private MemberBean member = null;
-    private StaticText userNameText = new StaticText();
-
-    public StaticText getUserNameText() {
-        return userNameText;
-    }
-
-    public void setUserNameText(StaticText st) {
-        this.userNameText = st;
-    }
-    private StaticText firstNameText = new StaticText();
-
-    public StaticText getFirstNameText() {
-        return firstNameText;
-    }
-
-    public void setFirstNameText(StaticText st) {
-        this.firstNameText = st;
-    }
     private Label label1 = new Label();
 
     public Label getLabel1() {
@@ -212,23 +194,40 @@ public class MemberDetail extends AbstractPageBean {
     public void setBlockCheckbox(Checkbox c) {
         this.blockCheckbox = c;
     }
-    private Button blockButton = new Button();
 
-    public Button getBlockButton() {
-        return blockButton;
+     public StaticText getUserNameText() {
+        return userNameText;
     }
 
-    public void setBlockButton(Button b) {
-        this.blockButton = b;
+    public void setUserNameText(StaticText st) {
+        this.userNameText = st;
     }
-    private Button unblockButton = new Button();
+    private StaticText firstNameText = new StaticText();
 
-    public Button getUnblockButton() {
-        return unblockButton;
+    public StaticText getFirstNameText() {
+        return firstNameText;
     }
 
-    public void setUnblockButton(Button b) {
-        this.unblockButton = b;
+    public void setFirstNameText(StaticText st) {
+        this.firstNameText = st;
+    }
+    private Hyperlink blockHyperlink = new Hyperlink();
+
+    public Hyperlink getBlockHyperlink() {
+        return blockHyperlink;
+    }
+
+    public void setBlockHyperlink(Hyperlink h) {
+        this.blockHyperlink = h;
+    }
+    private Hyperlink unblockHyperlink = new Hyperlink();
+
+    public Hyperlink getUnblockHyperlink() {
+        return unblockHyperlink;
+    }
+
+    public void setUnblockHyperlink(Hyperlink h) {
+        this.unblockHyperlink = h;
     }
 
     /**
@@ -259,11 +258,18 @@ public class MemberDetail extends AbstractPageBean {
          // Get DatabaseUtil instance
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        String memberId = facesContext.getExternalContext().getRequestParameterMap().get("memberid");
         DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != dbUtil) {
-            String memberId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("memberid");
-            member = dbUtil.getMemberById(memberId);
+        if (null != dbUtil) {            
+            if (null != memberId) {
+                member = dbUtil.getMemberById(memberId);
+                String blockString = facesContext.getExternalContext().getRequestParameterMap().get("block");
+                if (null != blockString) {
+                    setMemberBlock(Boolean.valueOf(blockString));
+                }
+            }
         }
+        
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -278,6 +284,24 @@ public class MemberDetail extends AbstractPageBean {
         // Perform application initialization that must complete
         // *after* managed components are initialized
         // TODO - add your own initialization code here
+         if (null != dbUtil) {
+            member = dbUtil.getMemberById(memberId);
+         }
+        updateBlockState();
+    }
+    
+    private void updateBlockState() {
+        if (null == member) {
+            return;
+        }
+        blockHyperlink.setVisible(false);
+        unblockHyperlink.setVisible(false);
+        blockCheckbox.setSelected(member.getBlocked());
+        if (member.getBlocked()) {
+            unblockHyperlink.setVisible(true);
+        } else {
+            blockHyperlink.setVisible(true);
+        }
     }
 
     /**
@@ -350,31 +374,16 @@ public class MemberDetail extends AbstractPageBean {
         return member;
     }
 
-    public String unblockButton_action() {
-        // TODO: Process the action. Return value is a navigation
-        // case name where null will return to the same page.
-         // Get DatabaseUtil instance
+    private void setMemberBlock(boolean block) {
+        if (null == member) {
+            return;
+        }
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
         DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
         if (null != dbUtil) {
-            dbUtil.blockMember(member.getMemberId(), true);
+            dbUtil.blockMember(member.getMemberId(), block);
         }
-        return null;
     }
-
-    public String blockButton_action() {
-        // TODO: Process the action. Return value is a navigation
-        // case name where null will return to the same page.
-         // Get DatabaseUtil instance
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != dbUtil) {
-            dbUtil.blockMember(member.getMemberId(), false);
-        }
-        return null;
-    }
-    
 }
 

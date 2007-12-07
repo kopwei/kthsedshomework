@@ -6,10 +6,9 @@
         <Node id="Checkout.jsp" x="150" y="450" zoom="true"/>
         <Node id="Manage.jsp" x="400" y="150" zoom="true"/>
         <Node id="MemberDetail.jsp" x="150" y="300" zoom="true"/>
-        <Node id="*" x="900" y="150" zoom="false"/>
         <Node id="Page1.jsp" x="150" y="150" zoom="true"/>
-        <Node id="ShoppingCart.jsp" x="650" y="150" zoom="true"/>
         <Node id="Register.jsp" x="400" y="300" zoom="true"/>
+        <Node id="ShoppingCart.jsp" x="650" y="150" zoom="true"/>
         <Node id="AdminPage.jsp" x="650" y="300" zoom="true"/>
         <Node id="Login.jsp" x="150" y="600" zoom="true"/>
     </Scope>

@@ -23,6 +23,44 @@
                         <div style="position: absolute; left: 216px; top: 528px">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
+                        <table style="left: 240px; top: 96px; position: absolute">
+                            <tr>
+                                <td>Contact Name:</td>
+                                <td>
+                                    <h:inputText id="cname" required="true" value="#{OrderBean.contactName}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Delivery Address:</td>
+                                <td>
+                                    <h:inputText id="address" required="true" value="#{OrderBean.deliveryAddress}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Credit Card Type:</td>
+                                <td>
+                                    <h:selectOneRadio id="ccname" required="true" value="#{OrderBean.creditCardName}">
+                                        <f:selectItem itemLabel="Visa" itemValue="visa"/>
+                                        <f:selectItem itemLabel="Master" itemValue="master"/>
+                                    </h:selectOneRadio>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Credit Card Number:</td>
+                                <td>
+                                    <h:inputText id="addr" required="true" value="#{OrderBean.creditCardNumber}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Expiry Date:</td>
+                                <td>                                    
+                                    <h:inputText value="#{OrderBean.creditCardExpiryDate}" id="eod" required="true" >
+                                        <f:convertDateTime pattern="MM-dd-yy"/>
+                                    </h:inputText>
+                                    (mm-dd-yy)
+                                </td>
+                            </tr>
+                        </table>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

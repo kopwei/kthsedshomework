@@ -23,6 +23,22 @@
                         <div style="left: 216px; top: 528px; position: absolute">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
+                        <webuijsf:staticText binding="#{MemberDetail.userNameText}" id="userNameText" style="left: 336px; top: 96px; position: absolute" text="#{MemberDetail.member.userName}"/>
+                        <webuijsf:staticText binding="#{MemberDetail.firstNameText}" id="firstNameText" style="left: 336px; top: 120px; position: absolute" text="#{MemberDetail.member.firstName}"/>
+                        <webuijsf:label binding="#{MemberDetail.label1}" id="label1" style="left: 240px; top: 96px; position: absolute" text="User Name"/>
+                        <webuijsf:label binding="#{MemberDetail.label2}" id="label2" style="position: absolute; left: 240px; top: 120px" text="First Name"/>
+                        <webuijsf:label binding="#{MemberDetail.label3}" id="label3" style="position: absolute; left: 240px; top: 144px" text="Last Name"/>
+                        <webuijsf:staticText binding="#{MemberDetail.lastNameText}" id="lastNameText" style="position: absolute; left: 336px; top: 144px" text="#{MemberDetail.member.lastName}"/>
+                        <webuijsf:label binding="#{MemberDetail.label4}" id="label4" style="position: absolute; left: 240px; top: 168px" text="Email Address"/>
+                        <webuijsf:staticText binding="#{MemberDetail.emailText}" id="emailText" style="position: absolute; left: 336px; top: 168px" text="#{MemberDetail.member.email}"/>
+                        <webuijsf:label binding="#{MemberDetail.label5}" id="label5" style="position: absolute; left: 240px; top: 192px" text="Telephone"/>
+                        <webuijsf:staticText binding="#{MemberDetail.telephoneText}" id="telephoneText" style="position: absolute; left: 336px; top: 192px" text="#{MemberDetail.member.telephone}"/>
+                        <webuijsf:label binding="#{MemberDetail.label6}" id="label6" style="position: absolute; left: 240px; top: 216px" text="Blocked"/>
+                        <webuijsf:checkbox binding="#{MemberDetail.blockCheckbox}" id="blockCheckbox" readOnly="true" selected="#{MemberDetail.member.blocked}" style="position: absolute; left: 336px; top: 216px"/>
+                        <webuijsf:button actionExpression="#{MemberDetail.blockButton_action}" binding="#{MemberDetail.blockButton}" id="blockButton"
+                            rendered="#{!MemberDetail.member.blocked}" style="left: 336px; top: 264px; position: absolute; width: 50px" text="Block"/>
+                        <webuijsf:button actionExpression="#{MemberDetail.unblockButton_action}" binding="#{MemberDetail.unblockButton}" id="unblockButton"
+                            rendered="#{MemberDetail.member.blocked}" style="left: 336px; top: 264px; position: absolute; width: 50px" text="Unblock"/>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

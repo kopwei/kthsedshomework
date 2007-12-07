@@ -23,6 +23,31 @@
                         <div style="position: absolute; left: 216px; top: 528px">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
+                        <webuijsf:table augmentTitle="false" binding="#{AdminPage.memberTable}" id="memberTable"
+                            style="height: 197px; left: 216px; top: 96px; position: absolute" title="Members" width="504">
+                            <webuijsf:tableRowGroup binding="#{AdminPage.tableRowGroup1}" id="tableRowGroup1" rows="10"
+                                sourceData="#{AdminPage.membersDataProvider}" sourceVar="currentRow">
+                                <webuijsf:tableColumn binding="#{AdminPage.tableColumn4}" headerText="member_id" id="tableColumn4" rendered="false"
+                                    sort="members.member_id" width="132">
+                                    <webuijsf:staticText binding="#{AdminPage.staticText4}" id="staticText4" text="#{currentRow.value['members.member_id']}"/>
+                                </webuijsf:tableColumn>
+                                <webuijsf:tableColumn binding="#{AdminPage.userNameColumn}" headerText="User Name" id="userNameColumn" sort="members.username" width="127">
+                                    <webuijsf:staticText binding="#{AdminPage.staticText5}" id="staticText5" text="#{currentRow.value['members.username']}"/>
+                                </webuijsf:tableColumn>
+                                <webuijsf:tableColumn binding="#{AdminPage.firstNameColumn}" headerText="First Name" id="firstNameColumn"
+                                    sort="members.first_name" width="127">
+                                    <webuijsf:staticText binding="#{AdminPage.staticText8}" id="staticText8" text="#{currentRow.value['members.first_name']}"/>
+                                </webuijsf:tableColumn>
+                                <webuijsf:tableColumn binding="#{AdminPage.lastNameColumn}" headerText="Last Name" id="lastNameColumn" sort="members.last_name" width="127">
+                                    <webuijsf:staticText binding="#{AdminPage.staticText9}" id="staticText9" text="#{currentRow.value['members.last_name']}"/>
+                                </webuijsf:tableColumn>
+                                <webuijsf:tableColumn binding="#{AdminPage.detailColumn}" headerText="Details" id="detailColumn" width="80">
+                                    <webuijsf:hyperlink text="Details" url="/faces/MemberDetail.jsp">
+                                        <f:param name="memberid" value="#{currentRow.value['members.member_id']}"/>
+                                    </webuijsf:hyperlink>
+                                </webuijsf:tableColumn>
+                            </webuijsf:tableRowGroup>
+                        </webuijsf:table>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

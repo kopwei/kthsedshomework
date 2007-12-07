@@ -1,26 +1,19 @@
 /*
- * MemberDetail.java
+ * Checkout.java
  *
- * Created on Dec 6, 2007, 10:27:13 PM
+ * Created on Dec 7, 2007, 12:31:23 AM
  */
  
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
-import com.sun.webui.jsf.component.Button;
-import com.sun.webui.jsf.component.Checkbox;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
-import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import com.sun.webui.jsf.component.StaticText;
-import gnomeshop.items.MemberBean;
 import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -31,7 +24,7 @@ import javax.servlet.ServletContext;
  *
  * @author Kop
  */
-public class MemberDetail extends AbstractPageBean {
+public class Checkout extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -103,138 +96,11 @@ public class MemberDetail extends AbstractPageBean {
     }
 
     // </editor-fold>
-    private MemberBean member = null;
-    private StaticText userNameText = new StaticText();
-
-    public StaticText getUserNameText() {
-        return userNameText;
-    }
-
-    public void setUserNameText(StaticText st) {
-        this.userNameText = st;
-    }
-    private StaticText firstNameText = new StaticText();
-
-    public StaticText getFirstNameText() {
-        return firstNameText;
-    }
-
-    public void setFirstNameText(StaticText st) {
-        this.firstNameText = st;
-    }
-    private Label label1 = new Label();
-
-    public Label getLabel1() {
-        return label1;
-    }
-
-    public void setLabel1(Label l) {
-        this.label1 = l;
-    }
-    private Label label2 = new Label();
-
-    public Label getLabel2() {
-        return label2;
-    }
-
-    public void setLabel2(Label l) {
-        this.label2 = l;
-    }
-    private Label label3 = new Label();
-
-    public Label getLabel3() {
-        return label3;
-    }
-
-    public void setLabel3(Label l) {
-        this.label3 = l;
-    }
-    private StaticText lastNameText = new StaticText();
-
-    public StaticText getLastNameText() {
-        return lastNameText;
-    }
-
-    public void setLastNameText(StaticText st) {
-        this.lastNameText = st;
-    }
-    private Label label4 = new Label();
-
-    public Label getLabel4() {
-        return label4;
-    }
-
-    public void setLabel4(Label l) {
-        this.label4 = l;
-    }
-    private StaticText emailText = new StaticText();
-
-    public StaticText getEmailText() {
-        return emailText;
-    }
-
-    public void setEmailText(StaticText st) {
-        this.emailText = st;
-    }
-    private Label label5 = new Label();
-
-    public Label getLabel5() {
-        return label5;
-    }
-
-    public void setLabel5(Label l) {
-        this.label5 = l;
-    }
-    private StaticText telephoneText = new StaticText();
-
-    public StaticText getTelephoneText() {
-        return telephoneText;
-    }
-
-    public void setTelephoneText(StaticText st) {
-        this.telephoneText = st;
-    }
-    private Label label6 = new Label();
-
-    public Label getLabel6() {
-        return label6;
-    }
-
-    public void setLabel6(Label l) {
-        this.label6 = l;
-    }
-    private Checkbox blockCheckbox = new Checkbox();
-
-    public Checkbox getBlockCheckbox() {
-        return blockCheckbox;
-    }
-
-    public void setBlockCheckbox(Checkbox c) {
-        this.blockCheckbox = c;
-    }
-    private Button blockButton = new Button();
-
-    public Button getBlockButton() {
-        return blockButton;
-    }
-
-    public void setBlockButton(Button b) {
-        this.blockButton = b;
-    }
-    private Button unblockButton = new Button();
-
-    public Button getUnblockButton() {
-        return unblockButton;
-    }
-
-    public void setUnblockButton(Button b) {
-        this.unblockButton = b;
-    }
 
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public MemberDetail() {
+    public Checkout() {
     }
 
     /**
@@ -256,21 +122,14 @@ public class MemberDetail extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-         // Get DatabaseUtil instance
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != dbUtil) {
-            String memberId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("memberid");
-            member = dbUtil.getMemberById(memberId);
-        }
+        
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
         try {
             _init();
         } catch (Exception e) {
-            log("MemberDetail Initialization Failure", e);
+            log("Checkout Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -320,8 +179,8 @@ public class MemberDetail extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected ApplicationBean getApplicationBean() {
-        return (ApplicationBean) getBean("ApplicationBean");
+    protected RequestBean getRequestBean() {
+        return (RequestBean) getBean("RequestBean");
     }
 
     /**
@@ -338,42 +197,8 @@ public class MemberDetail extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected RequestBean getRequestBean() {
-        return (RequestBean) getBean("RequestBean");
-    }
-
-    /**
-     * This method is used to get the current member information
-     * @return The current member object
-     */
-    public MemberBean getMember() {
-        return member;
-    }
-
-    public String unblockButton_action() {
-        // TODO: Process the action. Return value is a navigation
-        // case name where null will return to the same page.
-         // Get DatabaseUtil instance
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != dbUtil) {
-            dbUtil.blockMember(member.getMemberId(), true);
-        }
-        return null;
-    }
-
-    public String blockButton_action() {
-        // TODO: Process the action. Return value is a navigation
-        // case name where null will return to the same page.
-         // Get DatabaseUtil instance
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != dbUtil) {
-            dbUtil.blockMember(member.getMemberId(), false);
-        }
-        return null;
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
     }
     
 }

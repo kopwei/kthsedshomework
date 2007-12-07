@@ -7,17 +7,39 @@
 <div style="background-color: rgb(255, 255, 153); height: 60px; width: 800px; -rave-layout: grid" xmlns:f="http://java.sun.com/jsf/core"
     xmlns:h="http://java.sun.com/jsf/html" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
     <f:subview id="Header">
-        <webuijsf:hyperlink actionExpression="#{Header.loginHyperlink_action}" binding="#{Header.loginHyperlink}" id="loginHyperlink"
-            style="color: #0000cc;left: 240px; top: 24px; position: absolute" text="Login"/>
-        <webuijsf:hyperlink actionExpression="#{Header.homeHyperlink_action}" binding="#{Header.homeHyperlink}" id="homeHyperlink"
-            style="color: #0000cc; left: 96px; top: 24px; position: absolute" text="Home"/>
-        <webuijsf:hyperlink actionExpression="#{Header.adminHyperlink_action}" binding="#{Header.adminHyperlink}" id="adminHyperlink"
-            style="color: #0000cc;position: absolute; left: 144px; top: 24px" text="Admin"/>
-        <webuijsf:hyperlink actionExpression="#{Header.registerHyperlink_action}" binding="#{Header.registerHyperlink}" id="registerHyperlink"
-            style="color: #0000cc;position: absolute; left: 192px; top: 24px" text="Register"/>
-        <webuijsf:hyperlink actionExpression="#{Header.shoppingCartHyperlink_action}" binding="#{Header.shoppingCartHyperlink}" id="shoppingCartHyperlink"
-            style="color: #0000cc;left: 278px; top: 24px; position: absolute" text="ShoppingCart"/>
-        <webuijsf:hyperlink actionExpression="#{Header.manageHyperlink_action}" binding="#{Header.manageHyperlink}" id="manageHyperlink"
-            style="color: #0000cc;left: 360px; top: 24px; position: absolute" text="Manage"/>
+        <table style="left: 216px; top: 24px; position: absolute" width="336">
+            <tr>
+                <td>
+                    <h:outputLink binding="#{Header.homeHyperlink}" id="homeHyperlink" value="/GnomeShop/faces/index.jsp">
+                        <h:outputText binding="#{Header.hyperlink1Text}" id="hyperlink1Text" value="Home"/>
+                    </h:outputLink>
+                </td>
+                <td>
+                    <h:outputLink binding="#{Header.adminHyperlink}" id="adminHyperlink" value="/GnomeShop/faces/AdminPage.jsp">
+                        <h:outputText binding="#{Header.hyperLink1Text}" id="hyperLink1Text" value="Admin"/>
+                    </h:outputLink>
+                </td>
+                <td>
+                    <h:outputLink binding="#{Header.registerHyperlink}" id="registerHyperlink" value="/GnomeShop/faces/Register.jsp">
+                        <h:outputText binding="#{Header.hyperlink1Text1}" id="hyperlink1Text1" value="Register"/>
+                    </h:outputLink>
+                </td>
+                <td>
+                    <h:outputLink binding="#{Header.loginHyperlink}" id="loginHyperlink" value="/GnomeShop/faces/Login.jsp">
+                        <h:outputText binding="#{Header.hyperlink1Text2}" id="hyperlink1Text2" value="Login"/>
+                    </h:outputLink>
+                </td>
+                <td>
+                    <h:outputLink binding="#{Header.shoppingCartHyperlink}" id="shoppingCartHyperlink" value="/GnomeShop/faces/ShoppingCart.jsp">
+                        <h:outputText binding="#{Header.hyperlink1Text3}" id="hyperlink1Text3" value="ShoppingCart"/>
+                    </h:outputLink>
+                </td>
+                <td style="width: 42px">
+                    <h:outputLink binding="#{Header.manageHyperlink}" id="manageHyperlink" value="/GnomeShop/faces/Manage.jsp">
+                        <h:outputText binding="#{Header.hyperlink1Text4}" id="hyperlink1Text4" value="Manage"/>
+                    </h:outputLink>
+                </td>
+            </tr>
+        </table>
     </f:subview>
 </div>

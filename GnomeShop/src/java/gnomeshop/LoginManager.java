@@ -15,11 +15,12 @@ import javax.servlet.ServletContext;
  */
 public class LoginManager {
     private String userName = null;
-    private String passWord = null;
+    private String password = null;
     private MemberBean currentMember = null;
     
     public LoginManager() {
-        
+        userName = "";
+        password ="";
     }
 
     public String getUserName() {
@@ -30,12 +31,12 @@ public class LoginManager {
         this.userName = userName;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String loginUser() {
@@ -45,7 +46,7 @@ public class LoginManager {
 	ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
 	DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
 	if (null != dbUtil) {
-            currentMember = dbUtil.getMemberByUserNameAndPwd(userName, passWord);
+            currentMember = dbUtil.getMemberByUserNameAndPwd(userName, password);
         }
         return null;
     }
@@ -57,7 +58,7 @@ public class LoginManager {
     public String  logoutUser() {
         // TODO:
         this.userName = null;
-        this.passWord = null;
+        this.password = null;
         this.currentMember = null;
         return null;
     }

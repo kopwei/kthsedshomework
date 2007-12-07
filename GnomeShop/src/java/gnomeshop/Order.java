@@ -1,32 +1,20 @@
 /*
- * ShoppingCart.java
+ * Order.java
  *
- * Created on Dec 6, 2007, 8:58:31 PM
+ * Created on Dec 7, 2007, 10:08:00 PM
  */
  
 package gnomeshop;
 
-import com.sun.data.provider.impl.ListDataProvider;
-import com.sun.data.provider.impl.ObjectDataProvider;
-import com.sun.data.provider.impl.ObjectListDataProvider;
-import com.sun.rave.faces.data.DefaultTableDataModel;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
-import com.sun.webui.jsf.component.Hyperlink;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import com.sun.webui.jsf.component.StaticText;
-import gnomeshop.items.ShoppingCartBean;
-import gnomeshop.items.ShoppingItemBean;
-import java.util.ArrayList;
-import java.util.List;
+import gnomeshop.items.OrderBean;
 import javax.faces.FacesException;
-import javax.faces.component.UIColumn;
-import javax.faces.component.html.HtmlDataTable;
-import javax.faces.component.html.HtmlOutputText;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -37,7 +25,7 @@ import javax.faces.component.html.HtmlOutputText;
  *
  * @author Kop
  */
-public class ShoppingCart extends AbstractPageBean {
+public class Order extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -46,7 +34,6 @@ public class ShoppingCart extends AbstractPageBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
-        shoppingCartDataProvider.setList(null);
     }
 
     private Page page1 = new Page();
@@ -108,141 +95,14 @@ public class ShoppingCart extends AbstractPageBean {
     public void setForm1(Form f) {
         this.form1 = f;
     }
-    private StaticText staticText1 = new StaticText();
-
-    public StaticText getStaticText1() {
-        return staticText1;
-    }
-
-    public void setStaticText1(StaticText st) {
-        this.staticText1 = st;
-    }
 
     // </editor-fold>
-    
-    
-    private ShoppingCartBean shoppingCart;
-    private HtmlDataTable dataTable1 = new HtmlDataTable();
 
-    public HtmlDataTable getDataTable1() {
-        return dataTable1;
-    }
-
-    public void setDataTable1(HtmlDataTable hdt) {
-        this.dataTable1 = hdt;
-    }
-    private DefaultTableDataModel dataTable1Model = new DefaultTableDataModel();
-
-    public DefaultTableDataModel getDataTable1Model() {
-        return dataTable1Model;
-    }
-
-    public void setDataTable1Model(DefaultTableDataModel dtdm) {
-        this.dataTable1Model = dtdm;
-    }
-    private UIColumn column1 = new UIColumn();
-
-    public UIColumn getColumn1() {
-        return column1;
-    }
-
-    public void setColumn1(UIColumn uic) {
-        this.column1 = uic;
-    }
-    private HtmlOutputText outputText1 = new HtmlOutputText();
-
-    public HtmlOutputText getOutputText1() {
-        return outputText1;
-    }
-
-    public void setOutputText1(HtmlOutputText hot) {
-        this.outputText1 = hot;
-    }
-    private HtmlOutputText outputText2 = new HtmlOutputText();
-
-    public HtmlOutputText getOutputText2() {
-        return outputText2;
-    }
-
-    public void setOutputText2(HtmlOutputText hot) {
-        this.outputText2 = hot;
-    }
-    private UIColumn column2 = new UIColumn();
-
-    public UIColumn getColumn2() {
-        return column2;
-    }
-
-    public void setColumn2(UIColumn uic) {
-        this.column2 = uic;
-    }
-    private HtmlOutputText outputText3 = new HtmlOutputText();
-
-    public HtmlOutputText getOutputText3() {
-        return outputText3;
-    }
-
-    public void setOutputText3(HtmlOutputText hot) {
-        this.outputText3 = hot;
-    }
-    private HtmlOutputText outputText4 = new HtmlOutputText();
-
-    public HtmlOutputText getOutputText4() {
-        return outputText4;
-    }
-
-    public void setOutputText4(HtmlOutputText hot) {
-        this.outputText4 = hot;
-    }
-    private UIColumn column3 = new UIColumn();
-
-    public UIColumn getColumn3() {
-        return column3;
-    }
-
-    public void setColumn3(UIColumn uic) {
-        this.column3 = uic;
-    }
-    private HtmlOutputText outputText5 = new HtmlOutputText();
-
-    public HtmlOutputText getOutputText5() {
-        return outputText5;
-    }
-
-    public void setOutputText5(HtmlOutputText hot) {
-        this.outputText5 = hot;
-    }
-    private HtmlOutputText outputText6 = new HtmlOutputText();
-
-    public HtmlOutputText getOutputText6() {
-        return outputText6;
-    }
-
-    public void setOutputText6(HtmlOutputText hot) {
-        this.outputText6 = hot;
-    }
-    private ObjectListDataProvider shoppingCartDataProvider = new ObjectListDataProvider();
-
-    public ObjectListDataProvider getShoppingCartDataProvider() {
-        return shoppingCartDataProvider;
-    }
-
-    public void setShoppingCartDataProvider(ObjectListDataProvider oldp) {
-        this.shoppingCartDataProvider = oldp;
-    }
-    private Hyperlink hyperlink1 = new Hyperlink();
-
-    public Hyperlink getHyperlink1() {
-        return hyperlink1;
-    }
-
-    public void setHyperlink1(Hyperlink h) {
-        this.hyperlink1 = h;
-    }
+    private OrderBean order;
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public ShoppingCart() {
+    public Order() {
     }
 
     /**
@@ -264,14 +124,14 @@ public class ShoppingCart extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        this.shoppingCartDataProvider.setList(new ArrayList<ShoppingItemBean>(shoppingCart.getShoppingItems()));
+        
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
         try {
             _init();
         } catch (Exception e) {
-            log("ShoppingCart Initialization Failure", e);
+            log("Order Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -302,7 +162,7 @@ public class ShoppingCart extends AbstractPageBean {
      */
     @Override
     public void prerender() {
-        shoppingCart = (ShoppingCartBean)getBean("ShoppingCartBean");
+        setOrder((OrderBean) getBean("OrderBean"));
     }
 
     /**
@@ -322,8 +182,8 @@ public class ShoppingCart extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected RequestBean getRequestBean() {
-        return (RequestBean) getBean("RequestBean");
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
     }
 
     /**
@@ -331,8 +191,8 @@ public class ShoppingCart extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected ApplicationBean getApplicationBean() {
-        return (ApplicationBean) getBean("ApplicationBean");
+    protected RequestBean getRequestBean() {
+        return (RequestBean) getBean("RequestBean");
     }
 
     /**
@@ -344,12 +204,12 @@ public class ShoppingCart extends AbstractPageBean {
         return (SessionBean) getBean("SessionBean");
     }
 
-    public ShoppingCartBean getShoppingCart() {
-        return shoppingCart;
+    public OrderBean getOrder() {
+        return order;
     }
 
-    public void setShoppingCart(ShoppingCartBean shoppingCart) {
-        this.shoppingCart = shoppingCart;
+    public void setOrder(OrderBean order) {
+        this.order = order;
     }
     
 }

@@ -22,7 +22,6 @@ import com.sun.webui.jsf.component.TableColumn;
 import com.sun.webui.jsf.component.TableRowGroup;
 import com.sun.webui.jsf.component.TextArea;
 import com.sun.webui.jsf.component.TextField;
-import com.sun.webui.jsf.model.DefaultTableDataProvider;
 import gnomeshop.items.ProductBean;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;

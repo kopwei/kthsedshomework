@@ -39,12 +39,12 @@
     <managed-bean>
         <managed-bean-name>ShoppingCartBean</managed-bean-name>
         <managed-bean-class>gnomeshop.items.ShoppingCartBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>OrderBean</managed-bean-name>
         <managed-bean-class>gnomeshop.items.OrderBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>MemberBean</managed-bean-name>
@@ -120,4 +120,14 @@
             <to-view-id>/MemberDetail.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
+    <managed-bean>
+        <managed-bean-name>Order</managed-bean-name>
+        <managed-bean-class>gnomeshop.Order</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ProductDetail</managed-bean-name>
+        <managed-bean-class>gnomeshop.ProductDetail</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>

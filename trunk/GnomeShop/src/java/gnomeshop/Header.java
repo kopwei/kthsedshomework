@@ -10,6 +10,8 @@ import com.sun.rave.web.ui.appbase.AbstractFragmentBean;
 import com.sun.webui.jsf.component.Hyperlink;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlGraphicImage;
+import javax.faces.component.html.HtmlOutputLink;
+import javax.faces.component.html.HtmlOutputText;
 
 /**
  * <p>Fragment bean that corresponds to a similarly named JSP page
@@ -39,59 +41,113 @@ public class Header extends AbstractFragmentBean {
     public void setImage1(HtmlGraphicImage hgi) {
         this.image1 = hgi;
     }
-    private Hyperlink loginHyperlink = new Hyperlink();
+    private HtmlOutputLink homeHyperlink = new HtmlOutputLink();
 
-    public Hyperlink getLoginHyperlink() {
-        return loginHyperlink;
-    }
-
-    public void setLoginHyperlink(Hyperlink h) {
-        this.loginHyperlink = h;
-    }
-    private Hyperlink homeHyperlink = new Hyperlink();
-
-    public Hyperlink getHomeHyperlink() {
+    public HtmlOutputLink getHomeHyperlink() {
         return homeHyperlink;
     }
 
-    public void setHomeHyperlink(Hyperlink h) {
-        this.homeHyperlink = h;
+    public void setHomeHyperlink(HtmlOutputLink hol) {
+        this.homeHyperlink = hol;
     }
-    private Hyperlink adminHyperlink = new Hyperlink();
+    private HtmlOutputText hyperlink1Text = new HtmlOutputText();
 
-    public Hyperlink getAdminHyperlink() {
+    public HtmlOutputText getHyperlink1Text() {
+        return hyperlink1Text;
+    }
+
+    public void setHyperlink1Text(HtmlOutputText hot) {
+        this.hyperlink1Text = hot;
+    }
+    private HtmlOutputLink adminHyperlink = new HtmlOutputLink();
+
+    public HtmlOutputLink getAdminHyperlink() {
         return adminHyperlink;
     }
 
-    public void setAdminHyperlink(Hyperlink h) {
-        this.adminHyperlink = h;
+    public void setAdminHyperlink(HtmlOutputLink hol) {
+        this.adminHyperlink = hol;
     }
-    private Hyperlink registerHyperlink = new Hyperlink();
+    private HtmlOutputText hyperLink1Text = new HtmlOutputText();
 
-    public Hyperlink getRegisterHyperlink() {
+    public HtmlOutputText getHyperLink1Text() {
+        return hyperLink1Text;
+    }
+
+    public void setHyperLink1Text(HtmlOutputText hot) {
+        this.hyperLink1Text = hot;
+    }
+    private HtmlOutputLink registerHyperlink = new HtmlOutputLink();
+
+    public HtmlOutputLink getRegisterHyperlink() {
         return registerHyperlink;
     }
 
-    public void setRegisterHyperlink(Hyperlink h) {
-        this.registerHyperlink = h;
+    public void setRegisterHyperlink(HtmlOutputLink hol) {
+        this.registerHyperlink = hol;
     }
-    private Hyperlink shoppingCartHyperlink = new Hyperlink();
+    private HtmlOutputText hyperlink1Text1 = new HtmlOutputText();
 
-    public Hyperlink getShoppingCartHyperlink() {
+    public HtmlOutputText getHyperlink1Text1() {
+        return hyperlink1Text1;
+    }
+
+    public void setHyperlink1Text1(HtmlOutputText hot) {
+        this.hyperlink1Text1 = hot;
+    }
+    private HtmlOutputLink loginHyperlink = new HtmlOutputLink();
+
+    public HtmlOutputLink getLoginHyperlink() {
+        return loginHyperlink;
+    }
+
+    public void setLoginHyperlink(HtmlOutputLink hol) {
+        this.loginHyperlink = hol;
+    }
+    private HtmlOutputText hyperlink1Text2 = new HtmlOutputText();
+
+    public HtmlOutputText getHyperlink1Text2() {
+        return hyperlink1Text2;
+    }
+
+    public void setHyperlink1Text2(HtmlOutputText hot) {
+        this.hyperlink1Text2 = hot;
+    }
+    private HtmlOutputLink shoppingCartHyperlink = new HtmlOutputLink();
+
+    public HtmlOutputLink getShoppingCartHyperlink() {
         return shoppingCartHyperlink;
     }
 
-    public void setShoppingCartHyperlink(Hyperlink h) {
-        this.shoppingCartHyperlink = h;
+    public void setShoppingCartHyperlink(HtmlOutputLink hol) {
+        this.shoppingCartHyperlink = hol;
     }
-    private Hyperlink manageHyperlink = new Hyperlink();
+    private HtmlOutputText hyperlink1Text3 = new HtmlOutputText();
 
-    public Hyperlink getManageHyperlink() {
+    public HtmlOutputText getHyperlink1Text3() {
+        return hyperlink1Text3;
+    }
+
+    public void setHyperlink1Text3(HtmlOutputText hot) {
+        this.hyperlink1Text3 = hot;
+    }
+    private HtmlOutputLink manageHyperlink = new HtmlOutputLink();
+
+    public HtmlOutputLink getManageHyperlink() {
         return manageHyperlink;
     }
 
-    public void setManageHyperlink(Hyperlink h) {
-        this.manageHyperlink = h;
+    public void setManageHyperlink(HtmlOutputLink hol) {
+        this.manageHyperlink = hol;
+    }
+    private HtmlOutputText hyperlink1Text4 = new HtmlOutputText();
+
+    public HtmlOutputText getHyperlink1Text4() {
+        return hyperlink1Text4;
+    }
+
+    public void setHyperlink1Text4(HtmlOutputText hot) {
+        this.hyperlink1Text4 = hot;
     }
     // </editor-fold>
 

@@ -281,7 +281,7 @@ public class Login extends AbstractPageBean {
                 // case name where null will return to the same page.
             
             loginMgr.setUserName(getUserNameField().getText().toString());
-            loginMgr.setPassWord(getPasswordField().getPassword().toString());
+            loginMgr.setPassword(getPasswordField().getPassword().toString());
             return loginMgr.loginUser();            
         }
         

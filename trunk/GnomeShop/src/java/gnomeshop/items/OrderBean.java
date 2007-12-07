@@ -21,6 +21,16 @@ public class OrderBean {
     private String creditCardName;
     private String creditCardNumber;
     private String creditCardExpiryDate;
+    
+    public OrderBean() {
+        this.orderId = UUID.randomUUID();
+        this.memberId = null;
+        contactName = "";
+        deliveryAddress= "";
+        creditCardNumber = "";
+        creditCardName = "";
+        creditCardExpiryDate="";
+    }
 
     /**
      * Constructor used to initialize the information

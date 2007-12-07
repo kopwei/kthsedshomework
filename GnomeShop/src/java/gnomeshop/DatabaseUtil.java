@@ -9,8 +9,6 @@ package gnomeshop;
  * @author Kop
  */
 import gnomeshop.items.*;
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -191,11 +189,25 @@ public class DatabaseUtil {
         return products;
     }
     
-    public ArrayList<MemberBean> getAllMembers() {
-        // Prepared the return array and the query string 
-        ArrayList<MemberBean> members = new ArrayList<MemberBean>();
-        
-        return members;
+    public void blockMember(String memberId, boolean setBlock) {
+        // Verify the input parameter
+        if (memberId.length() < 1) {
+            return;
+        }
+        //Prepare the update string
+        String sql = "UPDATE members SET isblocked = " + setBlock + " WHERE member_id = '" +  memberId +"'";
+        try {
+             // Create the connection and execute the query command
+            Class.forName(jdbcDriver).newInstance();
+            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);      
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+        }
     }
 
     /**
@@ -247,7 +259,7 @@ public class DatabaseUtil {
             MessageDigest md = MessageDigest.getInstance("SHA");
             String digestedPwd = new String(md.digest(passWord.getBytes()));
             // Prepare the query command string
-            String sql = "SELECT member_id,  member_level, first_name, last_name, email, phone FROM members" +
+            String sql = "SELECT member_id,  member_level, first_name, last_name, email, phone, isblocked FROM members" +
                     " WHERE (username = " + userName + " AND password = " + digestedPwd + ")";
             // Create the connection and execute the query
             Class.forName(jdbcDriver).newInstance();
@@ -262,10 +274,54 @@ public class DatabaseUtil {
                 String lastName = resultSet.getString(4);
                 String email = resultSet.getString(5);
                 String telephone = resultSet.getString(6);
+                boolean blocked = resultSet.getBoolean(7);
                 resultSet.close();
                 statement.close();
                 connection.close();
-                return new MemberBean(memberId, userName, passWord, memberLevel, firstName, lastName, telephone, email);
+                return new MemberBean(memberId, userName, passWord, memberLevel, firstName, lastName, telephone, email, blocked);
+            } else {
+                return null;
+            }
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * This method is used to get the member object by user's id
+     * @param memberId User's member id
+     * @return The member object
+     */
+    public MemberBean getMemberById(String memberId) {
+         // Verify the input parameter
+        if (memberId.length()< 1) {
+            return null;
+        }
+        try {
+            // Prepare the query command string
+            String sql = "SELECT username, password,  member_level,  first_name, last_name, email, phone, isblocked FROM members" +
+                    " WHERE (member_id = '" + memberId + "')";
+            // Create the connection and execute the query
+            Class.forName(jdbcDriver).newInstance();
+            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            // Get the query result 
+            if (resultSet.next()) {
+                String userName = resultSet.getString(1);
+                String password = resultSet.getString(2);
+                int memberLevel = resultSet.getInt(3);
+                String firstName = resultSet.getString(4);
+                String lastName = resultSet.getString(5);
+                String email = resultSet.getString(6);
+                String telephone = resultSet.getString(7);
+                boolean blocked = resultSet.getBoolean(8);
+                resultSet.close();
+                statement.close();
+                connection.close();
+                return new MemberBean(memberId, userName, password, memberLevel, firstName, lastName, 
+                        telephone, email, blocked);
             } else {
                 return null;
             }
@@ -305,7 +361,7 @@ public class DatabaseUtil {
             statement.setString(6, member.getLastName());
             statement.setString(7, member.getEmail());
             statement.setString(8, member.getTelephone());
-            statement.setBoolean(9, false);
+            statement.setBoolean(9, member.getBlocked());
 
             statement.executeUpdate();
             statement.close();

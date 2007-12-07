@@ -23,6 +23,7 @@ public class MemberBean {
     private String telephone;
     private String email;
     private int memberLevel;
+    private boolean blocked;
     
    /**
      * The constructor used for initialize the information
@@ -43,6 +44,7 @@ public class MemberBean {
         this.telephone = telephone;
         this.email = emailAddress;
         this.memberLevel = NORMALMEMBER;
+        this.blocked = false;
     }
     
     /**
@@ -57,7 +59,7 @@ public class MemberBean {
      * @param emailAddress Member's email address
      */
     public MemberBean(String memberId, String userName, String passWord, int memberLevel, String firstName, String lastName, 
-            String telephone, String emailAddress) {
+            String telephone, String emailAddress, boolean isBlocked) {
         this.memberId = UUID.fromString(memberId);
         this.userName = userName;
         this.passWord = passWord;
@@ -66,6 +68,7 @@ public class MemberBean {
         this.lastName = lastName;
         this.telephone = telephone;
         this.email = emailAddress;
+        this.blocked = isBlocked;
     }
 
      public String getMemberId() {
@@ -187,9 +190,19 @@ public class MemberBean {
         this.memberLevel = memberLevel;
     }
 
-    public String loginUser() {
-        // TODO: need implementation here
-        return null;
+    /**
+     * 
+     * @return
+     */
+    public boolean getBlocked() {
+        return blocked;
+    }
+    /**
+     * 
+     * @param blocked
+     */
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
  

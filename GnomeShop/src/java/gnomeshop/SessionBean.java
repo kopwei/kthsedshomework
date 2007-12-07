@@ -32,10 +32,22 @@ public class SessionBean extends AbstractSessionBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
+        membersRowSet.setDataSourceName("java:comp/env/jdbc/webshop_MySQL");
+        membersRowSet.setCommand("SELECT * FROM members");
+        membersRowSet.setTableName("members");
     }
     // </editor-fold>
 
     private MemberBean currentMember = null;
+    private CachedRowSetXImpl membersRowSet = new CachedRowSetXImpl();
+
+    public CachedRowSetXImpl getMembersRowSet() {
+        return membersRowSet;
+    }
+
+    public void setMembersRowSet(CachedRowSetXImpl crsxi) {
+        this.membersRowSet = crsxi;
+    }
     /**
      * <p>Construct a new session data bean instance.</p>
      */

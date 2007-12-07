@@ -129,4 +129,16 @@
         <managed-bean-class>gnomeshop.MemberDetail</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Checkout</managed-bean-name>
+        <managed-bean-class>gnomeshop.Checkout</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <navigation-rule>
+        <from-view-id>/ShoppingCart.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>Checkout</from-outcome>
+            <to-view-id>/Checkout.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

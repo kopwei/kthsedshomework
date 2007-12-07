@@ -126,7 +126,7 @@ public class DatabaseUtil {
     public ArrayList<ProductBean> searchProducts(String searchKey) {
         // Prepared the return array and the query string 
         ArrayList<ProductBean> products = new ArrayList<ProductBean>();
-        String sql = "SELECT ProductId, Name, Price FROM Products" + " WHERE Name LIKE '%" + searchKey + "%'" +
+        String sql = "SELECT ProductId, Name, Price, Description, Quatity FROM Products" + " WHERE Name LIKE '%" + searchKey + "%'" +
                 " OR Description LIKE '%" + searchKey + "%'";
         try {
             // Create the connection and execute the query command
@@ -139,7 +139,9 @@ public class DatabaseUtil {
                 String id = resultSet.getString(1);
                 String name = resultSet.getString(2);
                 float price = resultSet.getFloat(3);
-                ProductBean product = new ProductBean(id, name, price);
+                String desc = resultSet.getString(4);
+                int quantity = resultSet.getInt(5);
+                ProductBean product = new ProductBean(id, name, desc, price, quantity);
                 products.add(product);
             }
             // Close the database connection
@@ -162,7 +164,7 @@ public class DatabaseUtil {
     public ArrayList<ProductBean> getProductByCategory(String categoryId) {
         // Prepared the return array and the query string 
         ArrayList<ProductBean> products = new ArrayList<ProductBean>();
-        String sql = "SELECT ProductId, Name, Price FROM Products" + " WHERE CategoryId = " + categoryId;
+        String sql = "SELECT ProductId, Name, Price, Description, Quantity FROM Products" + " WHERE CategoryId = " + categoryId;
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
@@ -174,7 +176,9 @@ public class DatabaseUtil {
                 String id = resultSet.getString(1);
                 String name = resultSet.getString(2);
                 float price = resultSet.getFloat(3);
-                ProductBean product = new ProductBean(id, name, price);
+                String desc = resultSet.getString(4);
+                int quantity = resultSet.getInt(5);
+                ProductBean product = new ProductBean(id, name, desc, price, quantity);
                 products.add(product);
             }
             // Close the database connection
@@ -226,9 +230,34 @@ public class DatabaseUtil {
         String description = product.getDescription();
         int quantiry = product.getQuantity();
 
-        String sql = "INSERT INTO Products (ProductId, Name," +
-                "Description, Price, Quantity) VALUES(" + productId + ", " + productName + ", " + price + ", " +
-                description + ", " + quantiry + ")";
+        String sql = "INSERT INTO Products (ProductId, Name, " +
+                "Price, Description, Quantity) VALUES('" + productId + "', '" + productName + "', " + price + ", '" +
+                description + "', " + quantiry + ")";
+        try {
+            // Create the connection and execute the update command
+            Class.forName(jdbcDriver).newInstance();
+            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            statement.close();
+            connection.close();
+
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+    }
+    
+    /**
+     * This method is used to remove a kind of product from database
+     * @param productId The ID of product to be removed
+     */
+    public synchronized  void removeProduct(String productId) {
+        // Verify the input parameter
+        if (null == productId) {
+            return;
+        }
+        // Prepare the SQL arguments and sql statement
+        String sql = "DELETE FROM Products WHERE ProductId = '" + productId +"'";
         try {
             // Create the connection and execute the update command
             Class.forName(jdbcDriver).newInstance();

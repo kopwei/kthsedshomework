@@ -42,7 +42,7 @@
                                     <webuijsf:staticText binding="#{AdminPage.staticText9}" id="staticText9" text="#{currentRow.value['members.last_name']}"/>
                                 </webuijsf:tableColumn>
                                 <webuijsf:tableColumn binding="#{AdminPage.detailColumn}" headerText="Details" id="detailColumn" width="80">
-                                    <webuijsf:hyperlink text="Details" url="/faces/MemberDetail.jsp">
+                                    <webuijsf:hyperlink text="Details" url="/faces/MemberDetail.jsp" actionExpression="MemberDetails">
                                         <f:param name="memberid" value="#{currentRow.value['members.member_id']}"/>
                                     </webuijsf:hyperlink>
                                 </webuijsf:tableColumn>

@@ -35,6 +35,7 @@ public class SessionBean extends AbstractSessionBean {
         membersRowSet.setDataSourceName("java:comp/env/jdbc/webshop_MySQL");
         membersRowSet.setCommand("SELECT * FROM members");
         membersRowSet.setTableName("members");
+
     }
     // </editor-fold>
 
@@ -48,6 +49,7 @@ public class SessionBean extends AbstractSessionBean {
     public void setMembersRowSet(CachedRowSetXImpl crsxi) {
         this.membersRowSet = crsxi;
     }
+    
     /**
      * <p>Construct a new session data bean instance.</p>
      */

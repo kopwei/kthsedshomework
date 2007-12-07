@@ -13,7 +13,7 @@ public class ProductBean {
 	private UUID id;
 	private String name;
 	private String description;
-    private int quantity;
+        private int quantity;
 	private float price;
 	
 	/**
@@ -29,10 +29,12 @@ public class ProductBean {
 	 * @param name Name of the product
 	 * @param price Price of the product
 	 */
-	public ProductBean(String id, String name, float price) {
-		this.id = UUID.fromString(id);
+	public ProductBean(String name, float price, String description, int quantity) {
+		this.id = UUID.randomUUID();
 		this.name = name;
 		this.price = price;
+                this.description = description;
+                this.quantity = quantity;
 	}
 	
 	/**

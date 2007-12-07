@@ -6,14 +6,27 @@
  
 package gnomeshop;
 
+import com.sun.data.provider.impl.CachedRowSetDataProvider;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
+import com.sun.sql.rowset.CachedRowSetXImpl;
 import com.sun.webui.jsf.component.Body;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
+import com.sun.webui.jsf.component.Hyperlink;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
+import com.sun.webui.jsf.component.StaticText;
+import com.sun.webui.jsf.component.Table;
+import com.sun.webui.jsf.component.TableColumn;
+import com.sun.webui.jsf.component.TableRowGroup;
+import com.sun.webui.jsf.component.TextArea;
+import com.sun.webui.jsf.component.TextField;
+import com.sun.webui.jsf.model.DefaultTableDataProvider;
+import gnomeshop.items.ProductBean;
 import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -33,6 +46,15 @@ public class Manage extends AbstractPageBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
+        table3.setTitle("Table");
+        table3.setAugmentTitle(false);
+        table3.setId("productTable");
+        productsRowSet.setDataSourceName("java:comp/env/jdbc/webshop_MySQL");
+        productsRowSet.setCommand("SELECT * FROM products");
+        productsRowSet.setTableName("products");
+        productsDataProvider.setCachedRowSet((javax.sql.rowset.CachedRowSet) getValue("#{Manage.productsRowSet}"));
+        productsDataProvider.setCachedRowSet((javax.sql.rowset.CachedRowSet) getValue("#{Manage.productsRowSet}"));
+        productsDataProvider.setCachedRowSet((javax.sql.rowset.CachedRowSet) getValue("#{Manage.productsRowSet}"));
     }
 
     private Page page1 = new Page();
@@ -94,6 +116,179 @@ public class Manage extends AbstractPageBean {
     public void setForm1(Form f) {
         this.form1 = f;
     }
+    private TextField nameField = new TextField();
+
+    public TextField getNameField() {
+        return nameField;
+    }
+
+    public void setNameField(TextField tf) {
+        this.nameField = tf;
+    }
+    private TextField priceField = new TextField();
+
+    public TextField getPriceField() {
+        return priceField;
+    }
+
+    public void setPriceField(TextField tf) {
+        this.priceField = tf;
+    }
+    private TextArea descriptionArea = new TextArea();
+
+    public TextArea getDescriptionArea() {
+        return descriptionArea;
+    }
+
+    public void setDescriptionArea(TextArea ta) {
+        this.descriptionArea = ta;
+    }
+    private Hyperlink addHyperlink = new Hyperlink();
+
+    public Hyperlink getAddHyperlink() {
+        return addHyperlink;
+    }
+
+    public void setAddHyperlink(Hyperlink h) {
+        this.addHyperlink = h;
+    }
+    private Table table3 = new Table();
+
+    public Table getTable3() {
+        return table3;
+    }
+
+    public void setTable3(Table t) {
+        this.table3 = t;
+    }
+    private StaticText staticText1 = new StaticText();
+
+    public StaticText getStaticText1() {
+        return staticText1;
+    }
+
+    public void setStaticText1(StaticText st) {
+        this.staticText1 = st;
+    }
+    private TextField quantityField = new TextField();
+
+    public TextField getQuantityField() {
+        return quantityField;
+    }
+
+    public void setQuantityField(TextField tf) {
+        this.quantityField = tf;
+    }
+    private Table table1 = new Table();
+
+    public Table getTable1() {
+        return table1;
+    }
+
+    public void setTable1(Table t) {
+        this.table1 = t;
+    }
+    private TableRowGroup tableRowGroup1 = new TableRowGroup();
+
+    public TableRowGroup getTableRowGroup1() {
+        return tableRowGroup1;
+    }
+
+    public void setTableRowGroup1(TableRowGroup trg) {
+        this.tableRowGroup1 = trg;
+    }
+    
+     private CachedRowSetXImpl productsRowSet = new CachedRowSetXImpl();
+
+    public CachedRowSetXImpl getProductsRowSet() {
+        return productsRowSet;
+    }
+
+    public void setProductsRowSet(CachedRowSetXImpl crsxi) {
+        this.productsRowSet = crsxi;
+    }
+    
+    private CachedRowSetDataProvider productsDataProvider = new CachedRowSetDataProvider();
+
+    public CachedRowSetDataProvider getProductsDataProvider() {
+        return productsDataProvider;
+    }
+
+    public void setProductsDataProvider(CachedRowSetDataProvider crsdp) {
+        this.productsDataProvider = crsdp;
+    }
+    private TableColumn tableColumn6 = new TableColumn();
+
+    public TableColumn getTableColumn6() {
+        return tableColumn6;
+    }
+
+    public void setTableColumn6(TableColumn tc) {
+        this.tableColumn6 = tc;
+    }
+    private StaticText staticText7 = new StaticText();
+
+    public StaticText getStaticText7() {
+        return staticText7;
+    }
+
+    public void setStaticText7(StaticText st) {
+        this.staticText7 = st;
+    }
+    private TableColumn tableColumn8 = new TableColumn();
+
+    public TableColumn getTableColumn8() {
+        return tableColumn8;
+    }
+
+    public void setTableColumn8(TableColumn tc) {
+        this.tableColumn8 = tc;
+    }
+    private StaticText staticText9 = new StaticText();
+
+    public StaticText getStaticText9() {
+        return staticText9;
+    }
+
+    public void setStaticText9(StaticText st) {
+        this.staticText9 = st;
+    }
+    private TableColumn tableColumn9 = new TableColumn();
+
+    public TableColumn getTableColumn9() {
+        return tableColumn9;
+    }
+
+    public void setTableColumn9(TableColumn tc) {
+        this.tableColumn9 = tc;
+    }
+    private StaticText staticText10 = new StaticText();
+
+    public StaticText getStaticText10() {
+        return staticText10;
+    }
+
+    public void setStaticText10(StaticText st) {
+        this.staticText10 = st;
+    }
+    private TableColumn removeColumn = new TableColumn();
+
+    public TableColumn getRemoveColumn() {
+        return removeColumn;
+    }
+
+    public void setRemoveColumn(TableColumn tc) {
+        this.removeColumn = tc;
+    }
+    private StaticText staticText2 = new StaticText();
+
+    public StaticText getStaticText2() {
+        return staticText2;
+    }
+
+    public void setStaticText2(StaticText st) {
+        this.staticText2 = st;
+    }
 
     // </editor-fold>
 
@@ -122,7 +317,7 @@ public class Manage extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        
+        processParameter();
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -148,6 +343,7 @@ public class Manage extends AbstractPageBean {
      */
     @Override
     public void preprocess() {
+        
     }
 
     /**
@@ -172,6 +368,7 @@ public class Manage extends AbstractPageBean {
      */
     @Override
     public void destroy() {
+        productsDataProvider.close();
     }
 
     /**
@@ -201,5 +398,40 @@ public class Manage extends AbstractPageBean {
         return (SessionBean) getBean("SessionBean");
     }
     
+    private void processParameter() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        String productId = facesContext.getExternalContext().getRequestParameterMap().get("productid");
+        String removeStr = facesContext.getExternalContext().getRequestParameterMap().get("remove");
+        if (null != removeStr) {
+            boolean remove = Boolean.valueOf(removeStr);
+            DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
+            if (null != dbUtil && remove) {
+                if (null != productId) {
+                    dbUtil.removeProduct(productId);
+                }
+            }
+        }
+    }
+
+    public String addHyperlink_action() {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        if (nameField.getText() == null || priceField.getText() == null || quantityField.getText() == null) {
+            return null;
+        }
+        String name = nameField.getText().toString();
+        float price = Float.parseFloat(priceField.getText().toString());
+        String desc = descriptionArea.getText().toString();
+        int quantity = Integer.parseInt(quantityField.getText().toString());
+        ProductBean product = new ProductBean(name, price, desc, quantity);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
+        if (null != dbUtil) {
+            dbUtil.insertProduct(product);
+        }
+        return null;
+    }
 }
 

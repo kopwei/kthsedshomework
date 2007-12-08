@@ -16,6 +16,7 @@ import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Hyperlink;
+import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
 import com.sun.webui.jsf.component.StaticText;
@@ -238,6 +239,15 @@ public class ShoppingCart extends AbstractPageBean {
 
     public void setHyperlink1(Hyperlink h) {
         this.hyperlink1 = h;
+    }
+    private Label label1 = new Label();
+
+    public Label getLabel1() {
+        return label1;
+    }
+
+    public void setLabel1(Label l) {
+        this.label1 = l;
     }
     /**
      * <p>Construct a new Page bean instance.</p>

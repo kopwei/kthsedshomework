@@ -32,6 +32,7 @@ import javax.faces.component.html.HtmlPanelGroup;
 
 import gnomeshop.DatabaseUtil;
 import gnomeshop.items.ProductBean;
+import gnomeshop.items.SearchBean;
 import java.util.ArrayList;
 import javax.faces.context.FacesContext;
 import javax.servlet.Servlet;
@@ -154,8 +155,9 @@ public class Inventory extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
+        SearchBean searchBean = (SearchBean) getBean("SearchBean");
+        String searchKey = searchBean.getSearchKey();
         FacesContext fc = FacesContext.getCurrentInstance();
-        String searchKey = fc.getExternalContext().getRequestParameterMap().get("searchkey");
         ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
         DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
         if (null != databaseUtil) {            

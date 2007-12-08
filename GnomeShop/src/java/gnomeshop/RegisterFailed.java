@@ -183,6 +183,33 @@ public class RegisterFailed extends AbstractPageBean {
     @Override
     public void destroy() {
     }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected RequestBean getRequestBean() {
+        return (RequestBean) getBean("RequestBean");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected SessionBean getSessionBean() {
+        return (SessionBean) getBean("SessionBean");
+    }
+
+    /**
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
+     */
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
+    }
     
 }
 

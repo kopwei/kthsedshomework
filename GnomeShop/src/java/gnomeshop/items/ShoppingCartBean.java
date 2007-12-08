@@ -45,8 +45,9 @@ public class ShoppingCartBean {
 	 * This method is used to add a new shopping item into the current cart
 	 * @param item The shopping item
 	 */
-	public void addShoppingItem(ShoppingItemBean item) {
-		shoppingItems.add(item);
+	public boolean addShoppingItem(ShoppingItemBean item) {
+		boolean result = shoppingItems.add(item);
+                return result;
 	}
 	
 	/**

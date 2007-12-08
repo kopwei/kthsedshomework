@@ -101,6 +101,16 @@
         <managed-bean-class>gnomeshop.Checkout</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>GnomeDetail</managed-bean-name>
+        <managed-bean-class>gnomeshop.GnomeDetail</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Inventory</managed-bean-name>
+        <managed-bean-class>gnomeshop.Inventory</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
     <navigation-rule>
         <from-view-id>/ShoppingCart.jsp</from-view-id>
         <navigation-case>
@@ -132,4 +142,25 @@
         <managed-bean-class>gnomeshop.ProductDetail</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>AddingIntoCartSuccess</managed-bean-name>
+        <managed-bean-class>gnomeshop.AddingIntoCartSuccess</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>AddingIntoCartFailure</managed-bean-name>
+        <managed-bean-class>gnomeshop.AddingIntoCartFailure</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <navigation-rule>
+        <from-view-id>/GnomeDetail.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>AddingSuccess</from-outcome>
+            <to-view-id>/AddingIntoCartSuccess.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>AddingFailure</from-outcome>
+            <to-view-id>/AddingIntoCartFailure.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

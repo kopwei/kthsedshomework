@@ -23,14 +23,41 @@
                         <div style="left: 216px; top: 528px; position: absolute">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
-                        <webuijsf:textField binding="#{Manage.nameField}" id="nameField" label="Gnome Name" style="left: 288px; top: 96px; position: absolute"/>
-                        <webuijsf:textField binding="#{Manage.priceField}" id="priceField" label="Gnome Price" style="left: 288px; top: 144px; position: absolute"/>
-                        <webuijsf:textArea binding="#{Manage.descriptionArea}" id="descriptionArea" label="Gnome Description" style="left: 264px; top: 192px; position: absolute"/>
-                        <webuijsf:hyperlink actionExpression="#{Manage.addHyperlink_action}" binding="#{Manage.addHyperlink}" id="addHyperlink"
-                            style="color: rgb(0, 0, 204); left: 552px; top: 240px; position: absolute; text-decoration: underline" text="Add"/>
-                        <webuijsf:textField binding="#{Manage.quantityField}" id="quantityField" label="Quantity" style="left: 312px; top: 240px; position: absolute"/>
+                        <table style="left: 240px; top: 96px; position: absolute">
+                            <tr>
+                                <td>Gnome Name</td>
+                                <td>
+                                    <webuijsf:textField binding="#{Manage.nameField}" id="nameField"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Gnome Price</td>
+                                <td>
+                                    <webuijsf:textField binding="#{Manage.priceField}" id="priceField"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Gnome Description</td>
+                                <td>
+                                    <webuijsf:textArea binding="#{Manage.descriptionArea}" id="descriptionArea"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Quantity</td>
+                                <td>
+                                    <webuijsf:textField binding="#{Manage.quantityField}" id="quantityField"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <webuijsf:hyperlink actionExpression="#{Manage.addHyperlink_action}" binding="#{Manage.addHyperlink}" id="addHyperlink"
+                                        style="color: rgb(0, 0, 204);text-decoration: underline" text="Add"/>
+                                </td>
+                            </tr>
+                        </table>
                         <webuijsf:table augmentTitle="false" binding="#{Manage.table1}" id="table1"
-                            style="height: 101px; left: 216px; top: 312px; position: absolute" title="Gnomes" width="408">
+                            style="height: 101px; left: 240px; top: 240px; position: absolute; width: 408px" title="Gnomes" width="408">
                             <webuijsf:tableRowGroup binding="#{Manage.tableRowGroup1}" id="tableRowGroup1" rows="10" sourceData="#{Manage.productsDataProvider}" sourceVar="currentRow">
                                 <webuijsf:tableColumn binding="#{Manage.tableColumn6}" headerText="name" id="tableColumn6" sort="products.name">
                                     <webuijsf:staticText binding="#{Manage.staticText7}" id="staticText7" text="#{currentRow.value['products.name']}"/>

@@ -284,7 +284,7 @@ public class MemberDetail extends AbstractPageBean {
         // Perform application initialization that must complete
         // *after* managed components are initialized
         // TODO - add your own initialization code here
-         if (null != dbUtil) {
+         if (null != dbUtil && null != memberId) {
             member = dbUtil.getMemberById(memberId);
          }
         updateBlockState();

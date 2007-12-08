@@ -20,7 +20,11 @@ public class ProductBean {
 	 * Default constructor.
 	 */
 	public ProductBean() {
-		
+		this.id = UUID.randomUUID();
+                this.name = "";
+                this.description = "";
+                this.quantity = 0;
+                this.price = 0.0f;
 	}
 	
 	/**

@@ -289,7 +289,7 @@ public class DatabaseUtil {
             String digestedPwd = new String(md.digest(passWord.getBytes()));
             // Prepare the query command string
             String sql = "SELECT member_id,  member_level, first_name, last_name, email, phone, isblocked FROM members" +
-                    " WHERE (username = " + userName + " AND password = " + digestedPwd + ")";
+                    " WHERE (username = '" + userName + "' AND password = '" + digestedPwd + "')";
             // Create the connection and execute the query
             Class.forName(jdbcDriver).newInstance();
             connection = DriverManager.getConnection(dbUrl, "root", "123456");
@@ -363,11 +363,12 @@ public class DatabaseUtil {
     /**
      * This method is used to store a member into the database
      * @param member The member to be stored
+     * @return Whether it suceed or not
      */
-    public synchronized void insertMember(MemberBean member) {
+    public synchronized boolean insertMember(MemberBean member) {
         // Verify the input parameter
         if (null == member) {
-            return;
+            return false;
         }
 
         try {
@@ -395,10 +396,11 @@ public class DatabaseUtil {
             statement.executeUpdate();
             statement.close();
             connection.close();
-
         } catch (Exception ex) {
             System.err.println(ex.getMessage());
+            return false;
         }
+        return true;
     }
 
     /**

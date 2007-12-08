@@ -23,6 +23,7 @@ import com.sun.webui.jsf.component.TableRowGroup;
 import com.sun.webui.jsf.component.TextArea;
 import com.sun.webui.jsf.component.TextField;
 import gnomeshop.items.ProductBean;
+import java.io.IOException;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -316,6 +317,18 @@ public class Manage extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
+        try {
+            LoginManager loginMgr = (LoginManager)getBean("LoginManager");
+            if (null != loginMgr) {
+                if (!loginMgr.isAdmin()) {
+                    FacesContext facesContext = FacesContext.getCurrentInstance();        
+                    facesContext.getExternalContext().redirect("Login.jsp");
+                }
+            }
+        } catch (IOException ex) {
+            //Logger.getLogger(AdminPage.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
+        }
         processParameter();
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components

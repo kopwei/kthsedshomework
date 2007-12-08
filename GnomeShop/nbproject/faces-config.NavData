@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Scene Scope="All Faces Configurations" version="2">
-    <Scope Scope="Faces Configuration Only">
-        <Node id="GnomeDetail.jsp" x="150" y="750" zoom="true"/>
-        <Node id="AddingIntoCartSuccess.jsp" x="400" y="450" zoom="true"/>
-        <Node id="AddingIntoCartFailure.jsp" x="400" y="600" zoom="true"/>
-    </Scope>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
-        <Node id="index.jsp" x="900" y="150" zoom="true"/>
-        <Node id="Checkout.jsp" x="150" y="300" zoom="true"/>
-        <Node id="Page1.jsp" x="400" y="600" zoom="true"/>
-        <Node id="AddingIntoCartSuccess.jsp" x="400" y="150" zoom="true"/>
-        <Node id="Register.jsp" x="150" y="600" zoom="true"/>
-        <Node id="Order.jsp" x="900" y="300" zoom="true"/>
-        <Node id="AddingIntoCartFailure.jsp" x="1150" y="150" zoom="true"/>
-        <Node id="Inventory.jsp" x="650" y="300" zoom="true"/>
-        <Node id="Manage.jsp" x="650" y="450" zoom="true"/>
-        <Node id="MemberDetail.jsp" x="150" y="750" zoom="true"/>
+        <Node id="index.jsp" x="400" y="450" zoom="true"/>
+        <Node id="Checkout.jsp" x="941" y="295" zoom="true"/>
+        <Node id="Loginsuceed.jsp" x="1150" y="150" zoom="true"/>
+        <Node id="*" x="400" y="600" zoom="true"/>
+        <Node id="AddingIntoCartSuccess.jsp" x="650" y="300" zoom="true"/>
+        <Node id="Register.jsp" x="185" y="259" zoom="true"/>
+        <Node id="Order.jsp" x="150" y="600" zoom="true"/>
+        <Node id="RegisterSuceed.jsp" x="184" y="73" zoom="true"/>
+        <Node id="RegisterFailed.jsp" x="900" y="450" zoom="true"/>
+        <Node id="AddingIntoCartFailure.jsp" x="133" y="150" zoom="true"/>
+        <Node id="Inventory.jsp" x="150" y="750" zoom="true"/>
+        <Node id="Manage.jsp" x="400" y="150" zoom="true"/>
+        <Node id="MemberDetail.jsp" x="650" y="450" zoom="true"/>
         <Node id="ProductDetail.jsp" x="400" y="300" zoom="true"/>
-        <Node id="GnomeDetail.jsp" x="150" y="150" zoom="true"/>
-        <Node id="ShoppingCart.jsp" x="150" y="450" zoom="true"/>
-        <Node id="Login.jsp" x="400" y="450" zoom="true"/>
-        <Node id="AdminPage.jsp" x="650" y="150" zoom="true"/>
+        <Node id="Loginerror.jsp" x="1150" y="300" zoom="true"/>
+        <Node id="GnomeDetail.jsp" x="900" y="150" zoom="true"/>
+        <Node id="ShoppingCart.jsp" x="650" y="150" zoom="true"/>
+        <Node id="AdminPage.jsp" x="140" y="489" zoom="true"/>
+        <Node id="Login.jsp" x="1400" y="150" zoom="true"/>
     </Scope>
 </Scene>

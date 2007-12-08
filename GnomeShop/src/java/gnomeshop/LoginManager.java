@@ -39,6 +39,10 @@ public class LoginManager {
         this.password = password;
     }
 
+    /**
+     * This method is used to login
+     * @return
+     */
     public String loginUser() {
         // TODO:
         // Get DatabaseUtil instance
@@ -47,12 +51,43 @@ public class LoginManager {
 	DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
 	if (null != dbUtil) {
             currentMember = dbUtil.getMemberByUserNameAndPwd(userName, password);
+        } 
+        if (null != currentMember) {
+            return "LoginSucceed";
+        } else {
+            return "LoginFailed";
+        }
+    }
+    
+    public String checkAdmin() {
+        String adminReq = "Admin required";
+        if (null == currentMember) {
+            return adminReq;
+        }
+        if (currentMember.getMemberLevel() != MemberBean.ADMINISTRATOR) {
+            return adminReq;
         }
         return null;
     }
     
+    /**
+     * This method is used to check if the user is logged in
+     * @return Whether the user logs in
+     */
     public boolean getLoggedIn() {
-        return (null == currentMember);
+        return (null != currentMember);
+    }
+    
+    /**
+     * This method is used to check if the login user is the administrator or not
+     * @return Whether the admin logs in
+     */
+    public boolean isAdmin() {
+        if (null != currentMember) {
+            return (MemberBean.ADMINISTRATOR == currentMember.getMemberLevel());
+        } else {
+            return false;
+        }
     }
     
     public String  logoutUser() {

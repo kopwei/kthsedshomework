@@ -42,13 +42,14 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td/>
                                 <td>
+                                    <h:commandButton action="#{Login.loginButton_action}" binding="#{Login.loginButton}" id="loginButton"
+                                        rendered="#{!Login.loginMgr.loggedIn}" value="Login"/>
                                 </td>
                                 <td>
-                                    <h:commandButton action="#{Login.loginButton_action}" binding="#{Login.loginButton}" id="loginButton" value="Login"/>
-                                </td>
-                                <td>
-                                    <h:commandButton binding="#{Login.logoutButton}" id="logoutButton" value="Logout"/>
+                                    <h:commandButton action="#{Login.logoutButton_action}" binding="#{Login.logoutButton}" id="logoutButton"
+                                        rendered="#{Login.loginMgr.loggedIn}" value="Logout"/>
                                 </td>
                             </tr>
                         </table>

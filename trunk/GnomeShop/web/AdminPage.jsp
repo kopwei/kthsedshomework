@@ -24,7 +24,7 @@
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
                         <webuijsf:table augmentTitle="false" binding="#{AdminPage.memberTable}" id="memberTable"
-                            style="height: 197px; left: 216px; top: 96px; position: absolute" title="Members" width="504">
+                            style="height: 173px; left: 216px; top: 96px; position: absolute; width: 504px" title="Members" width="504">
                             <webuijsf:tableRowGroup binding="#{AdminPage.tableRowGroup1}" id="tableRowGroup1" rows="10"
                                 sourceData="#{AdminPage.membersDataProvider}" sourceVar="currentRow">
                                 <webuijsf:tableColumn binding="#{AdminPage.tableColumn4}" headerText="member_id" id="tableColumn4" rendered="false"
@@ -42,7 +42,7 @@
                                     <webuijsf:staticText binding="#{AdminPage.staticText9}" id="staticText9" text="#{currentRow.value['members.last_name']}"/>
                                 </webuijsf:tableColumn>
                                 <webuijsf:tableColumn binding="#{AdminPage.detailColumn}" headerText="Details" id="detailColumn" width="80">
-                                    <webuijsf:hyperlink text="Details" url="/faces/MemberDetail.jsp" actionExpression="MemberDetails">
+                                    <webuijsf:hyperlink actionExpression="MemberDetails" text="Details" url="/faces/MemberDetail.jsp">
                                         <f:param name="memberid" value="#{currentRow.value['members.member_id']}"/>
                                     </webuijsf:hyperlink>
                                 </webuijsf:tableColumn>

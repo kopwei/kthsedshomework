@@ -7,10 +7,8 @@
 package gnomeshop;
 
 import com.sun.data.provider.impl.CachedRowSetDataProvider;
-import com.sun.rave.faces.data.DefaultTableDataModel;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
-import com.sun.webui.jsf.component.Checkbox;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
@@ -20,15 +18,11 @@ import com.sun.webui.jsf.component.StaticText;
 import com.sun.webui.jsf.component.Table;
 import com.sun.webui.jsf.component.TableColumn;
 import com.sun.webui.jsf.component.TableRowGroup;
-import com.sun.webui.jsf.model.DefaultTableDataProvider;
 import gnomeshop.items.MemberBean;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.faces.FacesException;
-import javax.faces.component.UIColumn;
-import javax.faces.component.html.HtmlDataTable;
-import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -265,6 +259,18 @@ public class AdminPage extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
+        try {
+            LoginManager loginMgr = (LoginManager)getBean("LoginManager");
+            if (null != loginMgr) {
+                if (!loginMgr.isAdmin()) {
+                    FacesContext facesContext = FacesContext.getCurrentInstance();        
+                    facesContext.getExternalContext().redirect("Login.jsp");
+                }
+            }
+        } catch (IOException ex) {
+            //Logger.getLogger(AdminPage.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
+        }
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -290,6 +296,7 @@ public class AdminPage extends AbstractPageBean {
      */
     @Override
     public void preprocess() {
+
     }
 
     /**
@@ -302,6 +309,7 @@ public class AdminPage extends AbstractPageBean {
      */
     @Override
     public void prerender() {
+        
     }
 
     /**

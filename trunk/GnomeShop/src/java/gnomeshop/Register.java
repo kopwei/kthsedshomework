@@ -338,9 +338,12 @@ public class Register extends AbstractPageBean {
                     String lastName = lastNameField.getText().toString();
                     String email = emailField.getText().toString();
                     String telephone = phoneField.getText().toString();
-                    dbUtil.insertMember(new MemberBean(userName, passWord, firstName, lastName, telephone, email));
+                    boolean bRes = dbUtil.insertMember(new MemberBean(userName, passWord, firstName, lastName, telephone, email));
+                    if (bRes) {
+                        return ("Register Success");
+                    } 
                 }
-                return null;
+                return ("Register Failed");
         }
     
 }

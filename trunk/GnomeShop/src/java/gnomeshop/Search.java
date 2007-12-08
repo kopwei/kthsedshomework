@@ -11,6 +11,7 @@ import com.sun.webui.jsf.component.DropDown;
 import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.TextField;
 import com.sun.webui.jsf.model.SingleSelectOptionsList;
+import gnomeshop.items.SearchBean;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlCommandButton;
 
@@ -24,6 +25,7 @@ import javax.faces.component.html.HtmlCommandButton;
  * @author Kop
  */
 public class Search extends AbstractFragmentBean {
+    private String keyword = null;
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -158,7 +160,13 @@ public class Search extends AbstractFragmentBean {
     public String searchButton_action() {
         // TODO: Process the button click action. Return value is a navigation
         // case name where null will return to the same page.
-        return "case1";
+        keyword = (String) keywordField.getText();
+        if (keyword != null) {
+            SearchBean searchBean = (SearchBean) getBean("SearchBean");
+            searchBean.setSearchKey(keyword);
+            return "search";
+        }
+        else return null;
     }
 
 }

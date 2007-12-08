@@ -101,19 +101,21 @@
         <managed-bean-class>gnomeshop.Checkout</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>GnomeDetail</managed-bean-name>
+        <managed-bean-class>gnomeshop.GnomeDetail</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>Inventory</managed-bean-name>
+        <managed-bean-class>gnomeshop.Inventory</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
     <navigation-rule>
         <from-view-id>/ShoppingCart.jsp</from-view-id>
         <navigation-case>
             <from-outcome>Checkout</from-outcome>
             <to-view-id>/Checkout.jsp</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-action>#{LoginManager.checkAdmin}</from-action>
-            <from-outcome>Admin required</from-outcome>
-            <to-view-id>/Login.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
@@ -141,8 +143,8 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>GnomeDetail</managed-bean-name>
-        <managed-bean-class>gnomeshop.GnomeDetail</managed-bean-class>
+        <managed-bean-name>AddingIntoCartSuccess</managed-bean-name>
+        <managed-bean-class>gnomeshop.AddingIntoCartSuccess</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
@@ -150,14 +152,44 @@
         <managed-bean-class>gnomeshop.AddingIntoCartFailure</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <navigation-rule>
+        <from-view-id>/GnomeDetail.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>AddingSuccess</from-outcome>
+            <to-view-id>/AddingIntoCartSuccess.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>AddingFailure</from-outcome>
+            <to-view-id>/AddingIntoCartFailure.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Checkout.jsp</from-view-id>
+        <navigation-case>
+            <from-outcome>submit</from-outcome>
+            <to-view-id>/Order.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
     <managed-bean>
-        <managed-bean-name>AddingIntoCartSuccess</managed-bean-name>
-        <managed-bean-class>gnomeshop.AddingIntoCartSuccess</managed-bean-class>
+        <managed-bean-name>SubmissionFail</managed-bean-name>
+        <managed-bean-class>gnomeshop.SubmissionFail</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <navigation-rule>
+        <from-view-id>/Search.jspf</from-view-id>
+        <navigation-case>
+            <from-outcome>search</from-outcome>
+            <to-view-id>/Inventory.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
     <managed-bean>
-        <managed-bean-name>Inventory</managed-bean-name>
-        <managed-bean-class>gnomeshop.Inventory</managed-bean-class>
+        <managed-bean-name>SearchBean</managed-bean-name>
+        <managed-bean-class>gnomeshop.SearchBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>RegisterFailed</managed-bean-name>
+        <managed-bean-class>gnomeshop.RegisterFailed</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
@@ -170,40 +202,9 @@
         <managed-bean-class>gnomeshop.Loginerror</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
-    <navigation-rule>
-        <from-view-id>/Login.jsp</from-view-id>
-        <navigation-case>
-            <from-action>#{Login.loginButton_action}</from-action>
-            <from-outcome>LoginFailed</from-outcome>
-            <to-view-id>/Loginerror.jsp</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{Login.loginButton_action}</from-action>
-            <from-outcome>LoginSucceed</from-outcome>
-            <to-view-id>/Loginsuceed.jsp</to-view-id>
-        </navigation-case>
-    </navigation-rule>
     <managed-bean>
         <managed-bean-name>RegisterSuceed</managed-bean-name>
         <managed-bean-class>gnomeshop.RegisterSuceed</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
-    <managed-bean>
-        <managed-bean-name>RegisterFailed</managed-bean-name>
-        <managed-bean-class>gnomeshop.RegisterFailed</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
-    <navigation-rule>
-        <from-view-id>/Register.jsp</from-view-id>
-        <navigation-case>
-            <from-action>#{Register.submitButton_action}</from-action>
-            <from-outcome>Register Success</from-outcome>
-            <to-view-id>/RegisterSuceed.jsp</to-view-id>
-        </navigation-case>
-        <navigation-case>
-            <from-action>#{Register.submitButton_action}</from-action>
-            <from-outcome>Register Failed</from-outcome>
-            <to-view-id>/RegisterFailed.jsp</to-view-id>
-        </navigation-case>
-    </navigation-rule>
 </faces-config>

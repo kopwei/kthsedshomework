@@ -44,7 +44,11 @@
                                 </f:facet>
                             </h:column>
                         </h:dataTable>
-                        <webuijsf:hyperlink binding="#{ShoppingCart.hyperlink1}" id="hyperlink1" style="position: absolute; left: 552px; top: 288px" text="Checkout"/>
+                        <webuijsf:hyperlink binding="#{ShoppingCart.hyperlink1}" id="hyperlink1" style="position: absolute; left: 552px; top: 288px"
+                            text="Checkout" url="/faces/Checkout.jsp"/>
+                        <webuijsf:label binding="#{ShoppingCart.label1}" id="label1" style="left: 264px; top: 264px; position: absolute" text="Total:">
+                            <h:outputText value="#{ShoppingCart.shoppingCart.getTotal}"/>
+                        </webuijsf:label>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

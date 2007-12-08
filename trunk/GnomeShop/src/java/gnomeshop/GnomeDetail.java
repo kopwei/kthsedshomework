@@ -240,9 +240,14 @@ public class GnomeDetail extends AbstractPageBean {
         // case name where null will return to the same page.
         boolean result = false;
         if (null != productBean) {
-            ShoppingItemBean shoppingItemBean = new ShoppingItemBean(productBean.getId(), productBean.getName(), productBean.getPrice(), 1);
-            ShoppingCartBean shoppingCartBean = (ShoppingCartBean) getBean("ShoppingCartBean");
-            result = shoppingCartBean.addShoppingItem(shoppingItemBean);
+            if (productBean.getQuantity() > 0) {
+                ShoppingItemBean shoppingItemBean = new ShoppingItemBean(productBean.getId(), productBean.getName(), productBean.getPrice(), 1);
+                ShoppingCartBean shoppingCartBean = (ShoppingCartBean) getBean("ShoppingCartBean");
+                result = shoppingCartBean.addShoppingItem(shoppingItemBean);
+            }
+            else {
+                result = false;
+            }
         }
         String addIntoCartActionResult = null;
         if (result) {

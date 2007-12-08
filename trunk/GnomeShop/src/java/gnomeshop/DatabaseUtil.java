@@ -117,6 +117,34 @@ public class DatabaseUtil {
         }
         return result;
     }
+    
+    /**
+     * This method is used to update the quantity of product when customer wants to buy the product
+     * @param productId The product id which uniquely identifies a product
+     * @param Quantity The amount of product customer wants to buy, which is also the amount is to be decreased
+     * @return result of updating action
+     */
+    public synchronized boolean decreaseProductQuantity(String productId, int Quantity) {
+        // Prepared the return object and the query string
+        String sql = "UPDATE Products SET Quantity = Quantity - " + Quantity + " WHERE ProductId = '" + productId + "'";
+
+        try {
+            Class.forName(jdbcDriver).newInstance();
+            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            // Get the query result and fill the return object
+            
+            // Close the database connection
+            statement.close();
+            connection.close();
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+            return false;
+        }
+        return true;
+    }
 
     /**
      * This method is used to search for a list of matched products according to the product search query String

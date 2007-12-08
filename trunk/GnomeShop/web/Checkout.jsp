@@ -53,14 +53,16 @@
                             </tr>
                             <tr>
                                 <td>Expiry Date:</td>
-                                <td>                                    
-                                    <h:inputText value="#{OrderBean.creditCardExpiryDate}" id="eod" required="true" >
+                                <td>
+                                    <h:inputText id="eod" required="true" value="#{OrderBean.creditCardExpiryDate}">
                                         <f:convertDateTime pattern="MM-dd-yy"/>
                                     </h:inputText>
                                     (mm-dd-yy)
                                 </td>
                             </tr>
                         </table>
+                        <webuijsf:button actionExpression="#{Checkout.submitButton_action}" binding="#{Checkout.submitButton}" id="submitButton"
+                            style="left: 359px; top: 216px; position: absolute" text="Submit"/>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

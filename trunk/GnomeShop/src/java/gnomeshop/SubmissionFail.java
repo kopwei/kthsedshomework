@@ -1,25 +1,19 @@
 /*
- * Checkout.java
+ * SubmissionFail.java
  *
- * Created on Dec 7, 2007, 12:31:23 AM
+ * Created on 2007-12-8, 18:54:08
  */
  
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
-import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import gnomeshop.items.ShoppingCartBean;
-import gnomeshop.items.ShoppingItemBean;
-import java.util.ArrayList;
 import javax.faces.FacesException;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -28,9 +22,9 @@ import javax.servlet.ServletContext;
  * lifecycle methods and event handlers where you may add behavior
  * to respond to incoming events.</p>
  *
- * @author Kop
+ * @author Ricky
  */
-public class Checkout extends AbstractPageBean {
+public class SubmissionFail extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -100,22 +94,13 @@ public class Checkout extends AbstractPageBean {
     public void setForm1(Form f) {
         this.form1 = f;
     }
-    private Button submitButton = new Button();
-
-    public Button getSubmitButton() {
-        return submitButton;
-    }
-
-    public void setSubmitButton(Button b) {
-        this.submitButton = b;
-    }
 
     // </editor-fold>
 
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public Checkout() {
+    public SubmissionFail() {
     }
 
     /**
@@ -144,7 +129,7 @@ public class Checkout extends AbstractPageBean {
         try {
             _init();
         } catch (Exception e) {
-            log("Checkout Initialization Failure", e);
+            log("SubmissionFail Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -194,15 +179,6 @@ public class Checkout extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected RequestBean getRequestBean() {
-        return (RequestBean) getBean("RequestBean");
-    }
-
-    /**
-     * <p>Return a reference to the scoped data bean.</p>
-     *
-     * @return reference to the scoped data bean
-     */
     protected SessionBean getSessionBean() {
         return (SessionBean) getBean("SessionBean");
     }
@@ -212,33 +188,17 @@ public class Checkout extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected ApplicationBean getApplicationBean() {
-        return (ApplicationBean) getBean("ApplicationBean");
+    protected RequestBean getRequestBean() {
+        return (RequestBean) getBean("RequestBean");
     }
 
     /**
-     * This is the action which will be invoked if user clicks the submit button
-     * @return The action result String
+     * <p>Return a reference to the scoped data bean.</p>
+     *
+     * @return reference to the scoped data bean
      */
-    public String submitButton_action() {
-        // TODO: Process the action. Return value is a navigation
-        // case name where null will return to the same page.
-        ShoppingCartBean shoppingCartBean = (ShoppingCartBean) getBean("ShoppingCartBean");
-        ArrayList<ShoppingItemBean> shoppingItems = (ArrayList<ShoppingItemBean>) shoppingCartBean.getShoppingItems();
-        FacesContext fc = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
-        DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        boolean result = false;
-        for (int i = 0; i < shoppingItems.size(); i++) {
-            ShoppingItemBean shoppingItemBean = shoppingItems.get(i);
-            result = databaseUtil.decreaseProductQuantity(shoppingItemBean.getProductId(), shoppingItemBean.getQuantity());
-        }
-        if (result) {
-            return "submit";
-        }
-        else{
-            return "fail";
-        }
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
     }
     
 }

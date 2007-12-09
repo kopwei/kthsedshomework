@@ -58,9 +58,20 @@
                                         <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.description}"/>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>Please input number to buy</td>
+                                    <td>
+                                        <h:inputText binding="#{GnomeDetail.numberTextField}" id="numberTextField" required="true"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <webuijsf:button actionExpression="#{GnomeDetail.addIntoCartButton_action}" binding="#{GnomeDetail.addIntoCartButton1}"
+                                            id="addIntoCartButton1" text="Add into My Cart"/>
+                                    </td>
+                                </tr>
                             </table>
-                            <webuijsf:button actionExpression="#{GnomeDetail.addIntoCartButton_action}" binding="#{GnomeDetail.addIntoCartButton1}"
-                                id="addIntoCartButton1" style="height: 24px; width: 119px" text="Add into My Cart"/>
                         </div>
                         <div style="height: 60px; left: 1px; top: 0px; position: absolute; width: 800px">
                             <jsp:directive.include file="Header.jspf"/>

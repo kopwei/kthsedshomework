@@ -47,18 +47,20 @@ public class LoginManager {
         // TODO:
         // Get DatabaseUtil instance
         FacesContext facesContext = FacesContext.getCurrentInstance();
-	ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-	DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-	if (null != dbUtil) {
+        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
+        if (null != dbUtil) {
             setCurrentMember(dbUtil.getMemberByUserNameAndPwd(userName, password));
-        } 
-        if (null != getCurrentMember()) {
-            return "LoginSucceed";
-        } else {
-            return "LoginFailed";
         }
+        // Get the member and check if it is blocked
+        if (null != getCurrentMember()) {
+            if (!currentMember.getBlocked()) {
+                return "LoginSucceed";
+            }
+        }
+        return "LoginFailed";
     }
-    
+
     public String checkAdmin() {
         String adminReq = "Admin required";
         if (null == getCurrentMember()) {

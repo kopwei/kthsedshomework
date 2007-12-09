@@ -119,7 +119,7 @@ public class ShoppingCart extends AbstractPageBean {
     private ArrayList<ShoppingItemBean> shoppingItems;
     private ShoppingCartBean shoppingCart;
     private HtmlDataTable shoppingCartTable = new HtmlDataTable();
-
+    
     public HtmlDataTable getShoppingCartTable() {
         return shoppingCartTable;
     }

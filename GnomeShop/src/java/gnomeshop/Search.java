@@ -35,24 +35,6 @@ public class Search extends AbstractFragmentBean {
      */
     private void _init() throws Exception {
     }
-        private DropDown categoryDropDown = new DropDown();
-
-        public DropDown getCategoryDropDown() {
-                return categoryDropDown;
-        }
-
-        public void setCategoryDropDown(DropDown dd) {
-                this.categoryDropDown = dd;
-        }
-        private SingleSelectOptionsList categoryDropDownDefaultOptions = new SingleSelectOptionsList();
-
-        public SingleSelectOptionsList getCategoryDropDownDefaultOptions() {
-                return categoryDropDownDefaultOptions;
-        }
-
-        public void setCategoryDropDownDefaultOptions(SingleSelectOptionsList ssol) {
-                this.categoryDropDownDefaultOptions = ssol;
-        }
         private Label categoryLabel = new Label();
 
         public Label getCategoryLabel() {

@@ -238,4 +238,9 @@
             <to-view-id>/Loginsuceed.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
+    <managed-bean>
+        <managed-bean-name>Browse</managed-bean-name>
+        <managed-bean-class>gnomeshop.Browse</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>

@@ -159,6 +159,24 @@ public class Header extends AbstractFragmentBean {
     public void setLinkAction1(HtmlCommandLink hcl) {
         this.linkAction1 = hcl;
     }
+    private HtmlOutputLink browseHyperlink = new HtmlOutputLink();
+
+    public HtmlOutputLink getBrowseHyperlink() {
+        return browseHyperlink;
+    }
+
+    public void setBrowseHyperlink(HtmlOutputLink hol) {
+        this.browseHyperlink = hol;
+    }
+    private HtmlOutputText hyperlink1Text5 = new HtmlOutputText();
+
+    public HtmlOutputText getHyperlink1Text5() {
+        return hyperlink1Text5;
+    }
+
+    public void setHyperlink1Text5(HtmlOutputText hot) {
+        this.hyperlink1Text5 = hot;
+    }
     // </editor-fold>
 
     public Header() {

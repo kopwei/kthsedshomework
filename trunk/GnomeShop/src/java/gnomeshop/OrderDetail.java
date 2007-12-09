@@ -1,12 +1,11 @@
 /*
- * AdminPage.java
+ * OrderDetail.java
  *
- * Created on Dec 6, 2007, 8:30:35 PM
+ * Created on Dec 9, 2007, 3:54:19 PM
  */
  
 package gnomeshop;
 
-import com.sun.data.provider.impl.CachedRowSetDataProvider;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
 import com.sun.webui.jsf.component.Form;
@@ -14,11 +13,7 @@ import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import com.sun.webui.jsf.component.StaticText;
-import com.sun.webui.jsf.component.Table;
-import com.sun.webui.jsf.component.TableColumn;
-import com.sun.webui.jsf.component.TableRowGroup;
-import gnomeshop.items.MemberBean;
+import gnomeshop.items.ShoppingItemBean;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.faces.FacesException;
@@ -34,7 +29,7 @@ import javax.servlet.ServletContext;
  *
  * @author Kop
  */
-public class AdminPage extends AbstractPageBean {
+public class OrderDetail extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -43,7 +38,6 @@ public class AdminPage extends AbstractPageBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
-        membersDataProvider.setCachedRowSet((javax.sql.rowset.CachedRowSet) getValue("#{SessionBean.membersRowSet}"));
     }
 
     private Page page1 = new Page();
@@ -107,138 +101,13 @@ public class AdminPage extends AbstractPageBean {
     }
 
     // </editor-fold>
-    private ArrayList<MemberBean> users = new ArrayList<MemberBean>();
-    private StaticText detailText = new StaticText();
-
-    public StaticText getDetailText() {
-        return detailText;
-    }
-
-    public void setDetailText(StaticText st) {
-        this.detailText = st;
-    }
-    private Table memberTable = new Table();
-
-    public Table getMemberTable() {
-        return memberTable;
-    }
-
-    public void setMemberTable(Table t) {
-        this.memberTable = t;
-    }
-    private TableRowGroup tableRowGroup1 = new TableRowGroup();
-
-    public TableRowGroup getTableRowGroup1() {
-        return tableRowGroup1;
-    }
-
-    public void setTableRowGroup1(TableRowGroup trg) {
-        this.tableRowGroup1 = trg;
-    }
-    private CachedRowSetDataProvider membersDataProvider = new CachedRowSetDataProvider();
-
-    public CachedRowSetDataProvider getMembersDataProvider() {
-        return membersDataProvider;
-    }
-
-    public void setMembersDataProvider(CachedRowSetDataProvider crsdp) {
-        this.membersDataProvider = crsdp;
-    }
-    private TableColumn tableColumn4 = new TableColumn();
-
-    public TableColumn getTableColumn4() {
-        return tableColumn4;
-    }
-
-    public void setTableColumn4(TableColumn tc) {
-        this.tableColumn4 = tc;
-    }
-    private StaticText staticText4 = new StaticText();
-
-    public StaticText getStaticText4() {
-        return staticText4;
-    }
-
-    public void setStaticText4(StaticText st) {
-        this.staticText4 = st;
-    }
-    private TableColumn userNameColumn = new TableColumn();
-
-    public TableColumn getUserNameColumn() {
-        return userNameColumn;
-    }
-
-    public void setUserNameColumn(TableColumn tc) {
-        this.userNameColumn = tc;
-    }
-    private StaticText staticText5 = new StaticText();
-
-    public StaticText getStaticText5() {
-        return staticText5;
-    }
-
-    public void setStaticText5(StaticText st) {
-        this.staticText5 = st;
-    }
-    private TableColumn firstNameColumn = new TableColumn();
-
-    public TableColumn getFirstNameColumn() {
-        return firstNameColumn;
-    }
-
-    public void setFirstNameColumn(TableColumn tc) {
-        this.firstNameColumn = tc;
-    }
-    private StaticText staticText8 = new StaticText();
-
-    public StaticText getStaticText8() {
-        return staticText8;
-    }
-
-    public void setStaticText8(StaticText st) {
-        this.staticText8 = st;
-    }
-    private TableColumn lastNameColumn = new TableColumn();
-
-    public TableColumn getLastNameColumn() {
-        return lastNameColumn;
-    }
-
-    public void setLastNameColumn(TableColumn tc) {
-        this.lastNameColumn = tc;
-    }
-    private StaticText staticText9 = new StaticText();
-
-    public StaticText getStaticText9() {
-        return staticText9;
-    }
-
-    public void setStaticText9(StaticText st) {
-        this.staticText9 = st;
-    }
-    private TableColumn detailColumn = new TableColumn();
-
-    public TableColumn getDetailColumn() {
-        return detailColumn;
-    }
-
-    public void setDetailColumn(TableColumn tc) {
-        this.detailColumn = tc;
-    }
-    private StaticText staticText1 = new StaticText();
-
-    public StaticText getStaticText1() {
-        return staticText1;
-    }
-
-    public void setStaticText1(StaticText st) {
-        this.staticText1 = st;
-    }
-    
+    private ArrayList<ShoppingItemBean> currentOrderDetail = new ArrayList<ShoppingItemBean>();
+    private float totalPrice = 0.0f;
+            
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public AdminPage() {
+    public OrderDetail() {
     }
 
     /**
@@ -267,25 +136,32 @@ public class AdminPage extends AbstractPageBean {
                     FacesContext facesContext = FacesContext.getCurrentInstance();        
                     facesContext.getExternalContext().redirect("Login.jsp");
                 }
-                FacesContext fc = FacesContext.getCurrentInstance();
-                ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
-                DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-                if (null != databaseUtil) {
-                    setUsers(databaseUtil.getAllMembers());
-                    getUsers().remove(loginMgr.getCurrentMember());
-                }
             }
         } catch (IOException ex) {
             //Logger.getLogger(AdminPage.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(ex.getMessage());
-        }        
+        }
+        FacesContext fc = FacesContext.getCurrentInstance();
+        String orderId = fc.getExternalContext().getRequestParameterMap().get("orderId");
+        ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
+        DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
+        if (null != databaseUtil) {            
+            if (null != orderId) {
+                currentOrderDetail = databaseUtil.getOrderDetails(orderId);
+            }
+        }
+        totalPrice = 0;
+        for (ShoppingItemBean shoppingItemBean : currentOrderDetail) {
+            totalPrice += shoppingItemBean.getPrice() * shoppingItemBean.getQuantity();
+        }
+
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
         try {
             _init();
         } catch (Exception e) {
-            log("AdminPage Initialization Failure", e);
+            log("OrderDetail Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -304,7 +180,6 @@ public class AdminPage extends AbstractPageBean {
      */
     @Override
     public void preprocess() {
-
     }
 
     /**
@@ -317,7 +192,6 @@ public class AdminPage extends AbstractPageBean {
      */
     @Override
     public void prerender() {
-        
     }
 
     /**
@@ -330,46 +204,30 @@ public class AdminPage extends AbstractPageBean {
      */
     @Override
     public void destroy() {
-        membersDataProvider.close();
     }
 
     /**
-     * <p>Return a reference to the scoped data bean.</p>
-     *
-     * @return reference to the scoped data bean
+     * 
+     * @return
      */
-    protected RequestBean getRequestBean() {
-        return (RequestBean) getBean("RequestBean");
+    public ArrayList<ShoppingItemBean> getCurrentOrderDetail() {
+        return currentOrderDetail;
     }
 
     /**
-     * <p>Return a reference to the scoped data bean.</p>
-     *
-     * @return reference to the scoped data bean
+     * 
+     * @param currentOrderDetail
      */
-    protected ApplicationBean getApplicationBean() {
-        return (ApplicationBean) getBean("ApplicationBean");
+    public void setCurrentOrderDetail(ArrayList<ShoppingItemBean> currentOrderDetail) {
+        this.currentOrderDetail = currentOrderDetail;
     }
 
-    /**
-     * <p>Return a reference to the scoped data bean.</p>
-     *
-     * @return reference to the scoped data bean
-     */
-    protected SessionBean getSessionBean() {
-        return (SessionBean) getBean("SessionBean");
+    public float getTotalPrice() {
+        return totalPrice;
     }
 
-    public
-
-    // </editor-fold>
-    ArrayList<MemberBean> getUsers() {
-        return users;
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
-
-    public void setUsers(ArrayList<MemberBean> users) {
-        this.users = users;
-    }
-    
 }
 

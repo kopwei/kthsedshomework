@@ -13,7 +13,11 @@ import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
+import gnomeshop.items.ProductBean;
+import java.util.ArrayList;
 import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -96,7 +100,7 @@ public class Browse extends AbstractPageBean {
     }
 
     // </editor-fold>
-
+    private ArrayList<ProductBean> products = new ArrayList<ProductBean>();
     /**
      * <p>Construct a new Page bean instance.</p>
      */
@@ -122,7 +126,12 @@ public class Browse extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
+        DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
+        if (null != databaseUtil) {            
+            products = databaseUtil.getAllProducts();
+        }
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -199,6 +208,14 @@ public class Browse extends AbstractPageBean {
      */
     protected ApplicationBean getApplicationBean() {
         return (ApplicationBean) getBean("ApplicationBean");
+    }
+
+    public ArrayList<ProductBean> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<ProductBean> products) {
+        this.products = products;
     }
     
 }

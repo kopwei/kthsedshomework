@@ -7,7 +7,6 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractFragmentBean;
-import com.sun.webui.jsf.component.Hyperlink;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlCommandLink;
 import javax.faces.component.html.HtmlGraphicImage;
@@ -159,14 +158,14 @@ public class Header extends AbstractFragmentBean {
     public void setLinkAction1(HtmlCommandLink hcl) {
         this.linkAction1 = hcl;
     }
-    private HtmlOutputLink browseHyperlink = new HtmlOutputLink();
+    private HtmlOutputLink orderListHyperlink = new HtmlOutputLink();
 
-    public HtmlOutputLink getBrowseHyperlink() {
-        return browseHyperlink;
+    public HtmlOutputLink getOrderListHyperlink() {
+        return orderListHyperlink;
     }
 
-    public void setBrowseHyperlink(HtmlOutputLink hol) {
-        this.browseHyperlink = hol;
+    public void setOrderListHyperlink(HtmlOutputLink hol) {
+        this.orderListHyperlink = hol;
     }
     private HtmlOutputText hyperlink1Text5 = new HtmlOutputText();
 

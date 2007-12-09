@@ -14,6 +14,9 @@ import com.sun.webui.jsf.model.SingleSelectOptionsList;
 import gnomeshop.items.SearchBean;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlCommandButton;
+import javax.faces.component.html.HtmlInputText;
+import javax.faces.component.html.HtmlOutputLink;
+import javax.faces.component.html.HtmlOutputText;
 
 /**
  * <p>Fragment bean that corresponds to a similarly named JSP page
@@ -44,15 +47,6 @@ public class Search extends AbstractFragmentBean {
         public void setCategoryLabel(Label l) {
                 this.categoryLabel = l;
         }
-        private TextField keywordField = new TextField();
-
-        public TextField getKeywordField() {
-                return keywordField;
-        }
-
-        public void setKeywordField(TextField tf) {
-                this.keywordField = tf;
-        }
         private HtmlCommandButton searchButton = new HtmlCommandButton();
 
         public HtmlCommandButton getSearchButton() {
@@ -62,6 +56,33 @@ public class Search extends AbstractFragmentBean {
         public void setSearchButton(HtmlCommandButton hcb) {
                 this.searchButton = hcb;
         }
+    private HtmlOutputLink browseHyperlink = new HtmlOutputLink();
+
+    public HtmlOutputLink getBrowseHyperlink() {
+        return browseHyperlink;
+    }
+
+    public void setBrowseHyperlink(HtmlOutputLink hol) {
+        this.browseHyperlink = hol;
+    }
+    private HtmlOutputText browseHyperlinkText = new HtmlOutputText();
+
+    public HtmlOutputText getBrowseHyperlinkText() {
+        return browseHyperlinkText;
+    }
+
+    public void setBrowseHyperlinkText(HtmlOutputText hot) {
+        this.browseHyperlinkText = hot;
+    }
+    private HtmlInputText searchTextField = new HtmlInputText();
+
+    public HtmlInputText getSearchTextField() {
+        return searchTextField;
+    }
+
+    public void setSearchTextField(HtmlInputText hit) {
+        this.searchTextField = hit;
+    }
     // </editor-fold>
 
     public Search() {
@@ -142,7 +163,7 @@ public class Search extends AbstractFragmentBean {
     public String searchButton_action() {
         // TODO: Process the button click action. Return value is a navigation
         // case name where null will return to the same page.
-        keyword = (String) keywordField.getText();
+        keyword = (String) searchTextField.getValue();
         if (keyword != null) {
             SearchBean searchBean = (SearchBean) getBean("SearchBean");
             searchBean.setSearchKey(keyword);

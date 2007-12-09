@@ -24,6 +24,7 @@ import com.sun.webui.jsf.component.TextArea;
 import com.sun.webui.jsf.component.TextField;
 import gnomeshop.items.ProductBean;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -291,6 +292,7 @@ public class Manage extends AbstractPageBean {
     }
 
     // </editor-fold>
+    private ArrayList<ProductBean> products = new ArrayList<ProductBean>();
 
     /**
      * <p>Construct a new Page bean instance.</p>
@@ -328,6 +330,12 @@ public class Manage extends AbstractPageBean {
         } catch (IOException ex) {
             //Logger.getLogger(AdminPage.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(ex.getMessage());
+        }       
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
+        DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
+        if (null != databaseUtil) {            
+            setProducts(databaseUtil.getAllProducts());
         }
         processParameter();
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
@@ -444,6 +452,14 @@ public class Manage extends AbstractPageBean {
             dbUtil.insertProduct(product);
         }
         return null;
+    }
+
+    public ArrayList<ProductBean> getProducts() {
+        return products;
+    }
+
+    public void setProducts(ArrayList<ProductBean> products) {
+        this.products = products;
     }
 }
 

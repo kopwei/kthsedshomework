@@ -176,4 +176,17 @@ public class OrderBean {
     public String getCreditCardExpiryDate() {
         return creditCardExpiryDate;
     }
+    
+    /**
+     * This method is used for clear all the informations in the current order
+     */
+    public void clear() {
+        this.orderId = UUID.randomUUID();
+        this.memberId = null;
+        this.contactName = null;
+        this.deliveryAddress = null;
+        this.creditCardName = null;
+        this.creditCardNumber = null;
+        this.creditCardExpiryDate = null;
+    }
 }

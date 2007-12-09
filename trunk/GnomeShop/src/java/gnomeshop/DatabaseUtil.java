@@ -474,8 +474,9 @@ public class DatabaseUtil {
      * This method is used to store a order into the database
      * @param order The current submit order
      * @param shoppingCart The shopping cart with the order
+     * @return Whether it suceed or not
      */
-    public synchronized void insertOrder(OrderBean order, ShoppingCartBean shoppingCart) {
+    public synchronized boolean insertOrder(OrderBean order, ShoppingCartBean shoppingCart) {
         @SuppressWarnings("unused")
         // Prepare the SQL arguments
         String orderId = order.getOrderId();
@@ -485,8 +486,8 @@ public class DatabaseUtil {
         String creditCardName = order.getCreditCardName();
         String creditCardNumber = order.getCreditCardNumber();
         String creditCardExpiryDate = order.getCreditCardExpiryDate();
-        String sql = "INSERT INTO Orders" + " (OrderId, MemberId, ContactName, DeliveryAddress, CCName, CCNumber, CCExpiryDate)" +
-                " VALUES" + " (" + orderId + ", '" + memberId + "',  '" + contactName + "', '" + deliveryAddress + "', '" + creditCardName +
+        String sql = "INSERT INTO Orders" + " (OrderId, member_id, ContactName, DeliveryAddress, CCName, CCNumber, CCExpiryDate)" +
+                " VALUES" + " ('" + orderId + "', '" + memberId + "',  '" + contactName + "', '" + deliveryAddress + "', '" + creditCardName +
                 "', '" + creditCardNumber + "', '" + creditCardExpiryDate + "')";
         try {
             // Create the connection and execute the update command
@@ -496,22 +497,24 @@ public class DatabaseUtil {
             statement.executeUpdate(sql);
 
             // Iterate the shopping items and insert them into details
-            Iterator<ShoppingItemBean> shoppingItems = shoppingCart.getShoppingItems().iterator();
-            while (shoppingItems.hasNext()) {
-                ShoppingItemBean item = shoppingItems.next();
-                String productId = item.getProductId();
-                int quantity = item.getQuantity();
-                float price = item.getPrice();
-                sql = "INSERT INTO OrderDetails" + " (OrderId, ProductId, Quantity, Price)" + " VALUES" + " (" +
-                        orderId + ", " + productId + ", " + quantity + ", " + price + ")";
-                statement.execute(sql);
-            }
+//            Iterator<ShoppingItemBean> shoppingItems = shoppingCart.getShoppingItems().iterator();
+//            while (shoppingItems.hasNext()) {
+//                ShoppingItemBean item = shoppingItems.next();
+//                String productId = item.getProductId();
+//                int quantity = item.getQuantity();
+//                float price = item.getPrice();
+//                sql = "INSERT INTO OrderDetails" + " (OrderId, ProductId, Quantity, Price)" + " VALUES" + " (" +
+//                        orderId + ", " + productId + ", " + quantity + ", " + price + ")";
+//                statement.execute(sql);
+//            }
             statement.close();
             connection.close();
 
         } catch ( Exception e) {
             // TODO: handle exception
             System.err.println(e.getMessage());
+            return false;
         }
+        return true;
     }
 }

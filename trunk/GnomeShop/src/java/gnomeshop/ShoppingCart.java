@@ -6,10 +6,6 @@
  
 package gnomeshop;
 
-import com.sun.data.provider.impl.ListDataProvider;
-import com.sun.data.provider.impl.ObjectDataProvider;
-import com.sun.data.provider.impl.ObjectListDataProvider;
-import com.sun.rave.faces.data.DefaultTableDataModel;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
 import com.sun.webui.jsf.component.Form;
@@ -23,11 +19,11 @@ import com.sun.webui.jsf.component.StaticText;
 import gnomeshop.items.ShoppingCartBean;
 import gnomeshop.items.ShoppingItemBean;
 import java.util.ArrayList;
-import java.util.List;
 import javax.faces.FacesException;
 import javax.faces.component.UIColumn;
 import javax.faces.component.html.HtmlDataTable;
 import javax.faces.component.html.HtmlOutputText;
+import javax.faces.context.FacesContext;
 
 /**
  * <p>Page bean that corresponds to a similarly named JSP page.  This
@@ -47,7 +43,6 @@ public class ShoppingCart extends AbstractPageBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
-        shoppingCartDataProvider.setList(null);
     }
 
     private Page page1 = new Page();
@@ -121,25 +116,16 @@ public class ShoppingCart extends AbstractPageBean {
 
     // </editor-fold>
     
-    
+    private ArrayList<ShoppingItemBean> shoppingItems;
     private ShoppingCartBean shoppingCart;
-    private HtmlDataTable dataTable1 = new HtmlDataTable();
+    private HtmlDataTable shoppingCartTable = new HtmlDataTable();
 
-    public HtmlDataTable getDataTable1() {
-        return dataTable1;
+    public HtmlDataTable getShoppingCartTable() {
+        return shoppingCartTable;
     }
 
-    public void setDataTable1(HtmlDataTable hdt) {
-        this.dataTable1 = hdt;
-    }
-    private DefaultTableDataModel dataTable1Model = new DefaultTableDataModel();
-
-    public DefaultTableDataModel getDataTable1Model() {
-        return dataTable1Model;
-    }
-
-    public void setDataTable1Model(DefaultTableDataModel dtdm) {
-        this.dataTable1Model = dtdm;
+    public void setShoppingCartTable(HtmlDataTable hdt) {
+        this.shoppingCartTable = hdt;
     }
     private UIColumn column1 = new UIColumn();
 
@@ -222,24 +208,7 @@ public class ShoppingCart extends AbstractPageBean {
     public void setOutputText6(HtmlOutputText hot) {
         this.outputText6 = hot;
     }
-    private ObjectListDataProvider shoppingCartDataProvider = new ObjectListDataProvider();
-
-    public ObjectListDataProvider getShoppingCartDataProvider() {
-        return shoppingCartDataProvider;
-    }
-
-    public void setShoppingCartDataProvider(ObjectListDataProvider oldp) {
-        this.shoppingCartDataProvider = oldp;
-    }
-    private Hyperlink hyperlink1 = new Hyperlink();
-
-    public Hyperlink getHyperlink1() {
-        return hyperlink1;
-    }
-
-    public void setHyperlink1(Hyperlink h) {
-        this.hyperlink1 = h;
-    }
+    
     private Label label1 = new Label();
 
     public Label getLabel1() {
@@ -248,6 +217,15 @@ public class ShoppingCart extends AbstractPageBean {
 
     public void setLabel1(Label l) {
         this.label1 = l;
+    }
+    private Hyperlink checkOutHyperlink = new Hyperlink();
+
+    public Hyperlink getCheckOutHyperlink() {
+        return checkOutHyperlink;
+    }
+
+    public void setCheckOutHyperlink(Hyperlink h) {
+        this.checkOutHyperlink = h;
     }
     /**
      * <p>Construct a new Page bean instance.</p>
@@ -274,7 +252,22 @@ public class ShoppingCart extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        this.shoppingCartDataProvider.setList(new ArrayList<ShoppingItemBean>(shoppingCart.getShoppingItems()));
+        shoppingCart = (ShoppingCartBean)getBean("ShoppingCartBean");
+        
+        if (null != shoppingCart) {
+            // Check the parameters and remove the corresponding items if there is necessary
+            FacesContext fc = FacesContext.getCurrentInstance();
+            String productID = fc.getExternalContext().getRequestParameterMap().get("productid");
+            if (null != productID) {
+                String removeStr = fc.getExternalContext().getRequestParameterMap().get("remove");
+                if (null != removeStr) {
+                    if (Boolean.valueOf(removeStr)) {
+                        shoppingCart.removeShoppingItem(productID);
+                    }
+                }
+            }
+            shoppingItems = new ArrayList<ShoppingItemBean>(shoppingCart.getShoppingItems());
+        }
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -289,6 +282,9 @@ public class ShoppingCart extends AbstractPageBean {
         // Perform application initialization that must complete
         // *after* managed components are initialized
         // TODO - add your own initialization code here
+        if (shoppingItems.isEmpty()) {
+            checkOutHyperlink.setVisible(false);
+        }
     }
 
     /**
@@ -312,7 +308,7 @@ public class ShoppingCart extends AbstractPageBean {
      */
     @Override
     public void prerender() {
-        shoppingCart = (ShoppingCartBean)getBean("ShoppingCartBean");
+        
     }
 
     /**
@@ -361,6 +357,20 @@ public class ShoppingCart extends AbstractPageBean {
     public void setShoppingCart(ShoppingCartBean shoppingCart) {
         this.shoppingCart = shoppingCart;
     }
-    
+
+    public ArrayList<ShoppingItemBean> getShoppingItems() {
+        return shoppingItems;
+    }
+
+    public void setShoppingItems(ArrayList<ShoppingItemBean> shoppingItems) {
+        this.shoppingItems = shoppingItems;
+    }
+
+    public String checkOutHyperlink_action() {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        
+        return null;
+    }
 }
 

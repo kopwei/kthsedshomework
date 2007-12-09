@@ -191,14 +191,14 @@ public class MemberBean {
     }
 
     /**
-     * 
+     * This method is used to get the block state
      * @return
      */
     public boolean getBlocked() {
         return blocked;
     }
     /**
-     * 
+     * This method is used to set the block state
      * @param blocked
      */
     public void setBlocked(boolean blocked) {

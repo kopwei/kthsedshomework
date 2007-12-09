@@ -14,6 +14,7 @@ import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
+import gnomeshop.items.OrderBean;
 import gnomeshop.items.ShoppingCartBean;
 import gnomeshop.items.ShoppingItemBean;
 import java.util.ArrayList;
@@ -224,19 +225,37 @@ public class Checkout extends AbstractPageBean {
         // TODO: Process the action. Return value is a navigation
         // case name where null will return to the same page.
         ShoppingCartBean shoppingCartBean = (ShoppingCartBean) getBean("ShoppingCartBean");
+        OrderBean currentOrder = (OrderBean)getBean("OrderBean");
         ArrayList<ShoppingItemBean> shoppingItems = (ArrayList<ShoppingItemBean>) shoppingCartBean.getShoppingItems();
         FacesContext fc = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
         DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
         boolean result = false;
-        for (int i = 0; i < shoppingItems.size(); i++) {
-            ShoppingItemBean shoppingItemBean = shoppingItems.get(i);
-            result = databaseUtil.decreaseProductQuantity(shoppingItemBean.getProductId(), shoppingItemBean.getQuantity());
+        if (null != databaseUtil) {
+            for (int i = 0; i < shoppingItems.size(); i++) {
+                ShoppingItemBean shoppingItemBean = shoppingItems.get(i);
+                result = databaseUtil.decreaseProductQuantity(shoppingItemBean.getProductId(), shoppingItemBean.getQuantity());
+            }
+            if (result) {
+                LoginManager loginMgr = (LoginManager) getBean("LoginManager");
+                if (null != loginMgr) {
+                    if (null != loginMgr.getCurrentMember()) {
+                        currentOrder.setMemberId(loginMgr.getCurrentMember().getMemberId());
+                        result = databaseUtil.insertOrder(currentOrder, shoppingCartBean);
+                    } else {
+                        return "Login";
+                    }
+                } else {
+                    result = false;
+                }
+            }
         }
+
         if (result) {
+            //currentOrder.clear();
+            shoppingCartBean.clear();
             return "submit";
-        }
-        else{
+        } else {
             return "fail";
         }
     }

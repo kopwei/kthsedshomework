@@ -7,7 +7,6 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractSessionBean;
-import com.sun.sql.rowset.CachedRowSetXImpl;
 import gnomeshop.items.MemberBean;
 import gnomeshop.items.ProductBean;
 import javax.faces.FacesException;
@@ -33,24 +32,11 @@ public class SessionBean extends AbstractSessionBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
-        membersRowSet.setDataSourceName("java:comp/env/jdbc/webshop_MySQL");
-        membersRowSet.setCommand("SELECT * FROM members");
-        membersRowSet.setTableName("members");
-
     }
     // </editor-fold>
 
     private MemberBean currentMember = null;
-    private CachedRowSetXImpl membersRowSet = new CachedRowSetXImpl();
     private ProductBean currentProductBean = null;
-
-    public CachedRowSetXImpl getMembersRowSet() {
-        return membersRowSet;
-    }
-
-    public void setMembersRowSet(CachedRowSetXImpl crsxi) {
-        this.membersRowSet = crsxi;
-    }
     
     /**
      * <p>Construct a new session data bean instance.</p>
@@ -131,19 +117,7 @@ public class SessionBean extends AbstractSessionBean {
     @Override
     public void destroy() {
     }
-    
-////    public void logout(){
-////               
-////        FacesContext fc = javax.faces.context.FacesContext.getCurrentInstance();
-//////        ((HttpSession)fc.getExternalContext().getSession(false)).invalidate();
-//////        ApplicationBean ap = getApplicationBean();
-//////        NavigationHandler nh = ap.getNavigationHandler();
-//////        nh.handleNavigation(fc,null,"logout");
-////    }
-    
-    
-
-    
+        
     /**
      * <p>Return a reference to the scoped data bean.</p>
      *

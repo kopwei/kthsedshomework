@@ -167,10 +167,11 @@ public class GnomeDetail extends AbstractPageBean {
                 setPrice(productBean.getPrice());
                 setQuantity(productBean.getQuantity());
                 setDescription(productBean.getDescription());
+                SessionBean sessionBean = (SessionBean) getBean("SessionBean");
+                sessionBean.setCurrentProductBean(productBean);
             }
         }
-        SessionBean sessionBean = (SessionBean) getBean("SessionBean");
-        sessionBean.setCurrentProductBean(productBean);
+        
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified

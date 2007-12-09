@@ -71,4 +71,28 @@ public class ShoppingCartBean {
 		return total;
 	}
 	
+        /**
+         * This method is used to remove the corresponding item in the shopping cart
+         * @param itemId The unique product id represent the shopping item
+         */
+        public void removeShoppingItem(String itemId) {
+            int index = -1;
+            for (int i = 0; i < shoppingItems.size(); i++) {
+                ShoppingItemBean item = shoppingItems.get(i);
+                if (item.getProductId().equals(itemId)) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index >= 0) {
+                shoppingItems.remove(index);
+            }
+        }
+        
+        /**
+         * This method is used to clear all the things in the shopping item
+         */
+        public void clear() {
+            shoppingItems.clear();
+        }
 }

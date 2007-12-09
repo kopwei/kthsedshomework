@@ -50,9 +50,9 @@ public class LoginManager {
 	ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
 	DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
 	if (null != dbUtil) {
-            currentMember = dbUtil.getMemberByUserNameAndPwd(userName, password);
+            setCurrentMember(dbUtil.getMemberByUserNameAndPwd(userName, password));
         } 
-        if (null != currentMember) {
+        if (null != getCurrentMember()) {
             return "LoginSucceed";
         } else {
             return "LoginFailed";
@@ -61,10 +61,10 @@ public class LoginManager {
     
     public String checkAdmin() {
         String adminReq = "Admin required";
-        if (null == currentMember) {
+        if (null == getCurrentMember()) {
             return adminReq;
         }
-        if (currentMember.getMemberLevel() != MemberBean.ADMINISTRATOR) {
+        if (getCurrentMember().getMemberLevel() != MemberBean.ADMINISTRATOR) {
             return adminReq;
         }
         return null;
@@ -75,7 +75,7 @@ public class LoginManager {
      * @return Whether the user logs in
      */
     public boolean getLoggedIn() {
-        return (null != currentMember);
+        return (null != getCurrentMember());
     }
     
     /**
@@ -83,18 +83,38 @@ public class LoginManager {
      * @return Whether the admin logs in
      */
     public boolean isAdmin() {
-        if (null != currentMember) {
-            return (MemberBean.ADMINISTRATOR == currentMember.getMemberLevel());
+        if (null != getCurrentMember()) {
+            return (MemberBean.ADMINISTRATOR == getCurrentMember().getMemberLevel());
         } else {
             return false;
         }
     }
     
+    /**
+     * 
+     * @return
+     */
     public String  logoutUser() {
         // TODO:
         this.userName = null;
         this.password = null;
-        this.currentMember = null;
+        this.setCurrentMember(null);
         return null;
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public MemberBean getCurrentMember() {
+        return currentMember;
+    }
+
+    /**
+     * 
+     * @param currentMember
+     */
+    public void setCurrentMember(MemberBean currentMember) {
+        this.currentMember = currentMember;
     }
 }

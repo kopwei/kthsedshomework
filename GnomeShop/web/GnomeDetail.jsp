@@ -14,10 +14,10 @@
                 </webuijsf:head>
                 <webuijsf:body binding="#{GnomeDetail.body1}" id="body1" style="-rave-layout: grid">
                     <webuijsf:form binding="#{GnomeDetail.form1}" id="form1">
-                        <div style="left: 72px; top: 528px; position: absolute">
+                        <div style="left: 216px; top: 504px; position: absolute">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
-                        <div style="height: 430px; left: 0px; top: 72px; position: absolute; width: 800px">
+                        <div style="height: 238px; left: 216px; top: 96px; position: absolute; width: 310px">
                             <table>
                                 <tr>
                                     <td colspan="2" style="background-color: #336699; text-align: Center; border-style: outset; border-width: 1">
@@ -51,19 +51,22 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="background-color: #FFFFFF; border-style: inset; border-width: 0">
+                                    <td style="border-width: 0; border-style: inset; background-color: rgb(255, 255, 255); height: 13px">
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Description</font>
                                     </td>
-                                    <td style="background-color: #FFFFFF; border-width: 1">
+                                    <td style="border-width: 1; background-color: rgb(255, 255, 255)">
                                         <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.description}"/>
                                     </td>
                                 </tr>
                             </table>
                             <webuijsf:button actionExpression="#{GnomeDetail.addIntoCartButton_action}" binding="#{GnomeDetail.addIntoCartButton1}"
-                                             id="addIntoCartButton1" style="height: 24px; width: 119px" text="Add into My Cart"/>                                   
+                                id="addIntoCartButton1" style="height: 24px; width: 119px" text="Add into My Cart"/>
                         </div>
                         <div style="height: 60px; left: 1px; top: 0px; position: absolute; width: 800px">
                             <jsp:directive.include file="Header.jspf"/>
+                        </div>
+                        <div style="position: absolute; left: 0px; top: 72px">
+                            <jsp:directive.include file="Search.jspf"/>
                         </div>
                     </webuijsf:form>
                 </webuijsf:body>

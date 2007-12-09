@@ -3,13 +3,14 @@
  */
 package gnomeshop.items;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * @author Kop
  *
  */
-public class ProductBean {
+public class ProductBean implements Serializable{
 	private UUID id;
 	private String name;
 	private String description;

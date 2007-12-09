@@ -7,7 +7,6 @@
 package gnomeshop;
 
 import com.sun.data.provider.impl.ObjectListDataProvider;
-import com.sun.rave.faces.data.DefaultTableDataModel;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
 import com.sun.webui.jsf.component.Form;
@@ -15,28 +14,16 @@ import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import com.sun.webui.jsf.component.StaticText;
-import com.sun.webui.jsf.component.Table;
-import com.sun.webui.jsf.component.TableColumn;
-import com.sun.webui.jsf.component.TableRowGroup;
-import com.sun.webui.jsf.model.DefaultTableDataProvider;
 import javax.faces.FacesException;
 import gnomeshop.RequestBean;
 import gnomeshop.SessionBean;
 import gnomeshop.ApplicationBean;
-import javax.faces.component.UIColumn;
-import javax.faces.component.html.HtmlDataTable;
-import javax.faces.component.html.HtmlOutputText;
-import javax.faces.component.html.HtmlPanelGrid;
-import javax.faces.component.html.HtmlPanelGroup;
 
 import gnomeshop.DatabaseUtil;
 import gnomeshop.items.ProductBean;
 import gnomeshop.items.SearchBean;
-import gnomeshop.items.ShoppingItemBean;
 import java.util.ArrayList;
 import javax.faces.context.FacesContext;
-import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 
 /**

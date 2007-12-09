@@ -18,7 +18,7 @@
                         <div style="left: 0px; top: 0px; position: absolute; height: 60px; width: 800px">
                             <jsp:directive.include file="Header.jspf"/>
                         </div>
-                        <div style="height: 430px; left: 0px; top: 72px; position: absolute; width: 800px">
+                        <div style="height: 310px; left: 264px; top: 120px; position: absolute; width: 430px">
                             <table>
                                 <tr>
                                     <td colspan="2" style="background-color: #336699; text-align: Center; border-style: outset; border-width: 1">
@@ -55,8 +55,11 @@
                             </table>
                             <br/>
                         </div>
-                        <div style="left: 72px; top: 528px; position: absolute">
+                        <div style="left: 216px; top: 528px; position: absolute">
                             <jsp:directive.include file="Footer.jspf"/>
+                        </div>
+                        <div style="position: absolute; left: 0px; top: 72px">
+                            <jsp:directive.include file="Search.jspf"/>
                         </div>
                     </webuijsf:form>
                 </webuijsf:body>

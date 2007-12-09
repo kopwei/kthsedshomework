@@ -34,7 +34,7 @@
         <description>The application context listener</description>
         <listener-class>gnomeshop.AppContextListener</listener-class>
     </listener>
-    <listener><description>The application action listener</description><listener-class>gnomeshop.AppActionListener</listener-class></listener><servlet>
+    <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <init-param>

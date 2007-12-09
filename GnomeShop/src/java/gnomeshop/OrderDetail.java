@@ -207,8 +207,8 @@ public class OrderDetail extends AbstractPageBean {
     }
 
     /**
-     * 
-     * @return
+     * This method is used to get the current order detail
+     * @return The detail object of current order
      */
     public ArrayList<ShoppingItemBean> getCurrentOrderDetail() {
         return currentOrderDetail;

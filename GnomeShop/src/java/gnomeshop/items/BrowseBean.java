@@ -10,8 +10,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 /**
+ * This class is used for handling the browse action of the application, it contains the information with a certain browse action
  * @author Kop
- *
  */
 public class BrowseBean {
 	private String categoryId;

@@ -28,13 +28,10 @@ public class DatabaseUtil {
     String jdbcDriver = "com.mysql.jdbc.Driver";
     Connection connection = null;
 
+    /**
+     * Default constructor
+     */
     public DatabaseUtil() {
-        try {
-
-            
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
     }
 
     /**
@@ -258,6 +255,11 @@ public class DatabaseUtil {
         return products;
     }
     
+    /**
+     * This method is used to change the block state of the member
+     * @param memberId The id of the target member
+     * @param setBlock Whether to block or unblock
+     */
     public void blockMember(String memberId, boolean setBlock) {
         // Verify the input parameter
         if (memberId.length() < 1) {

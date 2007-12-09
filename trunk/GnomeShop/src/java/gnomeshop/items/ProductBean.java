@@ -10,6 +10,10 @@ import java.util.UUID;
  * @author Kop
  *
  */
+/**
+ * This class represents a product entity
+ * @author Kop
+ */
 public class ProductBean implements Serializable{
 	private UUID id;
 	private String name;
@@ -29,11 +33,12 @@ public class ProductBean implements Serializable{
 	}
 	
 	/**
-	 * Constructor used to initialize id, name and price of the product
-	 * @param id Id of the product
-	 * @param name Name of the product
-	 * @param price Price of the product
-	 */
+         * Constructor used to initialize id, name and price of the product
+         * @param name Name of the product
+         * @param price Price of the priduct
+         * @param description Description of the product
+         * @param quantity Quantity of the product
+         */
 	public ProductBean(String name, float price, String description, int quantity) {
 		this.id = UUID.randomUUID();
 		this.name = name;
@@ -100,7 +105,7 @@ public class ProductBean implements Serializable{
 	
 	/**
 	 * This method is used to set the product description 
-	 * @param id The description of the product
+	 * @param description The description of the product
 	 */
 	public void setDescription(String description) {
 		this.description = description;

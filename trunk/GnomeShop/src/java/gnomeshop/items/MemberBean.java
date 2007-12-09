@@ -8,7 +8,7 @@ package gnomeshop.items;
 import java.util.UUID;
 
 /**
- *
+ * This class represents a member entity
  * @author Kop
  */
 public class MemberBean {
@@ -192,7 +192,7 @@ public class MemberBean {
 
     /**
      * This method is used to get the block state
-     * @return
+     * @return Whether the member is blocked
      */
     public boolean getBlocked() {
         return blocked;

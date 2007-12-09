@@ -13,6 +13,10 @@ import javax.servlet.ServletContext;
  * @author Kop
  *
  */
+/**
+ * This class represent a search action entity
+ * @author Kop
+ */
 public class SearchBean {
 	private String searchKey;
 

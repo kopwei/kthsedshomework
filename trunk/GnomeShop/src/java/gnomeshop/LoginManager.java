@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
 /**
- *
+ * This class is a session bean which is used for manage the login/logout status
  * @author Kop
  */
 public class LoginManager {
@@ -18,30 +18,49 @@ public class LoginManager {
     private String password = null;
     private MemberBean currentMember = null;
     
+    /**
+     * Default constructor
+     */
     public LoginManager() {
         userName = "";
         password ="";
     }
 
+    /**
+     * This method is used to get the user name of the current login user
+     * @return The user name string
+     */
     public String getUserName() {
         return userName;
     }
 
+    /**
+     * This method is used to set the user name of the current login user
+     * @param userName The user name string
+     */
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
+    /**
+     * This method is used to get the password of the current login user
+     * @return The password String
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * This method is used to set the password of the current login user
+     * @param password The password String
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
     /**
      * This method is used to login
-     * @return
+     * @return The action string
      */
     public String loginUser() {
         // TODO:
@@ -61,6 +80,10 @@ public class LoginManager {
         return "LoginFailed";
     }
 
+    /**
+     * This method is used to check if the current logged member is an administrator or not
+     * @return Whether the user is an administrator
+     */
     public String checkAdmin() {
         String adminReq = "Admin required";
         if (null == getCurrentMember()) {
@@ -93,8 +116,8 @@ public class LoginManager {
     }
     
     /**
-     * 
-     * @return
+     * This method is used for log out the current user
+     * @return The action string
      */
     public String  logoutUser() {
         // TODO:
@@ -105,16 +128,16 @@ public class LoginManager {
     }
     
     /**
-     * 
-     * @return
+     * This method is used to get the current login member
+     * @return the current login member
      */
     public MemberBean getCurrentMember() {
         return currentMember;
     }
 
     /**
-     * 
-     * @param currentMember
+     * This method is used to set the current login member
+     * @param currentMember the current login member
      */
     public void setCurrentMember(MemberBean currentMember) {
         this.currentMember = currentMember;

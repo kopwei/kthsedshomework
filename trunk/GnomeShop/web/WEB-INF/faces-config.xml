@@ -29,7 +29,7 @@
     <managed-bean>
         <managed-bean-name>ProductBean</managed-bean-name>
         <managed-bean-class>gnomeshop.items.ProductBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
+        <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>ShoppingCartBean</managed-bean-name>
@@ -124,6 +124,11 @@
             <from-outcome>Login</from-outcome>
             <to-view-id>/Login.jsp</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-action>#{Search.searchButton_action}</from-action>
+            <from-outcome>search</from-outcome>
+            <to-view-id>/Inventory.jsp</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <navigation-rule>
         <from-view-id>/AdminPage.jsp</from-view-id>
@@ -184,7 +189,7 @@
     </navigation-rule>
     <managed-bean>
         <managed-bean-name>SearchBean</managed-bean-name>
-        <managed-bean-class>gnomeshop.SearchBean</managed-bean-class>
+        <managed-bean-class>gnomeshop.items.SearchBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
     <managed-bean>
@@ -207,4 +212,30 @@
         <managed-bean-class>gnomeshop.RegisterSuceed</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <navigation-rule>
+        <from-view-id>/Register.jsp</from-view-id>
+        <navigation-case>
+            <from-action>#{Register.submitButton_action}</from-action>
+            <from-outcome>Register Success</from-outcome>
+            <to-view-id>/RegisterSuceed.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{Register.submitButton_action}</from-action>
+            <from-outcome>Register Failed</from-outcome>
+            <to-view-id>/RegisterFailed.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/Login.jsp</from-view-id>
+        <navigation-case>
+            <from-action>#{Login.loginButton_action}</from-action>
+            <from-outcome>LoginFailed</from-outcome>
+            <to-view-id>/Loginerror.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{Login.loginButton_action}</from-action>
+            <from-outcome>LoginSucceed</from-outcome>
+            <to-view-id>/Loginsuceed.jsp</to-view-id>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

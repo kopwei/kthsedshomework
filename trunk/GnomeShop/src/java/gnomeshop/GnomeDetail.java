@@ -34,7 +34,12 @@ import javax.servlet.ServletContext;
  * @author Ricky
  */
 public class GnomeDetail extends AbstractPageBean {
-    ProductBean productBean = null;
+    private ProductBean productBean = null;
+    private String id = null;
+    private String name = null;
+    private float price = 0;
+    private int quantity = 0;
+    private String description = null;
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -113,6 +118,15 @@ public class GnomeDetail extends AbstractPageBean {
     public void setAddIntoCartButton(Button b) {
         this.addIntoCartButton = b;
     }
+    private Button addIntoCartButton1 = new Button();
+
+    public Button getAddIntoCartButton1() {
+        return addIntoCartButton1;
+    }
+
+    public void setAddIntoCartButton1(Button b) {
+        this.addIntoCartButton1 = b;
+    }
 
     // </editor-fold>
 
@@ -147,9 +161,16 @@ public class GnomeDetail extends AbstractPageBean {
         DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
         if (null != databaseUtil) {            
             if (null != productID) {
-                productBean = databaseUtil.getProductDetails(productID);
+                setProductBean(databaseUtil.getProductDetails(productID));
+                setId(productBean.getId());
+                setName(productBean.getName());
+                setPrice(productBean.getPrice());
+                setQuantity(productBean.getQuantity());
+                setDescription(productBean.getDescription());
             }
         }
+        SessionBean sessionBean = (SessionBean) getBean("SessionBean");
+        sessionBean.setCurrentProductBean(productBean);
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -230,6 +251,13 @@ public class GnomeDetail extends AbstractPageBean {
 
     public String addIntoCartButton_action() {
         // TODO: Process the action. Return value is a navigation
+        SessionBean sessionBean = (SessionBean) getBean("SessionBean");
+        productBean = sessionBean.getCurrentProductBean();
+        setId(productBean.getId());
+        setName(productBean.getName());
+        setPrice(productBean.getPrice());
+        setQuantity(productBean.getQuantity());
+
         // Check if the member is logged in or not
         LoginManager manager = (LoginManager)getBean("LoginManager");
         if (null != manager) {
@@ -239,9 +267,9 @@ public class GnomeDetail extends AbstractPageBean {
         }
         // case name where null will return to the same page.
         boolean result = false;
-        if (null != productBean) {
-            if (productBean.getQuantity() > 0) {
-                ShoppingItemBean shoppingItemBean = new ShoppingItemBean(productBean.getId(), productBean.getName(), productBean.getPrice(), 1);
+        if (null != getProductBean()) {
+            if (getQuantity() > 0) {
+                ShoppingItemBean shoppingItemBean = new ShoppingItemBean(getId(), getName(), getPrice(), 1);
                 ShoppingCartBean shoppingCartBean = (ShoppingCartBean) getBean("ShoppingCartBean");
                 result = shoppingCartBean.addShoppingItem(shoppingItemBean);
             }
@@ -257,6 +285,54 @@ public class GnomeDetail extends AbstractPageBean {
             addIntoCartActionResult = "AddingFailure";
         }
         return addIntoCartActionResult;
+    }
+
+    public ProductBean getProductBean() {
+        return productBean;
+    }
+
+    public void setProductBean(ProductBean productBean) {
+        this.productBean = productBean;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
     
 }

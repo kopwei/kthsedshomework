@@ -46,9 +46,8 @@
                                             <f:facet name="header">
                                                 <f:verbatim>Detail</f:verbatim>
                                             </f:facet>
-                                            <webuijsf:hyperlink text="gnomeDetail" url="/faces/GnomeDetail.jsp">
-                                                <f:param name="productid" value="#{currentRow.value['productBean.id']}"/>
-                                                <h:outputText value="Detail"/>
+                                            <webuijsf:hyperlink text="Detail" url="/faces/GnomeDetail.jsp">
+                                                <f:param name="productid" value="#{productBean.id}"/>
                                             </webuijsf:hyperlink>
                                         </h:column>
                                     </h:dataTable>

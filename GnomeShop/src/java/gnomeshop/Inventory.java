@@ -33,6 +33,7 @@ import javax.faces.component.html.HtmlPanelGroup;
 import gnomeshop.DatabaseUtil;
 import gnomeshop.items.ProductBean;
 import gnomeshop.items.SearchBean;
+import gnomeshop.items.ShoppingItemBean;
 import java.util.ArrayList;
 import javax.faces.context.FacesContext;
 import javax.servlet.Servlet;
@@ -48,7 +49,9 @@ import javax.servlet.ServletContext;
  * @author Ricky
  */
 public class Inventory extends AbstractPageBean {
-    ArrayList<ProductBean> searchResult = null;
+    private ArrayList<ProductBean> searchResult = null;
+    private ProductBean productBean = null;
+    private String id = null;
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -162,7 +165,7 @@ public class Inventory extends AbstractPageBean {
         DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
         if (null != databaseUtil) {            
             if (null != searchKey) {
-                searchResult = databaseUtil.searchProducts(searchKey);
+                setSearchResult(databaseUtil.searchProducts(searchKey));
             }
         }
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
@@ -241,6 +244,30 @@ public class Inventory extends AbstractPageBean {
      */
     protected ApplicationBean getApplicationBean() {
         return (ApplicationBean) getBean("ApplicationBean");
+    }
+
+    public ArrayList<ProductBean> getSearchResult() {
+        return searchResult;
+    }
+
+    public void setSearchResult(ArrayList<ProductBean> searchResult) {
+        this.searchResult = searchResult;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ProductBean getProductBean() {
+        return productBean;
+    }
+
+    public void setProductBean(ProductBean productBean) {
+        this.productBean = productBean;
     }
     
 }

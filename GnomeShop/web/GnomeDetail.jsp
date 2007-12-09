@@ -31,7 +31,7 @@
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Product Name</font>
                                     </td>
                                     <td style="background-color: #FFFFFF; border-width: 1">
-                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.productBean.name}"/>
+                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.name}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -39,7 +39,7 @@
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Price</font>
                                     </td>
                                     <td style="background-color: #FFFFFF; border-width: 1">
-                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.productBean.price}"/>
+                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.price}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -47,7 +47,7 @@
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Quantity</font>
                                     </td>
                                     <td style="background-color: #FFFFFF; border-width: 1">
-                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.productBean.quantity}"/>
+                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.quantity}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -55,20 +55,12 @@
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Description</font>
                                     </td>
                                     <td style="background-color: #FFFFFF; border-width: 1">
-                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.productBean.description}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" style="text-align: Center">
-                                        <a name="Previous">
-                                            <font style="font-size: 10pt; color: #CCCCC; font-weight: bold">Previous</font>
-                                        </a>
+                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.description}"/>
                                     </td>
                                 </tr>
                             </table>
-                            <h:commandButton action="#{GnomeDetail.addIntoCartButton_action}" binding="#{GnomeDetail.addIntoCartButton}" id="addIntoCartButton"
-                                style="color: blue; font-family: 'Times New Roman',Times,serif; font-size: 12px; font-style: normal; height: 24px; text-align: center; text-decoration: underline; width: 119px"
-                                text="Add into My Cart" value="Check out"/>
+                            <webuijsf:button actionExpression="#{GnomeDetail.addIntoCartButton_action}" binding="#{GnomeDetail.addIntoCartButton1}"
+                                             id="addIntoCartButton1" style="height: 24px; width: 119px" text="Add into My Cart"/>                                   
                         </div>
                         <div style="height: 60px; left: 1px; top: 0px; position: absolute; width: 800px">
                             <jsp:directive.include file="Header.jspf"/>

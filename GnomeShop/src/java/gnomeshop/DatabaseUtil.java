@@ -23,7 +23,7 @@ import java.util.Iterator;
  */
 public class DatabaseUtil {
 
-    String dbUrl = "jdbc:mysql://localhost:3306/webshop";
+    String dbUrl = "jdbc:mysql://192.168.11.3:3306/webshop";
     String jdbcDriver = "com.mysql.jdbc.Driver";
     Connection connection = null;
 
@@ -91,7 +91,7 @@ public class DatabaseUtil {
      */
     public ProductBean getProductDetails(String productId) {
         // Prepared the return object and the query string
-        String sql = "SELECT ProductId, Name, Description, Price, Quantity FROM Products" + " WHERE ProductId = " + productId;
+        String sql = "SELECT ProductId, Name, Description, Price, Quantity FROM Products" + " WHERE ProductId = '" + productId + "'";
         ProductBean result = null;
         try {
             Class.forName(jdbcDriver).newInstance();
@@ -154,7 +154,7 @@ public class DatabaseUtil {
     public ArrayList<ProductBean> searchProducts(String searchKey) {
         // Prepared the return array and the query string 
         ArrayList<ProductBean> products = new ArrayList<ProductBean>();
-        String sql = "SELECT ProductId, Name, Price, Description, Quatity FROM Products" + " WHERE Name LIKE '%" + searchKey + "%'" +
+        String sql = "SELECT ProductId, Name, Price, Description, Quantity FROM Products" + " WHERE Name LIKE '%" + searchKey + "%'" +
                 " OR Description LIKE '%" + searchKey + "%'";
         try {
             // Create the connection and execute the query command

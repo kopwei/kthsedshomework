@@ -23,7 +23,7 @@
                                     <td colspan="2" style="background-color: #FFFFF; text-align: Center">
                                         <font style="font-size: 14pt; color: #00000; font-weight: bold">It is added into your shopping cart now.</font>
                                         <p/>
-                                        <font style="font-size: 14pt; font-weight: bold"><a href="GnomeDetail.faces">Preview</a></font>
+                                        <font style="font-size: 14pt; font-weight: bold"><a href="GnomeDetail.jsp">Preview</a></font>
                                     </td>
                                 </tr>
                                 <br/>

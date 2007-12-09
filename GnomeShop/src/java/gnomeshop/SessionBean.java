@@ -9,6 +9,7 @@ package gnomeshop;
 import com.sun.rave.web.ui.appbase.AbstractSessionBean;
 import com.sun.sql.rowset.CachedRowSetXImpl;
 import gnomeshop.items.MemberBean;
+import gnomeshop.items.ProductBean;
 import javax.faces.FacesException;
 
 /**
@@ -41,6 +42,7 @@ public class SessionBean extends AbstractSessionBean {
 
     private MemberBean currentMember = null;
     private CachedRowSetXImpl membersRowSet = new CachedRowSetXImpl();
+    private ProductBean currentProductBean = null;
 
     public CachedRowSetXImpl getMembersRowSet() {
         return membersRowSet;
@@ -157,6 +159,14 @@ public class SessionBean extends AbstractSessionBean {
      */
     public void setCurrentMember(MemberBean currentMember) {
         this.currentMember = currentMember;
+    }
+
+    public ProductBean getCurrentProductBean() {
+        return currentProductBean;
+    }
+
+    public void setCurrentProductBean(ProductBean currentProductBean) {
+        this.currentProductBean = currentProductBean;
     }
 
 }

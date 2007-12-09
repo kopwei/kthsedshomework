@@ -24,7 +24,7 @@
                                     <td colspan="2" style="background-color: #FFFFF; text-align: Center">
                                         <font style="font-size: 14pt; color: #00000; font-weight: bold">The action of adding into your shopping cart failed.</font>
                                         <p/>
-                                        <font style="font-size: 14pt; font-weight: bold">Please check the quantity available and <a href="GnomeDetail.faces">try again</a></font>
+                                        <font style="font-size: 14pt; font-weight: bold">Please check the quantity available and <a href="GnomeDetail.jsp">try again</a></font>
                                     </td>
                                 </tr>
                                 <br/>

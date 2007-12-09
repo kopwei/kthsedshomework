@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.UUID;
 
 /**
  * This class contains several utility functions for query and update the database 
@@ -156,6 +157,42 @@ public class DatabaseUtil {
         ArrayList<ProductBean> products = new ArrayList<ProductBean>();
         String sql = "SELECT ProductId, Name, Price, Description, Quantity FROM Products" + " WHERE Name LIKE '%" + searchKey + "%'" +
                 " OR Description LIKE '%" + searchKey + "%'";
+        try {
+            // Create the connection and execute the query command
+            Class.forName(jdbcDriver).newInstance();
+            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            // Get the query result and fill the return array list
+            while (resultSet.next()) {
+                String id = resultSet.getString(1);
+                String name = resultSet.getString(2);
+                float price = resultSet.getFloat(3);
+                String desc = resultSet.getString(4);
+                int quantity = resultSet.getInt(5);
+                ProductBean product = new ProductBean(id, name, desc, price, quantity);
+                products.add(product);
+            }
+            // Close the database connection
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+        }
+        return products;
+    }
+    
+    /**
+     * This method is used to get all the products
+     * @return The  list of products
+     */
+    public ArrayList<ProductBean> getAllProducts() {
+         // Prepared the return array and the query string 
+        ArrayList<ProductBean> products = new ArrayList<ProductBean>();
+        String sql = "SELECT ProductId, Name, Price, Description, Quantity FROM Products";
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
@@ -497,16 +534,18 @@ public class DatabaseUtil {
             statement.executeUpdate(sql);
 
             // Iterate the shopping items and insert them into details
-//            Iterator<ShoppingItemBean> shoppingItems = shoppingCart.getShoppingItems().iterator();
-//            while (shoppingItems.hasNext()) {
-//                ShoppingItemBean item = shoppingItems.next();
-//                String productId = item.getProductId();
-//                int quantity = item.getQuantity();
-//                float price = item.getPrice();
-//                sql = "INSERT INTO OrderDetails" + " (OrderId, ProductId, Quantity, Price)" + " VALUES" + " (" +
-//                        orderId + ", " + productId + ", " + quantity + ", " + price + ")";
-//                statement.execute(sql);
-//            }
+            Iterator<ShoppingItemBean> shoppingItems = shoppingCart.getShoppingItems().iterator();
+            while (shoppingItems.hasNext()) {
+                ShoppingItemBean item = shoppingItems.next();
+                String detailId = UUID.randomUUID().toString();
+                String productId = item.getProductId();
+                String productName = item.getProductName();
+                int quantity = item.getQuantity();
+                float price = item.getPrice();
+                sql = "INSERT INTO OrderDetails" + " (Id, OrderId, ProductId, ProductName, Quantity, Price)" + " VALUES" + " ('"+ detailId + "','" +
+                        orderId + "',' " + productId + "', ' " +  productName +"'," +quantity + ", " + price + ")";
+                statement.execute(sql);
+            }
             statement.close();
             connection.close();
 
@@ -516,5 +555,120 @@ public class DatabaseUtil {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * This method is used to get the order detail according to a order id
+     * @param orderId The id which represent a order
+     * @return The list of shopping items within a order
+     */
+    public ArrayList<ShoppingItemBean> getOrderDetails(String orderId) {
+         // Prepared the return array and the query string 
+        ArrayList<ShoppingItemBean> items = new ArrayList<ShoppingItemBean>();
+        String sql = "SELECT ProductId, ProductName, Quantity, Price FROM OrderDetails WHERE OrderId = '" + orderId + "'";
+         try {
+            // Create the connection and execute the query command
+            Class.forName(jdbcDriver).newInstance();
+            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            // Get the query result and fill the return array list
+            while (resultSet.next()) {
+                String productId = resultSet.getString(1);
+                String productName = resultSet.getString(2);
+                int quantity = resultSet.getInt(3);
+                float price = resultSet.getFloat(4);
+                ShoppingItemBean item = new ShoppingItemBean(productId, productName, price, quantity);
+                items.add(item);
+            }
+            // Close the database connection
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+        }
+        return items;
+    }
+    
+    /**
+      * This method is used to get all the orders
+      * @return The  list of orders
+      */
+    public ArrayList<OrderBean> getAllOrders() {
+         // Prepared the return array and the query string 
+        ArrayList<OrderBean> orders = new ArrayList<OrderBean>();
+        String sql = "SELECT OrderId, member_id,   ContactName, DeliveryAddress, CCName, CCNumber, CCExpireDate  FROM Orders";
+        try {
+            // Create the connection and execute the query command
+            Class.forName(jdbcDriver).newInstance();
+            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            // Get the query result and fill the return array list
+            while (resultSet.next()) {             
+                String orderId = resultSet.getString(1);
+                String memberId= resultSet.getString(2);
+                String contactName = resultSet.getString(3);
+                String deliveryAddress = resultSet.getString(4);
+                String ccName = resultSet.getString(5);
+                String ccNumber = resultSet.getString(6);
+                String ccExpireDate = resultSet.getString(7);
+                OrderBean order = new OrderBean(orderId, memberId, contactName, deliveryAddress, ccName, ccNumber, ccExpireDate);
+                orders.add(order);
+            }
+            // Close the database connection
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+        }
+        return orders;
+    }
+    
+     /**
+      * This method is used to get all the members
+      * @return The  list of members
+      */
+    public ArrayList<MemberBean> getAllMembers() {
+         // Prepared the return array and the query string 
+        ArrayList<MemberBean> members = new ArrayList<MemberBean>();
+        String sql = "SELECT member_id, username, password,  member_level,  first_name, last_name, email, phone, isblocked FROM members";
+        try {
+            // Create the connection and execute the query command
+            Class.forName(jdbcDriver).newInstance();
+            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            // Get the query result and fill the return array list
+            while (resultSet.next()) {
+                String memberId = resultSet.getString(1);
+                String userName = resultSet.getString(2);
+                String password = resultSet.getString(3);
+                int memberLevel = resultSet.getInt(4);
+                String firstName = resultSet.getString(5);
+                String lastName = resultSet.getString(6);
+                String email = resultSet.getString(7);
+                String telephone = resultSet.getString(8);
+                boolean blocked = resultSet.getBoolean(9);
+                MemberBean member = new MemberBean(memberId, userName, password, memberLevel, firstName, lastName, 
+                        telephone, email, blocked);
+                members.add(member);
+            }
+            // Close the database connection
+            resultSet.close();
+            statement.close();
+            connection.close();
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.err.println(e.getMessage());
+        }
+        return members;
     }
 }

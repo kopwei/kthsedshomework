@@ -11,7 +11,7 @@
             <tr>
                 <td>Key Word</td>
                 <td>
-                    <h:inputText binding="#{Search.keywordField}" id="keywordField"/>
+                    <h:inputText binding="#{Search.searchTextField}" id="searchTextField"/>
                 </td>
             </tr>
             <tr>
@@ -20,6 +20,15 @@
                     <h:commandButton action="#{Search.searchButton_action}" binding="#{Search.searchButton}" id="searchButton" value="Search"/>
                 </td>
             </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <h:outputLink binding="#{Search.browseHyperlink}" id="browseHyperlink" value="Browse.jsp">
+                        <h:outputText binding="#{Search.browseHyperlinkText}" id="browseHyperlinkText" value="Browse All Gnomes"/>
+                    </h:outputLink>
+                </td>
+            </tr>
         </table>
+        <table style="left: 120px; top: 96px; position: absolute"></table>
     </f:subview>
 </div>

@@ -6,7 +6,6 @@
 -->
 <jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:webuijsf="http://www.sun.com/webui/webuijsf">
     <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
-    
     <f:view>
         <webuijsf:page binding="#{Manage.page1}" id="page1">
             <webuijsf:html binding="#{Manage.html1}" id="html1">
@@ -57,6 +56,7 @@
                                 </td>
                             </tr>
                         </table>
+                        <!--
                         <webuijsf:table augmentTitle="false" binding="#{Manage.table1}" id="table1"
                             style="height: 101px; left: 240px; top: 240px; position: absolute; width: 408px" title="Gnomes" width="408">
                             <webuijsf:tableRowGroup binding="#{Manage.tableRowGroup1}" id="tableRowGroup1" rows="10" sourceData="#{Manage.productsDataProvider}" sourceVar="currentRow">
@@ -77,6 +77,45 @@
                                 </webuijsf:tableColumn>
                             </webuijsf:tableRowGroup>
                         </webuijsf:table>
+                        -->
+                        <div style="height: 310px; left: 240px; top: 240px; position: absolute; width: 430px">
+                            <table>
+                                <tr>
+                                    <td colspan="2" style="background-color: #336699; text-align: Center; border-style: outset; border-width: 1">
+                                        <a name="Results">
+                                            <font style="font-size: 12pt; color: #FFFFFF; font-weight: bold">All Products</font>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <br/>
+                                <h:form>
+                                    <h:dataTable border="1" value="#{Manage.products}" var="productBean">
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <f:verbatim>Product Name</f:verbatim>
+                                            </f:facet>
+                                            <h:outputText value="#{productBean.name}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <f:verbatim>Price</f:verbatim>
+                                            </f:facet>
+                                            <h:outputText value="#{productBean.price}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <f:verbatim>Remove</f:verbatim>
+                                            </f:facet>
+                                            <webuijsf:hyperlink binding="#{MemberDetail.unblockHyperlink}" id="removeHyperlink" text="Remove" url="/faces/Manage.jsp">
+                                                <f:param name="productid" value="#{currentRow.value['products.ProductId']}"/>
+                                                <f:param name="remove" value="true"/>
+                                            </webuijsf:hyperlink>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:form>
+                            </table>
+                            <br/>
+                        </div>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

@@ -23,7 +23,8 @@
                         <div style="position: absolute; left: 216px; top: 528px">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
-                        <webuijsf:table augmentTitle="false" binding="#{AdminPage.memberTable}" id="memberTable"
+                        <!--
+                         <webuijsf:table augmentTitle="false" binding="#{AdminPage.memberTable}" id="memberTable"
                             style="height: 173px; left: 216px; top: 96px; position: absolute; width: 504px" title="Members" width="504">
                             <webuijsf:tableRowGroup binding="#{AdminPage.tableRowGroup1}" id="tableRowGroup1" rows="10"
                                 sourceData="#{AdminPage.membersDataProvider}" sourceVar="currentRow">
@@ -47,7 +48,49 @@
                                     </webuijsf:hyperlink>
                                 </webuijsf:tableColumn>
                             </webuijsf:tableRowGroup>
-                        </webuijsf:table>
+                        </webuijsf:table> -->
+                        <div style="height: 310px; left: 216px; top: 96px; position: absolute; width: 430px">
+                            <table>
+                                <tr>
+                                    <td colspan="2" style="background-color: #336699; text-align: Center; border-style: outset; border-width: 1">
+                                        <a name="Results">
+                                            <font style="font-size: 12pt; color: #FFFFFF; font-weight: bold">All Members</font>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <br/>
+                                <h:form>
+                                    <h:dataTable border="1" value="#{AdminPage.users}" var="member">
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <f:verbatim>User Name</f:verbatim>
+                                            </f:facet>
+                                            <h:outputText value="#{member.userName}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <f:verbatim>First name</f:verbatim>
+                                            </f:facet>
+                                            <h:outputText value="#{member.firstName}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <f:verbatim>Last Name</f:verbatim>
+                                            </f:facet>
+                                            <h:outputText value="#{member.lastName}"/>
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                <f:verbatim>Details</f:verbatim>
+                                            </f:facet>
+                                            <webuijsf:hyperlink binding="#{MemberDetail.unblockHyperlink}" id="removeHyperlink" text="Detail" url="MemberDetail.jsp">
+                                                <f:param name="memberid" value="#{member.memberId}"/>
+                                            </webuijsf:hyperlink>
+                                        </h:column>
+                                    </h:dataTable>
+                                </h:form>
+                            </table>
+                        </div>
                     </webuijsf:form>
                 </webuijsf:body>
             </webuijsf:html>

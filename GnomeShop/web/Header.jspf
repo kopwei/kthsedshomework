@@ -15,8 +15,8 @@
                     </h:outputLink>
                 </td>
                 <td>
-                    <h:outputLink binding="#{Header.browseHyperlink}" id="browseHyperlink" value="/GnomeShop/faces/Manage.jsp">
-                        <h:outputText binding="#{Header.hyperlink1Text5}" id="hyperlink1Text5" value="Browse"/>
+                    <h:outputLink binding="#{Header.orderListHyperlink}" id="orderListHyperlink" value="/GnomeShop/faces/OrderList.jsp">
+                        <h:outputText binding="#{Header.hyperlink1Text5}" id="hyperlink1Text5" value="Orders"/>
                     </h:outputLink>
                 </td>
                 <td>

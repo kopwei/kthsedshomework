@@ -243,4 +243,14 @@
         <managed-bean-class>gnomeshop.Browse</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>OrderList</managed-bean-name>
+        <managed-bean-class>gnomeshop.OrderList</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>OrderDetail</managed-bean-name>
+        <managed-bean-class>gnomeshop.OrderDetail</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>

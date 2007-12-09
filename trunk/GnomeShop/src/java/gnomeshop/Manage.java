@@ -6,9 +6,7 @@
  
 package gnomeshop;
 
-import com.sun.data.provider.impl.CachedRowSetDataProvider;
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
-import com.sun.sql.rowset.CachedRowSetXImpl;
 import com.sun.webui.jsf.component.Body;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
@@ -47,15 +45,6 @@ public class Manage extends AbstractPageBean {
      * here is subject to being replaced.</p>
      */
     private void _init() throws Exception {
-        table3.setTitle("Table");
-        table3.setAugmentTitle(false);
-        table3.setId("productTable");
-        productsRowSet.setDataSourceName("java:comp/env/jdbc/webshop_MySQL");
-        productsRowSet.setCommand("SELECT * FROM products");
-        productsRowSet.setTableName("products");
-        productsDataProvider.setCachedRowSet((javax.sql.rowset.CachedRowSet) getValue("#{Manage.productsRowSet}"));
-        productsDataProvider.setCachedRowSet((javax.sql.rowset.CachedRowSet) getValue("#{Manage.productsRowSet}"));
-        productsDataProvider.setCachedRowSet((javax.sql.rowset.CachedRowSet) getValue("#{Manage.productsRowSet}"));
     }
 
     private Page page1 = new Page();
@@ -153,15 +142,7 @@ public class Manage extends AbstractPageBean {
     public void setAddHyperlink(Hyperlink h) {
         this.addHyperlink = h;
     }
-    private Table table3 = new Table();
-
-    public Table getTable3() {
-        return table3;
-    }
-
-    public void setTable3(Table t) {
-        this.table3 = t;
-    }
+    
     private StaticText staticText1 = new StaticText();
 
     public StaticText getStaticText1() {
@@ -197,26 +178,6 @@ public class Manage extends AbstractPageBean {
 
     public void setTableRowGroup1(TableRowGroup trg) {
         this.tableRowGroup1 = trg;
-    }
-    
-     private CachedRowSetXImpl productsRowSet = new CachedRowSetXImpl();
-
-    public CachedRowSetXImpl getProductsRowSet() {
-        return productsRowSet;
-    }
-
-    public void setProductsRowSet(CachedRowSetXImpl crsxi) {
-        this.productsRowSet = crsxi;
-    }
-    
-    private CachedRowSetDataProvider productsDataProvider = new CachedRowSetDataProvider();
-
-    public CachedRowSetDataProvider getProductsDataProvider() {
-        return productsDataProvider;
-    }
-
-    public void setProductsDataProvider(CachedRowSetDataProvider crsdp) {
-        this.productsDataProvider = crsdp;
     }
     private TableColumn tableColumn6 = new TableColumn();
 
@@ -388,7 +349,6 @@ public class Manage extends AbstractPageBean {
      */
     @Override
     public void destroy() {
-        productsDataProvider.close();
     }
 
     /**

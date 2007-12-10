@@ -23,7 +23,7 @@
                         <div style="position: absolute; left: 216px; top: 528px">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
-                        <table style="height: 192px; left: 240px; top: 96px; position: absolute" width="192">
+                        <table style="height: 144px; left: 240px; top: 96px; position: absolute" width="288">
                             <tr>
                                 <td>Contact Name:</td>
                                 <td>
@@ -37,7 +37,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td style="height: 44px">Credit Card Name</td>
+                                <td>Credit Card Name</td>
                                 <td>
                                     <h:outputText value="#{OrderBean.creditCardName}"/>
                                 </td>

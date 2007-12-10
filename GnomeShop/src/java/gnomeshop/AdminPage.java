@@ -144,7 +144,18 @@ public class AdminPage extends AbstractPageBean {
                 DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
                 if (null != databaseUtil) {
                     setUsers(databaseUtil.getAllMembers());
-                    getUsers().remove(loginMgr.getCurrentMember());
+                    // Remove the current administrator, since the administrator can not block him/herself
+                    int index = -1;
+                    for (int i = 0; i < users.size(); i++) {
+                        MemberBean memberBean = users.get(i);
+                        if (memberBean.getMemberId().equals(loginMgr.getCurrentMember().getMemberId())) {
+                            index = i;
+                            break;
+                        }
+                    }
+                    if (index >= 0) {
+                        users.remove(index);
+                    }
                 }
             }
         } catch (IOException ex) {

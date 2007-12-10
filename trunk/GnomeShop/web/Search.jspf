@@ -29,6 +29,5 @@
                 </td>
             </tr>
         </table>
-        <table style="left: 120px; top: 96px; position: absolute"></table>
     </f:subview>
 </div>

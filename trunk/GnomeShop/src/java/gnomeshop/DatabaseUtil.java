@@ -115,7 +115,7 @@ public class DatabaseUtil {
         }
         return result;
     }
-    
+
     /**
      * This method is used to update the quantity of product when customer wants to buy the product
      * @param productId The product id which uniquely identifies a product
@@ -123,16 +123,26 @@ public class DatabaseUtil {
      * @return result of updating action
      */
     public synchronized boolean decreaseProductQuantity(String productId, int Quantity) {
-        // Prepared the return object and the query string
-        String sql = "UPDATE Products SET Quantity = Quantity - " + Quantity + " WHERE ProductId = '" + productId + "'";
-
+         // Prepared the return object and the query string
+        String querySql = "SELECT Quantity FROM Products WHERE ProductId = '" + productId + "'";
         try {
             Class.forName(jdbcDriver).newInstance();
             connection = DriverManager.getConnection(dbUrl, "root", "123456");
             Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            // Get the query result and fill the return object
-            
+            ResultSet result = statement.executeQuery(querySql);
+            if (result.next()) {
+                String sql = null;
+                int storedQuantity = Integer.parseInt(result.getString(1));
+                if (storedQuantity > Quantity) {
+                    sql = "UPDATE Products SET Quantity = Quantity - " + Quantity + " WHERE ProductId = '" + productId + "'";
+
+                } else if (storedQuantity == Quantity) {
+                    sql = "DELETE FROM Products WHERE ProductId = '" + productId + "'";
+                } else {
+                    throw new Exception("Can not decrease to minus");
+                }
+                statement.executeUpdate(sql);
+            }
             // Close the database connection
             statement.close();
             connection.close();
@@ -181,13 +191,13 @@ public class DatabaseUtil {
         }
         return products;
     }
-    
+
     /**
      * This method is used to get all the products
      * @return The  list of products
      */
     public ArrayList<ProductBean> getAllProducts() {
-         // Prepared the return array and the query string 
+        // Prepared the return array and the query string 
         ArrayList<ProductBean> products = new ArrayList<ProductBean>();
         String sql = "SELECT ProductId, Name, Price, Description, Quantity FROM Products";
         try {
@@ -254,7 +264,7 @@ public class DatabaseUtil {
         }
         return products;
     }
-    
+
     /**
      * This method is used to change the block state of the member
      * @param memberId The id of the target member
@@ -266,13 +276,13 @@ public class DatabaseUtil {
             return;
         }
         //Prepare the update string
-        String sql = "UPDATE members SET isblocked = " + setBlock + " WHERE member_id = '" +  memberId +"'";
+        String sql = "UPDATE members SET isblocked = " + setBlock + " WHERE member_id = '" + memberId + "'";
         try {
-             // Create the connection and execute the query command
+            // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
             connection = DriverManager.getConnection(dbUrl, "root", "123456");
             Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);      
+            statement.executeUpdate(sql);
             statement.close();
             connection.close();
         } catch (Exception e) {
@@ -313,18 +323,18 @@ public class DatabaseUtil {
             System.err.println(ex.getMessage());
         }
     }
-    
+
     /**
      * This method is used to remove a kind of product from database
      * @param productId The ID of product to be removed
      */
-    public synchronized  void removeProduct(String productId) {
+    public synchronized void removeProduct(String productId) {
         // Verify the input parameter
         if (null == productId) {
             return;
         }
         // Prepare the SQL arguments and sql statement
-        String sql = "DELETE FROM Products WHERE ProductId = '" + productId +"'";
+        String sql = "DELETE FROM Products WHERE ProductId = '" + productId + "'";
         try {
             // Create the connection and execute the update command
             Class.forName(jdbcDriver).newInstance();
@@ -383,15 +393,15 @@ public class DatabaseUtil {
             return null;
         }
     }
-    
+
     /**
      * This method is used to get the member object by user's id
      * @param memberId User's member id
      * @return The member object
      */
     public MemberBean getMemberById(String memberId) {
-         // Verify the input parameter
-        if (memberId.length()< 1) {
+        // Verify the input parameter
+        if (memberId.length() < 1) {
             return null;
         }
         try {
@@ -416,7 +426,7 @@ public class DatabaseUtil {
                 resultSet.close();
                 statement.close();
                 connection.close();
-                return new MemberBean(memberId, userName, password, memberLevel, firstName, lastName, 
+                return new MemberBean(memberId, userName, password, memberLevel, firstName, lastName,
                         telephone, email, blocked);
             } else {
                 return null;
@@ -544,8 +554,8 @@ public class DatabaseUtil {
                 String productName = item.getProductName();
                 int quantity = item.getQuantity();
                 float price = item.getPrice();
-                sql = "INSERT INTO OrderDetails" + " (Id, OrderId, ProductId, ProductName, Quantity, Price)" + " VALUES" + " ('"+ detailId + "','" +
-                        orderId + "',' " + productId + "', ' " +  productName +"'," +quantity + ", " + price + ")";
+                sql = "INSERT INTO OrderDetails" + " (Id, OrderId, ProductId, ProductName, Quantity, Price)" + " VALUES" + " ('" + detailId + "','" +
+                        orderId + "',' " + productId + "', ' " + productName + "'," + quantity + ", " + price + ")";
                 statement.execute(sql);
             }
             statement.close();
@@ -558,17 +568,17 @@ public class DatabaseUtil {
         }
         return true;
     }
-    
+
     /**
      * This method is used to get the order detail according to a order id
      * @param orderId The id which represent a order
      * @return The list of shopping items within a order
      */
     public ArrayList<ShoppingItemBean> getOrderDetails(String orderId) {
-         // Prepared the return array and the query string 
+        // Prepared the return array and the query string 
         ArrayList<ShoppingItemBean> items = new ArrayList<ShoppingItemBean>();
         String sql = "SELECT ProductId, ProductName, Quantity, Price FROM OrderDetails WHERE OrderId = '" + orderId + "'";
-         try {
+        try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
             connection = DriverManager.getConnection(dbUrl, "root", "123456");
@@ -594,15 +604,15 @@ public class DatabaseUtil {
         }
         return items;
     }
-    
+
     /**
-      * This method is used to get all the orders
-      * @return The  list of orders
-      */
+     * This method is used to get all the orders
+     * @return The  list of orders
+     */
     public ArrayList<OrderBean> getAllOrders() {
-         // Prepared the return array and the query string 
+        // Prepared the return array and the query string 
         ArrayList<OrderBean> orders = new ArrayList<OrderBean>();
-        String sql = "SELECT OrderId, member_id,   ContactName, DeliveryAddress, CCName, CCNumber, CCExpireDate  FROM Orders";
+        String sql = "SELECT OrderId, member_id,   ContactName, DeliveryAddress, CCName, CCNumber, CCExpiryDate  FROM Orders";
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
@@ -610,9 +620,9 @@ public class DatabaseUtil {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list
-            while (resultSet.next()) {             
+            while (resultSet.next()) {
                 String orderId = resultSet.getString(1);
-                String memberId= resultSet.getString(2);
+                String memberId = resultSet.getString(2);
                 String contactName = resultSet.getString(3);
                 String deliveryAddress = resultSet.getString(4);
                 String ccName = resultSet.getString(5);
@@ -632,13 +642,13 @@ public class DatabaseUtil {
         }
         return orders;
     }
-    
-     /**
-      * This method is used to get all the members
-      * @return The  list of members
-      */
+
+    /**
+     * This method is used to get all the members
+     * @return The  list of members
+     */
     public ArrayList<MemberBean> getAllMembers() {
-         // Prepared the return array and the query string 
+        // Prepared the return array and the query string 
         ArrayList<MemberBean> members = new ArrayList<MemberBean>();
         String sql = "SELECT member_id, username, password,  member_level,  first_name, last_name, email, phone, isblocked FROM members";
         try {
@@ -658,7 +668,7 @@ public class DatabaseUtil {
                 String email = resultSet.getString(7);
                 String telephone = resultSet.getString(8);
                 boolean blocked = resultSet.getBoolean(9);
-                MemberBean member = new MemberBean(memberId, userName, password, memberLevel, firstName, lastName, 
+                MemberBean member = new MemberBean(memberId, userName, password, memberLevel, firstName, lastName,
                         telephone, email, blocked);
                 members.add(member);
             }

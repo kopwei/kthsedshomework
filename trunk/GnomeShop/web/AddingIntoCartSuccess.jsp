@@ -17,15 +17,11 @@
                         <div style="height: 60px; left: 0px; top: 0px; position: absolute; width: 800px">
                             <jsp:directive.include file="Header.jspf"/>
                         </div>
-                        <div style="height: 430px; left: 264px; top: 96px; position: absolute; width: 574px">
+                        <div style="height: 166px; left: 264px; top: 192px; position: absolute; width: 430px">
                             <table>
                                 <tr>
                                     <td colspan="2" style="background-color: #FFFFF; text-align: Center">
                                         <font style="font-size: 14pt; color: #00000; font-weight: bold">It is added into your shopping cart now.</font>
-                                        <p></p>
-                                        <font style="font-size: 14pt; font-weight: bold">
-                                            <a href="GnomeDetail.jsp">Preview</a>
-                                        </font>
                                     </td>
                                 </tr>
                                 <br/>

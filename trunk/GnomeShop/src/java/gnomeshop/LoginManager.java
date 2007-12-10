@@ -76,6 +76,12 @@ public class LoginManager {
             if (!currentMember.getBlocked()) {
                 return "LoginSucceed";
             }
+            // If he/she is blocked, then we can't let he/she log in
+            else {
+                setCurrentMember(null);
+                this.userName = null;
+                this.password = null;
+            }
         }
         return "LoginFailed";
     }

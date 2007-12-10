@@ -23,62 +23,7 @@
                         <div style="left: 216px; top: 528px; position: absolute">
                             <jsp:directive.include file="Footer.jspf"/>
                         </div>
-                        <table style="left: 240px; top: 96px; position: absolute">
-                            <tr>
-                                <td>Gnome Name</td>
-                                <td>
-                                    <webuijsf:textField binding="#{Manage.nameField}" id="nameField"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Gnome Price</td>
-                                <td>
-                                    <webuijsf:textField binding="#{Manage.priceField}" id="priceField"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Gnome Description</td>
-                                <td>
-                                    <webuijsf:textArea binding="#{Manage.descriptionArea}" id="descriptionArea"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Quantity</td>
-                                <td>
-                                    <webuijsf:textField binding="#{Manage.quantityField}" id="quantityField"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <webuijsf:hyperlink actionExpression="#{Manage.addHyperlink_action}" binding="#{Manage.addHyperlink}" id="addHyperlink"
-                                        style="color: rgb(0, 0, 204);text-decoration: underline" text="Add"/>
-                                </td>
-                            </tr>
-                        </table>
-                        <!--
-                        <webuijsf:table augmentTitle="false" binding="#{Manage.table1}" id="table1"
-                            style="height: 101px; left: 240px; top: 240px; position: absolute; width: 408px" title="Gnomes" width="408">
-                            <webuijsf:tableRowGroup binding="#{Manage.tableRowGroup1}" id="tableRowGroup1" rows="10" sourceData="#{Manage.productsDataProvider}" sourceVar="currentRow">
-                                <webuijsf:tableColumn binding="#{Manage.tableColumn6}" headerText="name" id="tableColumn6" sort="products.name">
-                                    <webuijsf:staticText binding="#{Manage.staticText7}" id="staticText7" text="#{currentRow.value['products.name']}"/>
-                                </webuijsf:tableColumn>
-                                <webuijsf:tableColumn binding="#{Manage.tableColumn8}" headerText="Price" id="tableColumn8" sort="products.Price">
-                                    <webuijsf:staticText binding="#{Manage.staticText9}" id="staticText9" text="#{currentRow.value['products.Price']}"/>
-                                </webuijsf:tableColumn>
-                                <webuijsf:tableColumn binding="#{Manage.tableColumn9}" headerText="Quantity" id="tableColumn9" sort="products.Quantity" width="43">
-                                    <webuijsf:staticText binding="#{Manage.staticText10}" id="staticText10" text="#{currentRow.value['products.Quantity']}"/>
-                                </webuijsf:tableColumn>
-                                <webuijsf:tableColumn binding="#{Manage.removeColumn}" headerText="Remove" id="removeColumn" width="64">
-                                    <webuijsf:hyperlink binding="#{MemberDetail.unblockHyperlink}" id="removeHyperlink" text="Remove" url="/faces/Manage.jsp">
-                                        <f:param name="productid" value="#{currentRow.value['products.ProductId']}"/>
-                                        <f:param name="remove" value="true"/>
-                                    </webuijsf:hyperlink>
-                                </webuijsf:tableColumn>
-                            </webuijsf:tableRowGroup>
-                        </webuijsf:table>
-                        -->
-                        <div style="height: 310px; left: 240px; top: 240px; position: absolute; width: 430px">
+                        <div style="height: 310px; left: 216px; top: 120px; position: absolute; width: 430px">
                             <table>
                                 <tr>
                                     <td colspan="2" style="background-color: #336699; text-align: Center; border-style: outset; border-width: 1">
@@ -106,13 +51,22 @@
                                             <f:facet name="header">
                                                 <f:verbatim>Remove</f:verbatim>
                                             </f:facet>
-                                            <webuijsf:hyperlink binding="#{MemberDetail.unblockHyperlink}" id="removeHyperlink" text="Remove" url="/faces/Manage.jsp">
-                                                <f:param name="productid" value="#{currentRow.value['products.ProductId']}"/>
+                                            <webuijsf:hyperlink binding="#{Manage.removeHyperlink}" id="removeHyperlink" text="Remove" url="/faces/Manage.jsp">
+                                                <f:param name="productid" value="#{productBean.id}"/>
                                                 <f:param name="remove" value="true"/>
                                             </webuijsf:hyperlink>
                                         </h:column>
                                     </h:dataTable>
                                 </h:form>
+                                <br/>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <h:outputLink binding="#{Manage.addProductHyperlink}" id="addProductHyperlink" value="AddProduct.jsp">
+                                            <h:outputText binding="#{Manage.addProductHyperlinkText}" id="addProductHyperlinkText" value="Add Gnomes"/>
+                                        </h:outputLink>
+                                    </td>
+                                </tr>
                             </table>
                             <br/>
                         </div>

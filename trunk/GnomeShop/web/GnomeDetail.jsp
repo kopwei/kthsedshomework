@@ -31,7 +31,7 @@
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Product Name</font>
                                     </td>
                                     <td style="background-color: #FFFFFF; border-width: 1">
-                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.name}"/>
+                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.productBean.name}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -39,7 +39,7 @@
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Price</font>
                                     </td>
                                     <td style="background-color: #FFFFFF; border-width: 1">
-                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.price}"/>
+                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.productBean.price}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -47,7 +47,7 @@
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Quantity</font>
                                     </td>
                                     <td style="background-color: #FFFFFF; border-width: 1">
-                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.quantity}"/>
+                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.productBean.quantity}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -55,7 +55,7 @@
                                         <font style="font-size: 10pt; color: #CE7E00; font-weight: bold">Description</font>
                                     </td>
                                     <td style="border-width: 1; background-color: rgb(255, 255, 255)">
-                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.description}"/>
+                                        <h:outputText style="font-size: 10pt; color: #00000" value="#{GnomeDetail.productBean.description}"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -67,8 +67,8 @@
                                 <tr>
                                     <td></td>
                                     <td>
-                                        <webuijsf:button actionExpression="#{GnomeDetail.addIntoCartButton_action}" binding="#{GnomeDetail.addIntoCartButton1}"
-                                            id="addIntoCartButton1" text="Add into My Cart"/>
+                                        <webuijsf:button actionExpression="#{GnomeDetail.addIntoCartButton_action}" binding="#{GnomeDetail.addIntoCartButton}"
+                                            id="addIntoCartButton" text="Add into My Cart"/>
                                     </td>
                                 </tr>
                             </table>

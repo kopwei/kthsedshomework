@@ -1,27 +1,24 @@
 /*
- * GnomeDetail.java
+ * AddProduct.java
  *
- * Created on 2007-12-6, 20:11:45
+ * Created on Dec 10, 2007, 7:19:13 PM
  */
  
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
 import com.sun.webui.jsf.component.Body;
-import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
-import javax.faces.FacesException;
-import gnomeshop.ApplicationBean;
-import gnomeshop.SessionBean;
-import gnomeshop.RequestBean;
+import com.sun.webui.jsf.component.TextArea;
+import com.sun.webui.jsf.component.TextField;
 import gnomeshop.items.ProductBean;
-import gnomeshop.items.ShoppingCartBean;
-import gnomeshop.items.ShoppingItemBean;
-import javax.faces.component.html.HtmlInputText;
+import java.io.IOException;
+import javax.faces.FacesException;
+import javax.faces.component.html.HtmlCommandButton;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
@@ -32,15 +29,9 @@ import javax.servlet.ServletContext;
  * lifecycle methods and event handlers where you may add behavior
  * to respond to incoming events.</p>
  *
- * @author Ricky
+ * @author Kop
  */
-public class GnomeDetail extends AbstractPageBean {
-    private ProductBean productBean = null;
-    private String id = null;
-    private String name = null;
-    private float price = 0;
-    private int quantity = 0;
-    private String description = null;
+public class AddProduct extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -110,24 +101,50 @@ public class GnomeDetail extends AbstractPageBean {
     public void setForm1(Form f) {
         this.form1 = f;
     }
-    private Button addIntoCartButton = new Button();
+    private TextField nameField = new TextField();
 
-    public Button getAddIntoCartButton() {
-        return addIntoCartButton;
+    public TextField getNameField() {
+        return nameField;
     }
 
-    public void setAddIntoCartButton(Button b) {
-        this.addIntoCartButton = b;
+    public void setNameField(TextField tf) {
+        this.nameField = tf;
+    }
+    private TextField priceField = new TextField();
+
+    public TextField getPriceField() {
+        return priceField;
     }
 
-    private HtmlInputText numberTextField = new HtmlInputText();
+    public void setPriceField(TextField tf) {
+        this.priceField = tf;
+    }
+    private TextArea descriptionArea = new TextArea();
 
-    public HtmlInputText getNumberTextField() {
-        return numberTextField;
+    public TextArea getDescriptionArea() {
+        return descriptionArea;
     }
 
-    public void setNumberTextField(HtmlInputText hit) {
-        this.numberTextField = hit;
+    public void setDescriptionArea(TextArea ta) {
+        this.descriptionArea = ta;
+    }
+    private TextField quantityField = new TextField();
+
+    public TextField getQuantityField() {
+        return quantityField;
+    }
+
+    public void setQuantityField(TextField tf) {
+        this.quantityField = tf;
+    }
+    private HtmlCommandButton addButton = new HtmlCommandButton();
+
+    public HtmlCommandButton getAddButton() {
+        return addButton;
+    }
+
+    public void setAddButton(HtmlCommandButton hcb) {
+        this.addButton = hcb;
     }
 
     // </editor-fold>
@@ -135,7 +152,7 @@ public class GnomeDetail extends AbstractPageBean {
     /**
      * <p>Construct a new Page bean instance.</p>
      */
-    public GnomeDetail() {
+    public AddProduct() {
     }
 
     /**
@@ -157,30 +174,25 @@ public class GnomeDetail extends AbstractPageBean {
         // Perform application initialization that must complete
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
-        FacesContext fc = FacesContext.getCurrentInstance();
-        String productID = fc.getExternalContext().getRequestParameterMap().get("productid");
-        ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
-        DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != databaseUtil) {            
-            if (null != productID) {
-                setProductBean(databaseUtil.getProductDetails(productID));
-                setId(productBean.getId());
-                setName(productBean.getName());
-                setPrice(productBean.getPrice());
-                setQuantity(productBean.getQuantity());
-                setDescription(productBean.getDescription());
-                SessionBean sessionBean = (SessionBean) getBean("SessionBean");
-                sessionBean.setCurrentProductBean(productBean);
+         try {
+            LoginManager loginMgr = (LoginManager) getBean("LoginManager");
+            if (null != loginMgr) {
+                if (!loginMgr.isAdmin()) {
+                    FacesContext facesContext = FacesContext.getCurrentInstance();
+                    facesContext.getExternalContext().redirect("Login.jsp");
+                }
             }
+        } catch (IOException ex) {
+            //Logger.getLogger(AdminPage.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
-        
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
         try {
             _init();
         } catch (Exception e) {
-            log("GnomeDetail Initialization Failure", e);
+            log("AddProduct Initialization Failure", e);
             throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
         }
         
@@ -230,8 +242,8 @@ public class GnomeDetail extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected ApplicationBean getApplicationBean() {
-        return (ApplicationBean) getBean("ApplicationBean");
+    protected RequestBean getRequestBean() {
+        return (RequestBean) getBean("RequestBean");
     }
 
     /**
@@ -248,96 +260,37 @@ public class GnomeDetail extends AbstractPageBean {
      *
      * @return reference to the scoped data bean
      */
-    protected RequestBean getRequestBean() {
-        return (RequestBean) getBean("RequestBean");
+    protected ApplicationBean getApplicationBean() {
+        return (ApplicationBean) getBean("ApplicationBean");
     }
 
-    public String addIntoCartButton_action() {
-        // TODO: Process the action. Return value is a navigation
-        SessionBean sessionBean = (SessionBean) getBean("SessionBean");
-        productBean = sessionBean.getCurrentProductBean();
-        setId(productBean.getId());
-        setName(productBean.getName());
-        setPrice(productBean.getPrice());
-        setQuantity(productBean.getQuantity());
-
-        // Check if the member is logged in or not
-        LoginManager manager = (LoginManager)getBean("LoginManager");
-        if (null != manager) {
-            if (!manager.getLoggedIn()) {
-                return "Login";
-            }
-        }
+    /**
+     * This method will be invoked if user clicks the add button and it will add the corresponding item into
+     * database
+     * @return The action String
+     */
+    public String addButton_action() {
+        // TODO: Process the button click action. Return value is a navigation
         // case name where null will return to the same page.
-        boolean result = false;
-        if (null != getProductBean()) {
-            int number = Integer.parseInt(numberTextField.getValue().toString());
-            if (getQuantity() >= number) {
-                ShoppingItemBean shoppingItemBean = new ShoppingItemBean(getId(), getName(), getPrice(), number);
-                ShoppingCartBean shoppingCartBean = (ShoppingCartBean) getBean("ShoppingCartBean");
-                result = shoppingCartBean.addShoppingItem(shoppingItemBean);
+        if (nameField.getText() == null || priceField.getText() == null || quantityField.getText() == null) {
+            return null;
+        }
+        try {
+            String name = nameField.getText().toString();
+            float price = Float.parseFloat(priceField.getText().toString());
+            String desc = descriptionArea.getText().toString();
+            int quantity = Integer.parseInt(quantityField.getText().toString());
+            ProductBean product = new ProductBean(name, price, desc, quantity);
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+            DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
+            if (null != dbUtil) {
+                dbUtil.insertProduct(product);
             }
-            else {
-                result = false;
-            }
+            return "AddProductSucceed";
+        } catch (Exception e) {
+            return "AddingFailed";
         }
-        String addIntoCartActionResult = null;
-        if (result) {
-            addIntoCartActionResult = "AddingSuccess";
-        }
-        else {
-            addIntoCartActionResult = "AddingFailure";
-        }
-        return addIntoCartActionResult;
-    }
-
-    public ProductBean getProductBean() {
-        return productBean;
-    }
-
-    public void setProductBean(ProductBean productBean) {
-        this.productBean = productBean;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
+    }    
 }
 

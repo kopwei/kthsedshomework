@@ -143,11 +143,6 @@
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>ProductDetail</managed-bean-name>
-        <managed-bean-class>gnomeshop.ProductDetail</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
         <managed-bean-name>AddingIntoCartSuccess</managed-bean-name>
         <managed-bean-class>gnomeshop.AddingIntoCartSuccess</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
@@ -267,6 +262,11 @@
         <navigation-case>
             <from-outcome>AddProductSucceed</from-outcome>
             <to-view-id>/Manage.jsp</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{AddProduct.addButton_action}</from-action>
+            <from-outcome>AddingFailed</from-outcome>
+            <to-view-id>/SubmissionFail.jsp</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

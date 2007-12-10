@@ -263,7 +263,7 @@ public class GnomeDetail extends AbstractPageBean {
         boolean result = false;
         if (null != getProductBean()) {
             int number = Integer.parseInt(numberTextField.getValue().toString());
-            if (productBean.getQuantity() >= number) {
+            if (productBean.getQuantity() >= number && number > 0) {
                 ShoppingItemBean shoppingItemBean = new ShoppingItemBean(productBean.getId(), productBean.getName(), productBean.getPrice(), number);
                 ShoppingCartBean shoppingCartBean = (ShoppingCartBean) getBean("ShoppingCartBean");
                 result = shoppingCartBean.addShoppingItem(shoppingItemBean);

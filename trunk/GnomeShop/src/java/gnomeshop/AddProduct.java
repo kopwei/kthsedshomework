@@ -273,13 +273,16 @@ public class AddProduct extends AbstractPageBean {
         // TODO: Process the button click action. Return value is a navigation
         // case name where null will return to the same page.
         if (nameField.getText() == null || priceField.getText() == null || quantityField.getText() == null) {
-            return null;
+            return "AddingFailed";
         }
         try {
             String name = nameField.getText().toString();
             float price = Float.parseFloat(priceField.getText().toString());
             String desc = descriptionArea.getText().toString();
             int quantity = Integer.parseInt(quantityField.getText().toString());
+            if (quantity < 0) {
+                return "AddingFailed";
+            }
             ProductBean product = new ProductBean(name, price, desc, quantity);
             FacesContext facesContext = FacesContext.getCurrentInstance();
             ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();

@@ -7,10 +7,7 @@
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractFragmentBean;
-import com.sun.webui.jsf.component.DropDown;
 import com.sun.webui.jsf.component.Label;
-import com.sun.webui.jsf.component.TextField;
-import com.sun.webui.jsf.model.SingleSelectOptionsList;
 import gnomeshop.items.SearchBean;
 import javax.faces.FacesException;
 import javax.faces.component.html.HtmlCommandButton;

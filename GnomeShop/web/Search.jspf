@@ -23,7 +23,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <h:outputLink binding="#{Search.browseHyperlink}" id="browseHyperlink" value="Browse.jsp">
+                    <h:outputLink binding="#{Search.browseHyperlink}" id="browseHyperlink" value="/GnomeShop/faces/Browse.jsp">
                         <h:outputText binding="#{Search.browseHyperlinkText}" id="browseHyperlinkText" value="Browse All Gnomes"/>
                     </h:outputLink>
                 </td>

@@ -65,8 +65,8 @@
                                     </h:dataTable>
                                 </h:form>
                                 <tr>
-                                    <td></td>
-                                    <td><h:outputText title= "Total Price" value="#{ShoppingCartBean.total}"/></td>
+                                    <td>Total Price:  </td>
+                                    <td><h:outputText title= "Total Price: " value="#{ShoppingCartBean.total}"/></td>
                                 </tr>
                             </table>
                             <br/>

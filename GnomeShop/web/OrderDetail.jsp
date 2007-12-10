@@ -56,7 +56,7 @@
                                     </h:dataTable>
                                 </h:form>
                                 <tr>
-                                    <td></td>
+                                    <td>Total Price:   </td>
                                     <td><h:outputText title= "Total Price" value="#{OrderDetail.totalPrice}"/></td>
                                 </tr>
                             </table>

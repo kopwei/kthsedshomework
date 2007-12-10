@@ -36,11 +36,6 @@ import javax.servlet.ServletContext;
  */
 public class GnomeDetail extends AbstractPageBean {
     private ProductBean productBean = null;
-    private String id = null;
-    private String name = null;
-    private float price = 0;
-    private int quantity = 0;
-    private String description = null;
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
 
     /**
@@ -164,11 +159,6 @@ public class GnomeDetail extends AbstractPageBean {
         if (null != databaseUtil) {            
             if (null != productID) {
                 setProductBean(databaseUtil.getProductDetails(productID));
-                setId(productBean.getId());
-                setName(productBean.getName());
-                setPrice(productBean.getPrice());
-                setQuantity(productBean.getQuantity());
-                setDescription(productBean.getDescription());
                 SessionBean sessionBean = (SessionBean) getBean("SessionBean");
                 sessionBean.setCurrentProductBean(productBean);
             }
@@ -252,14 +242,15 @@ public class GnomeDetail extends AbstractPageBean {
         return (RequestBean) getBean("RequestBean");
     }
 
+    /**
+     * This method will be invoked while user clicks the addIntoCart button, and will add the current gnome into
+     * shopping cart
+     * @return The action String
+     */
     public String addIntoCartButton_action() {
         // TODO: Process the action. Return value is a navigation
         SessionBean sessionBean = (SessionBean) getBean("SessionBean");
         productBean = sessionBean.getCurrentProductBean();
-        setId(productBean.getId());
-        setName(productBean.getName());
-        setPrice(productBean.getPrice());
-        setQuantity(productBean.getQuantity());
 
         // Check if the member is logged in or not
         LoginManager manager = (LoginManager)getBean("LoginManager");
@@ -272,8 +263,8 @@ public class GnomeDetail extends AbstractPageBean {
         boolean result = false;
         if (null != getProductBean()) {
             int number = Integer.parseInt(numberTextField.getValue().toString());
-            if (getQuantity() >= number) {
-                ShoppingItemBean shoppingItemBean = new ShoppingItemBean(getId(), getName(), getPrice(), number);
+            if (productBean.getQuantity() >= number) {
+                ShoppingItemBean shoppingItemBean = new ShoppingItemBean(productBean.getId(), productBean.getName(), productBean.getPrice(), number);
                 ShoppingCartBean shoppingCartBean = (ShoppingCartBean) getBean("ShoppingCartBean");
                 result = shoppingCartBean.addShoppingItem(shoppingItemBean);
             }
@@ -291,53 +282,21 @@ public class GnomeDetail extends AbstractPageBean {
         return addIntoCartActionResult;
     }
 
+    /**
+     * This method is used to get the product of the current page
+     * @return The product object
+     */
     public ProductBean getProductBean() {
         return productBean;
     }
 
+    /**
+     * This method is used to get the product of the current page
+     * @param productBean The product object
+     */
     public void setProductBean(ProductBean productBean) {
         this.productBean = productBean;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
 }
 

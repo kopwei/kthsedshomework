@@ -3,7 +3,6 @@
  *
  * Created on Dec 6, 2007, 8:31:27 PM
  */
- 
 package gnomeshop;
 
 import com.sun.rave.web.ui.appbase.AbstractPageBean;
@@ -18,12 +17,13 @@ import com.sun.webui.jsf.component.StaticText;
 import com.sun.webui.jsf.component.Table;
 import com.sun.webui.jsf.component.TableColumn;
 import com.sun.webui.jsf.component.TableRowGroup;
-import com.sun.webui.jsf.component.TextArea;
 import com.sun.webui.jsf.component.TextField;
 import gnomeshop.items.ProductBean;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.faces.FacesException;
+import javax.faces.component.html.HtmlOutputLink;
+import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
@@ -38,7 +38,6 @@ import javax.servlet.ServletContext;
  */
 public class Manage extends AbstractPageBean {
     // <editor-fold defaultstate="collapsed" desc="Managed Component Definition">
-
     /**
      * <p>Automatically managed component initialization.  <strong>WARNING:</strong>
      * This method is automatically generated, so any user-specified code inserted
@@ -46,101 +45,59 @@ public class Manage extends AbstractPageBean {
      */
     private void _init() throws Exception {
     }
-
     private Page page1 = new Page();
-    
+
     public Page getPage1() {
         return page1;
     }
-    
+
     public void setPage1(Page p) {
         this.page1 = p;
     }
-    
     private Html html1 = new Html();
-    
+
     public Html getHtml1() {
         return html1;
     }
-    
+
     public void setHtml1(Html h) {
         this.html1 = h;
     }
-    
     private Head head1 = new Head();
-    
+
     public Head getHead1() {
         return head1;
     }
-    
+
     public void setHead1(Head h) {
         this.head1 = h;
     }
-    
     private Link link1 = new Link();
-    
+
     public Link getLink1() {
         return link1;
     }
-    
+
     public void setLink1(Link l) {
         this.link1 = l;
     }
-    
     private Body body1 = new Body();
-    
+
     public Body getBody1() {
         return body1;
     }
-    
+
     public void setBody1(Body b) {
         this.body1 = b;
     }
-    
     private Form form1 = new Form();
-    
+
     public Form getForm1() {
         return form1;
     }
-    
+
     public void setForm1(Form f) {
         this.form1 = f;
-    }
-    private TextField nameField = new TextField();
-
-    public TextField getNameField() {
-        return nameField;
-    }
-
-    public void setNameField(TextField tf) {
-        this.nameField = tf;
-    }
-    private TextField priceField = new TextField();
-
-    public TextField getPriceField() {
-        return priceField;
-    }
-
-    public void setPriceField(TextField tf) {
-        this.priceField = tf;
-    }
-    private TextArea descriptionArea = new TextArea();
-
-    public TextArea getDescriptionArea() {
-        return descriptionArea;
-    }
-
-    public void setDescriptionArea(TextArea ta) {
-        this.descriptionArea = ta;
-    }
-    private Hyperlink addHyperlink = new Hyperlink();
-
-    public Hyperlink getAddHyperlink() {
-        return addHyperlink;
-    }
-
-    public void setAddHyperlink(Hyperlink h) {
-        this.addHyperlink = h;
     }
     
     private StaticText staticText1 = new StaticText();
@@ -252,9 +209,39 @@ public class Manage extends AbstractPageBean {
         this.staticText2 = st;
     }
 
-    // </editor-fold>
-    private ArrayList<ProductBean> products = new ArrayList<ProductBean>();
+    private Hyperlink removeHyperlink = new Hyperlink();
 
+    public Hyperlink getRemoveHyperlink() {
+        return removeHyperlink;
+    }
+
+    public void setRemoveHyperlink(Hyperlink h) {
+        this.removeHyperlink = h;
+    }
+    
+    private HtmlOutputLink addProductHyperlink = new HtmlOutputLink();
+
+    public HtmlOutputLink getAddProductHyperlink() {
+        return addProductHyperlink;
+    }
+
+    public void setAddProductHyperlink(HtmlOutputLink hol) {
+        this.addProductHyperlink = hol;
+    }
+    private HtmlOutputText addProductHyperlinkText = new HtmlOutputText();
+
+    public HtmlOutputText getAddProductHyperlinkText() {
+        return addProductHyperlinkText;
+    }
+
+    public void setAddProductHyperlinkText(HtmlOutputText hot) {
+        this.addProductHyperlinkText = hot;
+    }
+    
+     // </editor-fold>
+    
+    private ArrayList<ProductBean> products = new ArrayList<ProductBean>();
+    
     /**
      * <p>Construct a new Page bean instance.</p>
      */
@@ -281,24 +268,28 @@ public class Manage extends AbstractPageBean {
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
         try {
-            LoginManager loginMgr = (LoginManager)getBean("LoginManager");
+            LoginManager loginMgr = (LoginManager) getBean("LoginManager");
             if (null != loginMgr) {
                 if (!loginMgr.isAdmin()) {
-                    FacesContext facesContext = FacesContext.getCurrentInstance();        
+                    FacesContext facesContext = FacesContext.getCurrentInstance();
                     facesContext.getExternalContext().redirect("Login.jsp");
                 }
             }
         } catch (IOException ex) {
             //Logger.getLogger(AdminPage.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println(ex.getMessage());
-        }       
+        }
+        // Process the argument
+        processParameter();
+
+        // Set the data array
         FacesContext fc = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
         DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != databaseUtil) {            
+        if (null != databaseUtil) {
             setProducts(databaseUtil.getAllProducts());
         }
-        processParameter();
+
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified
@@ -306,13 +297,13 @@ public class Manage extends AbstractPageBean {
             _init();
         } catch (Exception e) {
             log("ManageGnomePage Initialization Failure", e);
-            throw e instanceof FacesException ? (FacesException) e: new FacesException(e);
+            throw e instanceof FacesException ? (FacesException) e : new FacesException(e);
         }
-        
-        // </editor-fold>
-        // Perform application initialization that must complete
-        // *after* managed components are initialized
-        // TODO - add your own initialization code here
+
+    // </editor-fold>
+    // Perform application initialization that must complete
+    // *after* managed components are initialized
+    // TODO - add your own initialization code here
     }
 
     /**
@@ -324,7 +315,7 @@ public class Manage extends AbstractPageBean {
      */
     @Override
     public void preprocess() {
-        
+
     }
 
     /**
@@ -377,7 +368,10 @@ public class Manage extends AbstractPageBean {
     protected SessionBean getSessionBean() {
         return (SessionBean) getBean("SessionBean");
     }
-    
+
+    /**
+     * This method is used to handle the related arguments in URL
+     */
     private void processParameter() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
@@ -394,30 +388,18 @@ public class Manage extends AbstractPageBean {
         }
     }
 
-    public String addHyperlink_action() {
-        // TODO: Process the action. Return value is a navigation
-        // case name where null will return to the same page.
-        if (nameField.getText() == null || priceField.getText() == null || quantityField.getText() == null) {
-            return null;
-        }
-        String name = nameField.getText().toString();
-        float price = Float.parseFloat(priceField.getText().toString());
-        String desc = descriptionArea.getText().toString();
-        int quantity = Integer.parseInt(quantityField.getText().toString());
-        ProductBean product = new ProductBean(name, price, desc, quantity);
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        DatabaseUtil dbUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != dbUtil) {
-            dbUtil.insertProduct(product);
-        }
-        return null;
-    }
-
+    /**
+     * This method is used to get all the products info
+     * @return The list of products
+     */
     public ArrayList<ProductBean> getProducts() {
         return products;
     }
 
+    /**
+     * This method is used to set all the products info
+     * @param products The list of products
+     */
     public void setProducts(ArrayList<ProductBean> products) {
         this.products = products;
     }

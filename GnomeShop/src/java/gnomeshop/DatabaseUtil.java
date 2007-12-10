@@ -24,7 +24,7 @@ import java.util.UUID;
  */
 public class DatabaseUtil {
 
-    String dbUrl = "jdbc:mysql://192.168.11.3:3306/webshop";
+    String dbUrl = "jdbc:mysql://localhost:3306/webshop";
     String jdbcDriver = "com.mysql.jdbc.Driver";
     Connection connection = null;
 

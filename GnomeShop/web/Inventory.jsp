@@ -18,7 +18,7 @@
                         <div style="left: 0px; top: 0px; position: absolute; height: 60px; width: 800px">
                             <jsp:directive.include file="Header.jspf"/>
                         </div>
-                        <div style="height: 310px; left: 264px; top: 120px; position: absolute; width: 430px">
+                        <div style="height: 310px; left: 216px; top: 96px; position: absolute; width: 430px">
                             <table>
                                 <tr>
                                     <td colspan="2" style="background-color: #336699; text-align: Center; border-style: outset; border-width: 1">

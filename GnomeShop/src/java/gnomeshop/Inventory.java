@@ -146,14 +146,8 @@ public class Inventory extends AbstractPageBean {
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
         SearchBean searchBean = (SearchBean) getBean("SearchBean");
-        String searchKey = searchBean.getSearchKey();
-        FacesContext fc = FacesContext.getCurrentInstance();
-        ServletContext servletContext = (ServletContext) fc.getExternalContext().getContext();
-        DatabaseUtil databaseUtil = (DatabaseUtil) servletContext.getAttribute("DATABASE_UTIL");
-        if (null != databaseUtil) {            
-            if (null != searchKey) {
-                setSearchResult(databaseUtil.searchProducts(searchKey));
-            }
+        if (null != searchBean) {
+            this.searchResult = new ArrayList<ProductBean>(searchBean.getSearchResult());
         }
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components

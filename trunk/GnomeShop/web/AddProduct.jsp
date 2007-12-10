@@ -42,7 +42,7 @@
                             <tr>
                                 <td style="height: 36px">Gnome Description</td>
                                 <td>
-                                    <webuijsf:textArea binding="#{AddProduct.descriptionArea}" id="descriptionArea"/>
+                                    <webuijsf:textArea binding="#{AddProduct.descriptionArea}" id="descriptionArea" rows="4"/>
                                 </td>
                             </tr>
                             <tr>

@@ -12,6 +12,7 @@ import com.sun.webui.jsf.component.Button;
 import com.sun.webui.jsf.component.Form;
 import com.sun.webui.jsf.component.Head;
 import com.sun.webui.jsf.component.Html;
+import com.sun.webui.jsf.component.Label;
 import com.sun.webui.jsf.component.Link;
 import com.sun.webui.jsf.component.Page;
 import com.sun.webui.jsf.component.PasswordField;
@@ -165,6 +166,15 @@ public class Login extends AbstractPageBean {
     public void setLogoutButton(HtmlCommandButton hcb) {
         this.logoutButton = hcb;
     }
+    private Label userNameLabel = new Label();
+
+    public Label getUserNameLabel() {
+        return userNameLabel;
+    }
+
+    public void setUserNameLabel(Label l) {
+        this.userNameLabel = l;
+    }
     /**
      * <p>Construct a new Page bean instance.</p>
      */
@@ -192,7 +202,11 @@ public class Login extends AbstractPageBean {
         // *before* managed components are initialized
         // TODO - add your own initialiation code here
         loginMgr = (LoginManager)getBean("LoginManager");
-        
+        if (loginMgr != null) {
+            if(loginMgr.getLoggedIn()) {
+                this.userNameLabel.setText(loginMgr.getUserName());
+            }
+        }
         // <editor-fold defaultstate="collapsed" desc="Managed Component Initialization">
         // Initialize automatically managed components
         // *Note* - this logic should NOT be modified

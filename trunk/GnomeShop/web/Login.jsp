@@ -30,7 +30,8 @@
                                     User Name
                                 </td>
                                 <td>
-                                    <webuijsf:textField binding="#{Login.userNameField}" id="userNameField"/>
+                                    <webuijsf:textField binding="#{Login.userNameField}" id="userNameField" rendered="#{!Login.loginMgr.loggedIn}"/>
+                                    <webuijsf:label binding="#{Login.userNameLabel}" id="userNameLabel" rendered="#{Login.loginMgr.loggedIn}"/>
                                 </td>
                             </tr>
                             <tr>
@@ -38,18 +39,16 @@
                                     Password
                                 </td>
                                 <td>
-                                    <webuijsf:passwordField binding="#{Login.passwordField}" id="passwordField"/>
+                                    <webuijsf:passwordField binding="#{Login.passwordField}" id="passwordField" rendered="#{!Login.loginMgr.loggedIn}"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td/>
-                                <td>
-                                    <h:commandButton action="#{Login.loginButton_action}" binding="#{Login.loginButton}" id="loginButton"
-                                        rendered="#{!Login.loginMgr.loggedIn}" value="Login"/>
-                                </td>
+                                <td style="height: 21px"></td>
                                 <td>
                                     <h:commandButton action="#{Login.logoutButton_action}" binding="#{Login.logoutButton}" id="logoutButton"
                                         rendered="#{Login.loginMgr.loggedIn}" value="Logout"/>
+                                    <h:commandButton action="#{Login.loginButton_action}" binding="#{Login.loginButton}" id="loginButton"
+                                        rendered="#{!Login.loginMgr.loggedIn}" value="Login"/>
                                 </td>
                             </tr>
                         </table>

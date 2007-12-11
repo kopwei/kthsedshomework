@@ -86,21 +86,45 @@
 	<tbody>
     	<tr>
         	<th align="left" bgcolor="#CCCCCC" valign="top"><font size="+1">5.Instructions:</font></th>
-        </tr>
+	</tr>
+	<tr>
+		<td>
+			<dd><font size="+1"><strong>Installation instruction </strong></font>            		</td>
+	</tr>
+	<tr>
+		<td>
+			<ul>
+				<ol>
+					<strong><font size="3">The following are the steps of deploying the project					</font></strong>
+				  (The Tomcat server and MySQL server must be in a same machine)
+				  <li><font size="2">Create a database named "webshop" in MySQL server </font></li>
+                			<li><font size="2">Start a console and locates to the directory of webshop.sql file
+	                </font></li>
+					<li><font size="2">Type the following command in console to import the data into MySQL
+					</font></li>
+					<font size = "2"> mysql -u root -p webshop < webshop.sql </font>
+					<li><font size="2">Copy GnomeShop.war into TOMCAT_HOME\webapps\ (TOMCAT_HOME is the Tomcat installation directory)
+					</font></li>
+					<li><font size="2">Start Tomcat server
+					</font></li>
+			    </ol>
+		  </ul>
+	  </td>
+	</tr>
         <tr>
-        	<td><font size="-1"><dd>Please follow the instructions below to run the application.
-            	</font>
+        	<td><dd><font size="4"><strong>Running instruction:</strong></font><strong></strong>
             </td>
         </tr>
         <tr>
         	<td><ul>
             	<ol>
-                <font size="-1">Start Internet Explorer and enter the following url: http://ServerAddress:8080/GnomeShop/ (The server address is the ip address which the web server locates)
-		</font>
-	</ol></ul><ul>
+                  <p><font size="3"><strong>Please follow the instructions below to run the application. </strong></font></p>
+                  <p><font size="3">Start Internet Explorer and enter the following url: http://ServerAddress:8080/GnomeShop/ (The server address is the ip address which the web server locates)</font></p>
+           	  </ol>
+        	</ul>
+        	<ul>
 		<ol>
-		<font size="-1">The following are the steps of buying gnomes on the web
-		</font>
+		  <strong><font size="3">The following are the steps of buying gnomes on the web		</font></strong>
                 <li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "guest" and password "guest"
 		</font></li>
 		<li><font size="-1">Click "Browse All Gnomes" on the left panel and you will see the list of all gnomes
@@ -116,9 +140,8 @@
 		<li><font size="-1">Click "Submit" button to submit the order and wait for gnomes ^_^
 		</font></li>
 		</ol></ul><ul><ol>
-		<font size="-1">The following are the steps of registering a member
-		</font>
-                <li><font size="-1">Click the "Register" hyperlink on the top panel to enter registering page. 
+		    <strong><font size="3">The following are the steps of registering a member		</font></strong>
+            <li><font size="-1">Click the "Register" hyperlink on the top panel to enter registering page. 
 		</font></li>
 		<li><font size="-1">Enter the required information into the input text boxes
 		</font></li>
@@ -126,9 +149,8 @@
 		</font></li>
 		</ol>		
 		</ul><ul><ol>
-			<font size="-1">The following are the steps for administrators to remove a product or add a new kind of product into repository
-			</font>
-			 <li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "admin" and password "admin", if you are already logged in, click to logout first
+			<strong><font size="3">The following are the steps for administrators to remove a product or add a new kind of product into repository			</font></strong>
+		    <li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "admin" and password "admin", if you are already logged in, click to logout first
 			 </font></li>
 			 <li><font size="-1">Click "Manage" hyperlink on the top panel, you may see all the gnomes in the repository. You can click "Remove" to remove a certain kind of gnome
 			 </font></li>
@@ -138,8 +160,7 @@
 			 </font></li>
 	 		</ol></ul>
 			 <ul><ol>
-			<font size="-1">The following are the steps for administrators to block members
-			</font>
+			<strong><font size="3">The following are the steps for administrators to block members			</font></strong>
 			<li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "admin" and password "admin", if you are already logged in, click to logout first
 			</font></li>
 			<li><font size="-1">Click "Admin" hyperlink on the top panel, you may see all the members registered. You can check their registration information by clicking the "Details" hyperlink
@@ -148,8 +169,7 @@
 			</font></li>
 			</ol></ul>
 			 <ul><ol>
-			<font size="-1">The following are the steps for administrators to check all the orders
-			</font>
+			<strong><font size="3">The following are the steps for administrators to check all the orders			</font></strong>
 			<li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "admin" and password "admin", if you are already logged in, click to logout first
 			</font></li>
 			<li><font size="-1">Click "Orders" hyperlink on the top panel, you may see all the orders which customer creates. You can check the order detail by clicking "Details" hyperlink.

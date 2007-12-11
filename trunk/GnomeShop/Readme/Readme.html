@@ -68,39 +68,70 @@
       </tr>
         <tr nosave="">
         	<td><ul>
-            	<li><font size="-1"><b>Use Case:</b></font><br />
+            	<li><font size="3"><b>Use Case Diagram:</b></font><br />
+            	  <br/>
                 <a href="capture screen/Use Case Model.jpg"><img src="abbreviative images/Use Case Model_small.png" /></a></li>
-                <li><font size="-1"><b>Structure:</b> Our application adopts the three-tier architecture: customer(browser) in the first tier, uses the services provided by the webserver in the 2nd tier, which communicates with database and instructs the manipulation of data.<br /></font>
-                <img src="capture screen/Deployment Model.JPG" /></li>
-                <li><font size="-1"><b>Functionality:</b></font></li>
-                	<ul>
-                    <li><font size="-1">Customer can register itself, and logon, logout. (The password of customer is encoded with MD5 algorithm to ensure the security of customer's information)</font></li>
-                    <a href="capture screen/Register.png"><img src="abbreviative images/Register_small.png" /></a><p>
-                    <a href="capture screen/Login.png"><img src="abbreviative images/Login_small.png" /></a><p>
-                    <a href="capture screen/MemberTable.JPG"><img src="abbreviative images/MemberTable_small.png" /></a>
-                    <li><font size="-1">Customer is able to search and browse the information of gnomes, like inventory or details. Of course the gnomes available can be put into shopping cart by customers.</font><br />
-                    <a href="capture screen/Search.png"><img src="abbreviative images/Search_small.png" /></a><p>
-                    <a href="capture screen/GnomeDetail.png"><img src="abbreviative images/GnomeDetail_small.png" /></a><p>                    
-                    <font size="-1">Check the state of shopping cart and make order by paying bills online.</font><br />
-                    <a href="capture screen/ShoppingCart.png"><img src="abbreviative images/ShoppingCart_small.png" /></a><p>
-                    <a href="capture screen/Checkout.png"><img src="abbreviative images/Checkout_small.png" /></a><p>
-                    </li>
-                    <li><font size="-1">Administrator also be able to log on to the system, and manage the gnomes, like add and remove gnome.</font><br />
-                    <a href="capture screen/AllGnome.png"><img src="abbreviative images/AllGnome_small.png" /></a><p>
-                    <a href="capture screen/AddGnome.png"><img src="abbreviative images/AddGnome_small.png" /></a><p>
-                    <font size="-1">Check all the orders that customers have made.</font><br />
-                    <a href="capture screen/OrderList.png"><img src="abbreviative images/OrderList_small.png" /></a><P>
-                    <font size="-1">Manage the customers, like browse list of all members, and block or unblock some a customer.</font><br />
-                    <a href="capture screen/MemberList.png"><img src="abbreviative images/MemberList_small.png" /></a><p>
-                    <a href="capture screen/BlockMember.png"><img src="abbreviative images/BlockMember_small.png" /></a>
-                    </li>
-                    </ul>
-                <li><font size="-1"><b>Communication protocol: </b></font><font size="-1">HTTP protocol.</font>
-			  </li>
-                <li><font size="-1"><b>Interactions: </b></font><font size="-1">The interactions between customers and webserver are processing through inputting informations and pressing button by customers and through showing corresponding result in pages by webserver.</font>
-              </li>
+                <br /><br />
+                <li><font size="3"><b>Structure:</b> Our application adopts the three-tier architecture: customer(browser) in the first tier, uses the services provided by the webserver in the 2nd tier, which communicates with database and instructs the manipulation of data.</font></li>
+                <font size="-1"><br />
+              </font>
+                  <img src="capture screen/Deployment Model.JPG" />
                 </ul>
-            </td>
+              <p>&nbsp;</p>
+              <ul>
+                <li><font size="3"><b>Functionality:</b></font></li>
+              </ul>
+              <ul>
+                <ul>
+                  <li><font size="-1">Customer can register itself, and logon, logout. (The password of customer is encoded with MD5 algorithm to ensure the security of customer's information)</font><br/><br/>
+                    <ul>
+                      <a href="capture screen/Register.png"><img src="abbreviative images/Register_small.png" /></a>
+                      <p>
+                        <a href="capture screen/Login.png"><img src="abbreviative images/Login_small.png" /></a>
+                      <p>
+                        <a href="capture screen/MemberTable.JPG"><img src="abbreviative images/MemberTable_small.png" /></a> </p>
+                      <p>&nbsp;</p>
+                      <li><font size="-1">Customer is able to search and browse the information of gnomes, like inventory or details. Of course the gnomes available can be put into shopping cart by customers.</font></li>
+                      <br/>
+                      
+                      <a href="capture screen/Search.png"><img src="abbreviative images/Search_small.png" /></a>
+                      <p>
+                        <a href="capture screen/GnomeDetail.png"><img src="abbreviative images/GnomeDetail_small.png" /></a>
+                              <p>                    
+                                <font size="-1">Check the state of shopping cart and make order by paying bills online.</font><br />
+                                <br/>
+                                <a href="capture screen/ShoppingCart.png"><img src="abbreviative images/ShoppingCart_small.png" /></a>
+                                      <p>
+                                        <a href="capture screen/Checkout.png"><img src="abbreviative images/Checkout_small.png" /></a>
+                                              <p>                                                                                                                                                                                                                                                                 
+                                                      <li><font size="-1">Administrator also be able to log on to the system, and manage the gnomes, like add and remove gnome.</font><br />
+                                                        <br/>
+                                                              <a href="capture screen/AllGnome.png"><img src="abbreviative images/AllGnome_small.png" /></a>
+                                                              <p>
+                                                                    <a href="capture screen/AddGnome.png"><img src="abbreviative images/AddGnome_small.png" /></a>
+                                                                  <p>
+                                                                    <font size="2">Check all the orders that customers have made.</font><br />
+                                                                    <br/>
+                                                                    <a href="capture screen/OrderList.png"><img src="abbreviative images/OrderList_small.png" /></a>                                 
+                      </li>
+                      <li>
+                        <P>
+                          <font size="2">Manage the customers, like browse list of all members, and block or unblock some a customer.</font><br />
+                          <br/>
+                          <a href="capture screen/MemberList.png"><img src="abbreviative images/MemberList_small.png" /></a>
+                        <p>
+                          <a href="capture screen/BlockMember.png"><img src="abbreviative images/BlockMember_small.png" /></a>                                                                                                                                  
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+                <li><font size="3"><b>Communication protocol: </b>HTTP protocol.</font> </li>
+                <br/>
+                <li><font size="3"><b>Interactions: </b></font><font size="-1">The interactions between customers and webserver are processing through inputting informations and pressing button by customers and through showing corresponding result in pages by webserver.</font>              </li>
+                <br/>
+                <br/>
+              </ul>
+          </td>
         </tr>
     </tbody>
 </table>

@@ -27,6 +27,9 @@ public class DatabaseUtil {
     String dbUrl = "jdbc:mysql://localhost:3306/webshop";
     String jdbcDriver = "com.mysql.jdbc.Driver";
     Connection connection = null;
+    private final String dbPassword = "123456";
+    private final String dbUserName = "root";
+
 
     /**
      * Default constructor
@@ -61,7 +64,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list
@@ -93,7 +96,7 @@ public class DatabaseUtil {
         ProductBean result = null;
         try {
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return object
@@ -127,7 +130,7 @@ public class DatabaseUtil {
         String querySql = "SELECT Quantity FROM Products WHERE ProductId = '" + productId + "'";
         try {
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery(querySql);
             if (result.next()) {
@@ -167,7 +170,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list
@@ -203,7 +206,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list
@@ -240,7 +243,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list
@@ -280,7 +283,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
             statement.close();
@@ -313,7 +316,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the update command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
             statement.close();
@@ -338,7 +341,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the update command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
             statement.close();
@@ -369,7 +372,7 @@ public class DatabaseUtil {
                     " WHERE (username = '" + userName + "' AND password = '" + digestedPwd + "')";
             // Create the connection and execute the query
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result 
@@ -410,7 +413,7 @@ public class DatabaseUtil {
                     " WHERE (member_id = '" + memberId + "')";
             // Create the connection and execute the query
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result 
@@ -458,7 +461,7 @@ public class DatabaseUtil {
                     "last_name, email, phone, isblocked)  VALUES(?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
             // Create the connection and execute the update command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, member.getMemberId());
             statement.setString(2, member.getUserName());
@@ -493,7 +496,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list
@@ -541,7 +544,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the update command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
 
@@ -581,7 +584,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list
@@ -616,7 +619,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list
@@ -654,7 +657,7 @@ public class DatabaseUtil {
         try {
             // Create the connection and execute the query command
             Class.forName(jdbcDriver).newInstance();
-            connection = DriverManager.getConnection(dbUrl, "root", "123456");
+            connection = DriverManager.getConnection(dbUrl,dbUserName,dbPassword);
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
             // Get the query result and fill the return array list

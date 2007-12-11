@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Project 4. APG WebShop</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+<table align="center">
+<tbody>
+    	<tr>
+        	<td width="375" align="center" valign="middle">
+            <h2>Project4. APG WebShop</h2>
+            </td>
+      </tr>
+    </tbody>
+</table>
+<br />
+<table nosave="">
+<tbody>
+    <tr>
+        <th width="1206" align="left" valign="top" bgcolor="#CCCCCC"><font size="+1" >1.General task specification:</font></th>
+    </tr>
+    <tr>
+        <td>
+            <dd><font size="-1">In this project, we implement and deploy a working webshop in Java as a EJB-based Web-application. It is allowed for customers to register, logon, logout, browse or search the information of gnomes (including name, price, quantity and description), put units into shopping cart, check the state of cart, and pay the bill by credit-card. Besides, administrator can log on to system, manage the customers, manage the gnomes (browse, add and remove).
+            </font></dd>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<br />
+<table nosave="">
+	<tbody>
+   	  <tr>
+       	  <th width="1240" align="left" valign="top" bgcolor="#CCCCCC"><font size="+1">2.Information about HW platform:</font></th>
+      </tr>
+        <tr>
+        	<td><font size="-1"><dd>A computer with XP or Vista operating system.
+            	</dd></font>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<table nosave="">
+	<tbody>
+    	<tr>
+        	<th width="1240" align="left" valign="top" bgcolor="#CCCCCC"><font size="+1">3.List of Java software and programming technologies:</font></th>
+      </tr>
+        <tr>
+        	<td>
+            	<ul>
+                <li><font size="-1"><b>Java software:</b> Java SE, Java EE(include JSF Library), MySQL, Netbeans, Apache Tomcat</font>
+                </li>
+                <li><font size="-1"><b>Programming technology:</b> JSP, JSF, JDBC</font>
+                </li>
+              </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<table nosave="">
+	<tbody>
+    	<tr nosave="">
+        	<th width="1206" align="left" valign="top" bgcolor="#CCCCCC"><font size="+1">4.Detailed description of application:</font></th>
+      </tr>
+        <tr nosave="">
+        	<td><ul>
+            	<li><font size="-1"><b>Use Case:</b></font><br />
+                <a href="capture screen/Use Case Model.jpg"><img src="abbreviative images/Use Case Model_small.png" /></a></li>
+                <li><font size="-1"><b>Structure:</b> Our application adopts the three-tier architecture: customer(browser) in the first tier, uses the services provided by the webserver in the 2nd tier, which communicates with database and instructs the manipulation of data.<br /></font>
+                <img src="capture screen/Deployment Model.JPG" /></li>
+                <li><font size="-1"><b>Functionality:</b></font></li>
+                	<ul>
+                    <li><font size="-1">Customer can register itself, and logon, logout. (The password of customer is encoded with MD5 algorithm to ensure the security of customer's information)</font></li>
+                    <a href="capture screen/Register.png"><img src="abbreviative images/Register_small.png" /></a><p>
+                    <a href="capture screen/Login.png"><img src="abbreviative images/Login_small.png" /></a><p>
+                    <a href="capture screen/MemberTable.JPG"><img src="abbreviative images/MemberTable_small.png" /></a>
+                    <li><font size="-1">Customer is able to search and browse the information of gnomes, like inventory or details. Of course the gnomes available can be put into shopping cart by customers.</font><br />
+                    <a href="capture screen/Search.png"><img src="abbreviative images/Search_small.png" /></a><p>
+                    <a href="capture screen/GnomeDetail.png"><img src="abbreviative images/GnomeDetail_small.png" /></a><p>                    
+                    <font size="-1">Check the state of shopping cart and make order by paying bills online.</font><br />
+                    <a href="capture screen/ShoppingCart.png"><img src="abbreviative images/ShoppingCart_small.png" /></a><p>
+                    <a href="capture screen/Checkout.png"><img src="abbreviative images/Checkout_small.png" /></a><p>
+                    </li>
+                    <li><font size="-1">Administrator also be able to log on to the system, and manage the gnomes, like add and remove gnome.</font><br />
+                    <a href="capture screen/AllGnome.png"><img src="abbreviative images/AllGnome_small.png" /></a><p>
+                    <a href="capture screen/AddGnome.png"><img src="abbreviative images/AddGnome_small.png" /></a><p>
+                    <font size="-1">Check all the orders that customers have made.</font><br />
+                    <a href="capture screen/OrderList.png"><img src="abbreviative images/OrderList_small.png" /></a><P>
+                    <font size="-1">Manage the customers, like browse list of all members, and block or unblock some a customer.</font><br />
+                    <a href="capture screen/MemberList.png"><img src="abbreviative images/MemberList_small.png" /></a><p>
+                    <a href="capture screen/BlockMember.png"><img src="abbreviative images/BlockMember_small.png" /></a>
+                    </li>
+                    </ul>
+                <li><font size="-1"><b>Communication protocol: </b></font><font size="-1">HTTP protocol.</font>
+			  </li>
+                <li><font size="-1"><b>Interactions: </b></font><font size="-1">The interactions between customers and webserver are processing through inputting informations and pressing button by customers and through showing corresponding result in pages by webserver.</font>
+              </li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+<table nosave="">
+	<tbody>
+    	<tr nosave="">
+        	<th width="1240" align="left" valign="top" bgcolor="#CCCCCC"><font size="+1">5.Instructions:</font></th>
+	</tr>
+	<tr nosave="">
+		<td>
+			<dd><font size="+1"><strong>Installation instruction </strong></font>            		</td>
+	</tr>
+	<tr nosave="">
+		<td>
+			<ul>
+				<ol>
+					<strong><font size="3">The following are the steps of deploying the project					</font></strong>
+				  (The Tomcat server and MySQL server must be in a same machine)
+				  <li><font size="2">Create a database named "webshop" in MySQL server </font></li>
+                			<li><font size="2">Start a console and locates to the directory of webshop.sql file
+	                </font></li>
+					<li><font size="2">Type the following command in console to import the data into MySQL
+					</font></li>
+					<font size = "2"> <strong>mysql -u root -p webshop < webshop.sql</strong> </font>
+					<li><font size="2">Copy GnomeShop.war into <em>TOMCAT_HOME</em>\webapps\ (<em>TOMCAT_HOME</em> is the Tomcat installation directory)
+					</font></li>
+					<li><font size="2">Start Tomcat server
+					</font></li>
+			    </ol>
+		  </ul>
+	  </td>
+	</tr>
+        <tr nosave="">
+        	<td><dd><font size="4"><strong>Running instruction:</strong></font><strong></strong>
+            </td>
+        </tr>
+        <tr nosave="">
+        	<td><ul>
+            	<ol>
+                  <p><font size="3"><strong>Please follow the instructions below to run the application. </strong></font></p>
+                  <p><font size="3">Start Internet Explorer and enter the following url: http://<em>ServerAddress</em>:8080/GnomeShop/ (The <em>ServerAddress</em> is the ip address which the web server locates)</font></p>
+           	  </ol>
+        	</ul>
+        	<ul>
+		<ol>
+		  <strong><font size="3">The following are the steps of buying gnomes on the web		</font></strong>
+                <li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "guest" and password "guest"
+		</font></li>
+		<li><font size="-1">Click "Browse All Gnomes" on the left panel and you will see the list of all gnomes
+		</font></li>
+		<li><font size="-1">Click the "Details" to check the detail information of each kind of gnomes
+		</font></li>
+		<li><font size="-1">Enter the number of gnomes and click "Add into My Cart" to add the gnomes into shopping cart. You can repeat the step 3 to 5 to buy several kinds of gnomes
+		</font></li>
+		<li><font size="-1">Click "ShoppingCart" link in the up panel to check the shopping cart
+		</font></li>
+		<li><font size="-1">Click "Checkout" enters the checkout page, here you have to enter the order information, e.g. contact name, delivery address, etc.
+		</font></li>
+		<li><font size="-1">Click "Submit" button to submit the order and wait for gnomes ^_^
+		</font></li>
+		</ol></ul><ul><ol>
+		    <strong><font size="3">The following are the steps of registering a member		</font></strong>
+            <li><font size="-1">Click the "Register" hyperlink on the top panel to enter registering page. 
+		</font></li>
+		<li><font size="-1">Enter the required information into the input text boxes
+		</font></li>
+		<li><font size="-1">Click "Submit" button and you will see the registration results. If the registration failed, which means the user name is already in the database, you may repeat step1 and 2 and choose another username
+		</font></li>
+		</ol>		
+		</ul><ul><ol>
+			<strong><font size="3">The following are the steps for administrators to remove a product or add a new kind of product into repository			</font></strong>
+		    <li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "admin" and password "admin", if you are already logged in, click to logout first
+			 </font></li>
+			 <li><font size="-1">Click "Manage" hyperlink on the top panel, you may see all the gnomes in the repository. You can click "Remove" to remove a certain kind of gnome
+			 </font></li>
+			 <li><font size="-1">If you want to add a new kind of products into the repository, you may click "Add Gnome" link to enter the adding page
+			 </font></li>
+			 <li><font size="-1">In the adding page, enter the required information of new gnomes and click "Add" button. If the adding succeeds then you will see the new gnomes are added in the gnome list
+			 </font></li>
+	 		</ol></ul>
+			 <ul><ol>
+			<strong><font size="3">The following are the steps for administrators to block members			</font></strong>
+			<li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "admin" and password "admin", if you are already logged in, click to logout first
+			</font></li>
+			<li><font size="-1">Click "Admin" hyperlink on the top panel, you may see all the members registered. You can check their registration information by clicking the "Details" hyperlink
+			</font></li>
+			<li><font size="-1">In the detail page, you can block/unblock a member. If you block the member, he/she cannot log into the system with his/her username and password anymore.
+			</font></li>
+			</ol></ul>
+			 <ul><ol>
+			<strong><font size="3">The following are the steps for administrators to check all the orders			</font></strong>
+			<li><font size="-1">First login into the system, click the "Login" hyperlink on the top panel to login. here we can use username "admin" and password "admin", if you are already logged in, click to logout first
+			</font></li>
+			<li><font size="-1">Click "Orders" hyperlink on the top panel, you may see all the orders which customer creates. You can check the order detail by clicking "Details" hyperlink.
+			</font></li>
+		 </ol></ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<h3><b>Useful Links:</b></h3>
+<ul>
+	<li><font size="-1"><a href="http://www.isk.kth.se/~zwei/src_GnomeShop.zip">Source files (.zip)</a></font></li>
+  	<li><font size="-1"><a href="http://www.isk.kth.se/~zwei/gnomeshop_doc.zip">API documentation (.zip)</a></font></li>
+    <li><font size="-1"><a href="http://www.isk.kth.se/~zwei/javadoc/">API documentation</a></font></li>
+</ul>
+<hr size="2" width="100%" />
+<font size="-1" style="text-align:center"><strong>By Yi Yan & Zhenfang Wei</strong></font><br />
+</body>
+</html>

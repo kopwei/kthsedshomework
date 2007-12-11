@@ -36,8 +36,10 @@
        	  <th width="1240" align="left" valign="top" bgcolor="#CCCCCC"><font size="+1">2.Information about HW platform:</font></th>
       </tr>
         <tr>
-        	<td><font size="-1"><dd>A computer with XP or Vista operating system.
-            	</dd></font>
+        	<td><font size="-1">
+        	<dd>A computer with XP or Vista operating system.
+            	(minimum 1G RAM)</dd>
+        	</font>
             </td>
         </tr>
     </tbody>
@@ -150,7 +152,7 @@
 			<ul>
 				<ol>
 					<strong><font size="3">The following are the steps of deploying the project					</font></strong>
-				  (The Tomcat server and MySQL server must be in a same machine)
+				  (The Tomcat server and MySQL server must be in a same machine. Notice: The root password of MySQL should be &quot;<strong><em>123456</em></strong>&quot; in default, it it is not, you have to change the source code. Modify the dbPassword field member in DatabaseUtil class in the source code.)
 				  <li><font size="2">Create a database named "webshop" in MySQL server </font></li>
                 			<li><font size="2">Start a console and locates to the directory of webshop.sql file
 	                </font></li>

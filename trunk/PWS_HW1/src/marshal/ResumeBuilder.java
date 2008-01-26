@@ -11,7 +11,10 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 
 /**
  *
@@ -31,13 +34,16 @@ public class ResumeBuilder {
             Resume resume = objFactory.createResume();
             // set the required resume attribute
             PersonNameType name = createPersonName(objFactory, "Yi", null, "Yan");
+            // Set the phone list
             PhoneNumberType phoneNumber = createPhoneNumber(objFactory, "+46", "704646375", null);
             ArrayList<PhoneNumberType> phoneList = new ArrayList<PhoneNumberType>();
             phoneList.add(phoneNumber);
             
+            // Set the email list
             ArrayList<String> emailAddrList = new ArrayList<String>();
             emailAddrList.add("Ricky.yanyi326@gmail.com");
             
+            // Prepare the postal info
             PostalType postInfo = createPostalInfo(objFactory, "Kista Alléväg 48 B:10", "16455");
             
             ContactMethodType contactMethod = createContactMethod(objFactory, phoneList, emailAddrList, postInfo);
@@ -46,18 +52,27 @@ public class ResumeBuilder {
             
             resume.setContactInfo(contactInfo);
             
+            // Prepare the objectives
             ObjectiveEnumType obj = ObjectiveEnumType.CDL_BANKING_SYSTEM_DEVELOPMENT;
             
             Resume.Objectives objs = new Resume.Objectives();
             objs.getObjective().add(obj.value());            
             resume.setObjectives(objs);
             
+            // Prepate the education history
             Resume.EducationHistory eduHistory = new Resume.EducationHistory();
             
-            DegreeType degree = createDegree(objFactory, "BSc", new FlexibleDates());
+            XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+            calendar.setYear(2007);
+            FlexibleDates degreeDate = createFlexibleDate(objFactory, calendar, DatatypeConstants.GYEAR);
+            DegreeType degree = createDegree(objFactory, "BSc", degreeDate);
+            EducationType edu = createEductionInfo(objFactory, "Wuhan University", degree, "Computer Science", null, null);
+            eduHistory.getEducation().add(edu);
+            
+            resume.setEducationHistory(eduHistory);
             
             
-            
+            // Write out the resume to standard output
             m.marshal(resume, System.out);            
             
         } catch (Exception ex) {
@@ -210,9 +225,14 @@ public class ResumeBuilder {
      * @throws javax.xml.bind.JAXBException
      */
     private static FlexibleDates createFlexibleDate(ObjectFactory objFactory, 
-            XMLGregorianCalendar calendar) throws JAXBException {
+            XMLGregorianCalendar calendar, QName type) throws JAXBException {
         FlexibleDates date = objFactory.createFlexibleDates();
-        
+        if (type.equals(DatatypeConstants.GYEARMONTH))
+            date.setYearMonth(calendar);
+        if (type.equals(DatatypeConstants.GMONTHDAY))
+            date.setYearMonthDay(calendar);
+        if (type.equals(DatatypeConstants.GYEAR))
+            date.setYear(calendar);
         return date;
     }
     

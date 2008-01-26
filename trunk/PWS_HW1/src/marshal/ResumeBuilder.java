@@ -11,6 +11,7 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  *
@@ -44,6 +45,18 @@ public class ResumeBuilder {
             ContactInfoType contactInfo = createContactInfo(objFactory, name, contactMethod);
             
             resume.setContactInfo(contactInfo);
+            
+            ObjectiveEnumType obj = ObjectiveEnumType.CDL_BANKING_SYSTEM_DEVELOPMENT;
+            
+            Resume.Objectives objs = new Resume.Objectives();
+            objs.getObjective().add(obj.value());            
+            resume.setObjectives(objs);
+            
+            Resume.EducationHistory eduHistory = new Resume.EducationHistory();
+            
+            DegreeType degree = createDegree(objFactory, "BSc", new FlexibleDates());
+            
+            
             
             m.marshal(resume, System.out);            
             
@@ -144,6 +157,65 @@ public class ResumeBuilder {
         postalInfo.setPostalCode(postalCode);
         return postalInfo;
     } 
+    
+    /**
+     * 
+     * @param objFactory
+     * @param schoolName
+     * @param degree
+     * @param major
+     * @param desertationName
+     * @param referenceList
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static EducationType createEductionInfo(ObjectFactory objFactory, String schoolName,
+            DegreeType degree, String major, String desertationName, 
+            List<QualificationReferenceType> referenceList) throws JAXBException {
+        EducationType education = objFactory.createEducationType();
+        education.setSchoolName(schoolName);
+        education.setDegree(degree);
+        education.setMajor(major);
+        education.setDissertationName(desertationName);
+        if (null != referenceList) {
+            for (QualificationReferenceType qualificationReferenceType : referenceList) {
+                education.getQualificationReference().add(qualificationReferenceType);
+            }
+        }
+        return education;
+        
+    }
+    
+    /**
+     * 
+     * @param objFactory
+     * @param degreeName
+     * @param degreeDate
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static DegreeType createDegree(ObjectFactory objFactory, String degreeName, 
+            FlexibleDates degreeDate) throws JAXBException {
+        DegreeType degree = objFactory.createDegreeType();
+        degree.setDegreeName(degreeName);
+        degree.setDegreeDate(degreeDate);
+        return degree;
+    }
+    
+    /**
+     * 
+     * @param objFactory
+     * @param yearMonth
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static FlexibleDates createFlexibleDate(ObjectFactory objFactory, 
+            XMLGregorianCalendar calendar) throws JAXBException {
+        FlexibleDates date = objFactory.createFlexibleDates();
+        
+        return date;
+    }
+    
     
     /////////////////////////////////////////////////////////////////////////////////
     // Above is Wei 

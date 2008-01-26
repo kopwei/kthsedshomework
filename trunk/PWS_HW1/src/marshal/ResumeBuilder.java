@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 /**
  *
@@ -20,6 +21,9 @@ public class ResumeBuilder {
         try {
             // Create a JAXBContext
             JAXBContext jc = JAXBContext.newInstance("com.ibm");
+            Marshaller m = jc.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
             // Create an ObjectFactory instance;
             ObjectFactory objFactory = new ObjectFactory();
             // Create an empty resume
@@ -41,7 +45,8 @@ public class ResumeBuilder {
             
             resume.setContactInfo(contactInfo);
             
-
+            m.marshal(resume, System.out);            
+            
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -93,7 +98,17 @@ public class ResumeBuilder {
      */
     private static ContactMethodType createContactMethod(ObjectFactory objFactory, 
             List<PhoneNumberType> phoneList, List<String> emailList, PostalType postInfo) throws JAXBException {
-        return null;
+        ContactMethodType contactMethod = objFactory.createContactMethodType();
+        for (String email : emailList) {
+            contactMethod.getInternetEmailAddress().add(email);
+        }
+        
+        for (PhoneNumberType phone : phoneList) {
+            contactMethod.getPhone().add(phone);
+        }
+        
+        contactMethod.setPostal(postInfo);
+        return contactMethod;
     }
     
     /**
@@ -106,7 +121,13 @@ public class ResumeBuilder {
      */
     private static PhoneNumberType createPhoneNumber(ObjectFactory objFactory, String areaCode,
             String subscriberNumber, String extNumber) throws JAXBException {
-        return null;
+        PhoneNumberType phone = objFactory.createPhoneNumberType();
+        phone.setSubscriberNumber(subscriberNumber);
+        if (null != areaCode)
+            phone.setAreaCityCode(areaCode);
+        if (null != extNumber)
+            phone.setExtension(extNumber);
+        return phone;
     }
     
     /**
@@ -118,7 +139,18 @@ public class ResumeBuilder {
      */
     private static PostalType createPostalInfo(ObjectFactory objFactory, String postalAddr, 
             String postalCode) throws JAXBException {
-        return null;
+        PostalType postalInfo = objFactory.createPostalType();
+        postalInfo.setPostalAddress(postalAddr);
+        postalInfo.setPostalCode(postalCode);
+        return postalInfo;
     } 
+    
+    /////////////////////////////////////////////////////////////////////////////////
+    // Above is Wei 
+    ///////////////////////////////////////////////////////////////////////////////////
+    // Below is Yan
+    ///////////////////////////////////////////////////////////////////////////////////
+    
+    
 
 }

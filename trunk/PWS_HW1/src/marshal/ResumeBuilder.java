@@ -59,7 +59,7 @@ public class ResumeBuilder {
             objs.getObjective().add(obj.value());            
             resume.setObjectives(objs);
             
-            // Prepate the education history
+            // Prepare the education history
             Resume.EducationHistory eduHistory = new Resume.EducationHistory();
             
             XMLGregorianCalendar calendar = DatatypeFactory.newInstance().newXMLGregorianCalendar();
@@ -71,6 +71,43 @@ public class ResumeBuilder {
             
             resume.setEducationHistory(eduHistory);
             
+            // Set the complex type ---- Languages
+            Resume.Languages languages = new Resume.Languages();
+            
+            LanguageNameEnumType languageNameType = LanguageNameEnumType.ENGLISH;
+            SkillLevelType skillLevelType = SkillLevelType.ABOVE_AVERAGE;
+            LanguageType language = createLanguage(objFactory, languageNameType, skillLevelType);
+            
+            languages.getLanguage().add(language);
+            
+            resume.setLanguages(languages);
+            
+            // Set the complex type ---- Experience
+            XMLGregorianCalendar calendar2 = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+            calendar2.setYear(2004);
+            FlexibleDates activityDate = createFlexibleDate(objFactory, calendar2, DatatypeConstants.GYEAR);
+            DurationType duration = createDuration(objFactory, activityDate, null);
+            
+            ArrayList<String> role = new ArrayList<String>();
+            role.add("organizer");
+            SocialActivityType socialActivity = createSocialActivity(objFactory, "Youth Volunteer Association relief efforts for victims of disaster area", 
+                    duration, role);
+            
+            ExperienceType experience = new ExperienceType();
+            experience.getSocialActivity().add(socialActivity);
+            
+            resume.setExperience(experience);
+            
+            // Set the complex type ---- Qualifications
+            XMLGregorianCalendar calendar3 = DatatypeFactory.newInstance().newXMLGregorianCalendar();
+            calendar3.setYear(2007);
+            calendar3.setMonth(06);
+            FlexibleDates certifiedDate = createFlexibleDate(objFactory, calendar3, DatatypeConstants.GYEARMONTH);
+            CertificationType certification = createCertification(objFactory, "Certification of Bachelor Degree", "National Notarization Department in Hubei", certifiedDate, null, null);
+            QualificationType qualification = new QualificationType();
+            qualification.getCertification().add(certification);
+            
+            resume.setQualifications(qualification);
             
             // Write out the resume to standard output
             m.marshal(resume, System.out);            
@@ -236,13 +273,202 @@ public class ResumeBuilder {
         return date;
     }
     
+    /**
+     * 
+     * @param objectFactory
+     * @param languageNameType
+     * @param skillLevelType
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static LanguageType createLanguage(ObjectFactory objectFactory, 
+            LanguageNameEnumType languageNameType, SkillLevelType skillLevelType) throws JAXBException {
+        LanguageType language = objectFactory.createLanguageType();
+        LanguageNameEnumType languageName = languageNameType;
+        language.setLanguageName(languageName.value());
+        language.setLevel(skillLevelType);
+        
+        return language;
+    }
     
-    /////////////////////////////////////////////////////////////////////////////////
-    // Above is Wei 
-    ///////////////////////////////////////////////////////////////////////////////////
-    // Below is Yan
-    ///////////////////////////////////////////////////////////////////////////////////
-    
-    
+    /**
+     * 
+     * @param objectFactory
+     * @param project
+     * @param employment
+     * @param professionalTraining
+     * @param socialActivity
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static ExperienceType createExperience(ObjectFactory objectFactory, 
+            List<ProjectType> project, List<EmploymentType> employment, List<ProfessionalTrainingType> professionalTraining, 
+            List<SocialActivityType> socialActivity) throws JAXBException {
+        ExperienceType experience = objectFactory.createExperienceType();
+        for (ProjectType _project : project) {
+            experience.getProject().add(_project);
+        }
+        
+        for (EmploymentType _employment : employment) {
+            experience.getEmployment().add(_employment);
+        }
 
+        for (ProfessionalTrainingType _professionalTraining : professionalTraining) {
+            experience.getProfessionalTraining().add(_professionalTraining);
+        }
+
+        for (SocialActivityType _socialActivity : socialActivity) {
+            experience.getSocialActivity().add(_socialActivity);
+        }
+
+        return experience;
+    }
+    
+    /**
+     * 
+     * @param objectFactory
+     * @param trainingName
+     * @param trainingProvider
+     * @param trainingSite
+     * @param duration
+     * @param demonstratedSkills
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static ProfessionalTrainingType createProfessionalTraining(ObjectFactory objectFactory, 
+            String trainingName, String trainingProvider, String trainingSite, DurationType duration, 
+            DemonstratedSkillsType demonstratedSkills) throws JAXBException {
+        ProfessionalTrainingType professionalTraining = objectFactory.createProfessionalTrainingType();
+        
+        professionalTraining.setTrainingName(trainingName);
+        professionalTraining.setTrainingProvider(trainingProvider);
+        professionalTraining.setTrainingSite(trainingSite);
+        professionalTraining.setDuration(duration);
+        professionalTraining.setDemonstratedSkills(demonstratedSkills);
+        
+        return professionalTraining;
+    }
+    
+    /**
+     * 
+     * @param objectFactory
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static DurationType createDuration(ObjectFactory objectFactory, FlexibleDates startDate, 
+            FlexibleDates endDate) throws JAXBException {
+        DurationType duration = objectFactory.createDurationType();
+        duration.setStartDate(startDate);
+        duration.setEndDate(endDate);
+        
+        return duration;
+    }
+    
+    /**
+     * 
+     * @param objectFactory
+     * @param technicalSkill
+     * @param nonTechnicalSkill
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static DemonstratedSkillsType createDemonstratedSkills(ObjectFactory objectFactory, 
+            List<TechSkillType> technicalSkill, List<NonTechSkillType> nonTechnicalSkill) throws JAXBException {
+        DemonstratedSkillsType demonstratedSkills = objectFactory.createDemonstratedSkillsType();
+        
+        for (TechSkillType techSkillType : technicalSkill) {
+            demonstratedSkills.getTechnicalSkill().add(techSkillType);
+        }
+
+        for (NonTechSkillType nonTechSkillType : nonTechnicalSkill) {
+            demonstratedSkills.getNonTechnicalSkill().add(nonTechSkillType);
+        }
+
+        return demonstratedSkills;
+    }
+
+    /**
+     * 
+     * @param objectFactory
+     * @param skillName
+     * @param skillLevel
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static TechSkillType createTechSkill(ObjectFactory objectFactory, String skillName, 
+            SkillLevelType skillLevel) throws JAXBException {
+        TechSkillType techSkill = objectFactory.createTechSkillType();
+        
+        techSkill.setSkillName(skillName);
+        techSkill.setSkillLevel(skillLevel);
+        
+        return techSkill;
+    }
+    
+    /**
+     * 
+     * @param objectFactory
+     * @param skillName
+     * @param skillLevel
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static NonTechSkillType createNonTechSkill(ObjectFactory objectFactory, String skillName, 
+            SkillLevelType skillLevel) throws JAXBException {
+        NonTechSkillType nonTechSkill = objectFactory.createNonTechSkillType();
+        
+        nonTechSkill.setSkillName(skillName);
+        nonTechSkill.setSkillLevel(skillLevel);
+        
+        return nonTechSkill;
+    }
+    
+    /**
+     * 
+     * @param objectFactory
+     * @param activityDescription
+     * @param duration
+     * @param role
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static SocialActivityType createSocialActivity(ObjectFactory objectFactory, String activityDescription, 
+            DurationType duration, List<String> role) throws JAXBException {
+        SocialActivityType socialActivity = objectFactory.createSocialActivityType();
+        
+        socialActivity.setActivityDescription(activityDescription);
+        socialActivity.setDuration(duration);
+        for (String _role : role) {
+            socialActivity.getRole().add(_role);
+        }
+
+        return socialActivity;
+    }
+    
+    /**
+     * 
+     * @param objectFactory
+     * @param certificationTitle
+     * @param certificationGrantor
+     * @param certifiedDate
+     * @param score
+     * @param demonstratedSkills
+     * @return
+     * @throws javax.xml.bind.JAXBException
+     */
+    private static CertificationType createCertification(ObjectFactory objectFactory, String certificationTitle, 
+            String certificationGrantor, FlexibleDates certifiedDate, String score, DemonstratedSkillsType demonstratedSkills) 
+            throws JAXBException {
+        CertificationType certification = objectFactory.createCertificationType();
+        
+        certification.setCertificationTitle(certificationTitle);
+        certification.setCertificationGrantor(certificationGrantor);
+        certification.setCertifiedDate(certifiedDate);
+        certification.setScore(score);
+        certification.setDemonstratedSkills(demonstratedSkills);
+        
+        return certification;
+    }
 }

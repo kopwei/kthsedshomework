@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Resume xmlns="http://www.ibm.com">
+    <ContactInfo>
+        <PersonName>
+            <GivenName>Yi</GivenName>
+            <FamilyName>Yan</FamilyName>
+        </PersonName>
+        <ContactMethod>
+            <Phone>
+                <AreaCityCode>+46</AreaCityCode>
+                <SubscriberNumber>704646375</SubscriberNumber>
+            </Phone>
+            <InternetEmailAddress>Ricky.yanyi326@gmail.com</InternetEmailAddress>
+            <Postal>
+                <PostalAddress>Kista Alléväg 48 B:10</PostalAddress>
+                <PostalCode>16455</PostalCode>
+            </Postal>
+        </ContactMethod>
+    </ContactInfo>
+    <Objectives>
+        <Objective>CDL-Banking System Development</Objective>
+    </Objectives>
+    <EducationHistory>
+        <Education>
+            <SchoolName>Wuhan University</SchoolName>
+            <Degree>
+                <DegreeName>BSc</DegreeName>
+                <DegreeDate>
+                    <Year>2007</Year>
+                </DegreeDate>
+            </Degree>
+            <Major>Computer Science</Major>
+        </Education>
+    </EducationHistory>
+    <Languages>
+        <Language>
+            <LanguageName>English</LanguageName>
+            <Level>AboveAverage</Level>
+        </Language>
+    </Languages>
+    <Experience>
+        <SocialActivity>
+            <ActivityDescription>Youth Volunteer Association relief efforts for victims of disaster area</ActivityDescription>
+            <Duration>
+                <StartDate>
+                    <Year>2004</Year>
+                </StartDate>
+            </Duration>
+            <Role>organizer</Role>
+        </SocialActivity>
+    </Experience>
+    <Qualifications>
+        <Certification>
+            <CertificationTitle>Certification of Bachelor Degree</CertificationTitle>
+            <CertificationGrantor>National Notarization Department in Hubei</CertificationGrantor>
+            <CertifiedDate>
+                <YearMonth>2007-06</YearMonth>
+            </CertifiedDate>
+        </Certification>
+    </Qualifications>
+</Resume>

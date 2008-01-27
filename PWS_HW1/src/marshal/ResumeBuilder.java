@@ -6,11 +6,13 @@
 package marshal;
 
 import com.ibm.*;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -110,7 +112,8 @@ public class ResumeBuilder {
             resume.setQualifications(qualification);
             
             // Write out the resume to standard output
-            m.marshal(resume, System.out);            
+            m.marshal(resume, System.out);
+            m.marshal(resume, new FileOutputStream("Resume.xml"));
             
         } catch (Exception ex) {
             System.out.println(ex.getMessage());

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">	
+	<xs:element name="topology">
+	<xs:complexType>
+			<xs:sequence>
+			    <xs:element ref="nodes"/>
+				<xs:element ref="groups" maxOccurs="1" minOccurs="0"/>
+				<xs:element ref="links"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="nodes">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element maxOccurs="unbounded" ref="node" />
+		</xs:sequence>
+		<xs:attribute name="number" type="xs:int"></xs:attribute>
+	</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="node">
+	<xs:complexType>
+		<xs:attribute name="id" type="xs:integer" use="required"/>
+		<xs:attribute name="ip" type="xs:string" use="required"/>
+		<xs:attribute name="port" type="xs:integer" use="required"/>
+	 </xs:complexType>
+        <xs:key name="nodeId">
+        <xs:selector xpath="./nodes/node"/>
+        <xs:field xpath="@id"/>
+        </xs:key>
+        <xs:keyref name="nodeIdRef" refer="nodeId">
+  <xs:selector xpath="./links/link"/>
+  <xs:field xpath="@src_id"/>
+  </xs:keyref>
+  <xs:keyref name="nodeIdRef0" refer="nodeId">
+  <xs:selector xpath="./links/link"/>
+  <xs:field xpath="@dst_id"/>
+  </xs:keyref>	
+  
+  <xs:keyref name="nodeIdRef2" refer="nodeId">
+  <xs:selector xpath="./groups/group/participant"/>
+  <xs:field xpath="@nodeId"/>
+  </xs:keyref>	
+    </xs:element>
+	
+	<xs:element name="groups">
+	<xs:complexType>
+		<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="group"/>
+		</xs:sequence>
+	 </xs:complexType>
+	</xs:element>
+	
+	<xs:element name="group">
+	
+	<xs:complexType>
+		<xs:sequence>
+		<xs:element maxOccurs="unbounded" ref="participant"/>
+	</xs:sequence>
+	<xs:attribute name="number" type="xs:integer" use="required"/>	
+	 </xs:complexType>
+	</xs:element>
+	
+	<xs:element name="participant">
+	<xs:complexType>
+	<xs:attribute name="nodeId" type="xs:integer" use="required"/>
+	</xs:complexType>
+	</xs:element>
+
+	<xs:element name="links">
+	<xs:complexType>
+		<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="link"/>
+		</xs:sequence>
+	 </xs:complexType>
+	</xs:element>
+	
+	<xs:element name="link">
+	<xs:complexType>
+		<xs:attribute name="src_id" type="xs:integer" use="required" />
+		<xs:attribute name="dst_id" type="xs:integer" use="required" />
+		<xs:attribute name="latency" type="xs:integer" />
+		<xs:attribute name="loss_rate" type="xs:integer" />
+		<xs:attribute name="undirected" type="xs:boolean"/>
+	</xs:complexType>
+	</xs:element>
+</xs:schema>

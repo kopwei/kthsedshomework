@@ -9,6 +9,10 @@ package assignment1.events;
  *
  * @author Kop
  */
-public class FloodDoneEvent {
+public class FloodDoneEvent implements tbn.api.Event{
+    public String getMessage() {
+        // TODO: need implementation here
+        return null;
+    }
 
 }

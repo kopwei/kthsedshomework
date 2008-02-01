@@ -79,6 +79,7 @@ public class ApplicationComponent {
 	}
 
 	class ApplicationThread extends Thread {
+        @Override
 		public void run() {
 			System.out.println("Application THREAD RUNNING");
 

@@ -11,6 +11,6 @@ package assignment1.events;
 public class FloodInitEvent implements tbn.api.Event {
 
     public FloodInitEvent(String eventMessage) {
-
+        
     }
 }

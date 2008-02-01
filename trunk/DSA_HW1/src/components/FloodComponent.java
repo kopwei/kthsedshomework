@@ -63,6 +63,7 @@ public class FloodComponent {
             // We have to send the event to all other neighbors
             for (NodeReference neighbor : topologyDescriptor.getAllOtherNodes()) {
                 event.setDestination(neighbor);
+                event.setSource(topologyDescriptor.getMyNodeRef());
                 component.raiseEvent(event);
             }
         } // If the message is not new message, we have to store its source
@@ -78,6 +79,7 @@ public class FloodComponent {
                     hashSet.clear();
                 }
                 floodMessageTable.clear();
+                // raise the done event
                 FloodDoneEvent doneEvent = new FloodDoneEvent();
                 component.raiseEvent(doneEvent);
             }

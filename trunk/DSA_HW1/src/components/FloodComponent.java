@@ -6,6 +6,7 @@
 package components;
 
 import assignment1.events.FloodInitEvent;
+import assignment1.events.FloodMessage;
 import assignment1.events.InitEvent;
 import assignments.util.TopologyDescriptor;
 import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ import tbn.comm.mina.MessageHandler;
  */
 public class FloodComponent {
 
-    private static Logger log = Logger.getLogger(DropComponent.class);
+    private static Logger log = Logger.getLogger(FloodComponent.class);
     private Component component;
     private TopologyDescriptor topologyDescriptor;
     private MessageHandler messageHandler;
@@ -35,5 +36,9 @@ public class FloodComponent {
 
     public void handleFloodInitEvent(FloodInitEvent event) {
         //component.raiseEvent(event);
+    }
+    
+    public void handleFloodMessage(FloodMessage event) {
+        
     }
 }

@@ -12,6 +12,6 @@ public class FloodDoneEvent implements tbn.api.Event {
 
     public String getMessage() {
         // TODO: need implementation here
-        return null;
+        return "Flood Done";
     }
 }

@@ -5,10 +5,20 @@
 
 package assignment1.events;
 
+import tbn.api.Event;
+
 /**
  *
  * @author Ricky
  */
-public class FloodMessage {
+public class FloodMessage implements Event{
+    private String message;
+    
+    public FloodMessage(String message) {
+        this.message = message;
+    }
 
+    public String getMessage() {
+        return message;
+    }
 }

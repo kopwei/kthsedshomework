@@ -19,98 +19,93 @@ import assignments.util.TopologyParser;
 
 public class ApplicationComponent {
 
-	private Component component;
+    private Component component;
+    private static Logger log = Logger.getLogger(ApplicationComponent.class);
+    private String topologyFile;
+    private TopologyDescriptor topologyDescriptor;
+    private TopologyParser topologyParser;
+    private int nodeID = 0;
 
-	private static Logger log = Logger.getLogger(ApplicationComponent.class);
+    public ApplicationComponent(Component component) {
+        this.component = component;
+    }
 
-	private String topologyFile;
+    public void init(Object[] params) {
+        try {
+            Properties properties = new Properties();
+            properties.load((InputStream) params[0]);
+            topologyFile = properties.getProperty("topology.file",
+                    "topology.xml");
+            nodeID = Integer.parseInt(properties.getProperty("node.id", "0"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	private TopologyDescriptor topologyDescriptor;
+        // Parsing Topology Descriptor File
+        topologyParser = new TopologyParser(nodeID, topologyFile);
 
-	private TopologyParser topologyParser;
+        this.topologyDescriptor = topologyParser.parseTopologyFile();
+        NodeReference.setThisNodeReference(topologyDescriptor.getMyNodeRef());
+    }
 
-	private int nodeID = 0;
+    public void start() {
+        InitEvent startEvent = new InitEvent(topologyDescriptor);
+        component.raiseEvent(startEvent);
+        if (nodeID == 0) {
+            new ApplicationComponent.ApplicationThread().start();
+        }
+    }
 
-	public ApplicationComponent(Component component) {
-		this.component = component;
-	}
+    public void handleFloodDoneEvent(FloodDoneEvent event) {
+        log.info("Done flooding message: " + event.getMessage() + " at " + System.currentTimeMillis());
+    }
 
-	public void init(Object[] params) {
-		try {
-			Properties properties = new Properties();
-			properties.load((InputStream) params[0]);
-			topologyFile = properties.getProperty("topology.file",
-					"topology.xml");
-			nodeID = Integer.parseInt(properties.getProperty("node.id", "0"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    public TopologyDescriptor getTopologyDescriptor() {
+        return topologyDescriptor;
+    }
 
-		// Parsing Topology Descriptor File
-		topologyParser = new TopologyParser(nodeID, topologyFile);
+    public NodeReference getMyNodeReference() {
+        return topologyDescriptor.getMyNodeRef();
+    }
 
-		this.topologyDescriptor = topologyParser.parseTopologyFile();
-		NodeReference.setThisNodeReference(topologyDescriptor.getMyNodeRef());
-	}
+    class ApplicationThread extends Thread {
 
-	public void start() {
-		InitEvent startEvent = new InitEvent(topologyDescriptor);
-		component.raiseEvent(startEvent);
-		if (nodeID == 0) {
-			new ApplicationComponent.ApplicationThread().start();
-		}
-	}
-
-	public void handleFloodDoneEvent(FloodDoneEvent event) {
-		log.info("Done flooding message: " + event.getMessage() + " at "
-				+ System.currentTimeMillis());
-	}
-
-	public TopologyDescriptor getTopologyDescriptor() {
-		return topologyDescriptor;
-	}
-
-	public NodeReference getMyNodeReference() {
-		return topologyDescriptor.getMyNodeRef();
-	}
-
-	class ApplicationThread extends Thread {
         @Override
-		public void run() {
-			System.out.println("Application THREAD RUNNING");
+        public void run() {
+            System.out.println("Application THREAD RUNNING");
 
-			while (true) {
-				BufferedReader userIn = new BufferedReader(
-						new InputStreamReader(System.in));
-				String messageString = null;
-				System.out.println("Enter Message to Flood:");
-				try {
-					messageString = userIn.readLine();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+            while (true) {
+                BufferedReader userIn = new BufferedReader(
+                        new InputStreamReader(System.in));
+                String messageString = null;
+                System.out.println("Enter Message to Flood:");
+                try {
+                    messageString = userIn.readLine();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-				if (messageString == null) {
-					continue;
-				}
-				if (messageString.equals("quit")) {
-					System.exit(0);
-				}
+                if (messageString == null) {
+                    continue;
+                }
+                if (messageString.equals("quit")) {
+                    System.exit(0);
+                }
 
-				FloodInitEvent event = new FloodInitEvent(messageString);
+                FloodInitEvent event = new FloodInitEvent(messageString);
 
-				System.out.println("Raising FloodInitEvent");
+                System.out.println("Raising FloodInitEvent");
 
-				component.raiseEvent(event);
-			}
-		}
-	}
+                component.raiseEvent(event);
+            }
+        }
+    }
 
-	public int getNodeID() {
-		return nodeID;
-	}
+    public int getNodeID() {
+        return nodeID;
+    }
 }

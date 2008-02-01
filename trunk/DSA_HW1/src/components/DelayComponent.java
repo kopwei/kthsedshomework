@@ -15,53 +15,47 @@ import assignments.util.TopologyDescriptor;
 
 public class DelayComponent {
 
-	private static Logger log = Logger.getLogger(DelayComponent.class);
+    private static Logger log = Logger.getLogger(DelayComponent.class);
+    private TopologyDescriptor topologyDescriptor;
+    private TimerHandler timerHandler;
+    private MessageHandler messageHandler;
 
-	private TopologyDescriptor topologyDescriptor;
+    public DelayComponent(Component component) {
+        timerHandler = new TimerHandler(component);
+        messageHandler = new MessageHandler(component);
+    }
 
-	private TimerHandler timerHandler;
+    public void handleInitEvent(InitEvent event) {
+        log.debug("INIT Delay Component");
+        this.topologyDescriptor = event.getTopologyDescriptor();
+    }
 
-	private MessageHandler messageHandler;
+    public void handleMessageEvent(MessageEvent event) {
 
-	public DelayComponent(Component component) {
-		timerHandler = new TimerHandler(component);
-		messageHandler = new MessageHandler(component);
-	}
+        LinkDescriptor linkDescriptor = topologyDescriptor.getLink(event.getDestination().getId());
 
-	public void handleInitEvent(InitEvent event) {
-		log.debug("INIT Delay Component");
-		this.topologyDescriptor = event.getTopologyDescriptor();
-	}
+        try {
 
-	public void handleMessageEvent(MessageEvent event) {
+            log.info("Delaying message: " + event//.getClass().getSimpleName()
+                    + " with dest: " + event.getDestination().getId() + " of " + linkDescriptor.getLatency() + " secs");
 
-		LinkDescriptor linkDescriptor = topologyDescriptor.getLink(event
-				.getDestination().getId());
+            timerHandler.startTimer(new DelayTimerExpiredEvent(event),
+                    "handleDelayTimerExpiredEvent", linkDescriptor.getLatency());
 
-		try {
+        } catch (HandlerNotSubscribedException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
 
-			log.info("Delaying message: " + event//.getClass().getSimpleName()
-					+ " with dest: " + event.getDestination().getId() + " of "
-					+ linkDescriptor.getLatency() + " secs");
+    public void handleDelayTimerExpiredEvent(DelayTimerExpiredEvent event) {
 
-			timerHandler.startTimer(new DelayTimerExpiredEvent(event),
-					"handleDelayTimerExpiredEvent", linkDescriptor
-							.getLatency());
+        MessageEvent message = event.getMessage();
 
-		} catch (HandlerNotSubscribedException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		}
-	}
+        log.info("Sending message: " + message//.getClass().getSimpleName()
+                + " to dest: " + message.getDestination().getId());
 
-	public void handleDelayTimerExpiredEvent(DelayTimerExpiredEvent event) {
-
-		MessageEvent message = event.getMessage();
-
-		log.info("Sending message: " + message//.getClass().getSimpleName()
-				+ " to dest: " + message.getDestination().getId());
-
-		messageHandler.send(message, message.getDestination());
-	}
+        messageHandler.send(message, message.getDestination());
+    }
 }

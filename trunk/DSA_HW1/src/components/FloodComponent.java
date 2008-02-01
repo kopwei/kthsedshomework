@@ -12,6 +12,7 @@ import assignments.util.TopologyDescriptor;
 import org.apache.log4j.Logger;
 import tbn.api.Component;
 import tbn.comm.mina.MessageHandler;
+import tbn.comm.mina.NodeReference;
 
 /**
  *
@@ -35,7 +36,16 @@ public class FloodComponent {
     }
 
     public void handleFloodInitEvent(FloodInitEvent event) {
-        //component.raiseEvent(event);
+        String floodInitEventMsg = event.getFloodInitEventMessage();
+        
+        System.out.println("FloodComponent: I got a FloodInitEvent message: " + floodInitEventMsg);
+        
+        FloodMessage floodMessage = new FloodMessage("Flood is coming! Run!!!");
+        for (NodeReference nodeRef : topologyDescriptor.getAllOtherNodes()) {
+            floodMessage.setDestination(nodeRef);
+            floodMessage.setSource(topologyDescriptor.getMyNodeRef());
+            component.raiseEvent(floodMessage);
+        }
     }
     
     public void handleFloodMessage(FloodMessage event) {

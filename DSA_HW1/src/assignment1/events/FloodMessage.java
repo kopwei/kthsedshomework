@@ -21,4 +21,19 @@ public class FloodMessage extends MessageEvent{
     public String getMessage() {
         return message;
     }
+    
+    @Override
+    public boolean equals(Object message) {
+    	FloodMessage fMessage = (FloodMessage)message;
+    	if (null == fMessage)
+    		return false;
+    	return (fMessage.getMessage().equals(this.message));
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 19 * hash + (this.message != null ? this.message.hashCode() : 0);
+        return hash;
+    }
 }

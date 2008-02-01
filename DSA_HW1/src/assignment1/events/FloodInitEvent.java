@@ -9,13 +9,13 @@ package assignment1.events;
  * @author Kop
  */
 public class FloodInitEvent implements tbn.api.Event {
-    private String eventMessage;
+    private String floodInitEventMsg;
 
-    public FloodInitEvent(String eventMessage) {
-        this.eventMessage = eventMessage;
+    public FloodInitEvent(String message) {
+        this.floodInitEventMsg = message;
     }
     
-    public String getEventMessage() {
-        return eventMessage;
+    public String getFloodInitEventMessage() {
+        return floodInitEventMsg;
     }
 }

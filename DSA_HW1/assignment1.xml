@@ -141,12 +141,12 @@
 		<tns:subscription>
 			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
 			<tns:channelName>FloodEventChannel</tns:channelName>
-			<tns:handlerName>handleFloodEvent</tns:handlerName>
+			<tns:handlerName>handleFloodDoneEvent</tns:handlerName>
 		</tns:subscription>
 		<tns:subscription>
 			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
 			<tns:channelName>FloodEventChannel</tns:channelName>
-			<tns:handlerName>handleFloodEvent</tns:handlerName>
+			<tns:handlerName>handleFloodInitEvent</tns:handlerName>
 		</tns:subscription>
 		<tns:subscription>
 			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
@@ -171,12 +171,12 @@
 		<tns:subscription>
 			<tns:componentName>DropComponentFactory:DropComponent</tns:componentName>
 			<tns:channelName>DropMessageChannel</tns:channelName>
-			<tns:handlerName>handleDropMessage</tns:handlerName>
+			<tns:handlerName>handleMessageEvent</tns:handlerName>
 		</tns:subscription>
 		<tns:subscription>
 			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
 			<tns:channelName>DelayMessageChannel</tns:channelName>
-			<tns:handlerName>handleDelayMessage</tns:handlerName>
+			<tns:handlerName>handleMessageEvent</tns:handlerName>
 		</tns:subscription>
 		<tns:subscription>
 			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
@@ -191,7 +191,7 @@
 		<tns:subscription>
 			<tns:componentName>CommunicationComponentFactory:CommunicationComponent</tns:componentName>
 			<tns:channelName>SendMessageChannel</tns:channelName>
-			<tns:handlerName>handleSendMessage</tns:handlerName>
+			<tns:handlerName>handleMessageEvent</tns:handlerName>
 		</tns:subscription>
 	</tns:subscriptions>
 	<tns:startSequence>

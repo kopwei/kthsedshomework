@@ -43,15 +43,19 @@ public class FloodComponent {
     public void handleFloodInitEvent(FloodInitEvent event) {
         String floodInitEventMsg = event.getFloodInitEventMessage();
         
-        System.out.println("FloodComponent: I got a FloodInitEvent message: " + floodInitEventMsg);
+        System.out.println(topologyDescriptor.getMyNodeRef() + ": FloodComponent got a FloodInitEvent message: " + floodInitEventMsg);
         
-        FloodMessage floodMessage = new FloodMessage("Flood is coming! Run!!!");
+        FloodMessage floodMessage = new FloodMessage(topologyDescriptor.getMyNodeRef() + ": Flood is coming! Run!!!");
         // send a FloodMessage to all its neighbors
         for (NodeReference nodeRef : topologyDescriptor.getAllOtherNodes()) {
             floodMessage.setDestination(nodeRef);
             floodMessage.setSource(topologyDescriptor.getMyNodeRef());
             component.raiseEvent(floodMessage);
         }
+        // store this FloodMessage event into FloodMessageTable
+        HashSet<NodeReference> _sourceSet = new HashSet<NodeReference>();
+        _sourceSet.add(topologyDescriptor.getMyNodeRef());
+        floodMessageTable.put(floodMessage, _sourceSet);
     }
 
     public void handleFloodMessage(FloodMessage event) {

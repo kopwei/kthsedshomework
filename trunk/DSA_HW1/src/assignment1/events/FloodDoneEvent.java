@@ -10,8 +10,14 @@ package assignment1.events;
  */
 public class FloodDoneEvent implements tbn.api.Event {
 
+    private String message;
+
+    public FloodDoneEvent(String message) {
+        this.message = message;
+    }
+
     public String getMessage() {
         // TODO: need implementation here
-        return "Flood Done";
+        return "Flood Done ( " + message + " )";
     }
 }

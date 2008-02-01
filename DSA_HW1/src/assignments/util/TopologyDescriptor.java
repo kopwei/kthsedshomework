@@ -12,97 +12,93 @@ import tbn.comm.mina.NodeReference;
 
 public class TopologyDescriptor {
 
-	private int totalNodes;
+    private int totalNodes;
+    private HashMap<Integer, NodeReference> nodesList;
+    private HashMap<Integer, LinkDescriptor> linksMap;
+    private NodeReference thisNodeRef;
 
-	private HashMap<Integer, NodeReference> nodesList;
+    public TopologyDescriptor(int totalNodes) {
+        this.totalNodes = totalNodes;
+        this.linksMap = new HashMap<Integer, LinkDescriptor>();
+        this.nodesList = new HashMap<Integer, NodeReference>();
+    }
 
-	private HashMap<Integer, LinkDescriptor> linksMap;
+    public int getTotalNodes() {
+        return totalNodes;
+    }
 
-	private NodeReference thisNodeRef;
+    public void setMyNodeRef(NodeReference ref) {
+        this.thisNodeRef = ref;
+        addLink(ref, ref, 0, 0.0);
+    }
 
-	public TopologyDescriptor(int totalNodes) {
-		this.totalNodes = totalNodes;
-		this.linksMap = new HashMap<Integer, LinkDescriptor>();
-		this.nodesList = new HashMap<Integer, NodeReference>();
-	}
+    public NodeReference addNode(String nodeId, String Ip, int port)
+            throws UnknownHostException {
 
-	public int getTotalNodes() {
-		return totalNodes;
-	}
+        InetAddress address = InetAddress.getByName(Ip);
 
-	public void setMyNodeRef(NodeReference ref) {
-		this.thisNodeRef = ref;
-		addLink(ref, ref, 0, 0.0);
-	}
+        BigInteger bIntNodeId = new BigInteger(nodeId);
 
-	public NodeReference addNode(String nodeId, String Ip, int port)
-			throws UnknownHostException {
+        NodeReference nodeReference = new NodeReference(address, port,
+                bIntNodeId);
 
-		InetAddress address = InetAddress.getByName(Ip);
+        nodesList.put(bIntNodeId.intValue(), nodeReference);
 
-		BigInteger bIntNodeId = new BigInteger(nodeId);
+        return nodeReference;
+    }
 
-		NodeReference nodeReference = new NodeReference(address, port,
-				bIntNodeId);
+    public LinkDescriptor addLink(NodeReference sourceNodeId,
+            NodeReference destNodeId, long latency, double loss_rate) {
 
-		nodesList.put(bIntNodeId.intValue(), nodeReference);
+        LinkDescriptor linkDescriptor = new LinkDescriptor(sourceNodeId,
+                destNodeId, latency, loss_rate);
 
-		return nodeReference;
-	}
+        linksMap.put(destNodeId.getId().intValue(), linkDescriptor);
 
-	public LinkDescriptor addLink(NodeReference sourceNodeId,
-			NodeReference destNodeId, long latency, double loss_rate) {
+        return linkDescriptor;
+    }
 
-		LinkDescriptor linkDescriptor = new LinkDescriptor(sourceNodeId,
-				destNodeId, latency, loss_rate);
+    public Collection<LinkDescriptor> getAllLinks() {
+        return linksMap.values();
+    }
 
-		linksMap.put(destNodeId.getId().intValue(), linkDescriptor);
+    public LinkDescriptor getLink(BigInteger nodeId) {
+        return linksMap.get(nodeId.intValue());
+    }
 
-		return linkDescriptor;
-	}
+    public NodeReference getNode(BigInteger nodeId) {
+        return nodesList.get(nodeId.intValue());
+    }
 
-	public Collection<LinkDescriptor> getAllLinks() {
-		return linksMap.values();
-	}
+    /**
+     * Gets all the node references of the nodes specified in this Topology
+     * Descriptor.
+     * 
+     * @return a {@link Collection} containing all the {@link NodeReference}
+     *         instances
+     */
+    public Collection<NodeReference> getAllNodes() {
+        return nodesList.values();
+    }
 
-	public LinkDescriptor getLink(BigInteger nodeId) {
-		return linksMap.get(nodeId.intValue());
-	}
+    /**
+     * Gets all the node references of the nodes specified in this Topology
+     * Descriptor, except the one of the current node.
+     * 
+     * @return a {@link Collection} containing all the {@link NodeReference}
+     *         instances
+     */
+    public Collection<NodeReference> getAllOtherNodes() {
+        Collection<NodeReference> nodes = new HashSet<NodeReference>(nodesList.values());
+        nodes.remove(thisNodeRef);
+        return nodes;
+    }
 
-	public NodeReference getNode(BigInteger nodeId) {
-		return nodesList.get(nodeId.intValue());
-	}
+    public boolean isNodePresent(int nodeId) {
+        return nodesList.containsKey(nodeId);
+    }
 
-	/**
-	 * Gets all the node references of the nodes specified in this Topology
-	 * Descriptor.
-	 * 
-	 * @return a {@link Collection} containing all the {@link NodeReference}
-	 *         instances
-	 */
-	public Collection<NodeReference> getAllNodes() {
-		return nodesList.values();
-	}
-
-	/**
-	 * Gets all the node references of the nodes specified in this Topology
-	 * Descriptor, except the one of the current node.
-	 * 
-	 * @return a {@link Collection} containing all the {@link NodeReference}
-	 *         instances
-	 */
-	public Collection<NodeReference> getAllOtherNodes() {
-		Collection<NodeReference> nodes = new HashSet<NodeReference>(nodesList
-				.values());
-		nodes.remove(thisNodeRef);
-		return nodes;
-	}
-
-	public boolean isNodePresent(int nodeId) {
-		return nodesList.containsKey(nodeId);
-	}
-
-	public NodeReference getMyNodeRef() {
-		return thisNodeRef;
-	}
+    public NodeReference getMyNodeRef() {
+        return thisNodeRef;
+    }
 }

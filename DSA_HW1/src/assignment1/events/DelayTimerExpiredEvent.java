@@ -5,14 +5,14 @@ import tbn.timer.events.TimerExpiredEvent;
 
 public class DelayTimerExpiredEvent extends TimerExpiredEvent {
 
-	private MessageEvent message;
+    private MessageEvent message;
 
-	public DelayTimerExpiredEvent(MessageEvent message) {
-		super();
-		this.message = message;
-	}
+    public DelayTimerExpiredEvent(MessageEvent message) {
+        super();
+        this.message = message;
+    }
 
-	public MessageEvent getMessage() {
-		return message;
-	}
+    public MessageEvent getMessage() {
+        return message;
+    }
 }

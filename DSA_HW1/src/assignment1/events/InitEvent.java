@@ -5,13 +5,13 @@ import assignments.util.TopologyDescriptor;
 
 public class InitEvent implements Event {
 
-	private TopologyDescriptor topologyDescriptor;
+    private TopologyDescriptor topologyDescriptor;
 
-	public InitEvent(TopologyDescriptor topologyDescriptor) {
-		this.topologyDescriptor = topologyDescriptor;
-	}
+    public InitEvent(TopologyDescriptor topologyDescriptor) {
+        this.topologyDescriptor = topologyDescriptor;
+    }
 
-	public TopologyDescriptor getTopologyDescriptor() {
-		return topologyDescriptor;
-	}
+    public TopologyDescriptor getTopologyDescriptor() {
+        return topologyDescriptor;
+    }
 }

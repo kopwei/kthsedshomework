@@ -24,221 +24,198 @@ import tbn.comm.mina.NodeReference;
 
 public class TopologyParser implements ErrorHandler {
 
-	private static Logger log = Logger.getLogger(TopologyParser.class);
+    private static Logger log = Logger.getLogger(TopologyParser.class);
+    private final String topologyXMLschemaDescriptorPath = "topology.xsd";
+    private int thisNodeNumber;
+    private String topologyDescriptorFile;
+    private DocumentBuilderFactory factory;
+    private DocumentBuilder parser;
+    private Document parsedDocument = null;
 
-	private final String topologyXMLschemaDescriptorPath = "topology.xsd";
+    public TopologyParser(int nodeNumber, String topologyDescriptorFilePath) {
+        super();
+        this.thisNodeNumber = nodeNumber;
+        this.topologyDescriptorFile = topologyDescriptorFilePath;
 
-	private int thisNodeNumber;
+        factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setValidating(false);
 
-	private String topologyDescriptorFile;
+        SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 
-	private DocumentBuilderFactory factory;
+        try {
+            factory.setSchema(schemaFactory.newSchema(TopologyParser.class.getResource(topologyXMLschemaDescriptorPath)));
 
-	private DocumentBuilder parser;
+        } catch (SAXException e) {
 
-	private Document parsedDocument = null;
+            e.printStackTrace();
+            System.out.println("Wrong Schema");
+        }
+    }
 
-	public TopologyParser(int nodeNumber, String topologyDescriptorFilePath) {
-		super();
-		this.thisNodeNumber = nodeNumber;
-		this.topologyDescriptorFile = topologyDescriptorFilePath;
+    public TopologyDescriptor parseTopologyFile() {
 
-		factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true);
-		factory.setValidating(false);
+        try {
+            parser = factory.newDocumentBuilder();
 
-		SchemaFactory schemaFactory = SchemaFactory
-				.newInstance("http://www.w3.org/2001/XMLSchema");
+            parser.setErrorHandler(this);
 
-		try {
-			factory.setSchema(schemaFactory.newSchema(TopologyParser.class
-					.getResource(topologyXMLschemaDescriptorPath)));
+            log.info("Parsing topology file:" + topologyDescriptorFile);
 
-		} catch (SAXException e) {
+            parsedDocument = parser.parse(new FileInputStream(
+                    topologyDescriptorFile));
 
-			e.printStackTrace();
-			System.out.println("Wrong Schema");
-		}
-	}
+            log.info("Parsing Successful");
 
-	public TopologyDescriptor parseTopologyFile() {
+        } catch (FileNotFoundException e1) {
+            log.error("Parsing Failed");
+            e1.printStackTrace();
+        } catch (ParserConfigurationException e1) {
+            log.error("Parsing Failed");
+            e1.printStackTrace();
+        } catch (SAXException e) {
+            log.error("Parsing Failed");
+            e.printStackTrace();
+        } catch (IOException e) {
+            log.error("Parsing Failed");
+            e.printStackTrace();
+        }
 
-		try {
-			parser = factory.newDocumentBuilder();
+        Element e = parsedDocument.getDocumentElement();
 
-			parser.setErrorHandler(this);
+        log.info("NODES");
 
-			log.info("Parsing topology file:" + topologyDescriptorFile);
+        NodeList nodes = e.getElementsByTagName("nodes");
 
-			parsedDocument = parser.parse(new FileInputStream(
-					topologyDescriptorFile));
+        int nodesNumber = 0;
 
-			log.info("Parsing Successful");
+        if (nodes.getLength() == 1) {
+            Element n = (Element) nodes.item(0);
+            nodesNumber = Integer.parseInt(n.getAttribute("number"));
 
-		} catch (FileNotFoundException e1) {
-			log.error("Parsing Failed");
-			e1.printStackTrace();
-		} catch (ParserConfigurationException e1) {
-			log.error("Parsing Failed");
-			e1.printStackTrace();
-		} catch (SAXException e) {
-			log.error("Parsing Failed");
-			e.printStackTrace();
-		} catch (IOException e) {
-			log.error("Parsing Failed");
-			e.printStackTrace();
-		}
+            log.info("Total number of nodes=" + nodesNumber);
 
-		Element e = parsedDocument.getDocumentElement();
+        } else {
 
-		log.info("NODES");
+            log.fatal("Error in parsing \"nodes\" section");
 
-		NodeList nodes = e.getElementsByTagName("nodes");
+            System.exit(1);
 
-		int nodesNumber = 0;
+        }
 
-		if (nodes.getLength() == 1) {
-			Element n = (Element) nodes.item(0);
-			nodesNumber = Integer.parseInt(n.getAttribute("number"));
+        NodeList n = e.getElementsByTagName("node");
 
-			log.info("Total number of nodes=" + nodesNumber);
+        // Creating Topology Descriptor
+        TopologyDescriptor topologyDescriptor = new TopologyDescriptor(n.getLength());
 
-		} else {
+        // For every node
+        for (int i = 0; i < n.getLength(); i++) {
+            Element x = (Element) n.item(i);
 
-			log.fatal("Error in parsing \"nodes\" section");
+            String id = x.getAttribute("id");
+            log.info("Node=" + i + ", Id=" + id + ", Ip=" + x.getAttribute("Ip") + ", port=" + x.getAttribute("port"));
 
-			System.exit(1);
+            try {
 
-		}
+                NodeReference ref = topologyDescriptor.addNode(id, x.getAttribute("Ip"), Integer.parseInt(x.getAttribute("port")));
 
-		NodeList n = e.getElementsByTagName("node");
+                if (id.equals("" + thisNodeNumber)) {
+                    topologyDescriptor.setMyNodeRef(ref);
+                }
 
-		// Creating Topology Descriptor
-		TopologyDescriptor topologyDescriptor = new TopologyDescriptor(n
-				.getLength());
+            } catch (NumberFormatException e1) {
+                log.error("Error in parsing in \"node\" section");
+                e1.printStackTrace();
+            } catch (UnknownHostException e1) {
+                log.error("Error in parsing in \"node\" section");
+                e1.printStackTrace();
+            }
 
-		// For every node
-		for (int i = 0; i < n.getLength(); i++) {
-			Element x = (Element) n.item(i);
+        }
 
-			String id = x.getAttribute("id");
-			log
-					.info("Node=" + i + ", Id=" + id + ", Ip="
-							+ x.getAttribute("Ip") + ", port="
-							+ x.getAttribute("port"));
+        NodeList n1 = e.getElementsByTagName("link");
 
-			try {
+        log.info("LINKS");
 
-				NodeReference ref = topologyDescriptor.addNode(id, x
-						.getAttribute("Ip"), Integer.parseInt(x
-						.getAttribute("port")));
+        // For every link
+        for (int i = 0; i < n1.getLength(); i++) {
+            Element x = (Element) n1.item(i);
 
-				if (id.equals("" + thisNodeNumber)) {
-					topologyDescriptor.setMyNodeRef(ref);
-				}
+            String src = x.getAttribute("src_id");
 
-			} catch (NumberFormatException e1) {
-				log.error("Error in parsing in \"node\" section");
-				e1.printStackTrace();
-			} catch (UnknownHostException e1) {
-				log.error("Error in parsing in \"node\" section");
-				e1.printStackTrace();
-			}
+            int srcNodeId = Integer.parseInt(src);
 
-		}
+            String dst = x.getAttribute("dst_id");
 
-		NodeList n1 = e.getElementsByTagName("link");
+            int dstNodeId = Integer.parseInt(dst);
 
-		log.info("LINKS");
+            if (!topologyDescriptor.isNodePresent(dstNodeId) || !topologyDescriptor.isNodePresent(srcNodeId)) {
 
-		// For every link
-		for (int i = 0; i < n1.getLength(); i++) {
-			Element x = (Element) n1.item(i);
+                log.fatal("Error parsing \"links\" section\n A link contains a reference to a non-existent node");
 
-			String src = x.getAttribute("src_id");
+                System.exit(1);
 
-			int srcNodeId = Integer.parseInt(src);
+            }
+            if (dstNodeId == thisNodeNumber && srcNodeId == thisNodeNumber) {
 
-			String dst = x.getAttribute("dst_id");
+                log.fatal("Error parsing \"links\" section\n A link contains the same node both as source and as destination");
 
-			int dstNodeId = Integer.parseInt(dst);
+                System.exit(1);
 
-			if (!topologyDescriptor.isNodePresent(dstNodeId)
-					|| !topologyDescriptor.isNodePresent(srcNodeId)) {
+            }
 
-				log
-						.fatal("Error parsing \"links\" section\n A link contains a reference to a non-existent node");
+            // Store only the links which have the node as one of the two edges
+            if (srcNodeId == thisNodeNumber || dstNodeId == thisNodeNumber) {
 
-				System.exit(1);
+                String latency = x.getAttribute("latency");
 
-			}
-			if (dstNodeId == thisNodeNumber && srcNodeId == thisNodeNumber) {
+                String loss_rate = x.getAttribute("loss_rate");
 
-				log
-						.fatal("Error parsing \"links\" section\n A link contains the same node both as source and as destination");
+                String undirected = x.getAttribute("undirected");
 
-				System.exit(1);
+                NodeReference srcNode = topologyDescriptor.getNode(new BigInteger(src));
 
-			}
+                NodeReference dstNode = topologyDescriptor.getNode(new BigInteger(dst));
 
-			// Store only the links which have the node as one of the two edges
-			if (srcNodeId == thisNodeNumber || dstNodeId == thisNodeNumber) {
+                // (dstNodeId == thisNodeNumber ? srcNode : dstNode),
+                // (srcNodeId == thisNodeNumber ? srcNode : dstNode),
 
-				String latency = x.getAttribute("latency");
+                LinkDescriptor linkDescriptor;
 
-				String loss_rate = x.getAttribute("loss_rate");
+                if (!undirected.equals("") && undirected.equals("true")) {
 
-				String undirected = x.getAttribute("undirected");
+                    linkDescriptor = topologyDescriptor.addLink(
+                            (srcNodeId == thisNodeNumber ? srcNode : dstNode),
+                            (dstNodeId == thisNodeNumber ? srcNode : dstNode),
+                            (latency.equals("") ? 0
+                            : Long.parseLong(latency)),
+                            (loss_rate.equals("") ? 0 : Double.parseDouble(loss_rate)));
 
-				NodeReference srcNode = topologyDescriptor
-						.getNode(new BigInteger(src));
+                } else {
 
-				NodeReference dstNode = topologyDescriptor
-						.getNode(new BigInteger(dst));
+                    linkDescriptor = topologyDescriptor.addLink(srcNode,
+                            dstNode, (latency.equals("") ? 0 : Long.parseLong(latency)), (loss_rate.equals("") ? 0 : Double.parseDouble(loss_rate)));
 
-				// (dstNodeId == thisNodeNumber ? srcNode : dstNode),
-				// (srcNodeId == thisNodeNumber ? srcNode : dstNode),
+                }
 
-				LinkDescriptor linkDescriptor;
+                log.info(linkDescriptor);
 
-				if (!undirected.equals("") && undirected.equals("true")) {
+            }
 
-					linkDescriptor = topologyDescriptor.addLink(
-							(srcNodeId == thisNodeNumber ? srcNode : dstNode),
-							(dstNodeId == thisNodeNumber ? srcNode : dstNode),
-							(latency.equals("") ? 0
-									: Long.parseLong(latency)),
-							(loss_rate.equals("") ? 0 : Double
-									.parseDouble(loss_rate)));
+        }
 
-				} else {
+        return topologyDescriptor;
+    }
 
-					linkDescriptor = topologyDescriptor.addLink(srcNode,
-							dstNode, (latency.equals("") ? 0 : Long
-									.parseLong(latency)), (loss_rate
-									.equals("") ? 0 : Double
-									.parseDouble(loss_rate)));
+    public void warning(SAXParseException e) {
+        log.error("Validation failed=" + e.getMessage());
+    }
 
-				}
+    public void error(SAXParseException e) {
+        log.error("Validation failed=" + e.getMessage());
+    }
 
-				log.info(linkDescriptor);
-
-			}
-
-		}
-
-		return topologyDescriptor;
-	}
-
-	public void warning(SAXParseException e) {
-		log.error("Validation failed=" + e.getMessage());
-	}
-
-	public void error(SAXParseException e) {
-		log.error("Validation failed=" + e.getMessage());
-	}
-
-	public void fatalError(SAXParseException e) {
-		log.error("Validation failed=" + e.getMessage());
-	}
+    public void fatalError(SAXParseException e) {
+        log.error("Validation failed=" + e.getMessage());
+    }
 }

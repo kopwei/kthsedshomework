@@ -5,13 +5,13 @@
 
 package assignment1.events;
 
-import tbn.api.Event;
+import tbn.comm.mina.events.MessageEvent;
 
 /**
  *
  * @author Ricky
  */
-public class FloodMessage implements Event{
+public class FloodMessage extends MessageEvent{
     private String message;
     
     public FloodMessage(String message) {

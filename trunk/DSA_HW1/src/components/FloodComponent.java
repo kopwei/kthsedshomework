@@ -72,7 +72,8 @@ public class FloodComponent {
             // If the source number reaches the number of neighbors, we thought it is done
             if (nodeSet.size() == topologyDescriptor.getAllOtherNodes().size() + 1) {
                 // Clear the corresponding hashset
-            	nodeSet.clear();               
+            	nodeSet.clear();
+                floodMessageTable.remove(event);
                 FloodDoneEvent doneEvent = new FloodDoneEvent(event.getMessage());
                 component.raiseEvent(doneEvent);
             }

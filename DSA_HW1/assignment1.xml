@@ -92,44 +92,42 @@
 		<tns:binding>
 			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
 			<tns:eventClass>assignment1.events.FloodInitEvent</tns:eventClass>
-			<tns:eventClass>assignment1.events.FloodDoneEvent</tns:eventClass>
-			<tns:channelName>FloodEventChannel</tns:channelName>					
+			<tns:channelName>FloodEventChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
-			<tns:eventClass>assignment1.events.InitEvent</tns:eventClass>			
-			<tns:channelName>InitEventChannel</tns:channelName>					
+			<tns:eventClass>assignment1.events.InitEvent</tns:eventClass>
+			<tns:channelName>InitEventChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
-			<tns:eventClass>assignment1.events.FloodInitEvent</tns:eventClass>
 			<tns:eventClass>assignment1.events.FloodDoneEvent</tns:eventClass>
-			<tns:channelName>FloodEventChannel</tns:channelName>					
+			<tns:channelName>FloodEventChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>CommunicationComponentFactory:CommunicationComponent</tns:componentName>
 			<tns:eventClass>assignment1.events.FloodMessage</tns:eventClass>
-			<tns:channelName>FloodMessageChannel</tns:channelName>					
+			<tns:channelName>FloodMessageChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
 			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
-			<tns:channelName>DropMessageChannel</tns:channelName>					
+			<tns:channelName>DropMessageChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>DropComponentFactory:DropComponent</tns:componentName>
 			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
-			<tns:channelName>DelayMessageChannel</tns:channelName>					
+			<tns:channelName>DelayMessageChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
-			<tns:eventClass>tbn.timer.events.TimerEvent</tns:eventClass>			
-			<tns:channelName>TimerEventChannel</tns:channelName>					
+			<tns:eventClass>tbn.timer.events.TimerEvent</tns:eventClass>
+			<tns:channelName>TimerEventChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
 			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
-			<tns:channelName>SendMessageChannel</tns:channelName>					
+			<tns:channelName>SendMessageChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>TimerComponentFactory:TimerComponent</tns:componentName>

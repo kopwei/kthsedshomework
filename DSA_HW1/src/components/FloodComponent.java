@@ -41,6 +41,7 @@ public class FloodComponent {
         System.out.println("FloodComponent: I got a FloodInitEvent message: " + floodInitEventMsg);
         
         FloodMessage floodMessage = new FloodMessage("Flood is coming! Run!!!");
+        // send a FloodMessage to all its neighbors
         for (NodeReference nodeRef : topologyDescriptor.getAllOtherNodes()) {
             floodMessage.setDestination(nodeRef);
             floodMessage.setSource(topologyDescriptor.getMyNodeRef());

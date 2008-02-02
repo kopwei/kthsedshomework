@@ -32,7 +32,7 @@ public class Assignment1 {
 
             TBNSystem sys = TBN.getSystem();
             sys.buildSystem(Assignment1.class.getResource("assignment1.xml").getPath());
-            sys.startReconfigurationServer();
+            //sys.startReconfigurationServer();
         } catch (ParsingFailedException e) {
             e.printStackTrace();
         } catch (SystemBuildFailedException e) {

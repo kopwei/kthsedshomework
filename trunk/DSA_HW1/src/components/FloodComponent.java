@@ -9,7 +9,6 @@ import assignment1.events.FloodInitEvent;
 import assignment1.events.FloodMessage;
 import assignment1.events.InitEvent;
 import assignments.util.TopologyDescriptor;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import org.apache.log4j.Logger;
@@ -68,6 +67,7 @@ public class FloodComponent {
             for (NodeReference neighbor : topologyDescriptor.getAllOtherNodes()) {
                 event.setDestination(neighbor);
                 component.raiseEvent(event);
+                 log.info("I raised the flood message to the nrighbor " + neighbor);
             }
         } // If the message is not new message, we have to store its source
         else {
@@ -80,6 +80,7 @@ public class FloodComponent {
                 floodMessageTable.remove(event);
                 FloodDoneEvent doneEvent = new FloodDoneEvent(event.getMessage());
                 component.raiseEvent(doneEvent);
+                log.info("I raised the done info");
             }
         }
     }

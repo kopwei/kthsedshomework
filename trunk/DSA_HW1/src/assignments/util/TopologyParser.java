@@ -113,11 +113,11 @@ public class TopologyParser implements ErrorHandler {
             Element x = (Element) n.item(i);
 
             String id = x.getAttribute("id");
-            log.info("Node=" + i + ", Id=" + id + ", Ip=" + x.getAttribute("Ip") + ", port=" + x.getAttribute("port"));
+            log.info("Node=" + i + ", Id=" + id + ", Ip=" + x.getAttribute("ip") + ", port=" + x.getAttribute("port"));
 
             try {
 
-                NodeReference ref = topologyDescriptor.addNode(id, x.getAttribute("Ip"), Integer.parseInt(x.getAttribute("port")));
+                NodeReference ref = topologyDescriptor.addNode(id, x.getAttribute("ip"), Integer.parseInt(x.getAttribute("port")));
 
                 if (id.equals("" + thisNodeNumber)) {
                     topologyDescriptor.setMyNodeRef(ref);

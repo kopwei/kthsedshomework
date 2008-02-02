@@ -65,7 +65,7 @@
 		</tns:channel>
 		<tns:channel>
 			<tns:channelName>DropMessageChannel</tns:channelName>
-			<tns:eventClass>tbn.comma.mina.events.MessageEvent</tns:eventClass>
+			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
 		</tns:channel>
 		<tns:channel>
 			<tns:channelName>InitEventChannel</tns:channelName>
@@ -81,7 +81,7 @@
 		</tns:channel>
 		<tns:channel>
 			<tns:channelName>SendMessageChannel</tns:channelName>
-			<tns:eventClass>tbn.comma.mina.events.MessageEvent</tns:eventClass>
+			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
 		</tns:channel>
 		<tns:channel>
 			<tns:channelName>DelayTimerExpiredEventChannel</tns:channelName>
@@ -189,7 +189,7 @@
 		<tns:subscription>
 			<tns:componentName>CommunicationComponentFactory:CommunicationComponent</tns:componentName>
 			<tns:channelName>SendMessageChannel</tns:channelName>
-			<tns:handlerName>handleMessageEvent</tns:handlerName>
+			<tns:handlerName>handleSendEvent</tns:handlerName>
 		</tns:subscription>
 	</tns:subscriptions>
 	<tns:startSequence>

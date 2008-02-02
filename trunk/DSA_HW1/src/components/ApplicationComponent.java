@@ -55,9 +55,9 @@ public class ApplicationComponent {
     public void start() {
         InitEvent startEvent = new InitEvent(topologyDescriptor);
         component.raiseEvent(startEvent);
-        if (nodeID == 0) {
+        //if (nodeID == 0) {
             new ApplicationComponent.ApplicationThread().start();
-        }
+        //}
     }
 
     public void handleFloodDoneEvent(FloodDoneEvent event) {

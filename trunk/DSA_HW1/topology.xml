@@ -7,6 +7,6 @@
   </nodes>
 
   <links>
-		<link src_id="0" dst_id="1" latency="1000" undirected="true"/>
+		<link src_id="0" dst_id="1" latency="0" undirected="true"/>
   </links>
 </topology>

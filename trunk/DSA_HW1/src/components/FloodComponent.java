@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import org.apache.log4j.Logger;
 import tbn.api.Component;
-import tbn.comm.mina.MessageHandler;
 import tbn.comm.mina.NodeReference;
 
 /**
@@ -25,12 +24,12 @@ public class FloodComponent {
     private static Logger log = Logger.getLogger(FloodComponent.class);
     private Component component;
     private TopologyDescriptor topologyDescriptor;
-    private MessageHandler messageHandler;
+    //private MessageHandler messageHandler;
     private Hashtable<FloodMessage, HashSet<NodeReference>> floodMessageTable;
 
     public FloodComponent(Component component) {
         this.component = component;
-        messageHandler = new MessageHandler(this.component);
+        //messageHandler = new MessageHandler(this.component);
         floodMessageTable = new Hashtable<FloodMessage, HashSet<NodeReference>>();
     }
 
@@ -43,13 +42,14 @@ public class FloodComponent {
         String floodInitEventMsg = event.getFloodInitEventMessage();
         
         System.out.println(topologyDescriptor.getMyNodeRef() + ": FloodComponent got a FloodInitEvent message: " + floodInitEventMsg);
-        
-        FloodMessage floodMessage = new FloodMessage(topologyDescriptor.getMyNodeRef() + ": Flood is coming! Run!!!");
+        FloodMessage floodMessage = null;
         // send a FloodMessage to all its neighbors
         for (NodeReference nodeRef : topologyDescriptor.getAllOtherNodes()) {
+            floodMessage = new FloodMessage(topologyDescriptor.getMyNodeRef() + ": Flood is coming! Run!!!");
             floodMessage.setDestination(nodeRef);
             floodMessage.setSource(topologyDescriptor.getMyNodeRef());
             component.raiseEvent(floodMessage);
+            log.info("I raised a flood info event to " + floodMessage.getDestination());
         }
         // store this FloodMessage event into FloodMessageTable
         HashSet<NodeReference> _sourceSet = new HashSet<NodeReference>();
@@ -60,14 +60,16 @@ public class FloodComponent {
     public void handleFloodMessage(FloodMessage event) {
          // If the message is a totally new message, we have to store it and its source
         if (!floodMessageTable.containsKey(event)) {
+            log.info("I received a flood message from " + event.getSource());
             HashSet<NodeReference> sourceSet = new HashSet<NodeReference>();
             sourceSet.add(event.getSource());
             floodMessageTable.put(event, sourceSet);
             // We have to send the event to all other neighbors
             for (NodeReference neighbor : topologyDescriptor.getAllOtherNodes()) {
-                event.setDestination(neighbor);
-                component.raiseEvent(event);
-                 log.info("I raised the flood message to the nrighbor " + neighbor);
+                FloodMessage newEvent = event.clone();
+                newEvent.setDestination(neighbor);
+                component.raiseEvent(newEvent);
+                 log.info("I raised the flood message to the neighbor " + neighbor);
             }
         } // If the message is not new message, we have to store its source
         else {

@@ -22,6 +22,10 @@ public class FloodMessage extends MessageEvent{
         return message;
     }
     
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    
     @Override
     public boolean equals(Object message) {
     	FloodMessage fMessage = (FloodMessage)message;
@@ -35,5 +39,12 @@ public class FloodMessage extends MessageEvent{
         int hash = 5;
         hash = 19 * hash + (this.message != null ? this.message.hashCode() : 0);
         return hash;
+    }
+
+    @Override
+    public FloodMessage clone() {
+        FloodMessage msg = (FloodMessage) super.clone();
+        msg.setMessage(message);
+        return msg;
     }
 }

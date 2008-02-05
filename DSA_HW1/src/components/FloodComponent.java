@@ -53,7 +53,6 @@ public class FloodComponent {
         }
         // store this FloodMessage event into FloodMessageTable
         HashSet<NodeReference> _sourceSet = new HashSet<NodeReference>();
-        _sourceSet.add(topologyDescriptor.getMyNodeRef());
         floodMessageTable.put(floodMessage, _sourceSet);
     }
 
@@ -76,7 +75,7 @@ public class FloodComponent {
             HashSet<NodeReference> nodeSet = floodMessageTable.get(event);
             nodeSet.add(event.getSource());
             // If the source number reaches the number of neighbors, we thought it is done
-            if (nodeSet.size() == topologyDescriptor.getAllOtherNodes().size() + 1) {
+            if (nodeSet.size() == topologyDescriptor.getAllOtherNodes().size()) {
                 // Clear the corresponding hashset
             	nodeSet.clear();
                 floodMessageTable.remove(event);

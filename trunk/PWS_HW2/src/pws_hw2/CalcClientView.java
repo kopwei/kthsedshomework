@@ -4,6 +4,18 @@
 
 package pws_hw2;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.rmi.Remote;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.namespace.QName;
+import javax.xml.rpc.Call;
+import javax.xml.rpc.ServiceException;
+import javax.xml.rpc.encoding.TypeMappingRegistry;
+import javax.xml.rpc.handler.HandlerRegistry;
+import localhost.axis.services.CalculatorService.CalculatorService;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -11,10 +23,14 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import localhost.axis.services.CalculatorService.CalculatorServiceService;
+import localhost.axis.services.CalculatorService.CalculatorServiceServiceLocator;
+import localhost.axis.services.CalculatorService.DivideZeroException;
 
 /**
  * The application's main frame.
@@ -91,6 +107,16 @@ public class CalcClientView extends FrameView {
         CalcClientApp.getApplication().show(aboutBox);
     }
 
+    private String buildURL() {
+        StringBuffer buf = new StringBuffer();
+        buf.append("http://");
+        buf.append(serverAddrTextField.getText());
+        buf.append(":");
+        buf.append(portTextField.getText());
+        buf.append("/axis/services/CalculatorService");
+        return buf.toString();
+    }
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -157,18 +183,48 @@ public class CalcClientView extends FrameView {
 
         calcButton.setText(resourceMap.getString("calcButton.text")); // NOI18N
         calcButton.setName("calcButton"); // NOI18N
+        calcButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calcButtonActionPerformed(evt);
+            }
+        });
 
+        buttonGroup.add(addButton);
+        addButton.setSelected(true);
         addButton.setText(resourceMap.getString("addButton.text")); // NOI18N
         addButton.setName("addButton"); // NOI18N
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
 
+        buttonGroup.add(minusButton);
         minusButton.setText(resourceMap.getString("minusButton.text")); // NOI18N
         minusButton.setName("minusButton"); // NOI18N
+        minusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minusButtonActionPerformed(evt);
+            }
+        });
 
+        buttonGroup.add(multiplyButton);
         multiplyButton.setText(resourceMap.getString("multiplyButton.text")); // NOI18N
         multiplyButton.setName("multiplyButton"); // NOI18N
+        multiplyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                multiplyButtonActionPerformed(evt);
+            }
+        });
 
+        buttonGroup.add(divideButton);
         divideButton.setText(resourceMap.getString("divideButton.text")); // NOI18N
         divideButton.setName("divideButton"); // NOI18N
+        divideButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                divideButtonActionPerformed(evt);
+            }
+        });
 
         resultLabel.setText(resourceMap.getString("resultLabel.text")); // NOI18N
         resultLabel.setName("resultLabel"); // NOI18N
@@ -176,7 +232,8 @@ public class CalcClientView extends FrameView {
         scrollPane.setName("scrollPane"); // NOI18N
 
         resultTextArea.setColumns(20);
-        resultTextArea.setRows(4);
+        resultTextArea.setEditable(false);
+        resultTextArea.setRows(3);
         resultTextArea.setName("resultTextArea"); // NOI18N
         scrollPane.setViewportView(resultTextArea);
 
@@ -195,8 +252,8 @@ public class CalcClientView extends FrameView {
                                     .addComponent(serverAddrTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(portLabel))
                                 .addGap(76, 76, 76))
-                            .addGroup(mainPanelLayout.createSequentialGroup()
-                                .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                                .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(calcButton)
                                 .addGap(40, 40, 40)))
@@ -234,9 +291,9 @@ public class CalcClientView extends FrameView {
                     .addComponent(secondOperandLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(secondOperandTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calcButton))
+                    .addComponent(calcButton)
+                    .addComponent(portTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(addButton)
@@ -289,11 +346,11 @@ public class CalcClientView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusAnimationLabel)
@@ -315,6 +372,82 @@ public class CalcClientView extends FrameView {
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        // TODO add your handling code here:
+        operatorIndex = ADD;
+    }//GEN-LAST:event_addButtonActionPerformed
+
+    private void minusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minusButtonActionPerformed
+        // TODO add your handling code here:
+        operatorIndex = MINUS;
+    }//GEN-LAST:event_minusButtonActionPerformed
+
+    private void multiplyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_multiplyButtonActionPerformed
+        // TODO add your handling code here:
+        operatorIndex = MULTIPLY;
+    }//GEN-LAST:event_multiplyButtonActionPerformed
+
+    private void divideButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_divideButtonActionPerformed
+        // TODO add your handling code here:
+        operatorIndex = DIVIDE;
+    }//GEN-LAST:event_divideButtonActionPerformed
+
+    private void calcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcButtonActionPerformed
+        try {
+            // TODO add your handling code here:
+            CalculatorServiceService service = new CalculatorServiceServiceLocator();
+            String url = buildURL();
+            int firstOperand = Integer.parseInt(firstOperandTextField.getText());
+            int secondOperand = Integer.parseInt(secondOperandTextField.getText());
+            int resultValue = 0;
+            String resultString = null;
+            CalculatorService entry = service.getCalculatorService(new java.net.URL(url));
+            switch (operatorIndex) {
+                case ADD:
+                    try {
+                        resultValue = entry.add(firstOperand, secondOperand);
+                        resultString = String.valueOf(resultValue);
+                    } catch (RemoteException re) {
+                        System.err.println(re.getMessage());
+                    }
+                    break;
+                case MINUS:
+                    try {
+                        resultValue = entry.subtraction(firstOperand, secondOperand);
+                        resultString = String.valueOf(resultValue);
+                    } catch (RemoteException re) {
+                        System.err.println(re.getMessage());
+                    }
+                    break;
+                case MULTIPLY:
+                    try {
+                        resultValue = entry.multiplication(firstOperand, secondOperand);
+                        resultString = String.valueOf(resultValue);
+                    } catch (RemoteException re) {
+                        System.err.println(re.getMessage());
+                    }
+                    break;
+                case DIVIDE:
+                    try {
+                        resultValue = entry.division(firstOperand, secondOperand);
+                        resultString = String.valueOf(resultValue);
+                    } catch (DivideZeroException dze) {
+                        resultString = dze.getDivideZeroError();
+                    } catch (RemoteException re) {
+                        System.err.println(re.getMessage());
+                    }
+                    break;
+            }
+            resultTextArea.setText(resultString);
+        } catch (ServiceException ex) {
+            Logger.getLogger(CalcClientView.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(CalcClientView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
+    }//GEN-LAST:event_calcButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton addButton;
@@ -349,4 +482,11 @@ public class CalcClientView extends FrameView {
     private int busyIconIndex = 0;
 
     private JDialog aboutBox;
+    
+    private int operatorIndex = 1;
+    
+    private static final int ADD = 1;
+    private static final int MINUS = 2;
+    private static final int MULTIPLY = 3;
+    private static final int DIVIDE = 4;
 }

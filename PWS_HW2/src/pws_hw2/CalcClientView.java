@@ -5,16 +5,7 @@
 package pws_hw2;
 
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.Remote;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.xml.namespace.QName;
-import javax.xml.rpc.Call;
 import javax.xml.rpc.ServiceException;
-import javax.xml.rpc.encoding.TypeMappingRegistry;
-import javax.xml.rpc.handler.HandlerRegistry;
 import localhost.axis.services.CalculatorService.CalculatorService;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -395,21 +386,23 @@ public class CalcClientView extends FrameView {
 
     private void calcButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcButtonActionPerformed
         try {
-            // TODO add your handling code here:
+            // Get the service
             CalculatorServiceService service = new CalculatorServiceServiceLocator();
             String url = buildURL();
+            // Prepare for the arguments
             int firstOperand = Integer.parseInt(firstOperandTextField.getText());
             int secondOperand = Integer.parseInt(secondOperandTextField.getText());
             int resultValue = 0;
             String resultString = null;
             CalculatorService entry = service.getCalculatorService(new java.net.URL(url));
+            // Invoke the method according to the operator
             switch (operatorIndex) {
                 case ADD:
                     try {
                         resultValue = entry.add(firstOperand, secondOperand);
                         resultString = String.valueOf(resultValue);
                     } catch (RemoteException re) {
-                        System.err.println(re.getMessage());
+                        resultTextArea.setText(re.getMessage());
                     }
                     break;
                 case MINUS:
@@ -417,7 +410,7 @@ public class CalcClientView extends FrameView {
                         resultValue = entry.subtraction(firstOperand, secondOperand);
                         resultString = String.valueOf(resultValue);
                     } catch (RemoteException re) {
-                        System.err.println(re.getMessage());
+                        resultTextArea.setText(re.getMessage());
                     }
                     break;
                 case MULTIPLY:
@@ -425,7 +418,7 @@ public class CalcClientView extends FrameView {
                         resultValue = entry.multiplication(firstOperand, secondOperand);
                         resultString = String.valueOf(resultValue);
                     } catch (RemoteException re) {
-                        System.err.println(re.getMessage());
+                        resultTextArea.setText(re.getMessage());
                     }
                     break;
                 case DIVIDE:
@@ -433,20 +426,20 @@ public class CalcClientView extends FrameView {
                         resultValue = entry.division(firstOperand, secondOperand);
                         resultString = String.valueOf(resultValue);
                     } catch (DivideZeroException dze) {
+                        // If the divide zero is caught, then display the error
+                        // message
                         resultString = dze.getDivideZeroError();
                     } catch (RemoteException re) {
-                        System.err.println(re.getMessage());
+                        resultTextArea.setText(re.getMessage());
                     }
                     break;
             }
             resultTextArea.setText(resultString);
         } catch (ServiceException ex) {
-            Logger.getLogger(CalcClientView.class.getName()).log(Level.SEVERE, null, ex);
+            resultTextArea.setText(ex.getMessage());
         } catch (MalformedURLException ex) {
-            Logger.getLogger(CalcClientView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-            
+            resultTextArea.setText(ex.getMessage());
+        }            
     }//GEN-LAST:event_calcButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

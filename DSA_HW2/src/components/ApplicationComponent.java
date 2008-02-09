@@ -65,7 +65,7 @@ public class ApplicationComponent {
     public void start() {
         InitEvent startEvent = new InitEvent(topologyDescriptor);
         component.raiseEvent(startEvent);
-        log.info("Raise InitEvent, and start Perfect Failure Detector Algorithm");
+        log.info("Raising InitEvent");
         if (nodeID == 0) {
             new ApplicationComponent.ApplicationThread().start();
         }
@@ -76,24 +76,6 @@ public class ApplicationComponent {
         @Override
         public void run() {
             System.out.println("Application THREAD RUNNING");
-
-//            while (true) {
-//                BufferedReader userIn = new BufferedReader(
-//                        new InputStreamReader(System.in));
-//                String messageString = null;
-//                try {
-//                    messageString = userIn.readLine();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                if (messageString == null) {
-//                    continue;
-//                }
-//                if (messageString.equals("quit")) {
-//                    System.exit(0);
-//                }
-//            }
         }
     }
 

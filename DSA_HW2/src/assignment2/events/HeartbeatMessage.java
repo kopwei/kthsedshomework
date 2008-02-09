@@ -5,10 +5,12 @@
 
 package assignment2.events;
 
+import tbn.comm.mina.events.MessageEvent;
+
 /**
  *
  * @author Ricky
  */
-public class HeartbeatMessage {
+public class HeartbeatMessage extends MessageEvent{
 
 }

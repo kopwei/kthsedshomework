@@ -40,7 +40,8 @@ public class ApplicationComponent {
             properties.load((InputStream) params[0]);
             topologyFile = properties.getProperty("topology.file",
                     "topology.xml");
-            nodeID = Integer.parseInt(properties.getProperty("node.id", "0"));
+            String strPro = properties.getProperty("node.id", "0");
+            nodeID = Integer.parseInt(strPro);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (NumberFormatException e) {
@@ -64,9 +65,9 @@ public class ApplicationComponent {
         InitEvent startEvent = new InitEvent(topologyDescriptor);
         component.raiseEvent(startEvent);
         log.info("Raising InitEvent");
-        if (nodeID == 0) {
+        //if (nodeID == 0) {
             new ApplicationComponent.ApplicationThread().start();
-        }
+        //}
     }
     
     class ApplicationThread extends Thread {

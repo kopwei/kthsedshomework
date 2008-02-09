@@ -205,7 +205,7 @@
 			<tns:channelName>SendMessageChannel</tns:channelName>
 			<tns:channelName>DeliverHeartBeatMessageChannel</tns:channelName>
 			<tns:channelName>CrashEventChannel</tns:channelName>
-			<tns:channelName>InitEventChannel</tns:channelName>ahaseeb@kth.se nimad@kth.se
+			<tns:channelName>InitEventChannel</tns:channelName>
 		</tns:startChannels>
 	</tns:startSequence>
 </tns:configuration>

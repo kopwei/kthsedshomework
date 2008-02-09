@@ -13,9 +13,9 @@ import tbn.api.Component;
  *
  * @author Ricky
  */
-public class PerfectFailureDetectorComponent {
+public class PFDComponent {
     private Component component;
-    private static Logger log = Logger.getLogger(PerfectFailureDetectorComponent.class);
+    private static Logger log = Logger.getLogger(PFDComponent.class);
     private TopologyDescriptor topologyDescriptor;
     
     public void handleHeartbeatMessage() {

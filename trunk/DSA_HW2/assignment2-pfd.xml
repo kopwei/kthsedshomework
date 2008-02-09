@@ -6,8 +6,8 @@
 			<tns:componentClass>components.ApplicationComponent</tns:componentClass>
 		</tns:factory>
 		<tns:factory>
-			<tns:factoryName>PerfectFailureDetectorComponentFactory</tns:factoryName>
-			<tns:componentClass>components.PerfectFailureDetectorComponent</tns:componentClass>
+			<tns:factoryName>PFDComponentFactory</tns:factoryName>
+			<tns:componentClass>components.PFDComponent</tns:componentClass>
 		</tns:factory>
 		<tns:factory>
 			<tns:factoryName>DelayComponentFactory</tns:factoryName>
@@ -29,8 +29,9 @@
 			<tns:initFile>node.properties</tns:initFile>
 		</tns:component>
 		<tns:component>
-			<tns:factoryName>PerfectFailureDetectorComponentFactory</tns:factoryName>
-			<tns:componentName>PerfectFailureDetectorComponent</tns:componentName>
+			<tns:factoryName>PFDComponentFactory</tns:factoryName>
+			<tns:componentName>PFDComponent</tns:componentName>
+			<tns:initFile>pfd.properties</tns:initFile>
 		</tns:component>
 		<tns:component>
 			<tns:factoryName>DelayComponentFactory</tns:factoryName>
@@ -120,17 +121,17 @@
 			<tns:channelName>CheckTimeOutEventChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
-			<tns:componentName>PerfectFailureDetectorComponentFactory:PerfectFailureDetectorComponent</tns:componentName>
+			<tns:componentName>PFDComponentFactory:PFDComponent</tns:componentName>
 			<tns:eventClass>tbn.timer.events.TimerEvent</tns:eventClass>
 			<tns:channelName>TimerEventChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
-			<tns:componentName>PerfectFailureDetectorComponentFactory:PerfectFailureDetectorComponent</tns:componentName>
+			<tns:componentName>PFDComponentFactory:PFDComponent</tns:componentName>
 			<tns:eventClass>assignment2.events.CrashEvent</tns:eventClass>
 			<tns:channelName>CrashEventChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
-			<tns:componentName>PerfectFailureDetectorComponentFactory:PerfectFailureDetectorComponent</tns:componentName>
+			<tns:componentName>PFDComponentFactory:PFDComponent</tns:componentName>
 			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
 			<tns:channelName>DelayMessageChannel</tns:channelName>
 		</tns:binding>
@@ -162,22 +163,22 @@
 			<tns:handlerName>handleSendEvent</tns:handlerName>
 		</tns:subscription>
 		<tns:subscription>
-			<tns:componentName>PerfectFailureDetectorComponentFactory:PerfectFailureDetectorComponent</tns:componentName>
+			<tns:componentName>PFDComponentFactory:PFDComponent</tns:componentName>
 			<tns:channelName>DeliverHeartBeatMessageChannel</tns:channelName>
 			<tns:handlerName>handleHeartbeatMessage</tns:handlerName>
 		</tns:subscription>
 		<tns:subscription>
-			<tns:componentName>PerfectFailureDetectorComponentFactory:PerfectFailureDetectorComponent</tns:componentName>
+			<tns:componentName>PFDComponentFactory:PFDComponent</tns:componentName>
 			<tns:channelName>InitEventChannel</tns:channelName>
 			<tns:handlerName>handleInitEvent</tns:handlerName>
 		</tns:subscription>
 		<tns:subscription>
-			<tns:componentName>PerfectFailureDetectorComponentFactory:PerfectFailureDetectorComponent</tns:componentName>
+			<tns:componentName>PFDComponentFactory:PFDComponent</tns:componentName>
 			<tns:channelName>CheckTimeOutEventChannel</tns:channelName>
 			<tns:handlerName>handleCheckTimeoutEvent</tns:handlerName>
 		</tns:subscription>
 		<tns:subscription>
-			<tns:componentName>PerfectFailureDetectorComponentFactory:PerfectFailureDetectorComponent</tns:componentName>
+			<tns:componentName>PFDComponentFactory:PFDComponent</tns:componentName>
 			<tns:channelName>HeartbeatTimeOutEventChannel</tns:channelName>
 			<tns:handlerName>handleHeartbeatTimeoutEvent</tns:handlerName>
 		</tns:subscription>	
@@ -192,7 +193,7 @@
 			<tns:componentName>TimerComponentFactory:TimerComponent</tns:componentName>
 			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
 			<tns:componentName>CommunicationComponentFactory:CommunicationComponent</tns:componentName>			
-			<tns:componentName>PerfectFailureDetectorComponentFactory:PerfectFailureDetectorComponent</tns:componentName>
+			<tns:componentName>PFDComponentFactory:PFDComponent</tns:componentName>
 			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
 		</tns:startComponents>
 		<tns:startChannels>
@@ -204,7 +205,7 @@
 			<tns:channelName>SendMessageChannel</tns:channelName>
 			<tns:channelName>DeliverHeartBeatMessageChannel</tns:channelName>
 			<tns:channelName>CrashEventChannel</tns:channelName>
-			<tns:channelName>InitEventChannel</tns:channelName>
+			<tns:channelName>InitEventChannel</tns:channelName>ahaseeb@kth.se nimad@kth.se
 		</tns:startChannels>
 	</tns:startSequence>
 </tns:configuration>

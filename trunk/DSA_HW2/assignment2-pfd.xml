@@ -3,15 +3,15 @@
 	<tns:factories>
 		<tns:factory>
 			<tns:factoryName>ApplicationComponentFactory</tns:factoryName>
-			<tns:componentClass>components.ApplicationComponent</tns:componentClass>
+			<tns:componentClass>assignment2.components.ApplicationComponent</tns:componentClass>
 		</tns:factory>
 		<tns:factory>
 			<tns:factoryName>PFDComponentFactory</tns:factoryName>
-			<tns:componentClass>components.PFDComponent</tns:componentClass>
+			<tns:componentClass>assignment2.components.PFDComponent</tns:componentClass>
 		</tns:factory>
 		<tns:factory>
 			<tns:factoryName>DelayComponentFactory</tns:factoryName>
-			<tns:componentClass>components.DelayComponent</tns:componentClass>
+			<tns:componentClass>assignment2.components.DelayComponent</tns:componentClass>
 		</tns:factory>
 		<tns:factory>
 			<tns:factoryName>CommunicationComponentFactory</tns:factoryName>

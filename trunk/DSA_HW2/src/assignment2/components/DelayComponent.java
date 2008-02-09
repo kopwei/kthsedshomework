@@ -1,4 +1,4 @@
-package components;
+package assignment2.components;
 
 import org.apache.log4j.Logger;
 
@@ -56,6 +56,10 @@ public class DelayComponent {
         log.info("Sending message: " + message//.getClass().getSimpleName()
                 + " to dest: " + message.getDestination().getId());
 
+        try {
         messageHandler.send(message, message.getDestination());
+        } catch (Exception e) {
+            log.info("Error !!!!!!!!!!!!!!!!!");
+        }
     }
 }

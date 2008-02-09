@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package components;
+package assignment2.components;
 
 import assignment2.events.CrashEvent;
 import assignment2.events.InitEvent;

@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package components;
+package assignment2.components;
 
 import assignment2.events.CheckTimeoutEvent;
 import assignment2.events.CrashEvent;
@@ -91,7 +91,8 @@ public class PFDComponent {
             for (NodeReference ref : topologyDescriptor.getAllOtherNodes()) {
                 if (!aliveSet.contains(ref) && !detectedSet.contains(ref)) {
                     detectedSet.add(ref);
-                    component.raiseEvent(new CrashEvent("node " + ref.toString() + "crashed"));
+                    log.info("Node " + ref.toString() + " is dead !!!!!!!!!!!!");
+                    component.raiseEvent(new CrashEvent("node " + ref.toString() + " has crashed"));
                 }
             }
             aliveSet.clear();

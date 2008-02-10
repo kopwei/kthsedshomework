@@ -19,6 +19,16 @@ import tbn.api.TBNSystem;
  *
  * @author Ricky
  */
+
+/**
+ * put topology.xml and pfd.properties under the directory "..\dist\" or "..\classes\", and 
+ * use command "FOR /L %G IN (0, 1, 2) DO start java assignment2.Assignment2 topology.xml %G pfd"
+ * on cmd (under current directory) to start 3 processes, but 3 processes all are about node 0, 
+ * supposing that 3 processes read the same node.properties file with same data as the interval of 
+ * 3 processes starting is very short.
+ * Another way: under the directory same as told above, using 3 console windows to start 3 different
+ * processes for 3 nodes respectively. It can work!
+ */
 public class Assignment2 {
 
     public static void main(String args[]) {

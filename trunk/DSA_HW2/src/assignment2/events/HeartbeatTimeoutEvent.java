@@ -13,7 +13,4 @@ import tbn.timer.events.TimerExpiredEvent;
  */
 public class HeartbeatTimeoutEvent extends TimerExpiredEvent {
 
-    public HeartbeatTimeoutEvent() {
-        super();
-    }
 }

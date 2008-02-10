@@ -64,8 +64,7 @@ public class ApplicationComponent {
     }
     
     public void handleSuspectEvent(SuspectEvent suspectEvent) {
-        log.info("Node " + suspectEvent.getNodeReference() + " is suspect to be crashed");
-        //log.info("Crashing message: " + suspectEvent.getCrashEventMessage());
+        log.info("Node " + suspectEvent.getNodeReference() + " is suspected of crashing");
     }
     
     public void handleRestoreEvent(RestoreEvent restoreEvent) {

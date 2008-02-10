@@ -13,7 +13,4 @@ import tbn.timer.events.TimerExpiredEvent;
  */
 public class CheckTimeoutEvent extends TimerExpiredEvent {
 
-    public CheckTimeoutEvent() {
-        super();
-    }
 }

@@ -50,21 +50,21 @@ public class EPFDComponent {
             aliveSet.clear();
             Properties properties = new Properties();
             properties.load((InputStream) params[0]);
-            period = Long.parseLong(properties.getProperty("period", "6000"));
-            delta = Long.parseLong(properties.getProperty("delta", "4000"));
+            period = Long.parseLong(properties.getProperty("period", "2000"));
+            delta = Long.parseLong(properties.getProperty("delta", "2000"));
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
         }
     }
     
     public void handleHeartbeatMessage(HeartbeatMessage message) {
-        log.info("I received a heart beat message from " + message.getSource());
+        log.info("I received a heartbeat message from " + message.getSource());
         // Add the source to destination
         aliveSet.add(message.getSource());
     }
     
     public void handleInitEvent(InitEvent event) {        
-        log.info("Intializing PFD component");
+        log.info("Intializing EPFD component");
         this.topologyDescriptor = event.getTopologyDescriptor();
         aliveSet.clear();
         for (NodeReference ref : topologyDescriptor.getAllOtherNodes()) {

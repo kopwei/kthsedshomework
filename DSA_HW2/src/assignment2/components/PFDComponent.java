@@ -16,11 +16,9 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-import tbn.TBN;
 import tbn.api.Component;
 import tbn.api.HandlerNotSubscribedException;
 import tbn.api.NoSuchMethodException;
-import tbn.api.TBNSystem;
 import tbn.comm.mina.NodeReference;
 import tbn.timer.TimerHandler;
 
@@ -61,7 +59,7 @@ public class PFDComponent {
     }
             
     public void handleHeartbeatMessage(HeartbeatMessage messageEvent) {
-        log.info("I received a heart beat message from " + messageEvent.getSource());
+        log.info("I received a heartbeat message from " + messageEvent.getSource());
         // Add the source to destination
         aliveSet.add(messageEvent.getSource());
     }
@@ -76,8 +74,6 @@ public class PFDComponent {
             }
             detectedSet.clear();
             // TODO: We should start timer here
-            //TimerEvent event = new TimerEvent
-            TBNSystem sys = TBN.getSystem();
             timerHandler.startTimer(new HeartbeatTimeoutEvent(), "handleHeartbeatTimeoutEvent", gamma);
             timerHandler.startTimer(new CheckTimeoutEvent(), "handleCheckTimeoutEvent", gamma + delta);
         } catch (HandlerNotSubscribedException ex) {
@@ -109,7 +105,7 @@ public class PFDComponent {
     
     public void handleHeartbeatTimeoutEvent(HeartbeatTimeoutEvent event) {
         try {
-            log.info("I received a heart beat time out event ");
+            log.info("I received a heartbeat time out event ");
             for (NodeReference ref : topologyDescriptor.getAllOtherNodes()) {
                 HeartbeatMessage message = new HeartbeatMessage();
                 message.setDestination(ref);

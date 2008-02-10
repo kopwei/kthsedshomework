@@ -36,8 +36,8 @@ public class DelayComponent {
 
         try {
 
-            log.info("Delaying message: " + event//.getClass().getSimpleName()
-                    + " with dest: " + event.getDestination().getId() + " of " + linkDescriptor.getLatency() + " secs");
+            //log.info("Delaying message: " + event//.getClass().getSimpleName()
+            //        + " with dest: " + event.getDestination().getId() + " of " + linkDescriptor.getLatency() + " secs");
 
             timerHandler.startTimer(new DelayTimerExpiredEvent(event),
                     "handleDelayTimerExpiredEvent", linkDescriptor.getLatency());
@@ -53,8 +53,8 @@ public class DelayComponent {
 
         MessageEvent message = event.getMessage();
 
-        log.info("Sending message: " + message//.getClass().getSimpleName()
-                + " to dest: " + message.getDestination().getId());
+//        log.info("Sending message: " + message//.getClass().getSimpleName()
+//                + " to dest: " + message.getDestination().getId());
 
         try {
         messageHandler.send(message, message.getDestination());

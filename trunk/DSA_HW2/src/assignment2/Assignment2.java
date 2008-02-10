@@ -46,10 +46,6 @@ public class Assignment2 {
         try {
             String topologyFileName = args[0];
             String nodeId = args[1];
-//            Properties properties = new Properties();
-//            properties.setProperty("topology.file", topologyFileName);
-//            properties.setProperty("node.id", nodeId);
-//            properties.store(new FileOutputStream("node.properties"), null);
             
             String source = null;
             if (args[2].equals("pfd") || args[2].equals("epfd")) {

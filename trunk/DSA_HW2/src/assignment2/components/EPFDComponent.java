@@ -89,8 +89,10 @@ public class EPFDComponent {
                 break;
             }
         }
-        if (hasCommon)
+        if (hasCommon) {
             period += delta;
+            log.info("Period is increased from " + (period - delta) + " to " + period);
+        }
         
         for (NodeReference ref : topologyDescriptor.getAllOtherNodes()) {
             if (!aliveSet.contains(ref) && !suspectedSet.contains(ref)) {

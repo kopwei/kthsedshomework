@@ -5,15 +5,19 @@
 
 package assignment2;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Properties;
+import assignment2.events.InitEvent;
+import assignments.util.TopologyDescriptor;
+import assignments.util.TopologyParser;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tbn.TBN;
+import tbn.api.Component;
+import tbn.api.MalformedComponentNameException;
+import tbn.api.NoSuchComponentException;
 import tbn.api.ParsingFailedException;
 import tbn.api.SystemBuildFailedException;
 import tbn.api.TBNSystem;
+import tbn.comm.mina.NodeReference;
 
 /**
  *
@@ -30,6 +34,8 @@ import tbn.api.TBNSystem;
  * processes for 3 nodes respectively. It can work!
  */
 public class Assignment2 {
+    private static TopologyDescriptor topologyDescriptor;
+    private static TopologyParser topologyParser;
 
     public static void main(String args[]) {
             if (args.length != 3) {
@@ -40,10 +46,10 @@ public class Assignment2 {
         try {
             String topologyFileName = args[0];
             String nodeId = args[1];
-            Properties properties = new Properties();
-            properties.setProperty("topology.file", topologyFileName);
-            properties.setProperty("node.id", nodeId);
-            properties.store(new FileOutputStream("node.properties"), null);
+//            Properties properties = new Properties();
+//            properties.setProperty("topology.file", topologyFileName);
+//            properties.setProperty("node.id", nodeId);
+//            properties.store(new FileOutputStream("node.properties"), null);
             
             String source = null;
             if (args[2].equals("pfd") || args[2].equals("epfd")) {
@@ -54,14 +60,26 @@ public class Assignment2 {
                 System.err.println("usage: Assignment2 <topology.xml> <nodeId> pfd|epfd");
                 return;
             }
+            
+            /* Parsing Topology Descriptor File */
+            topologyParser = new TopologyParser(Integer.parseInt(nodeId), topologyFileName);
+            topologyDescriptor = topologyParser.parseTopologyFile();
+            NodeReference.setThisNodeReference(topologyDescriptor.getMyNodeRef());
+            
             TBNSystem sys = TBN.getSystem();
             sys.buildSystem(Assignment2.class.getResource(source).getPath());
+            
+            InitEvent startEvent = new InitEvent(topologyDescriptor);
+            Component component = sys.findComponent("ApplicationComponentFactory:ApplicationComponent");
+            component.raiseEvent(startEvent);
 
+        } catch (NoSuchComponentException ex) {
+            Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedComponentNameException ex) {
+            Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParsingFailedException ex) {
             Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SystemBuildFailedException ex) {
-            Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
             Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

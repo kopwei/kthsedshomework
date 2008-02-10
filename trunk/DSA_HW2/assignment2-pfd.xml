@@ -26,7 +26,6 @@
 		<tns:component>
 			<tns:factoryName>ApplicationComponentFactory</tns:factoryName>
 			<tns:componentName>ApplicationComponent</tns:componentName>
-			<tns:initFile>node.properties</tns:initFile>
 		</tns:component>
 		<tns:component>
 			<tns:factoryName>PFDComponentFactory</tns:factoryName>

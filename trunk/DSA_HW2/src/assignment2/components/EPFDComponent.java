@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Properties;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import tbn.api.Component;
 import tbn.api.HandlerNotSubscribedException;
@@ -42,6 +41,7 @@ public class EPFDComponent {
         this.component = component;
         aliveSet = new HashSet<NodeReference>();
         suspectedSet = new HashSet<NodeReference>();
+        timerHandler = new TimerHandler(component);
     }
     
     public void init(Object params[]) {
@@ -57,13 +57,13 @@ public class EPFDComponent {
         }
     }
     
-    public void handleHeartBeatMessage(HeartbeatMessage message) {
+    public void handleHeartbeatMessage(HeartbeatMessage message) {
         log.info("I received a heart beat message from " + message.getSource());
         // Add the source to destination
         aliveSet.add(message.getSource());
     }
     
-    public void handleInitMessage(InitEvent event) {        
+    public void handleInitEvent(InitEvent event) {        
         log.info("Intializing PFD component");
         this.topologyDescriptor = event.getTopologyDescriptor();
         aliveSet.clear();
@@ -81,7 +81,7 @@ public class EPFDComponent {
         }
     }
     
-    public void handelTimoutEvent(TimeoutEvent event) {
+    public void handleTimeoutEvent(TimeoutEvent event) {
         boolean hasCommon = false;
         for (NodeReference aliveRef : aliveSet) {
             if (suspectedSet.contains(aliveRef)) {

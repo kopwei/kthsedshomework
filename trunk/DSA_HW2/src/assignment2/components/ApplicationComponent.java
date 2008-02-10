@@ -63,12 +63,13 @@ public class ApplicationComponent {
         log.info("Crashing message: " + crashEvent.getCrashEventMessage());
     }
     
-    public void handelSuspectEvent(SuspectEvent suspectEvent) {
+    public void handleSuspectEvent(SuspectEvent suspectEvent) {
+        log.info("Node " + suspectEvent.getNodeReference() + " is suspect to be crashed");
         //log.info("Crashing message: " + suspectEvent.getCrashEventMessage());
     }
     
     public void handleRestoreEvent(RestoreEvent restoreEvent) {
-        
+        log.info("Node " + restoreEvent.getNodeReference() + " is restored");
     }
     
     public void start() {

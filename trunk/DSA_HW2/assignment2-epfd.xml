@@ -7,7 +7,7 @@
 		</tns:factory>
 		<tns:factory>
 			<tns:factoryName>EPFDComponentFactory</tns:factoryName>
-			<tns:componentClass>assignment2.components.EPFDComponentFactory</tns:componentClass>
+			<tns:componentClass>assignment2.components.EPFDComponent</tns:componentClass>
 		</tns:factory>
 		<tns:factory>
 			<tns:factoryName>DelayComponentFactory</tns:factoryName>
@@ -53,7 +53,7 @@
     </tns:channel>
 		<tns:channel>
 			<tns:channelName>InitEventChannel</tns:channelName>
-			<tns:eventClass>assignment1.events.InitEvent</tns:eventClass>
+			<tns:eventClass>assignment2.events.InitEvent</tns:eventClass>
 		</tns:channel>
 		<tns:channel>
 			<tns:channelName>DelayMessageChannel</tns:channelName>
@@ -69,7 +69,7 @@
 		</tns:channel>
 		<tns:channel>
 			<tns:channelName>DelayTimerExpiredEventChannel</tns:channelName>
-			<tns:eventClass>assignment1.events.DelayTimerExpiredEvent</tns:eventClass>
+			<tns:eventClass>assignment2.events.DelayTimerExpiredEvent</tns:eventClass>
 		</tns:channel>
     <tns:channel>
       <tns:channelName>TimeOutEventChannel</tns:channelName>
@@ -87,7 +87,7 @@
 	<tns:bindings>
 		<tns:binding>
 			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
-			<tns:eventClass>assignment1.events.InitEvent</tns:eventClass>
+			<tns:eventClass>assignment2.events.InitEvent</tns:eventClass>
 			<tns:channelName>InitEventChannel</tns:channelName>
 		</tns:binding>
     <tns:binding>
@@ -107,7 +107,7 @@
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>TimerComponentFactory:TimerComponent</tns:componentName>
-			<tns:eventClass>assignment1.events.DelayTimerExpiredEvent</tns:eventClass>
+			<tns:eventClass>assignment2.events.DelayTimerExpiredEvent</tns:eventClass>
 			<tns:channelName>DelayTimerExpiredEventChannel</tns:channelName>
 		</tns:binding>
     <tns:binding>
@@ -122,12 +122,12 @@
     </tns:binding>
     <tns:binding>
       <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
-      <tns:eventClass>tbn.timer.events.SuspectEvent</tns:eventClass>
+      <tns:eventClass>assignment2.events.SuspectEvent</tns:eventClass>
       <tns:channelName>SuspectEventChannel</tns:channelName>
     </tns:binding>
     <tns:binding>
       <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
-      <tns:eventClass>tbn.timer.events.RestoreEvent</tns:eventClass>
+      <tns:eventClass>assignment2.events.RestoreEvent</tns:eventClass>
       <tns:channelName>RestoreEventChannel</tns:channelName>
     </tns:binding>
     <tns:binding>
@@ -205,7 +205,7 @@
 			<tns:channelName>InitEventChannel</tns:channelName>
 			<tns:channelName>SuspectEventChannel</tns:channelName>
       <tns:channelName>DeliverHeartBeatMessageChannel</tns:channelName>
-			<tns:channelName>RestoreChannel</tns:channelName>
+			<tns:channelName>RestoreEventChannel</tns:channelName>
 		</tns:startChannels>
 	</tns:startSequence>
 </tns:configuration>

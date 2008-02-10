@@ -85,11 +85,11 @@ public class PFDComponent {
 
     public void handleCheckTimeoutEvent(CheckTimeoutEvent event) {
         try {
-            log.info("I received a check time out event ");
+            //log.info("I received a check time out event ");
             for (NodeReference ref : topologyDescriptor.getAllOtherNodes()) {
                 if (!aliveSet.contains(ref) && !detectedSet.contains(ref)) {
                     detectedSet.add(ref);
-                    log.info("Node " + ref.toString() + " is dead !!!!!!!!!!!!");
+                    //log.info("Node " + ref.toString() + " is dead !!!!!!!!!!!!");
                     component.raiseEvent(new CrashEvent("node " + ref.toString() + " has crashed", ref));
                 }
             }
@@ -105,7 +105,7 @@ public class PFDComponent {
     
     public void handleHeartbeatTimeoutEvent(HeartbeatTimeoutEvent event) {
         try {
-            log.info("I received a heartbeat time out event ");
+            //log.info("I received a heartbeat time out event ");
             for (NodeReference ref : topologyDescriptor.getAllOtherNodes()) {
                 HeartbeatMessage message = new HeartbeatMessage();
                 message.setDestination(ref);

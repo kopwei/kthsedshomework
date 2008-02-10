@@ -11,8 +11,6 @@ import assignments.util.TopologyParser;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import tbn.TBN;
 import tbn.api.Component;
 import tbn.api.MalformedComponentNameException;
@@ -68,7 +66,7 @@ public class Assignment2 {
                 TBNSystem sys = TBN.getSystem();
                 sys.buildSystem(Assignment2.class.getResource(source).getPath());
                 String strDot = sys.generateDOT();
-                String fileName = nodeId + ".tbndot";
+                String fileName = args[2] + "_" + nodeId  + ".tbndot";
                 out = new FileOutputStream(fileName);
                 out.write(strDot.getBytes());
                 InitEvent startEvent = new InitEvent(topologyDescriptor);

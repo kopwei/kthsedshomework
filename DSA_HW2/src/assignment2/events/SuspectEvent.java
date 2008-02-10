@@ -7,13 +7,12 @@ package assignment2.events;
 
 import tbn.comm.mina.NodeReference;
 
-
 /**
  *
- * @author Ricky
+ * @author Kop
  */
-public class CrashEvent extends FailureEvent{
-    public CrashEvent(String eventMessage, NodeReference ref) {
+public class SuspectEvent extends FailureEvent{
+    public SuspectEvent(String eventMessage, NodeReference ref) {
         super(eventMessage, ref);
     }
 }

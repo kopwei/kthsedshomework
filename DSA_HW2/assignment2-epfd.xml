@@ -3,15 +3,11 @@
 	<tns:factories>
 		<tns:factory>
 			<tns:factoryName>ApplicationComponentFactory</tns:factoryName>
-			<tns:componentClass>components.ApplicationComponent</tns:componentClass>
+			<tns:componentClass>assignment2.components.ApplicationComponent</tns:componentClass>
 		</tns:factory>
 		<tns:factory>
-			<tns:factoryName>FloodComponentFactory</tns:factoryName>
-			<tns:componentClass>components.FloodComponent</tns:componentClass>
-		</tns:factory>
-		<tns:factory>
-			<tns:factoryName>DropComponentFactory</tns:factoryName>
-			<tns:componentClass>components.DropComponent</tns:componentClass>
+			<tns:factoryName>EPFDComponentFactory</tns:factoryName>
+			<tns:componentClass>assignment2.components.EPFDComponentFactory</tns:componentClass>
 		</tns:factory>
 		<tns:factory>
 			<tns:factoryName>DelayComponentFactory</tns:factoryName>
@@ -33,12 +29,9 @@
 			<tns:initFile>node.properties</tns:initFile>
 		</tns:component>
 		<tns:component>
-			<tns:factoryName>FloodComponentFactory</tns:factoryName>
-			<tns:componentName>FloodComponent</tns:componentName>
-		</tns:component>
-		<tns:component>
-			<tns:factoryName>DropComponentFactory</tns:factoryName>
-			<tns:componentName>DropComponent</tns:componentName>
+			<tns:factoryName>EPFDComponentFactory</tns:factoryName>
+			<tns:componentName>EPFDComponent</tns:componentName>
+      <tns:initFile>epfd.properties</tns:initFile>
 		</tns:component>
 		<tns:component>
 			<tns:factoryName>DelayComponentFactory</tns:factoryName>
@@ -54,19 +47,10 @@
 		</tns:component>
 	</tns:components>
 	<tns:channels>
-		<tns:channel>
-			<tns:channelName>FloodMessageChannel</tns:channelName>
-			<tns:eventClass>assignment1.events.FloodMessage</tns:eventClass>
-		</tns:channel>
-		<tns:channel>
-			<tns:channelName>FloodEventChannel</tns:channelName>
-			<tns:eventClass>assignment1.events.FloodInitEvent</tns:eventClass>
-			<tns:eventClass>assignment1.events.FloodDoneEvent</tns:eventClass>
-		</tns:channel>
-		<tns:channel>
-			<tns:channelName>DropMessageChannel</tns:channelName>
-			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
-		</tns:channel>
+    <tns:channel>
+      <tns:channelName>DeliverHeartBeatMessageChannel</tns:channelName>
+      <tns:eventClass>assignment2.events.HeartbeatMessage</tns:eventClass>
+    </tns:channel>
 		<tns:channel>
 			<tns:channelName>InitEventChannel</tns:channelName>
 			<tns:eventClass>assignment1.events.InitEvent</tns:eventClass>
@@ -87,100 +71,97 @@
 			<tns:channelName>DelayTimerExpiredEventChannel</tns:channelName>
 			<tns:eventClass>assignment1.events.DelayTimerExpiredEvent</tns:eventClass>
 		</tns:channel>
+    <tns:channel>
+      <tns:channelName>TimeOutEventChannel</tns:channelName>
+      <tns:eventClass>assignment2.events.TimeoutEvent</tns:eventClass>
+    </tns:channel>
+    <tns:channel>
+      <tns:channelName>SuspectEventChannel</tns:channelName>
+      <tns:eventClass>assignment2.events.SuspectEvent</tns:eventClass>
+    </tns:channel>
+    <tns:channel>
+      <tns:channelName>RestoreEventChannel</tns:channelName>
+      <tns:eventClass>assignment2.events.RestoreEvent</tns:eventClass>
+    </tns:channel>
 	</tns:channels>
 	<tns:bindings>
-		<tns:binding>
-			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
-			<tns:eventClass>assignment1.events.FloodInitEvent</tns:eventClass>
-			<tns:channelName>FloodEventChannel</tns:channelName>
-		</tns:binding>
 		<tns:binding>
 			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
 			<tns:eventClass>assignment1.events.InitEvent</tns:eventClass>
 			<tns:channelName>InitEventChannel</tns:channelName>
 		</tns:binding>
-		<tns:binding>
-			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
-			<tns:eventClass>assignment1.events.FloodDoneEvent</tns:eventClass>
-			<tns:channelName>FloodEventChannel</tns:channelName>
-		</tns:binding>
-		<tns:binding>
-			<tns:componentName>CommunicationComponentFactory:CommunicationComponent</tns:componentName>
-			<tns:eventClass>assignment1.events.FloodMessage</tns:eventClass>
-			<tns:channelName>FloodMessageChannel</tns:channelName>
-		</tns:binding>
-		<tns:binding>
-			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
-			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
-			<tns:channelName>DropMessageChannel</tns:channelName>
-		</tns:binding>
-		<tns:binding>
-			<tns:componentName>DropComponentFactory:DropComponent</tns:componentName>
-			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
-			<tns:channelName>DelayMessageChannel</tns:channelName>
-		</tns:binding>
+    <tns:binding>
+      <tns:componentName>CommunicationComponentFactory:CommunicationComponent</tns:componentName>
+      <tns:eventClass>assignment2.events.HeartbeatMessage</tns:eventClass>
+      <tns:channelName>DeliverHeartBeatMessageChannel</tns:channelName>
+    </tns:binding>
+    <tns:binding>
+      <tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
+      <tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
+      <tns:channelName>SendMessageChannel</tns:channelName>
+    </tns:binding>
 		<tns:binding>
 			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
 			<tns:eventClass>tbn.timer.events.TimerEvent</tns:eventClass>
 			<tns:channelName>TimerEventChannel</tns:channelName>
-		</tns:binding>
-		<tns:binding>
-			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
-			<tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
-			<tns:channelName>SendMessageChannel</tns:channelName>
 		</tns:binding>
 		<tns:binding>
 			<tns:componentName>TimerComponentFactory:TimerComponent</tns:componentName>
 			<tns:eventClass>assignment1.events.DelayTimerExpiredEvent</tns:eventClass>
 			<tns:channelName>DelayTimerExpiredEventChannel</tns:channelName>
 		</tns:binding>
+    <tns:binding>
+      <tns:componentName>TimerComponentFactory:TimerComponent</tns:componentName>
+      <tns:eventClass>assignment2.events.TimeoutEvent</tns:eventClass>
+      <tns:channelName>TimeOutEventChannel</tns:channelName>
+    </tns:binding>
+    <tns:binding>
+      <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
+      <tns:eventClass>tbn.timer.events.TimerEvent</tns:eventClass>
+      <tns:channelName>TimerEventChannel</tns:channelName>
+    </tns:binding>
+    <tns:binding>
+      <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
+      <tns:eventClass>tbn.timer.events.SuspectEvent</tns:eventClass>
+      <tns:channelName>SuspectEventChannel</tns:channelName>
+    </tns:binding>
+    <tns:binding>
+      <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
+      <tns:eventClass>tbn.timer.events.RestoreEvent</tns:eventClass>
+      <tns:channelName>RestoreEventChannel</tns:channelName>
+    </tns:binding>
+    <tns:binding>
+      <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
+      <tns:eventClass>tbn.comm.mina.events.MessageEvent</tns:eventClass>
+      <tns:channelName>DelayMessageChannel</tns:channelName>
+    </tns:binding>
 	</tns:bindings>
 	<tns:subscriptions>
 		<tns:subscription>
 			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
-			<tns:channelName>FloodEventChannel</tns:channelName>
-			<tns:handlerName>handleFloodDoneEvent</tns:handlerName>
+			<tns:channelName>SuspectEventChannel</tns:channelName>
+			<tns:handlerName>handleSuspectEvent</tns:handlerName>
 		</tns:subscription>
-		<tns:subscription>
-			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
-			<tns:channelName>FloodEventChannel</tns:channelName>
-			<tns:handlerName>handleFloodInitEvent</tns:handlerName>
-		</tns:subscription>
-		<tns:subscription>
-			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
-			<tns:channelName>FloodMessageChannel</tns:channelName>
-			<tns:handlerName>handleFloodMessage</tns:handlerName>
-		</tns:subscription>
-		<tns:subscription>
-			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
-			<tns:channelName>InitEventChannel</tns:channelName>
-			<tns:handlerName>handleInitEvent</tns:handlerName>
-		</tns:subscription>
-		<tns:subscription>
-			<tns:componentName>DropComponentFactory:DropComponent</tns:componentName>
-			<tns:channelName>InitEventChannel</tns:channelName>
-			<tns:handlerName>handleInitEvent</tns:handlerName>
-		</tns:subscription>
-		<tns:subscription>
-			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
-			<tns:channelName>InitEventChannel</tns:channelName>
-			<tns:handlerName>handleInitEvent</tns:handlerName>
-		</tns:subscription>
-		<tns:subscription>
-			<tns:componentName>DropComponentFactory:DropComponent</tns:componentName>
-			<tns:channelName>DropMessageChannel</tns:channelName>
-			<tns:handlerName>handleMessageEvent</tns:handlerName>
-		</tns:subscription>
-		<tns:subscription>
-			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
-			<tns:channelName>DelayMessageChannel</tns:channelName>
-			<tns:handlerName>handleMessageEvent</tns:handlerName>
-		</tns:subscription>
-		<tns:subscription>
-			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
-			<tns:channelName>DelayTimerExpiredEventChannel</tns:channelName>
-			<tns:handlerName>handleDelayTimerExpiredEvent</tns:handlerName>
-		</tns:subscription>
+    <tns:subscription>
+      <tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
+      <tns:channelName>RestoreEventChannel</tns:channelName>
+      <tns:handlerName>handleRestoreEvent</tns:handlerName>
+    </tns:subscription>
+    <tns:subscription>
+      <tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
+      <tns:channelName>InitEventChannel</tns:channelName>
+      <tns:handlerName>handleInitEvent</tns:handlerName>
+    </tns:subscription>
+    <tns:subscription>
+      <tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
+      <tns:channelName>DelayMessageChannel</tns:channelName>
+      <tns:handlerName>handleMessageEvent</tns:handlerName>
+    </tns:subscription>
+    <tns:subscription>
+      <tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
+      <tns:channelName>DelayTimerExpiredEventChannel</tns:channelName>
+      <tns:handlerName>handleDelayTimerExpiredEvent</tns:handlerName>
+    </tns:subscription>
 		<tns:subscription>
 			<tns:componentName>TimerComponentFactory:TimerComponent</tns:componentName>
 			<tns:channelName>TimerEventChannel</tns:channelName>
@@ -191,25 +172,40 @@
 			<tns:channelName>SendMessageChannel</tns:channelName>
 			<tns:handlerName>handleSendEvent</tns:handlerName>
 		</tns:subscription>
+    <tns:subscription>
+      <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
+      <tns:channelName>DeliverHeartBeatMessageChannel</tns:channelName>
+      <tns:handlerName>handleHeartbeatMessage</tns:handlerName>
+    </tns:subscription>
+    <tns:subscription>
+      <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
+      <tns:channelName>TimeOutEventChannel</tns:channelName>
+      <tns:handlerName>handleTimeoutEvent</tns:handlerName>
+    </tns:subscription>
+    <tns:subscription>
+      <tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
+      <tns:channelName>InitEventChannel</tns:channelName>
+      <tns:handlerName>handleInitEvent</tns:handlerName>
+    </tns:subscription>
 	</tns:subscriptions>
 	<tns:startSequence>
 		<tns:startComponents>
 			<tns:componentName>TimerComponentFactory:TimerComponent</tns:componentName>
 			<tns:componentName>CommunicationComponentFactory:CommunicationComponent</tns:componentName>
 			<tns:componentName>DelayComponentFactory:DelayComponent</tns:componentName>
-			<tns:componentName>DropComponentFactory:DropComponent</tns:componentName>
 			<tns:componentName>ApplicationComponentFactory:ApplicationComponent</tns:componentName>
-			<tns:componentName>FloodComponentFactory:FloodComponent</tns:componentName>
+			<tns:componentName>EPFDComponentFactory:EPFDComponent</tns:componentName>
 		</tns:startComponents>
 		<tns:startChannels>
 			<tns:channelName>DelayTimerExpiredEventChannel</tns:channelName>
-			<tns:channelName>FloodMessageChannel</tns:channelName>
+			<tns:channelName>TimeOutEventChannel</tns:channelName>
 			<tns:channelName>TimerEventChannel</tns:channelName>
 			<tns:channelName>SendMessageChannel</tns:channelName>
 			<tns:channelName>DelayMessageChannel</tns:channelName>
 			<tns:channelName>InitEventChannel</tns:channelName>
-			<tns:channelName>FloodEventChannel</tns:channelName>
-			<tns:channelName>DropMessageChannel</tns:channelName>
+			<tns:channelName>SuspectEventChannel</tns:channelName>
+      <tns:channelName>DeliverHeartBeatMessageChannel</tns:channelName>
+			<tns:channelName>RestoreChannel</tns:channelName>
 		</tns:startChannels>
 	</tns:startSequence>
 </tns:configuration>

@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Properties;
-import java.util.logging.Level;
 import org.apache.log4j.Logger;
 import tbn.TBN;
 import tbn.api.Component;
@@ -49,18 +48,20 @@ public class PFDComponent {
     
     public void init(Object params[]) {
         try {
+            detectedSet.clear();
+            aliveSet.clear();
             Properties properties = new Properties();
             properties.load((InputStream) params[0]);
             gamma = Long.parseLong(properties.getProperty("gamma", "2000"));
             delta = Long.parseLong(properties.getProperty("delta", "4000"));
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(PFDComponent.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
         
     }
             
     public void handleHeartbeatMessage(HeartbeatMessage messageEvent) {
-        log.info("I received a heart beat message ");
+        log.info("I received a heart beat message from " + messageEvent.getSource());
         // Add the source to destination
         aliveSet.add(messageEvent.getSource());
     }
@@ -69,6 +70,7 @@ public class PFDComponent {
         try {
             log.info("Intializing PFD component");
             this.topologyDescriptor = event.getTopologyDescriptor();
+            aliveSet.clear();
             for (NodeReference ref : topologyDescriptor.getAllOtherNodes()) {
                 aliveSet.add(ref);
             }
@@ -79,9 +81,9 @@ public class PFDComponent {
             timerHandler.startTimer(new HeartbeatTimeoutEvent(), "handleHeartbeatTimeoutEvent", gamma);
             timerHandler.startTimer(new CheckTimeoutEvent(), "handleCheckTimeoutEvent", gamma + delta);
         } catch (HandlerNotSubscribedException ex) {
-            java.util.logging.Logger.getLogger(PFDComponent.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         } catch (NoSuchMethodException ex) {
-            java.util.logging.Logger.getLogger(PFDComponent.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
     }
 
@@ -92,16 +94,16 @@ public class PFDComponent {
                 if (!aliveSet.contains(ref) && !detectedSet.contains(ref)) {
                     detectedSet.add(ref);
                     log.info("Node " + ref.toString() + " is dead !!!!!!!!!!!!");
-                    component.raiseEvent(new CrashEvent("node " + ref.toString() + " has crashed"));
+                    component.raiseEvent(new CrashEvent("node " + ref.toString() + " has crashed", ref));
                 }
             }
             aliveSet.clear();
             // TODO: We should start check timer here
             timerHandler.startTimer(new CheckTimeoutEvent(), "handleCheckTimeoutEvent", gamma + delta);
         } catch (HandlerNotSubscribedException ex) {
-            java.util.logging.Logger.getLogger(PFDComponent.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         } catch (NoSuchMethodException ex) {
-            java.util.logging.Logger.getLogger(PFDComponent.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
     }
     
@@ -117,9 +119,9 @@ public class PFDComponent {
             // TODO: We should start a timer to send heart beat
             timerHandler.startTimer(new HeartbeatTimeoutEvent(), "handleHeartbeatTimeoutEvent", gamma);
         } catch (HandlerNotSubscribedException ex) {
-            java.util.logging.Logger.getLogger(PFDComponent.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         } catch (NoSuchMethodException ex) {
-            java.util.logging.Logger.getLogger(PFDComponent.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
     }
 }

@@ -7,6 +7,8 @@ package assignment2.components;
 
 import assignment2.events.CrashEvent;
 import assignment2.events.InitEvent;
+import assignment2.events.RestoreEvent;
+import assignment2.events.SuspectEvent;
 import assignments.util.TopologyDescriptor;
 import assignments.util.TopologyParser;
 import java.io.FileNotFoundException;
@@ -59,6 +61,14 @@ public class ApplicationComponent {
     
     public void handleCrashEvent(CrashEvent crashEvent) {
         log.info("Crashing message: " + crashEvent.getCrashEventMessage());
+    }
+    
+    public void handelSuspectEvent(SuspectEvent suspectEvent) {
+        //log.info("Crashing message: " + suspectEvent.getCrashEventMessage());
+    }
+    
+    public void handleRestoreEvent(RestoreEvent restoreEvent) {
+        
     }
     
     public void start() {

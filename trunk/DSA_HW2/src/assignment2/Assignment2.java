@@ -8,6 +8,9 @@ package assignment2;
 import assignment2.events.InitEvent;
 import assignments.util.TopologyDescriptor;
 import assignments.util.TopologyParser;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import tbn.TBN;
@@ -42,41 +45,54 @@ public class Assignment2 {
                 System.err.println("usage: Assignment2 <topology.xml> <nodeId> pfd|epfd");
                 return;
             }
-            
-        try {
-            String topologyFileName = args[0];
-            String nodeId = args[1];
-            
-            String source = null;
-            if (args[2].equals("pfd") || args[2].equals("epfd")) {
-                if (args[2].equals("pfd")) source = "assignment2-pfd.xml";
-                if (args[2].equals("epfd")) source = "assignment2-epfd.xml";
+        {
+            FileOutputStream out = null;
+            try {
+                String topologyFileName = args[0];
+                String nodeId = args[1];
+                String source = null;
+                if (args[2].equals("pfd") || args[2].equals("epfd")) {
+                    if (args[2].equals("pfd")) {
+                        source = "assignment2-pfd.xml";
+                    }
+                    if (args[2].equals("epfd")) {
+                        source = "assignment2-epfd.xml";
+                    }
+                } else {
+                    System.err.println("usage: Assignment2 <topology.xml> <nodeId> pfd|epfd");
+                    return;
+                }
+                topologyParser = new TopologyParser(Integer.parseInt(nodeId), topologyFileName);
+                topologyDescriptor = topologyParser.parseTopologyFile();
+                NodeReference.setThisNodeReference(topologyDescriptor.getMyNodeRef());
+                TBNSystem sys = TBN.getSystem();
+                sys.buildSystem(Assignment2.class.getResource(source).getPath());
+                String strDot = sys.generateDOT();
+                String fileName = nodeId + ".tbndot";
+                out = new FileOutputStream(fileName);
+                out.write(strDot.getBytes());
+                InitEvent startEvent = new InitEvent(topologyDescriptor);
+                Component component = sys.findComponent("ApplicationComponentFactory:ApplicationComponent");
+                component.raiseEvent(startEvent);
+            } catch (FileNotFoundException ex) {
+                System.err.print(ex.getMessage());
+            } catch (IOException ex) {
+                System.err.print(ex.getMessage());
+            } catch (NoSuchComponentException ex) {
+                System.err.print(ex.getMessage());
+            } catch (MalformedComponentNameException ex) {
+                System.err.print(ex.getMessage());
+            } catch (ParsingFailedException ex) {
+                System.err.print(ex.getMessage());
+            } catch (SystemBuildFailedException ex) {
+                System.err.print(ex.getMessage());
+            } finally {
+                try {
+                    out.close();
+                } catch (IOException ex) {
+                    System.err.print(ex.getMessage());
+                }
             }
-            else{
-                System.err.println("usage: Assignment2 <topology.xml> <nodeId> pfd|epfd");
-                return;
-            }
-            
-            /* Parsing Topology Descriptor File */
-            topologyParser = new TopologyParser(Integer.parseInt(nodeId), topologyFileName);
-            topologyDescriptor = topologyParser.parseTopologyFile();
-            NodeReference.setThisNodeReference(topologyDescriptor.getMyNodeRef());
-            
-            TBNSystem sys = TBN.getSystem();
-            sys.buildSystem(Assignment2.class.getResource(source).getPath());
-            
-            InitEvent startEvent = new InitEvent(topologyDescriptor);
-            Component component = sys.findComponent("ApplicationComponentFactory:ApplicationComponent");
-            component.raiseEvent(startEvent);
-
-        } catch (NoSuchComponentException ex) {
-            Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedComponentNameException ex) {
-            Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParsingFailedException ex) {
-            Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SystemBuildFailedException ex) {
-            Logger.getLogger(Assignment2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

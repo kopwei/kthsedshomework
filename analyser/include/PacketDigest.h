@@ -22,7 +22,11 @@
 #ifndef _PACKET_DIGEST_
 #define _PACKET_DIGEST_
 
-#include <net\socket.h>
+#include "pcap.h"
+#include <net/if_arp.h>
+#include <netinet/in.h>
+#include <netinet/if_ether.h>
+//#include "net/socket.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -33,7 +37,7 @@
 class CPacketDigest
 {
 public:
-	CPacketDigest(struct pcap_pkthdr* header, const char* packet);
+	CPacketDigest(struct pcap_pkthdr* header, char* packet);
 	~CPacketDigest(void);
 
 	const time_t			getTimeStamp() const;

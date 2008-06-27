@@ -17,7 +17,7 @@
  *   Copyright (C) 2008 by Ericsson                                        
  */
 
-#include "include\PacketStatistic.h"
+#include "../include/PacketStatistic.h"
 
 CPacketStatistic::CPacketStatistic(void)
 {

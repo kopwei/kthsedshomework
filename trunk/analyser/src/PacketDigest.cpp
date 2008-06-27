@@ -17,14 +17,14 @@
  *   Copyright (C) 2008 by Ericsson                                        
  */
 
-#include "include\PacketDigest.h"
-#include <netinet\ip.h>
+#include "../include/PacketDigest.h"
+#include "netinet/ip.h"
 
-const int ETHER_HDR_LEN = 14;
+//const int ETHER_HDR_LEN = 14;
 
-CPacketDigest::CPacketDigest(pcap_pkthdr* header, const char* packet)
+CPacketDigest::CPacketDigest(pcap_pkthdr* header, char* packet)
 {
-	m_timeStamp = header->ts;
+	m_timeStamp = header->ts.tv_usec + header->ts.tv_sec * (1e6);
 	m_sPacketSize = header->len;
 	ip* pIpHeader =reinterpret_cast<ip *>(packet + ETHER_HDR_LEN);
 	m_pSrcIPAddr = &pIpHeader->ip_src;
@@ -36,7 +36,7 @@ CPacketDigest::CPacketDigest(pcap_pkthdr* header, const char* packet)
 
 CPacketDigest::~CPacketDigest(void)
 {
-}
+} 
 
 /**
  *	This method returns the time stamp of the packet

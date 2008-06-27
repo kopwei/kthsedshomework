@@ -19,9 +19,6 @@
 
 #pragma once;
 
-#ifndef _PACKET_STATISTICIAN_
-#define _PACKET_STATISTICIAN_
-
 
 #include <map>
 #include "analyserpxAggreg.h"
@@ -51,5 +48,3 @@ private:
 
 };
 
-
-#endif

@@ -17,7 +17,7 @@
  *   Copyright (C) 2008 by Ericsson                                        
  */
 
-#include "..\include\PacketStatistician.h"
+#include "../include/PacketStatistician.h"
 
 CPacketStatistician::CPacketStatistician(void)
 {
@@ -27,7 +27,7 @@ CPacketStatistician::~CPacketStatistician(void)
 {
 }
 
-void CPacketStatistician::processNewPacket( unsigned char *args, const struct pcap_pkthdr *header, const u_char *packet, ThreadParams *tp )
+void CPacketStatistician::processNewPacket(unsigned char *arg, const struct pcap_pkthdr *header, const u_char *packet, ThreadParams *tp)
 {
-	mount_flow(args, header, packet, tp);
+	//mount_flow(arg, header, packet, tp);
 }

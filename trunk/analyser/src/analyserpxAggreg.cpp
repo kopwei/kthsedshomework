@@ -13,6 +13,8 @@
 #include "../include/classifier.h"
 #include "../include/circularbuffer.h"
 
+
+#include "../include/PacketStatistician.h"
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
 
 // RTA 18-03-08 - to avoid multiple definitions
@@ -34,6 +36,8 @@ pthread_mutex_t print_lock;
 unsigned long long frames_cap = 0;
 unsigned long long bytes_cap = 0;
 // fixed
+
+CPacketStatistician statistician;
 
 void optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 {
@@ -659,9 +663,9 @@ void *threadsLoop(void *par){
 			memcpy ( (void*) pkt, (void*)packet, size + ETHER_HDR_LEN );
 						
 			pthread_mutex_unlock(&cap_lock);	
-			mount_flow( (u_char *) & (tp->conf->snap_len), head, pkt, tp );
-			++tp->counttotal;
-			//mount_flow( (u_char *) & (tp->conf->snap_len), header, packet );	
+			statistician.processNewPacket((u_char *) & (tp->conf->snap_len), head, pkt, tp);
+			//mount_flow( (u_char *) & (tp->conf->snap_len), head, pkt, tp );
+			++tp->counttotal;	
 		} else {
 			pthread_mutex_unlock(&cap_lock);		
 		}

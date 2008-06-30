@@ -35,6 +35,7 @@ const unsigned int PCAP_SETFILTER_ERROR = 12;
 
 class CCaptureUtil
 {
+public:
 	/*! 	\fn cap_config *new_cap_config()
 	\brief Capture configuration structure creation procedure.
 

@@ -691,10 +691,27 @@ public:
 	/*!     \fn u_short getID(const struct ip *iph, u_short ipLen)
 	\brief Return the type recognized by the ipp2p signature-matching classifier.
 	\param *iph		IP header structure (payload included).
-	\param *ipLen		Colected IP packet length.
+	\param *ipLen		Collected IP packet length.
 	\return Identifier code.
 	*/
 	static u_short getID(const struct ip *iph, u_short ipLen);
+
+	/*!     \fn u_short verID(u_short old_id, u_short new_id)
+	\brief Check identifier code hierarchy.
+
+	\param old_id         Last code.
+	\param new_id         Eventual new code.
+	\return Return hierarchically higher code.
+	*/
+	static u_short verID(u_short old_id, u_short new_id);
+
+	/*!     \fn u_short isSuperClass(u_short id)
+	\brief Verify Super Class codes.
+
+	\param id         Identifier code.
+	\return		  Return 1 if id is a super class, 0 otherwise.
+	*/
+	static u_short isSuperClass(u_short id);
 
 private:
 
@@ -1327,22 +1344,7 @@ private:
 	*/
 	static u_short isAP2PID(u_short id);
 
-	/*!     \fn u_short verID(u_short old_id, u_short new_id)
-	\brief Check identifier code hierarchy.
-
-	\param old_id         Last code.
-	\param new_id         Eventual new code.
-	\return Return hierarchically higher code.
-	*/
-	static u_short verID(u_short old_id, u_short new_id);
-
-	/*!     \fn u_short isSuperClass(u_short id)
-	\brief Verify Super Class codes.
-
-	\param id         Identifier code.
-	\return		  Return 1 if id is a super class, 0 otherwise.
-	*/
-	static u_short isSuperClass(u_short id);
+	
 
 
 	static int coupeEOF (const unsigned char *payload, const u_short mess_len, unsigned char* strg);

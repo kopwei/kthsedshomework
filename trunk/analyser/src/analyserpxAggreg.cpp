@@ -173,21 +173,21 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 
 	if (flow_hsh == NULL) {
 		++tp->count[0];
-		classifier = getID(ip, ipLen);
+		classifier = CClassifier::getID(ip, ipLen);
 	} else if (verifyTimeOut(flow_hsh, flow)) {
 		++tp->count[1];
-		classifier = getID(ip, ipLen);
+		classifier =CClassifier:: getID(ip, ipLen);
 	} else {
 		if( (flow_hsh->class_proto == PROTO_ID_NONPAYLOAD) ) {//We can't classify a flow with NONPAYLOAD type only because his first packet
 			++tp->count[2];
-			classifier = getID(ip, ipLen);
+			classifier = CClassifier::getID(ip, ipLen);
 		}
 		else if( (flow_hsh->class_proto < DOWN_BASE_P2P_CLASS_NUMBER) ) {
 			++tp->count[3];
-			classifier = getID(ip, ipLen);
-		} else if ( isSuperClass(flow_hsh->class_proto) ) {
+			classifier = CClassifier::getID(ip, ipLen);
+		} else if ( CClassifier::isSuperClass(flow_hsh->class_proto) ) {
 			++tp->count[4];
-			classifier = getID(ip, ipLen);
+			classifier = CClassifier::getID(ip, ipLen);
 		} /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
 		  ++tp->count[5];
 		  classifier = getID(ip, ipLen);
@@ -209,7 +209,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 			flow->class_proto = classifier;
 		} else {
 			u_short tmp_id=0;
-			tmp_id = verID(reverse_flow_hsh->class_proto,classifier);
+			tmp_id = CClassifier::verID(reverse_flow_hsh->class_proto,classifier);
 			reverse_flow_hsh->class_proto = tmp_id;
 			flow->class_proto = tmp_id;
 		}
@@ -223,7 +223,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 			flow->class_proto = classifier;
 		} else {
 			u_short tmp_id=0;
-			tmp_id = verID(reverse_flow_hsh->class_proto,classifier);
+			tmp_id = CClassifier::verID(reverse_flow_hsh->class_proto,classifier);
 			reverse_flow_hsh->class_proto = tmp_id;
 			flow->class_proto = tmp_id;
 		}
@@ -253,7 +253,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 				flow_hsh->class_proto = classifier;
 			} else {
 				u_short tmp_id=0;
-				tmp_id = verID(reverse_flow_hsh->class_proto,classifier);
+				tmp_id = CClassifier::verID(reverse_flow_hsh->class_proto,classifier);
 				reverse_flow_hsh->class_proto = tmp_id;
 				flow_hsh->class_proto = tmp_id;
 			}
@@ -264,19 +264,19 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 					flow_hsh->class_proto = classifier;
 				} else {
 					u_short tmp_id=0;
-					tmp_id = verID(reverse_flow_hsh->class_proto,classifier);
+					tmp_id = CClassifier::verID(reverse_flow_hsh->class_proto,classifier);
 					reverse_flow_hsh->class_proto = tmp_id;
 					flow_hsh->class_proto = tmp_id;
 				}
 			}
-		} else if ( isSuperClass(flow_hsh->class_proto) ) {
+		} else if ( CClassifier::isSuperClass(flow_hsh->class_proto) ) {
 			if( (classifier>=DOWN_BASE_P2P_CLASS_NUMBER)&&(classifier<PROTO_ID_NONPAYLOAD)  ) {
 				if((reverse_flow_hsh == NULL)) {
 					if(!(classifier == 116 && flow_hsh->class_proto == 201)) //adicionado temporariamente lembrar de tirar
 						flow_hsh->class_proto = classifier;
 				} else {
 					u_short tmp_id=0;
-					tmp_id = verID(reverse_flow_hsh->class_proto,classifier);
+					tmp_id = CClassifier::verID(reverse_flow_hsh->class_proto,classifier);
 					if(!(tmp_id == 116 && flow_hsh->class_proto == 201)){ //adicionado temporariamente lembrar de tirar
 						reverse_flow_hsh->class_proto = tmp_id;
 						flow_hsh->class_proto = tmp_id;
@@ -611,7 +611,7 @@ int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileE
 		slotsOffline=control->hop;
 	}
 
-	analyserpxError = initiate_capture( conf, onlineCapMode, offLineFile);
+	analyserpxError = CCaptureUtil::initiate_capture( conf, onlineCapMode, offLineFile);
 	if ( analyserpxError == 0 ){
 		for (int i = 0; i < threadNum; ++i ){
 			pthread_create(&workerthreads[i], NULL, threadsLoop, &tps[i]);	

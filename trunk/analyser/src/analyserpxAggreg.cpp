@@ -50,15 +50,21 @@ void CAnalyzerAggregator::optimumCleanHash(hash_tab * hash, time_t sec, time_t u
 	HashTableUtil::init_hash_walk(hash);
 	double hashTime=0, lastTime=0;
 	lastTime = sec*(1e6) + usec;
-	while ( (flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(hash)) ) {
+	while ( (flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(hash)) ) 
+	{
 		hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
-		if(flow_export) {
+		if(flow_export) 
+		{
 			CFlowUtil::printFlowToFile(flow_hsh, fileName);
-			if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
+			if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) 
+			{
 				HashTableUtil::clear_hash_entry(hash, flow_hsh);
 			}
-		} else {
-			if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
+		} 
+		else 
+		{
+			if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) 
+			{
 				CFlowUtil::printFlowToFile(flow_hsh, fileName);
 				HashTableUtil::clear_hash_entry(hash, flow_hsh);
 			}
@@ -76,9 +82,11 @@ void CAnalyzerAggregator::cleanHash(hash_tab * hash, time_t sec, time_t usec, ch
 	HashTableUtil::init_hash_walk(hash);
 	double hashTime=0, lastTime=0;
 	lastTime = sec*(1e6) + usec;
-	while ( (flow_hsh =  (flow_t*) HashTableUtil::next_hash_walk(hash))) {
+	while ( (flow_hsh =  (flow_t*) HashTableUtil::next_hash_walk(hash))) 
+	{
 		hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
-		if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
+		if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) 
+		{
 			CFlowUtil::printFlowToFile(flow_hsh, fileName);
 			HashTableUtil::clear_hash_entry(hash, flow_hsh);
 		}

@@ -696,6 +696,8 @@ public:
 	*/
 	static u_short getID(const struct ip *iph, u_short ipLen);
 
+private:
+
 	/*!     \fn u_short isBittorrent (const unsigned char *payload, const u16 mess_len)
 	\brief Look for the BitTorrent messege's signature in payload message from TCP segments.
 
@@ -1342,7 +1344,7 @@ public:
 	*/
 	static u_short isSuperClass(u_short id);
 
-private:
+
 	static int coupeEOF (const unsigned char *payload, const u_short mess_len, unsigned char* strg);
 
 	static unsigned char* getPayload(const struct ip *iph);

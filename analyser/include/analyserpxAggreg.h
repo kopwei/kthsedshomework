@@ -20,7 +20,66 @@ extern hash_tab *test_table;
 class CAnalyzerAggregator
 {
 public:
+	/*!     \fn void addFlow(flow_t *flow, const struct ip *ip, unsigned short ipLen)
+	\brief Add a packet to a flow.
 
+	Add a flow to the hash table, it also keep a ip address to classify the flow based on ip payload.
+
+	\param flow	Flow to be added.
+	\param *ip	Pointer to the ip address .
+	\param ipLen	Ip payload size.
+	*/ 
+	//void addFlow(flow_t *flow, const struct ip *ip, unsigned short ipLen);
+
+	/*!     \fn void mount_flow(unsigned char *args, const struct pcap_pkthdr *header, const u_char *packet)
+	\brief Mount Flow function.
+
+	Function called every time when a packet arrives at libpcap.
+	\param *args	argument passed by pcap_loop function
+	\param *header	pointer to a pcap_pkthdr structure pointer
+	\param *header 	header of a dumped packet in the file
+	\param *packet	an arrived packet
+	*/
+	static void
+		mount_flow(unsigned char *args, const struct pcap_pkthdr *header, const u_char *packet, ThreadParams *tp);
+
+	
+
+	
+
+	/*!     \fn int analyserpxStart(cap_config *conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp)
+	\brief Analyser-PX Start up function.
+
+	Start all capturing, aggregating, and classifier process.
+	\param *conf		Pointer to cap_config structure pointer with all libcap needed parameter.
+	\param fileAdminTime  	The cicle time to save flows to file.
+	\param fileExpTime  	Interval counter to output file modification.
+	\param *offLineFile	Name of file to read the packets.
+	\param flow_exp		Export flow optmization flag.
+	\return Error code. 
+	*/
+	//int analyserpxStart(cap_config *conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp);
+
+
+
+	int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp, int threadNum);
+
+private :
+
+	static void verifyTimeOutHash(flow_t *flow);
+	static void* verifyHashTimeOut(void *par);
+
+	static void *threadsLoop(void *par);
+
+	static void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, ThreadParams *tp);
+
+	/*!     \fn void task_ctrl_C(int i)
+	\brief CTRL+C Interpreter function.
+
+	Cath the interrupt SIGINT caused by pressing the "CRT-C" buttons  and save to file all the remained flow that still into hash.
+	\param i	Interrupt signal.
+	*/ 
+	static void task_ctrl_C(int i);
 
 	/*!     \fn void cleanHash(hash_tab *hash, time_t sec, time_t usec, char *fileName)
 	\brief Clean Flows' Hashtable.
@@ -46,58 +105,6 @@ public:
 	*/
 	static int verifyTimeOut(flow_t *flow1, flow_t *flow2);
 
-
-	/*!     \fn void addFlow(flow_t *flow, const struct ip *ip, unsigned short ipLen)
-	\brief Add a packet to a flow.
-
-	Add a flow to the hash table, it also keep a ip address to classify the flow based on ip payload.
-
-	\param flow	Flow to be added.
-	\param *ip	Pointer to the ip address .
-	\param ipLen	Ip payload size.
-	*/ 
-	//void addFlow(flow_t *flow, const struct ip *ip, unsigned short ipLen);
-
-	/*!     \fn void mount_flow(unsigned char *args, const struct pcap_pkthdr *header, const u_char *packet)
-	\brief Mount Flow function.
-
-	Function called every time when a packet arrives at libpcap.
-	\param *args	argument passed by pcap_loop function
-	\param *header	pointer to a pcap_pkthdr structure pointer
-	\param *header 	header of a dumped packet in the file
-	\param *packet	an arrived packet
-	*/
-	static void
-		mount_flow(unsigned char *args, const struct pcap_pkthdr *header, const u_char *packet, ThreadParams *tp);
-
-	/*!     \fn void printHash()
-	\brief Print Hashtable to file.
-
-	Save to file all the remained flow still into hashtable.
-	*/
-	static void printHash();
-
-	/*!     \fn void task_ctrl_C(int i)
-	\brief CTRL+C Interpreter function.
-
-	Cath the interrupt SIGINT caused by pressing the "CRT-C" buttons  and save to file all the remained flow that still into hash.
-	\param i	Interrupt signal.
-	*/ 
-	static void task_ctrl_C(int i);
-
-	/*!     \fn int analyserpxStart(cap_config *conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp)
-	\brief Analyser-PX Start up function.
-
-	Start all capturing, aggregating, and classifier process.
-	\param *conf		Pointer to cap_config structure pointer with all libcap needed parameter.
-	\param fileAdminTime  	The cicle time to save flows to file.
-	\param fileExpTime  	Interval counter to output file modification.
-	\param *offLineFile	Name of file to read the packets.
-	\param flow_exp		Export flow optmization flag.
-	\return Error code. 
-	*/
-	//int analyserpxStart(cap_config *conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp);
-
 	/*!     \fnvoid optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 	\brief Optimum Clean hashtable function
 
@@ -109,15 +116,12 @@ public:
 	*/
 	static void optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName);
 
-	static int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp, int threadNum);
+	/*!     \fn void printHash()
+	\brief Print Hashtable to file.
 
-	static void *threadsLoop(void *par);
-
-	static void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, ThreadParams *tp);
-
-private :
-	static void verifyTimeOutHash(flow_t *flow);
-	static void* verifyHashTimeOut(void *par);
+	Save to file all the remained flow still into hashtable.
+	*/
+	static void printHash();
 };
 
 #endif

@@ -72,7 +72,7 @@ int main(int argc, char **argv){
 	int index;
 	int c;
 	opterr = 0;
-	cap_config *conf = new_cap_config();
+	cap_config *conf = CCaptureUtil::new_cap_config();
 	char *offLineFile = NULL;
 	char *data=NULL;
 	int fileAdminTime = 300;

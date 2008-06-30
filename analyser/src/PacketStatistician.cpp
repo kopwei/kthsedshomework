@@ -13,8 +13,8 @@
  *   GNU General Public License for more details.                          
  *                                                                         
  *   You should have received a copy of the GNU General Public License     
- *   along with this program; if not, write to the                         
- *   Copyright (C) 2008 by Ericsson                                        
+ *   along with this program; if not, write to Ericsson AB                        
+ *   Copyright (C) 2008 by Ericsson AB                                      
  */
 
 #include "../include/PacketStatistician.h"
@@ -27,7 +27,8 @@ CPacketStatistician::~CPacketStatistician(void)
 {
 }
 
-void CPacketStatistician::processNewPacket(unsigned char *arg, const struct pcap_pkthdr *header, const u_char *packet, ThreadParams *tp)
+void CPacketStatistician::processNewPacket(unsigned char *arg, const struct pcap_pkthdr *header, const u_char *packet, 
+										   ThreadParams *tp)
 {
-	//mount_flow(arg, header, packet, tp);
+	CAnalyzerAggregator::mount_flow(arg, header, packet, tp);
 }

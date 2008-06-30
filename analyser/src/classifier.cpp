@@ -71,7 +71,7 @@ u_short CClassifier::getID(const struct ip *iph, u16 ipLen)
 		if (mess_len == 0)
 			return PROTO_ID_NONPAYLOAD;	//Nonpayload TCP traffic
 		/*if (isHLCS(payload, mess_len))
-		return 403;*///this function was replaced above becauseits regexec function
+		return 403;*///this function was replaced above because its regexec function
 //printf("%x %u\n",payload[2],mess_len);
 		switch (payload[0]) {
 			case 0x00:

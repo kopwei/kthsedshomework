@@ -13,10 +13,9 @@
  *   GNU General Public License for more details.                          
  *                                                                         
  *   You should have received a copy of the GNU General Public License     
- *   along with this program; if not, write to the                         
- *   Copyright (C) 2008 by Ericsson                                        
+ *   along with this program; if not, write to Ericsson AB                        
+ *   Copyright (C) 2008 by Ericsson AB                                    
  */
-
 
 #pragma once
 

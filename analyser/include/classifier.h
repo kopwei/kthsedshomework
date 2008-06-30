@@ -1347,7 +1347,7 @@ private:
 
 	static unsigned char* getPayload(const struct ip *iph);
 
-	static unsigned short getPayloadLen(const struct ip *iph, u_short ipLen)
+	static unsigned short getPayloadLen(const struct ip *iph, u_short ipLen);
 
 };
 extern int STR_MAX_LEN;

@@ -114,7 +114,7 @@ static struct hash_tab *hash_table_list = NULL;
 /* These are the generic hashtable routines.  They _require_ that the first
    member of the entry be a string, and that string is taken as the key.
    The generic delete function simply free's it's argument. */
-int compare_generic_hash(const void *entry1, const void *entry2)
+int HashTableUtil::compare_generic_hash(const void *entry1, const void *entry2)
 {
     const char *str1 = (const char *) entry1;
     const char *str2 = (const char *) entry2;
@@ -136,7 +136,7 @@ int compare_generic_hash(const void *entry1, const void *entry2)
 }
 
 
-unsigned long make_key_generic_hash(const void *entry)
+unsigned long HashTableUtil::make_key_generic_hash(const void *entry)
 {
     const char *s = (const char *) entry;
     unsigned long hashval;
@@ -151,7 +151,7 @@ unsigned long make_key_generic_hash(const void *entry)
 }
 
 
-void delete_generic_hash(void *entry)
+void HashTableUtil::delete_generic_hash(void *entry)
 {
     FREE(entry);
 }
@@ -208,7 +208,7 @@ static struct hash_entry *find_hash_internal(hash_tab * table,
 }
 
 
-void *find_hash_entry(hash_tab * table, const void *match)
+void* HashTableUtil::find_hash_entry(hash_tab * table, const void *match)
 {
     struct hash_entry *entry;
 
@@ -219,7 +219,7 @@ void *find_hash_entry(hash_tab * table, const void *match)
 }
 
 
-int add_hash_entry(hash_tab * table, const void *data)
+int HashTableUtil::add_hash_entry(hash_tab * table, const void *data)
 {
     struct hash_entry *entry;
     unsigned long hashval;
@@ -256,7 +256,7 @@ int add_hash_entry(hash_tab * table, const void *data)
 }
 
 
-void clear_hash_entry(hash_tab * table, const void *data)
+void HashTableUtil::clear_hash_entry(hash_tab * table, const void *data)
 {
     struct hash_entry *entry;
     struct hash_entry **prev;
@@ -287,7 +287,7 @@ void clear_hash_entry(hash_tab * table, const void *data)
 }
 
 
-void free_hash_table(hash_tab * table)
+void HashTableUtil::free_hash_table(hash_tab * table)
 {
     struct hash_entry **temp;	/* In the table array. */
     struct hash_entry *entry, *next;
@@ -315,7 +315,7 @@ void free_hash_table(hash_tab * table)
     FREE(table);
 }
 
-void clear_hash_table(hash_tab * table)
+void HashTableUtil::clear_hash_table(hash_tab * table)
 {
     struct hash_entry **temp;	/* In the table array. */
     struct hash_entry *entry, *next;
@@ -342,7 +342,7 @@ void clear_hash_table(hash_tab * table)
     table->entries = 0;
 }
 
-hash_tab *init_hash_table(const char *id, compare_function cmpfn,
+hash_tab* HashTableUtil::init_hash_table(const char *id, compare_function cmpfn,
 			  key_function keyfn, delete_function delfn,
 			  unsigned long size)
 {
@@ -399,7 +399,7 @@ hash_tab *init_hash_table(const char *id, compare_function cmpfn,
 
 /* Can do lookups during a walk, but insertions and deletions may
     cause problems. */
-void init_hash_walk(hash_tab * table)
+void HashTableUtil::init_hash_walk(hash_tab * table)
 {
     table->walk_key = 0;
     table->walk_loc = NULL;
@@ -407,7 +407,7 @@ void init_hash_walk(hash_tab * table)
 }
 
 
-void *next_hash_walk(hash_tab * table)
+void* HashTableUtil::next_hash_walk(hash_tab * table)
 {
     struct hash_entry **temp;
     const void *result;
@@ -440,7 +440,7 @@ void *next_hash_walk(hash_tab * table)
 }
 
 
-void dump_hashtab_stats(hash_tab * table)
+void HashTableUtil::dump_hashtab_stats(hash_tab * table)
 {
     int doing_all = 0;
     long total_ratio, hit_ratio, miss_ratio;
@@ -499,20 +499,20 @@ void dump_hashtab_stats(hash_tab * table)
 }
 
 
-long total_hash_entries(void)
+long HashTableUtil::total_hash_entries(void)
 {
     /* #### MAKE_ALLOCATOR can't pluralize well :) */
     return total_hash_entrys;
 }
 
 
-void init_hash_entries(const long count)
+void HashTableUtil::init_hash_entries(const long count)
 {
     /* #### MAKE_ALLOCATOR can't pluralize well :) */
     generate_hash_entrys(count);
 }
 
-extern long num_hash_entries(hash_tab * table)
+long HashTableUtil::num_hash_entries(hash_tab * table)
 {
     return table->entries;
 }

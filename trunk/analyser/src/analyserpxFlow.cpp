@@ -1,21 +1,21 @@
 /**
- *   analyserpxFlow.cpp	
- *   Author: Wei Zhenfang                                                  
- *                                                                         
- *   This program is free software; you can redistribute it and/or modify  
- *   it under the terms of the GNU General Public License as published by  
- *   the Free Software Foundation; either version 2 of the License, or     
- *   (at your option) any later version.                                   
- *                                                                         
- *   This program is distributed in the hope that it will be useful,       
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         
- *   GNU General Public License for more details.                          
- *                                                                         
- *   You should have received a copy of the GNU General Public License     
- *   along with this program; if not, write to the                         
- *   Copyright (C) 2008 by Ericsson                                        
- */
+*   analyserpxFlow.cpp	
+*   Author: Wei Zhenfang                                                  
+*                                                                         
+*   This program is free software; you can redistribute it and/or modify  
+*   it under the terms of the GNU General Public License as published by  
+*   the Free Software Foundation; either version 2 of the License, or     
+*   (at your option) any later version.                                   
+*                                                                         
+*   This program is distributed in the hope that it will be useful,       
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         
+*   GNU General Public License for more details.                          
+*                                                                         
+*   You should have received a copy of the GNU General Public License     
+*   along with this program; if not, write to the                         
+*   Copyright (C) 2008 by Ericsson                                        
+*/
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -31,7 +31,7 @@
 
 using namespace std;
 
-int compare_flow(const void *data1, const void *data2)
+int CFlowUtil::compare_flow(const void *data1, const void *data2)
 {
 	const flow_t *check1 = (const flow_t *) data1;
 	const flow_t *check2 = (const flow_t *) data2;
@@ -42,7 +42,7 @@ int compare_flow(const void *data1, const void *data2)
 		|| check1->proto != check2->proto);
 }
 
-unsigned long flow_key(const void *data)
+unsigned long CFlowUtil::flow_key(const void *data)
 {
 	const flow_t *what = (const flow_t *) data;
 
@@ -50,18 +50,18 @@ unsigned long flow_key(const void *data)
 		what->proto + ((unsigned) what->dst_port << 16) + what->src_port;
 }
 
-void delete_flow(void *data)
+void CFlowUtil::delete_flow(void *data)
 {
 	if (!data)
 		return;
 	free(data);
 } 
 
-flow_t *createFlow_t(unsigned char proto, unsigned char class_proto, char *src_if, char *dst_if,
-					 u_short src_port, u_short dst_port,
-					 unsigned int n_bytes, unsigned int n_frames,
-					 time_t ini_sec, time_t end_sec, time_t ini_mic,
-					 time_t end_mic, struct in_addr src_ip,
+flow_t* CFlowUtil::createFlow_t(unsigned char proto, unsigned char class_proto, char *src_if, char *dst_if,
+								u_short src_port, u_short dst_port,
+								unsigned int n_bytes, unsigned int n_frames,
+								time_t ini_sec, time_t end_sec, time_t ini_mic,
+								time_t end_mic, struct in_addr src_ip,
 struct in_addr dst_ip)
 {
 	flow_t *flow = (flow_t *) malloc(sizeof(flow_t));
@@ -93,7 +93,7 @@ struct in_addr dst_ip)
 
 }
 
-int printFlowToFile(flow_t * flow, const char *file)
+int CFlowUtil::printFlowToFile(flow_t * flow, const char *file)
 {
 	int len1=strlen("stdout");
 	int len2=strlen(file);
@@ -130,7 +130,7 @@ int printFlowToFile(flow_t * flow, const char *file)
 	return 0;
 }
 
-flow_t *readFlowFromFile(flow_t * flow, const char *file, int ind)
+flow_t* CFlowUtil::readFlowFromFile(flow_t * flow, const char *file, int ind)
 {
 	FILE *readFlow = CFileUtil::openFile(file, "rb", NULL, NULL);
 	fseek(readFlow, ind * sizeof(flow_t), SEEK_SET);
@@ -143,7 +143,7 @@ flow_t *readFlowFromFile(flow_t * flow, const char *file, int ind)
 	return flow;
 }
 
-void adjustProtocol(char* str_proto, char* final) {
+void CFlowUtil::adjustProtocol(char* str_proto, char* final) {
 	if(strcmp(str_proto, "6") == 0 || strcmp(str_proto, "17") == 0 || strcmp(str_proto, "1") == 0
 		|| strcmp(str_proto, "19") == 0) {
 			strncpy(final, "0000",4);
@@ -159,7 +159,7 @@ void adjustProtocol(char* str_proto, char* final) {
 	}
 }
 
-void flowToString(char format, char proto_format, flow_t * flow, char *str){
+void CFlowUtil::flowToString(char format, char proto_format, flow_t * flow, char *str){
 	static char temp[256];
 	static char srcIp[16]; //added because a possible error in the function sprintf 
 	static char dstIp[16]; //added because a possible error in the function sprintf
@@ -252,7 +252,7 @@ void flowToString(char format, char proto_format, flow_t * flow, char *str){
 	strncat( str, temp,strlen(temp) );
 }
 
-void printFlowStruct(char format, char *str)
+void CFlowUtil::printFlowStruct(char format, char *str)
 {
 	if( format == FORMAT_FLOW_DATE_DURATION ){
 		strncpy( str, "ini_flow duration src_ip src_port dst_ip dst_port n_bytes n_frames app transp_prot",256);
@@ -262,7 +262,7 @@ void printFlowStruct(char format, char *str)
 	}
 }
 
-char * get_protocolName( unsigned short proto_id ){
+char* CFlowUtil::get_protocolName( unsigned short proto_id ){
 	switch ( proto_id ) {
 		case PROTO_ID_TCP:		return( PROTO_NAME_TCP );
 		case PROTO_ID_EDONKEY:		return( PROTO_NAME_EDONKEY );
@@ -329,7 +329,7 @@ char * get_protocolName( unsigned short proto_id ){
 	}
 }
 
-int getDate(time_t *tloc, char *str, int str_len) {
+int CFlowUtil::getDate(time_t *tloc, char *str, int str_len) {
 	if(str_len<6) return 0;
 	struct tm *clock = (struct tm *)localtime((tloc));
 	if((clock->tm_mon+1)>9) {
@@ -345,7 +345,7 @@ int getDate(time_t *tloc, char *str, int str_len) {
 	}
 	return 1;
 }
-u_short getIntLen(unsigned long num) {
+u_short CFlowUtil::getIntLen(unsigned long num) {
 	unsigned long number=10;
 	unsigned long bigest=1000000000;
 	u_short i = 1;
@@ -357,7 +357,7 @@ u_short getIntLen(unsigned long num) {
 	}
 	return i;
 }
-u_short getDouLen(double num) {
+u_short CFlowUtil::getDouLen(double num) {
 	unsigned long number=10;
 	unsigned long bigest=1000000000;
 	u_short i = 1;

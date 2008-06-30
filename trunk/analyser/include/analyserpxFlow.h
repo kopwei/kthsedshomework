@@ -39,7 +39,7 @@ const unsigned int	FORMAT_PROTO_DEFAULT =	FORMAT_PROTO_ID;
 
 class CFlowUtil
 {
-
+public:
 
 	/*!     \fn int compare_flow(const void * data1, const void * data2)
 	\brief Compare flows function.

@@ -47,20 +47,20 @@ void optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 	printf("Clean \n");	
 
     flow_t *flow_hsh=NULL;
-    init_hash_walk(hash);
+	HashTableUtil::init_hash_walk(hash);
     double hashTime=0, lastTime=0;
     lastTime = sec*(1e6) + usec;
-    while ( (flow_hsh = (flow_t*) next_hash_walk(hash)) ) {
+    while ( (flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(hash)) ) {
         hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
         if(flow_export) {
             printFlowToFile(flow_hsh, fileName);
             if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
-                clear_hash_entry(hash, flow_hsh);
+                HashTableUtil::clear_hash_entry(hash, flow_hsh);
             }
         } else {
             if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
                 printFlowToFile(flow_hsh, fileName);
-                clear_hash_entry(hash, flow_hsh);
+                HashTableUtil::clear_hash_entry(hash, flow_hsh);
             }
         }
 
@@ -73,14 +73,14 @@ void optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 void cleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 {
     flow_t *flow_hsh=NULL;
-    init_hash_walk(hash);
+    HashTableUtil::init_hash_walk(hash);
     double hashTime=0, lastTime=0;
     lastTime = sec*(1e6) + usec;
-    while ( (flow_hsh =  (flow_t*) next_hash_walk(hash))) {
+    while ( (flow_hsh =  (flow_t*) HashTableUtil::next_hash_walk(hash))) {
 	hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
 	if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
 	    printFlowToFile(flow_hsh, fileName);
-	    clear_hash_entry(hash, flow_hsh);
+	    HashTableUtil::clear_hash_entry(hash, flow_hsh);
 	}
 
     }
@@ -135,7 +135,7 @@ void verifyTimeOutHash(flow_t *flow)
 				optimumCleanHash(test_table, sec, usec, fileName);//introduced on 1 August 2007, it aims to optimize
                	                                                   	  //the analyzer-px output according to -b parameter
 				offCount++;					  //as well as this line
-				numo=offCount;					  //and this anoter one
+				numo=offCount;					  //and this another one
 				start = 0;
 				//free(buffer);
 
@@ -166,7 +166,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 	//pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock(&hash_lock) != 0 ){};
 
-    flow_hsh = (flow_t*) find_hash_entry(test_table, flow);
+    flow_hsh = (flow_t*) HashTableUtil::find_hash_entry(test_table, flow);
 
 	pthread_mutex_unlock(&hash_lock);
 	//Sync Table end
@@ -200,11 +200,11 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 	//Sync Table begin
     //pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock(&hash_lock) != 0 ){};
-	flow_hsh         = (flow_t*) find_hash_entry(test_table, flow);
-    reverse_flow_hsh = (flow_t*) find_hash_entry(test_table, tmp_flow);
+	flow_hsh         = (flow_t*) HashTableUtil::find_hash_entry(test_table, flow);
+    reverse_flow_hsh = (flow_t*) HashTableUtil::find_hash_entry(test_table, tmp_flow);
 
     if (flow_hsh == NULL) {
-		add_hash_entry(test_table, flow);
+		HashTableUtil::add_hash_entry(test_table, flow);
 		if((reverse_flow_hsh == NULL)) {
 			flow->class_proto = classifier;
 		} else {
@@ -217,8 +217,8 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
     } else if (verifyTimeOut(flow_hsh, flow)) {
 		extern char fileName[];
 		printFlowToFile(flow_hsh, fileName);
-		clear_hash_entry(test_table, flow_hsh);
-		add_hash_entry(test_table, flow);
+		HashTableUtil::clear_hash_entry(test_table, flow_hsh);
+		HashTableUtil::add_hash_entry(test_table, flow);
 		if((reverse_flow_hsh == NULL)) {
 			flow->class_proto = classifier;
 		} else {
@@ -397,7 +397,7 @@ mount_flow(u_char * args, const struct pcap_pkthdr *header,
 void printHash()
 {
     flow_t *flow_hsh;
-    init_hash_walk(test_table);
+    HashTableUtil::init_hash_walk(test_table);
     struct tm *clock = NULL;
     //extern char baseFileName[];
     //extern char fileName[];
@@ -413,13 +413,13 @@ void printHash()
     getDate(&init,data,6) ;
     snprintf(filenameCountStr,36,"%s_latestFile",data);
     snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
-    while ((flow_hsh = (flow_t*) next_hash_walk(test_table))) {
+    while ((flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(test_table))) {
 //	fprintf(stdout,"Estamos aqui 1\n");
 	printFlowToFile(flow_hsh, fileName);
     }
     free(filenameCountStr);
     free(data);
-    clear_hash_table(test_table);
+    HashTableUtil::clear_hash_table(test_table);
 }
 
 void task_ctrl_C(int i)
@@ -595,7 +595,7 @@ int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileE
 		tps[i].conf = conf;
 	}
 	
-    test_table = init_hash_table("ANALYSERPX_CAP_TABLE", compare_flow, flow_key,
+    test_table = HashTableUtil::init_hash_table("ANALYSERPX_CAP_TABLE", compare_flow, flow_key,
 				 delete_flow, HASH_SIZE);
 
     //pthread_create(&hashTimeOut, NULL, verifyHashTimeOut, &fileAdminTime);

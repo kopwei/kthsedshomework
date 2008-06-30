@@ -46,53 +46,53 @@ void optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 	while ( pthread_mutex_trylock(&hash_lock) != 0 ){};
 	printf("Clean \n");	
 
-    flow_t *flow_hsh=NULL;
+	flow_t *flow_hsh=NULL;
 	HashTableUtil::init_hash_walk(hash);
-    double hashTime=0, lastTime=0;
-    lastTime = sec*(1e6) + usec;
-    while ( (flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(hash)) ) {
-        hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
-        if(flow_export) {
-            printFlowToFile(flow_hsh, fileName);
-            if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
-                HashTableUtil::clear_hash_entry(hash, flow_hsh);
-            }
-        } else {
-            if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
-                printFlowToFile(flow_hsh, fileName);
-                HashTableUtil::clear_hash_entry(hash, flow_hsh);
-            }
-        }
+	double hashTime=0, lastTime=0;
+	lastTime = sec*(1e6) + usec;
+	while ( (flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(hash)) ) {
+		hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
+		if(flow_export) {
+			printFlowToFile(flow_hsh, fileName);
+			if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
+				HashTableUtil::clear_hash_entry(hash, flow_hsh);
+			}
+		} else {
+			if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
+				printFlowToFile(flow_hsh, fileName);
+				HashTableUtil::clear_hash_entry(hash, flow_hsh);
+			}
+		}
 
-    }
-    return;
+	}
+	return;
 	//Sync Table begin
 	pthread_mutex_unlock(&hash_lock);
 
 }
 void cleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 {
-    flow_t *flow_hsh=NULL;
-    HashTableUtil::init_hash_walk(hash);
-    double hashTime=0, lastTime=0;
-    lastTime = sec*(1e6) + usec;
-    while ( (flow_hsh =  (flow_t*) HashTableUtil::next_hash_walk(hash))) {
-	hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
-	if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
-	    printFlowToFile(flow_hsh, fileName);
-	    HashTableUtil::clear_hash_entry(hash, flow_hsh);
-	}
+	flow_t *flow_hsh=NULL;
+	HashTableUtil::init_hash_walk(hash);
+	double hashTime=0, lastTime=0;
+	lastTime = sec*(1e6) + usec;
+	while ( (flow_hsh =  (flow_t*) HashTableUtil::next_hash_walk(hash))) {
+		hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
+		if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
+			printFlowToFile(flow_hsh, fileName);
+			HashTableUtil::clear_hash_entry(hash, flow_hsh);
+		}
 
-    }
-    return;
+	}
+	return;
 }
 
 int verifyTimeOut(flow_t * flow1, flow_t * flow2)
 {
-    double temp1 = flow1->end_sec*(1e6) + (flow1->end_mic) ;
-    double temp2 = flow2->end_sec*(1e6) + (flow2->end_mic);
-    double result = temp2 - temp1;
-    return ( result > (TIMEOUT*(1e6)) );
+	double temp1 = flow1->end_sec*(1e6) + (flow1->end_mic) ;
+	double temp2 = flow2->end_sec*(1e6) + (flow2->end_mic);
+	double result = temp2 - temp1;
+	return ( result > (TIMEOUT*(1e6)) );
 }
 
 void verifyTimeOutHash(flow_t *flow)
@@ -107,11 +107,11 @@ void verifyTimeOutHash(flow_t *flow)
 	//static int offCount = 0;
 	//u_short i = 0;
 	time_t sec=0, usec=0;
-	
-	
+
+
 	char *filenameCountStr = (char*) malloc(sizeof(char) * 36); //-b modification on 1 August 2007
 
-	
+
 	if(start == 0)
 	{
 		start = flow->end_sec;
@@ -128,20 +128,20 @@ void verifyTimeOutHash(flow_t *flow)
 				//snprintf(buffer,i+1, "%u", offCount);
 				//snprintf(str, strlen(baseFileName)+i+1, "%s%u", baseFileName, offCount);
 				//printHash(str);
-	       		         sec = tvSec;
-               		 	usec = tvUSec;
+				sec = tvSec;
+				usec = tvUSec;
 				//cleanHash(test_table, sec, usec, fileName);
 				snprintf(fileName,256,"%s_%u",baseFileName, offCount); //-b modification on 1 August 2007
 				optimumCleanHash(test_table, sec, usec, fileName);//introduced on 1 August 2007, it aims to optimize
-               	                                                   	  //the analyzer-px output according to -b parameter
+				//the analyzer-px output according to -b parameter
 				offCount++;					  //as well as this line
 				numo=offCount;					  //and this another one
 				start = 0;
 				//free(buffer);
 
-}
+			}
 		}
-		
+
 
 	}
 	free(str);
@@ -161,23 +161,23 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 	{
 		verifyTimeOutHash(flow);
 	}
-    
+
 	//Sync Table begin
 	//pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock(&hash_lock) != 0 ){};
 
-    flow_hsh = (flow_t*) HashTableUtil::find_hash_entry(test_table, flow);
+	flow_hsh = (flow_t*) HashTableUtil::find_hash_entry(test_table, flow);
 
 	pthread_mutex_unlock(&hash_lock);
 	//Sync Table end
 
-    if (flow_hsh == NULL) {
+	if (flow_hsh == NULL) {
 		++tp->count[0];
 		classifier = getID(ip, ipLen);
-    } else if (verifyTimeOut(flow_hsh, flow)) {
+	} else if (verifyTimeOut(flow_hsh, flow)) {
 		++tp->count[1];
-        classifier = getID(ip, ipLen);
-    } else {
+		classifier = getID(ip, ipLen);
+	} else {
 		if( (flow_hsh->class_proto == PROTO_ID_NONPAYLOAD) ) {//We can't classify a flow with NONPAYLOAD type only because his first packet
 			++tp->count[2];
 			classifier = getID(ip, ipLen);
@@ -187,23 +187,23 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 			classifier = getID(ip, ipLen);
 		} else if ( isSuperClass(flow_hsh->class_proto) ) {
 			++tp->count[4];
-	    	classifier = getID(ip, ipLen);
-		} /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
-			++tp->count[5];
 			classifier = getID(ip, ipLen);
-		}*/
-    }
-    
+		} /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
+		  ++tp->count[5];
+		  classifier = getID(ip, ipLen);
+		  }*/
+	}
+
 	tmp_flow = createFlow_t(ip->ip_p,ip->ip_p, NULL, NULL, flow->dst_port, flow->src_port,
-                        (unsigned int) ntohs(ip->ip_len), 1, flow->ini_sec,
-                        flow->end_sec, flow->ini_mic, flow->end_mic, ip->ip_dst,ip->ip_src);
+		(unsigned int) ntohs(ip->ip_len), 1, flow->ini_sec,
+		flow->end_sec, flow->ini_mic, flow->end_mic, ip->ip_dst,ip->ip_src);
 	//Sync Table begin
-    //pthread_mutex_lock(&hash_lock);
+	//pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock(&hash_lock) != 0 ){};
 	flow_hsh         = (flow_t*) HashTableUtil::find_hash_entry(test_table, flow);
-    reverse_flow_hsh = (flow_t*) HashTableUtil::find_hash_entry(test_table, tmp_flow);
+	reverse_flow_hsh = (flow_t*) HashTableUtil::find_hash_entry(test_table, tmp_flow);
 
-    if (flow_hsh == NULL) {
+	if (flow_hsh == NULL) {
 		HashTableUtil::add_hash_entry(test_table, flow);
 		if((reverse_flow_hsh == NULL)) {
 			flow->class_proto = classifier;
@@ -214,7 +214,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 			flow->class_proto = tmp_id;
 		}
 
-    } else if (verifyTimeOut(flow_hsh, flow)) {
+	} else if (verifyTimeOut(flow_hsh, flow)) {
 		extern char fileName[];
 		printFlowToFile(flow_hsh, fileName);
 		HashTableUtil::clear_hash_entry(test_table, flow_hsh);
@@ -227,12 +227,12 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 			reverse_flow_hsh->class_proto = tmp_id;
 			flow->class_proto = tmp_id;
 		}
-    } else {
+	} else {
 		flow_hsh->n_bytes += flow->n_bytes;
 		flow_hsh->n_frames += flow->n_frames;
-				
+
 		/* RTA - 26/05/08
-		 Verification added for syncronization purposes
+		Verification added for syncronization purposes
 		*/
 		double end   = (double)flow_hsh->end_sec*(1e6) + (double)(flow_hsh->end_mic) ;    	
 		double act   = (double)flow->ini_sec*(1e6) + (double)(flow->ini_mic) ;
@@ -246,7 +246,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 				flow_hsh->ini_mic = flow->ini_mic;	
 			}
 		}
-		
+
 		delete_flow(flow);
 		if( (flow_hsh->class_proto == PROTO_ID_NONPAYLOAD) ) {//We can't classify a flow with NONPAYLOAD type only because his first packet
 			if((reverse_flow_hsh == NULL)) {
@@ -270,7 +270,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 				}
 			}
 		} else if ( isSuperClass(flow_hsh->class_proto) ) {
-	    	if( (classifier>=DOWN_BASE_P2P_CLASS_NUMBER)&&(classifier<PROTO_ID_NONPAYLOAD)  ) {
+			if( (classifier>=DOWN_BASE_P2P_CLASS_NUMBER)&&(classifier<PROTO_ID_NONPAYLOAD)  ) {
 				if((reverse_flow_hsh == NULL)) {
 					if(!(classifier == 116 && flow_hsh->class_proto == 201)) //adicionado temporariamente lembrar de tirar
 						flow_hsh->class_proto = classifier;
@@ -282,163 +282,163 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 						flow_hsh->class_proto = tmp_id;
 					}
 				}
-	     	}
-		} /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
-			if( ((classifier<=UP_BASE_P2P_CLASS_NUMBER) && (classifier>=DOWN_BASE_P2P_CLASS_NUMBER)) ) {
-				if((reverse_flow_hsh == NULL)) {
-					flow_hsh->class_proto = classifier;
-				} else {
-					reverse_flow_hsh->class_proto = classifier;
-					flow_hsh->class_proto = classifier;
-				}
 			}
-		}*/
-    }
+		} /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
+		  if( ((classifier<=UP_BASE_P2P_CLASS_NUMBER) && (classifier>=DOWN_BASE_P2P_CLASS_NUMBER)) ) {
+		  if((reverse_flow_hsh == NULL)) {
+		  flow_hsh->class_proto = classifier;
+		  } else {
+		  reverse_flow_hsh->class_proto = classifier;
+		  flow_hsh->class_proto = classifier;
+		  }
+		  }
+		  }*/
+	}
 
 	pthread_mutex_unlock(&hash_lock);
 	//Sync Table End
-    delete_flow(tmp_flow);
+	delete_flow(tmp_flow);
 }
 
 /*
- * dissect packet
- */
+* dissect packet
+*/
 void
 mount_flow(u_char * args, const struct pcap_pkthdr *header,
-	   const u_char * packet, ThreadParams *tp)
+		   const u_char * packet, ThreadParams *tp)
 {
 
 	extern int outputThroughput;
 
-    flow_t *flow;		//flow structure        
+	flow_t *flow;		//flow structure        
 
-    /* define pointers to packet headers */
-    const struct ether_header *ethernet;	/* ethernet header */
-    const struct ip *ip;	/* IP header */
-
-
-    /* ethernet headers are always exactly (time_t)(header->ts.tv_sec)14 bytes */
-    int size_ethernet = ETHER_HDR_LEN;
-    int size_ip;
-    u_short ipLen;
+	/* define pointers to packet headers */
+	const struct ether_header *ethernet;	/* ethernet header */
+	const struct ip *ip;	/* IP header */
 
 
-    /* define ethernet header */
-    ethernet = (struct ether_header *) (packet);
+	/* ethernet headers are always exactly (time_t)(header->ts.tv_sec)14 bytes */
+	int size_ethernet = ETHER_HDR_LEN;
+	int size_ip;
+	u_short ipLen;
 
-    /* define/compute ip header offset */
-    ip = (struct ip *) (packet + size_ethernet);
 
-    size_ip = ip->ip_hl * 4;	
-    if (size_ip < 20) {		
+	/* define ethernet header */
+	ethernet = (struct ether_header *) (packet);
+
+	/* define/compute ip header offset */
+	ip = (struct ip *) (packet + size_ethernet);
+
+	size_ip = ip->ip_hl * 4;	
+	if (size_ip < 20) {		
 		return;
-    }
+	}
 
-    u_int16_t src_port, dst_port;
+	u_int16_t src_port, dst_port;
 
-    /* determine protocol */
-    switch (ip->ip_p) {
-    case IPPROTO_TCP:
+	/* determine protocol */
+	switch (ip->ip_p) {
+	case IPPROTO_TCP:
 		src_port =
-	    ((struct tcphdr *) (packet + size_ethernet +
-				size_ip))->th_sport;
+			((struct tcphdr *) (packet + size_ethernet +
+			size_ip))->th_sport;
 		dst_port =
-	    ((struct tcphdr *) (packet + size_ethernet +
-				size_ip))->th_dport;
-	break;
-    case IPPROTO_UDP:
+			((struct tcphdr *) (packet + size_ethernet +
+			size_ip))->th_dport;
+		break;
+	case IPPROTO_UDP:
 		src_port =
-	    ((struct udphdr *) (packet + size_ethernet +
-				size_ip))->uh_sport;
+			((struct udphdr *) (packet + size_ethernet +
+			size_ip))->uh_sport;
 		dst_port =
-	    ((struct udphdr *) (packet + size_ethernet +
-				size_ip))->uh_dport;
-	break;
-    case IPPROTO_ICMP:
-	    src_port = htons(0);
-	    dst_port = htons(0);
-	    break;
-    default:
+			((struct udphdr *) (packet + size_ethernet +
+			size_ip))->uh_dport;
+		break;
+	case IPPROTO_ICMP:
 		src_port = htons(0);
 		dst_port = htons(0);
-	break;
-    }
-
-    // fixed
-	if (outputThroughput) {
-	    frames_cap++;
-	    bytes_cap += (unsigned int) ntohs(ip->ip_len);
+		break;
+	default:
+		src_port = htons(0);
+		dst_port = htons(0);
+		break;
 	}
-    // fixed
 
-    flow = createFlow_t(ip->ip_p, ip->ip_p, NULL, NULL, src_port, dst_port,
-			(unsigned int) ntohs(ip->ip_len), 1,
-			(time_t) (header->ts.tv_sec),
-			(time_t) (header->ts.tv_sec),
-			(time_t) (header->ts.tv_usec),
-			(time_t) (header->ts.tv_usec), ip->ip_src,
-			ip->ip_dst);
+	// fixed
+	if (outputThroughput) {
+		frames_cap++;
+		bytes_cap += (unsigned int) ntohs(ip->ip_len);
+	}
+	// fixed
 
-    tvSec = (time_t) (header->ts.tv_sec);
-    tvUSec = (time_t) (header->ts.tv_usec);
-    ipLen = *(unsigned short *) args;
-    ipLen -= ETHER_HDR_LEN;
-    if((unsigned int)(ntohs(ip->ip_len)) <= ipLen ) {
-    	addFlowSync(flow, ip, (unsigned int) ntohs(ip->ip_len), tp);
-    } else {
+	flow = createFlow_t(ip->ip_p, ip->ip_p, NULL, NULL, src_port, dst_port,
+		(unsigned int) ntohs(ip->ip_len), 1,
+		(time_t) (header->ts.tv_sec),
+		(time_t) (header->ts.tv_sec),
+		(time_t) (header->ts.tv_usec),
+		(time_t) (header->ts.tv_usec), ip->ip_src,
+		ip->ip_dst);
+
+	tvSec = (time_t) (header->ts.tv_sec);
+	tvUSec = (time_t) (header->ts.tv_usec);
+	ipLen = *(unsigned short *) args;
+	ipLen -= ETHER_HDR_LEN;
+	if((unsigned int)(ntohs(ip->ip_len)) <= ipLen ) {
+		addFlowSync(flow, ip, (unsigned int) ntohs(ip->ip_len), tp);
+	} else {
 		addFlowSync(flow, ip, ipLen, tp);
-    }
-	
-	
-    return;
+	}
+
+
+	return;
 }
 
 //void printHash(char *fileName)
 void printHash()
 {
-    flow_t *flow_hsh;
-    HashTableUtil::init_hash_walk(test_table);
-    struct tm *clock = NULL;
-    //extern char baseFileName[];
-    //extern char fileName[];
-    //snprintf(fileName,256,"%s_%u",baseFileName, numo);
-    char *filenameCountStr = (char*) malloc(sizeof(char) * 36);
-    extern char fileName[];
-    char *data = (char *) (malloc(sizeof(char)*7));
-    extern char baseFileName[];
-    time_t init = 0;
-    time(&init);
+	flow_t *flow_hsh;
+	HashTableUtil::init_hash_walk(test_table);
+	struct tm *clock = NULL;
+	//extern char baseFileName[];
+	//extern char fileName[];
+	//snprintf(fileName,256,"%s_%u",baseFileName, numo);
+	char *filenameCountStr = (char*) malloc(sizeof(char) * 36);
+	extern char fileName[];
+	char *data = (char *) (malloc(sizeof(char)*7));
+	extern char baseFileName[];
+	time_t init = 0;
+	time(&init);
 
-    clock = (struct tm *)localtime(&(init));
-    getDate(&init,data,6) ;
-    snprintf(filenameCountStr,36,"%s_latestFile",data);
-    snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
-    while ((flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(test_table))) {
-//	fprintf(stdout,"Estamos aqui 1\n");
-	printFlowToFile(flow_hsh, fileName);
-    }
-    free(filenameCountStr);
-    free(data);
-    HashTableUtil::clear_hash_table(test_table);
+	clock = (struct tm *)localtime(&(init));
+	getDate(&init,data,6) ;
+	snprintf(filenameCountStr,36,"%s_latestFile",data);
+	snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
+	while ((flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(test_table))) {
+		//	fprintf(stdout,"Estamos aqui 1\n");
+		printFlowToFile(flow_hsh, fileName);
+	}
+	free(filenameCountStr);
+	free(data);
+	HashTableUtil::clear_hash_table(test_table);
 }
 
 void task_ctrl_C(int i)
 {
-    //printHash("stdout");
-/*    char *filenameCountStr = malloc(sizeof(char) * 36);
-    extern char fileName[];
-    char *data = (char *) (malloc(sizeof(char)*7));
-    extern char baseFileName[];
-    time_t init = 0;
-    filenameCount++;
-    getDate(&init,data,6) ;
-    snprintf(filenameCountStr,36,"%s_%u",data,filenameCount);
-    snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);*/
-    printHash();
-    printf(" <- Interrupt received.\nProgram will exit now!\n");
-    /*free(filenameCountStr);
-    free(data);*/
-    exit(0);
+	//printHash("stdout");
+	/*    char *filenameCountStr = malloc(sizeof(char) * 36);
+	extern char fileName[];
+	char *data = (char *) (malloc(sizeof(char)*7));
+	extern char baseFileName[];
+	time_t init = 0;
+	filenameCount++;
+	getDate(&init,data,6) ;
+	snprintf(filenameCountStr,36,"%s_%u",data,filenameCount);
+	snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);*/
+	printHash();
+	printf(" <- Interrupt received.\nProgram will exit now!\n");
+	/*free(filenameCountStr);
+	free(data);*/
+	exit(0);
 }
 
 void *verifyHashTimeOut(void *par)
@@ -476,16 +476,16 @@ void *verifyHashTimeOut(void *par)
 
 		// fixed
 		if (outputThroughput) {
-		        frames_cal = frames_cap - frames_caled;
-		//      bytes_cal = bytes_cap - bytes_caled;
-				FILE *out = fopen(outputFileName, "a");
-				if (out == NULL)
-					printf("error!\n");
-			    fprintf(out, "# %.2f fps\n", frames_cal*fraction);
-				fclose(out);
-		//     	printf("# %.0d %.0d %.2fpackets/s %.0d %.2fbytes/s\n", (int)frames_cap, (int)frames_cal, frames_cal*fraction, (int)bytes_cal, bytes_cal*fraction);
-				frames_caled += frames_cal;
-		//		bytes_caled += bytes_cal;
+			frames_cal = frames_cap - frames_caled;
+			//      bytes_cal = bytes_cap - bytes_caled;
+			FILE *out = fopen(outputFileName, "a");
+			if (out == NULL)
+				printf("error!\n");
+			fprintf(out, "# %.2f fps\n", frames_cal*fraction);
+			fclose(out);
+			//     	printf("# %.0d %.0d %.2fpackets/s %.0d %.2fbytes/s\n", (int)frames_cap, (int)frames_cal, frames_cal*fraction, (int)bytes_cal, bytes_cal*fraction);
+			frames_caled += frames_cal;
+			//		bytes_caled += bytes_cal;
 		}
 		// fixed
 
@@ -496,9 +496,9 @@ void *verifyHashTimeOut(void *par)
 		clock = (struct tm *)localtime(&(init));
 		if((interCounter>=fileExpTime)&&(fileExpTime>0)){
 			filenameCount++;
-              		getDate(&init,data,6) ;
-                  	snprintf(filenameCountStr,36,"%s_%u",data,filenameCount);
-                        snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
+			getDate(&init,data,6) ;
+			snprintf(filenameCountStr,36,"%s_%u",data,filenameCount);
+			snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
 			interCounter=0;
 		}
 		if( ((clock->tm_hour) == 0)&&((clock->tm_min)<((int)((fileAdminTime*2)/60))) ) {
@@ -515,7 +515,7 @@ void *verifyHashTimeOut(void *par)
 		//cleanHash(test_table, sec, usec, fileName);		
 
 		optimumCleanHash(test_table, sec, usec, fileName);//introduced on 1 August 2007, it aims to optimize 
-								  //the analyzer-px output according to -b parameter 
+		//the analyzer-px output according to -b parameter 
 		interCounter++;
 		time(&final);
 	}
@@ -527,62 +527,62 @@ void *verifyHashTimeOut(void *par)
 
 	free(filenameCountStr);
 	free(data);
-	
+
 	//pthread_exit (0);
 	return (void *) NULL;
 } 
 
 /*void *verifyHashTimeOut(void *par)
 {
-    int filenameCount = 0;
-    int fileAdminTime = *((int *) par);
-    time_t init = 0, final = 0, sec, usec;
-    extern int analyserpxError;
-    extern char logFileName[];
-    extern char *baseFileName;
-    extern char *fileName;
+int filenameCount = 0;
+int fileAdminTime = *((int *) par);
+time_t init = 0, final = 0, sec, usec;
+extern int analyserpxError;
+extern char logFileName[];
+extern char *baseFileName;
+extern char *fileName;
 
-    char *filenameCountStr = malloc(sizeof(char) * 16);
+char *filenameCountStr = malloc(sizeof(char) * 16);
 
-    while (analyserpxError == 0) {
-	sleep(fileAdminTime - (final - init));
-	sec = tvSec;
-	usec = tvUSec;
-	time(&init);
-	sprintf(filenameCountStr, "%d", filenameCount++);
-	strncpy(fileName, baseFileName,strlen(baseFileName));
-	strncat(fileName, filenameCountStr,strlen(filenameCountStr));
-	cleanHash(test_table, sec, usec, fileName);
-	time(&final);
-    }
+while (analyserpxError == 0) {
+sleep(fileAdminTime - (final - init));
+sec = tvSec;
+usec = tvUSec;
+time(&init);
+sprintf(filenameCountStr, "%d", filenameCount++);
+strncpy(fileName, baseFileName,strlen(baseFileName));
+strncat(fileName, filenameCountStr,strlen(filenameCountStr));
+cleanHash(test_table, sec, usec, fileName);
+time(&final);
+}
 
-    if (analyserpxError) {
-	char buffer[50];
-	sprintf(buffer, "ERROR CLEANING HASH. ERROR CODE: %d", analyserpxError);
-	writeStringToLogFile(logFileName, buffer, NULL);
-    }
+if (analyserpxError) {
+char buffer[50];
+sprintf(buffer, "ERROR CLEANING HASH. ERROR CODE: %d", analyserpxError);
+writeStringToLogFile(logFileName, buffer, NULL);
+}
 
-    return (void *) NULL;
+return (void *) NULL;
 }*/
 
 int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp, int threadNum)
 {
-    extern int analyserpxError;
-    pthread_t hashTimeOut;
-	
-    extern char baseFileName[];
-    extern char fileName[];
-    extern int tFlag;
-    admin_t *control=(admin_t *)malloc(sizeof(admin_t));
-    control->interval=fileAdminTime;
-    control->hop=fileExpTime;
+	extern int analyserpxError;
+	pthread_t hashTimeOut;
+
+	extern char baseFileName[];
+	extern char fileName[];
+	extern int tFlag;
+	admin_t *control=(admin_t *)malloc(sizeof(admin_t));
+	control->interval=fileAdminTime;
+	control->hop=fileExpTime;
 	ThreadParams *tps        = new ThreadParams[threadNum];
 	pthread_t *workerthreads = new pthread_t[threadNum];
 
-    flow_export=flow_exp; 
-    /* interrupt rotine to Ctrl-C */
-    signal(SIGINT, task_ctrl_C);	
-	
+	flow_export=flow_exp; 
+	/* interrupt rotine to Ctrl-C */
+	signal(SIGINT, task_ctrl_C);	
+
 	pthread_mutex_init(&cap_lock , NULL ) ;
 	pthread_mutex_init(&hash_lock , NULL ) ;
 	pthread_mutex_init(&print_lock , NULL ) ;
@@ -594,24 +594,24 @@ int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileE
 		tps[i].counttotal = 0;
 		tps[i].conf = conf;
 	}
-	
-    test_table = HashTableUtil::init_hash_table("ANALYSERPX_CAP_TABLE", compare_flow, flow_key,
-				 delete_flow, HASH_SIZE);
 
-    //pthread_create(&hashTimeOut, NULL, verifyHashTimeOut, &fileAdminTime);
+	test_table = HashTableUtil::init_hash_table("ANALYSERPX_CAP_TABLE", compare_flow, flow_key,
+		delete_flow, HASH_SIZE);
 
-    if (offLineFile == NULL) {
-	    onlineCapMode = 1;
-	    pthread_create(&hashTimeOut, NULL, verifyHashTimeOut, control);
-    }
-    else {
-	    snprintf(fileName,256,"%s_0",baseFileName);
-	    onlineCapMode = 0;	
-	    fileAdminTimeOff = fileAdminTime;
-	    slotsOffline=control->hop;
-    }
-	
-    analyserpxError = initiate_capture( conf, onlineCapMode, offLineFile);
+	//pthread_create(&hashTimeOut, NULL, verifyHashTimeOut, &fileAdminTime);
+
+	if (offLineFile == NULL) {
+		onlineCapMode = 1;
+		pthread_create(&hashTimeOut, NULL, verifyHashTimeOut, control);
+	}
+	else {
+		snprintf(fileName,256,"%s_0",baseFileName);
+		onlineCapMode = 0;	
+		fileAdminTimeOff = fileAdminTime;
+		slotsOffline=control->hop;
+	}
+
+	analyserpxError = initiate_capture( conf, onlineCapMode, offLineFile);
 	if ( analyserpxError == 0 ){
 		for (int i = 0; i < threadNum; ++i ){
 			pthread_create(&workerthreads[i], NULL, threadsLoop, &tps[i]);	
@@ -620,18 +620,18 @@ int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileE
 			pthread_join(workerthreads[i],NULL);
 		}
 	}
-	
-    tFlag=0;
-//    printHash(fileName);
-    printHash();
-    if (offLineFile == NULL) {
+
+	tFlag=0;
+	//    printHash(fileName);
+	printHash();
+	if (offLineFile == NULL) {
 		pthread_exit((void*)verifyHashTimeOut);
-    }
-    //printHash(fileName);
-    free(control);
+	}
+	//printHash(fileName);
+	free(control);
 	delete [] workerthreads;
 	delete [] tps;
-    return analyserpxError;
+	return analyserpxError;
 }
 
 void *threadsLoop(void *par){
@@ -642,10 +642,10 @@ void *threadsLoop(void *par){
 	int size;
 	int sizetmp;
 	long long count = 0;
-	
+
 	struct pcap_pkthdr *head = (pcap_pkthdr*)malloc(sizeof(const struct pcap_pkthdr));
 	const u_char       *pkt = (unsigned char*)malloc(tp->conf->snap_len + 2);
-	
+
 	int res;
 	do{
 		//pthread_mutex_lock(&cap_lock);
@@ -655,13 +655,13 @@ void *threadsLoop(void *par){
 			ip = (struct ip *) (packet + ETHER_HDR_LEN);
 			sizetmp = ntohs(ip->ip_len);
 			if( sizetmp <= ( tp->conf->snap_len - ETHER_HDR_LEN) ) {
-    			size = sizetmp;
-	 	  	} else {
+				size = sizetmp;
+			} else {
 				size = tp->conf->snap_len - ETHER_HDR_LEN;
-		    }			 		
+			}			 		
 			memcpy ( (void*) head  , (void*)header, sizeof(struct pcap_pkthdr) );
 			memcpy ( (void*) pkt, (void*)packet, size + ETHER_HDR_LEN );
-						
+
 			pthread_mutex_unlock(&cap_lock);	
 			statistician.processNewPacket((u_char *) & (tp->conf->snap_len), head, pkt, tp);
 			//mount_flow( (u_char *) & (tp->conf->snap_len), head, pkt, tp );
@@ -669,8 +669,8 @@ void *threadsLoop(void *par){
 		} else {
 			pthread_mutex_unlock(&cap_lock);		
 		}
-		
-		
+
+
 	}while (res >= 0);
 	pthread_mutex_lock(&print_lock);
 	printf("Packets count : %d \n", tp->counttotal);
@@ -678,7 +678,7 @@ void *threadsLoop(void *par){
 	for (int i=0; i < 6; ++i){
 		printf("Packets count if%d : %d \n", i, tp->count[i] );//, ((double)tp->count[i]/(double)tp->counttotal)*100 );
 		tmp -= tp->count[i];
-		
+
 	}
 	printf("Packets not classified : %d \n", tmp);
 	pthread_mutex_unlock(&print_lock);

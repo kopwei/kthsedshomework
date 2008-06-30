@@ -4,7 +4,7 @@
 #include "../include/analyserpxFile.h"
 
 
-void writeStringToLogFile(const char *fileName, const char *str,
+void CFileUtil::writeStringToLogFile(const char *fileName, const char *str,
 			  char *errbuff)
 {
     FILE *logs = fopen(fileName, "a+");
@@ -18,7 +18,7 @@ void writeStringToLogFile(const char *fileName, const char *str,
     closeFile(logs);
 }
 
-FILE *openFile(const char *fileName, const char *mode, char *errbuff,
+FILE* CFileUtil::openFile(const char *fileName, const char *mode, char *errbuff,
 	       char *logFile)
 {
     FILE *p = fopen(fileName, mode);
@@ -36,14 +36,14 @@ FILE *openFile(const char *fileName, const char *mode, char *errbuff,
     return p;
 }
 
-void closeFile(FILE * p)
+void CFileUtil::closeFile(FILE * p)
 {
     if (p == NULL)
 	return;
     fclose(p);
 }
 
-long getSizeofFile(char *fileName)
+long CFileUtil::getSizeofFile(char *fileName)
 {
     FILE *file = openFile(fileName, "r", NULL, NULL);
     long size = 0;
@@ -55,7 +55,7 @@ long getSizeofFile(char *fileName)
     return size;
 }
 
-int existFile(char *fileName)
+int CFileUtil::existFile(char *fileName)
 {
     FILE *f = fopen(fileName, "r");
     if (f == NULL)
@@ -65,7 +65,7 @@ int existFile(char *fileName)
     return 1;
 }
 
-int deleteFile(char *fileName)
+int CFileUtil::deleteFile(char *fileName)
 {
     if (existFile(fileName)) {
 	return remove(fileName);

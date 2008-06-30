@@ -10,7 +10,7 @@
 #include <string.h>
 
 
-cap_config *new_cap_config()
+cap_config* CCaptureUtil::new_cap_config()
 {
     cap_config *c = (cap_config *) malloc(sizeof(cap_config));
     snprintf(c->dev,10,"%s","");//c->dev = NULL;
@@ -27,7 +27,7 @@ cap_config *new_cap_config()
 
 
 
-int start_capture(pcap_handler func, u_char * arg, cap_config * c,
+int CCaptureUtil::start_capture(pcap_handler func, u_char * arg, cap_config * c,
 		  int onlineCapMode, char *offLineFile)
 {
     pcap_lookupnet(c->dev, &(c->netp), &(c->maskp), c->errbuf);
@@ -68,7 +68,7 @@ int start_capture(pcap_handler func, u_char * arg, cap_config * c,
 }
 
 /* Add 22/05 - Rafael */
-int initiate_capture(cap_config * c, int onlineCapMode, char *offLineFile)
+int CCaptureUtil::initiate_capture(cap_config * c, int onlineCapMode, char *offLineFile)
 {
     pcap_lookupnet(c->dev, &(c->netp), &(c->maskp), c->errbuf);
     if (onlineCapMode == 1) {
@@ -103,4 +103,9 @@ int initiate_capture(cap_config * c, int onlineCapMode, char *offLineFile)
 
     return 0;
 
+}
+
+void CCaptureUtil::delete_cap_config(void *data)
+{
+	// TODO: Unfinished
 }

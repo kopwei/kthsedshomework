@@ -59,6 +59,7 @@ The generic delete function simply free's it's argument.
 
 class HashTableUtil
 {
+public:
 	static void free_hash_table(hash_tab *table);
 
 	/*!     \fn extern int compare_generic_hash(const void *entry1, const void *entry2)

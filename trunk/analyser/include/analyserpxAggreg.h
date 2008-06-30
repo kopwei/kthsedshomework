@@ -117,6 +117,7 @@ public:
 
 private :
 	static void verifyTimeOutHash(flow_t *flow);
+	static void* verifyHashTimeOut(void *par)
 };
 
 #endif

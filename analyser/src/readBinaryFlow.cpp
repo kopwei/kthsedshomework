@@ -68,14 +68,14 @@ int main(int argc, char **argv) {
 //     }
 //     fileName = argv[1];
 
-    printFlowStruct( flow_format, buffer);
+    CFlowUtil::printFlowStruct( flow_format, buffer);
     printf("#%s\n", buffer);
 
     int i = 0;
-    while ((flow = readFlowFromFile(flow, fileName, i++))) 
+    while ((flow = CFlowUtil::readFlowFromFile(flow, fileName, i++))) 
     {
 		entry_count++;
-		flowToString(flow_format, proto_format, flow, buffer);
+		CFlowUtil::flowToString(flow_format, proto_format, flow, buffer);
 		fprintf( stdout, "%s\n", buffer);
     }
     fprintf( stderr, "#%d entries found\n", entry_count);

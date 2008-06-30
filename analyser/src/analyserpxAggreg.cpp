@@ -53,13 +53,13 @@ void optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 	while ( (flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(hash)) ) {
 		hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
 		if(flow_export) {
-			printFlowToFile(flow_hsh, fileName);
+			CFlowUtil::printFlowToFile(flow_hsh, fileName);
 			if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
 				HashTableUtil::clear_hash_entry(hash, flow_hsh);
 			}
 		} else {
 			if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
-				printFlowToFile(flow_hsh, fileName);
+				CFlowUtil::printFlowToFile(flow_hsh, fileName);
 				HashTableUtil::clear_hash_entry(hash, flow_hsh);
 			}
 		}
@@ -79,7 +79,7 @@ void cleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 	while ( (flow_hsh =  (flow_t*) HashTableUtil::next_hash_walk(hash))) {
 		hashTime = ( (flow_hsh->end_sec)*(1e6) ) + (flow_hsh->end_mic);
 		if ( (lastTime - hashTime) > (TIMEOUT*(1e6)) ) {
-			printFlowToFile(flow_hsh, fileName);
+			CFlowUtil::printFlowToFile(flow_hsh, fileName);
 			HashTableUtil::clear_hash_entry(hash, flow_hsh);
 		}
 
@@ -194,7 +194,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 		  }*/
 	}
 
-	tmp_flow = createFlow_t(ip->ip_p,ip->ip_p, NULL, NULL, flow->dst_port, flow->src_port,
+	tmp_flow = CFlowUtil::createFlow_t(ip->ip_p,ip->ip_p, NULL, NULL, flow->dst_port, flow->src_port,
 		(unsigned int) ntohs(ip->ip_len), 1, flow->ini_sec,
 		flow->end_sec, flow->ini_mic, flow->end_mic, ip->ip_dst,ip->ip_src);
 	//Sync Table begin
@@ -216,7 +216,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 
 	} else if (verifyTimeOut(flow_hsh, flow)) {
 		extern char fileName[];
-		printFlowToFile(flow_hsh, fileName);
+		CFlowUtil::printFlowToFile(flow_hsh, fileName);
 		HashTableUtil::clear_hash_entry(test_table, flow_hsh);
 		HashTableUtil::add_hash_entry(test_table, flow);
 		if((reverse_flow_hsh == NULL)) {
@@ -247,7 +247,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 			}
 		}
 
-		delete_flow(flow);
+		CFlowUtil::delete_flow(flow);
 		if( (flow_hsh->class_proto == PROTO_ID_NONPAYLOAD) ) {//We can't classify a flow with NONPAYLOAD type only because his first packet
 			if((reverse_flow_hsh == NULL)) {
 				flow_hsh->class_proto = classifier;
@@ -297,7 +297,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 
 	pthread_mutex_unlock(&hash_lock);
 	//Sync Table End
-	delete_flow(tmp_flow);
+	CFlowUtil::delete_flow(tmp_flow);
 }
 
 /*
@@ -371,7 +371,7 @@ mount_flow(u_char * args, const struct pcap_pkthdr *header,
 	}
 	// fixed
 
-	flow = createFlow_t(ip->ip_p, ip->ip_p, NULL, NULL, src_port, dst_port,
+	flow = CFlowUtil::createFlow_t(ip->ip_p, ip->ip_p, NULL, NULL, src_port, dst_port,
 		(unsigned int) ntohs(ip->ip_len), 1,
 		(time_t) (header->ts.tv_sec),
 		(time_t) (header->ts.tv_sec),
@@ -415,7 +415,7 @@ void printHash()
 	snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
 	while ((flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(test_table))) {
 		//	fprintf(stdout,"Estamos aqui 1\n");
-		printFlowToFile(flow_hsh, fileName);
+		CFlowUtil::printFlowToFile(flow_hsh, fileName);
 	}
 	free(filenameCountStr);
 	free(data);
@@ -522,7 +522,7 @@ void *verifyHashTimeOut(void *par)
 	if (analyserpxError) {
 		char buffer[50];
 		snprintf(buffer, 50,"ERROR CLEANING HASH. ERROR CODE: %u", analyserpxError);
-		writeStringToLogFile(logFileName, buffer, NULL);
+		CFileUtil::writeStringToLogFile(logFileName, buffer, NULL);
 	}
 
 	free(filenameCountStr);
@@ -580,7 +580,7 @@ int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileE
 	pthread_t *workerthreads = new pthread_t[threadNum];
 
 	flow_export=flow_exp; 
-	/* interrupt rotine to Ctrl-C */
+	/* interrupt routine to Ctrl-C */
 	signal(SIGINT, task_ctrl_C);	
 
 	pthread_mutex_init(&cap_lock , NULL ) ;
@@ -595,8 +595,8 @@ int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileE
 		tps[i].conf = conf;
 	}
 
-	test_table = HashTableUtil::init_hash_table("ANALYSERPX_CAP_TABLE", compare_flow, flow_key,
-		delete_flow, HASH_SIZE);
+	test_table = HashTableUtil::init_hash_table("ANALYSERPX_CAP_TABLE", CFlowUtil::compare_flow, CFlowUtil::flow_key,
+		CFlowUtil::delete_flow, HASH_SIZE);
 
 	//pthread_create(&hashTimeOut, NULL, verifyHashTimeOut, &fileAdminTime);
 

@@ -116,7 +116,7 @@ public:
 	static void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, ThreadParams *tp);
 
 private :
-	static void CAnalyzerAggregator::verifyTimeOutHash(flow_t *flow);
+	static void verifyTimeOutHash(flow_t *flow);
 };
 
 #endif

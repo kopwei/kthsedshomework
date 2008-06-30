@@ -152,7 +152,8 @@ int main(int argc, char **argv){
 	printf("Number of worker threads: %d \n",threadnumber);
 
 	//analyserpxError = analyserpxStart(conf, fileAdminTime, fileExpTime, offLineFile,flow_exp);
-	analyserpxError = analyserpxStartMultiThreaded(conf, fileAdminTime, fileExpTime, offLineFile,flow_exp, threadnumber);
+	analyserpxError = CAnalyzerAggregator::analyserpxStartMultiThreaded(conf, fileAdminTime, fileExpTime, offLineFile,
+		flow_exp, threadnumber);
 	if (analyserpxError) 
 	{
 		printf("\nThe program will exit with erro code %d\n", analyserpxError);

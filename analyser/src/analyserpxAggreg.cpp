@@ -422,7 +422,7 @@ void CAnalyzerAggregator::printHash()
 	HashTableUtil::clear_hash_table(test_table);
 }
 
-void task_ctrl_C(int i)
+void CAnalyzerAggregator::task_ctrl_C(int i)
 {
 	//printHash("stdout");
 	/*    char *filenameCountStr = malloc(sizeof(char) * 36);

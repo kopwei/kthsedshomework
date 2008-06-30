@@ -6,7 +6,7 @@
 #include <netinet/in.h>
 
 
-int coupeEOF (const unsigned char *payload, const u_short mess_len, unsigned char* strg)
+int CClassifier::coupeEOF (const unsigned char *payload, const u_short mess_len, unsigned char* strg)
 {
 
 	strncpy((char*)strg,"",1);
@@ -25,7 +25,7 @@ int coupeEOF (const unsigned char *payload, const u_short mess_len, unsigned cha
 	return (c);
 }
 
-unsigned char *getPayload(const struct ip *iph)
+unsigned char* CClassifier::getPayload(const struct ip *iph)
 {
 	unsigned char *payload = NULL;
 	unsigned char *transport = (unsigned char *) iph + iph->ip_hl * 4;
@@ -42,7 +42,7 @@ unsigned char *getPayload(const struct ip *iph)
 	return payload;
 }
 
-unsigned short getPayloadLen(const struct ip *iph, u_short ipLen)
+unsigned short CClassifier::getPayloadLen(const struct ip *iph, u_short ipLen)
 {
 	unsigned char *transport = (unsigned char *) iph + iph->ip_hl * 4;
 	// if protocol is TCP
@@ -59,7 +59,7 @@ unsigned short getPayloadLen(const struct ip *iph, u_short ipLen)
 	//return ipLen - (payload - ((unsigned char *) iph));
 }
 
-u_short getID(const struct ip *iph, u16 ipLen)
+u_short CClassifier::getID(const struct ip *iph, u16 ipLen)
 {
 	unsigned char *strg;
 	unsigned char *transp = (unsigned char *) iph + iph->ip_hl * 4;
@@ -2536,7 +2536,7 @@ u_short getID(const struct ip *iph, u16 ipLen)
 }
 
 //Earth
-u_short isEarthu(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isEarthu(const unsigned char *payload, const u16 mess_len)
 {
 	unsigned char *t = (unsigned char *) payload;
 	if (mess_len < 4)
@@ -2550,7 +2550,7 @@ u_short isEarthu(const unsigned char *payload, const u16 mess_len)
 /**
  * MP2P
  */
-u_short isMP2Pu(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isMP2Pu(const unsigned char *payload, const u16 mess_len)
 {
 	unsigned char *t = (unsigned char *) payload;
 	if (mess_len < 5)
@@ -2564,7 +2564,7 @@ u_short isMP2Pu(const unsigned char *payload, const u16 mess_len)
 /**
  *  OpenNap/Napster for TCP
  */
-u_short isNap(unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isNap(unsigned char *payload, const u16 mess_len)
 {
 	/*unsigned char *t = (unsigned char *) payload;
 
@@ -2612,7 +2612,7 @@ u_short isNap(unsigned char *payload, const u16 mess_len)
 /**
  * Earth Station 5 for TCP//Identificacao do frames UDP
  */
-u_short isEarthS5(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isEarthS5(const unsigned char *payload, const u16 mess_len)
 {
 	unsigned char *t = (unsigned char *) payload;
 
@@ -2625,7 +2625,7 @@ u_short isEarthS5(const unsigned char *payload, const u16 mess_len)
 }
 
 /* MP2P for TCP*/
-u_short isMP2P(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isMP2P(const unsigned char *payload, const u16 mess_len)
 {
 	unsigned char *t = (unsigned char *) payload;
 
@@ -2640,7 +2640,7 @@ u_short isMP2P(const unsigned char *payload, const u16 mess_len)
 }
 
 /*Search for UDP KaZaA commands*/
-u_short isKazaau(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isKazaau(const unsigned char *payload, const u16 mess_len)
 {
 	unsigned char *t = (unsigned char *) payload;
 	if (mess_len < 6)
@@ -2663,7 +2663,7 @@ u_short isKazaau(const unsigned char *payload, const u16 mess_len)
 }				/*udp_search_kazaa */
 
 /*check for gnutella get commands and other typical data*/
-u_short isGnu_all(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isGnu_all(const unsigned char *payload, const u16 mess_len)
 {
 
 	if (mess_len < 2)
@@ -2697,7 +2697,7 @@ u_short isGnu_all(const unsigned char *payload, const u16 mess_len)
 }
 
 /*intensive but slower check for all direct connect packets*/
-u_short isDc_all(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isDc_all(const unsigned char *payload, const u16 mess_len)
 {
 	//    unsigned char *t = haystack;
 
@@ -2720,7 +2720,7 @@ u_short isDc_all(const unsigned char *payload, const u16 mess_len)
 }
 
 /*Search for UDP BitTorrent commands*/
-u_short isBittorrentu(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isBittorrentu(const unsigned char *payload, const u16 mess_len)
 {
 	switch (mess_len) {
 	case 24:
@@ -2817,7 +2817,7 @@ u_short isBittorrentu(const unsigned char *payload, const u16 mess_len)
 }				/*udp_search_bit */
 
 /* search for waste */
-u_short isWaste(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isWaste(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len >= 9 && memcmp(payload, "GET.sha1:", 9) == 0)
 		return 1;
@@ -2825,7 +2825,7 @@ u_short isWaste(const unsigned char *payload, const u16 mess_len)
 	return 0;
 }
 
-u_short isXdcc(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isXdcc(const unsigned char *payload, const u16 mess_len)
 {
 	/* search in small packets only */
 	if (mess_len > 20 && mess_len < 200 && payload[mess_len - 1] == 0x0a
@@ -2847,7 +2847,7 @@ u_short isXdcc(const unsigned char *payload, const u16 mess_len)
 	return 0;
 }
 
-u_short isKazaa_all(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isKazaa_all(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len < 2)
 		return 0;
@@ -2880,7 +2880,7 @@ u_short isKazaa_all(const unsigned char *payload, const u16 mess_len)
 	return 0;
 }
 
-u_short isMute(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isMute(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len == 209 || mess_len == 345 || mess_len == 473
 			|| mess_len == 609 || mess_len == 1121) {
@@ -2898,7 +2898,7 @@ u_short isMute(const unsigned char *payload, const u16 mess_len)
 	return 0;
 }
 
-u_short isWinMX(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isWinMX(const unsigned char *payload, const u16 mess_len)
 {
 	if (((mess_len) == 4) && (memcmp(payload, "SEND", 4) == 0))
 		return 1;
@@ -2937,7 +2937,7 @@ u_short isWinMX(const unsigned char *payload, const u16 mess_len)
 }				/*search_winmx */
 
 
-u_short isKazaa(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isKazaa(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len < 11)
 		return 0;
@@ -2965,7 +2965,7 @@ u_short isKazaa(const unsigned char *payload, const u16 mess_len)
 	return 0;
 }
 
-u_short isBittorrent(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isBittorrent(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len > 20) {
 		/* test for match 0x13+"BitTorrent protocol" */
@@ -3023,7 +3023,7 @@ u_short isBittorrent(const unsigned char *payload, const u16 mess_len)
 }
 
 /*intensive but slower check for all direct connect packets*/
-u_short isDc(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isDc(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len < 1)
 		return 0;
@@ -3068,7 +3068,7 @@ u_short isDc(const unsigned char *payload, const u16 mess_len)
 }
 
 /*Search for appleJuice commands*/
-u_short isApple(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isApple(const unsigned char *payload, const u16 mess_len)
 {
 	if ((mess_len > 7) && (payload[6] == 0x0d) && (payload[7] == 0x0a)
 			&& (memcmp(payload, "ajprot", 6) == 0))
@@ -3078,7 +3078,7 @@ u_short isApple(const unsigned char *payload, const u16 mess_len)
 }
 
 /*fast check for edonkey file segment transfer command*/
-u_short isEdk(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isEdk(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len < 1)
 		return 0;
@@ -3094,7 +3094,7 @@ u_short isEdk(const unsigned char *payload, const u16 mess_len)
 }
 
 /*intensive but slower search for some edonkey packets including size-check*/
-u_short isEdk_all(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isEdk_all(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len < 1)
 		return 0;
@@ -3117,7 +3117,7 @@ u_short isEdk_all(const unsigned char *payload, const u16 mess_len)
 	}
 }
 
-u_short isGnu(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isGnu(const unsigned char *payload, const u16 mess_len)
 {
 	if (mess_len < 9)
 		return 0;
@@ -3162,7 +3162,7 @@ u_short isGnu(const unsigned char *payload, const u16 mess_len)
 }
 
 /*Search for SoulSeek commands*/
-u_short isSoul(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isSoul(const unsigned char *payload, const u16 mess_len)
 {
 	/* match: xx xx xx xx | xx = sizeof(payload) - 4 */
 	if (mess_len < 9 ) return 0;
@@ -3235,7 +3235,7 @@ u_short isSoul(const unsigned char *payload, const u16 mess_len)
 
 
 /*Ares for TCP*/
-u_short isAres(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isAres(const unsigned char *payload, const u16 mess_len)
 {
 	/* all ares packets start with  */
 	/*payload pattern extracted from Blinc signatures paper*/
@@ -3284,7 +3284,7 @@ u_short isAres(const unsigned char *payload, const u16 mess_len)
 /**
  * eDonkey for UDP
  */
-u_short isEdku(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isEdku(const unsigned char *payload, const u16 mess_len)
 {
 	unsigned char *t = (unsigned char *) payload;
 
@@ -3394,7 +3394,7 @@ u_short isEdku(const unsigned char *payload, const u16 mess_len)
 
 
 //Gnutella
-u_short isGnuu(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isGnuu(const unsigned char *payload, const u16 mess_len)
 {
 	unsigned char *t = (unsigned char *) payload;
 
@@ -3429,7 +3429,7 @@ u_short isGnuu(const unsigned char *payload, const u16 mess_len)
 }
 
 //DirectConnect UDP
-u_short isDcu(const unsigned char *payload, const u16 mess_len)
+u_short CClassifier::isDcu(const unsigned char *payload, const u16 mess_len)
 {
 	unsigned char *t = (unsigned char *) payload;
 	if (mess_len < 9)
@@ -3454,7 +3454,7 @@ u_short isDcu(const unsigned char *payload, const u16 mess_len)
 	return 0;
 }
 
-u_short isGoBoogy (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isGoBoogy (unsigned char *payload, const u16 mess_len) {
 	if ((regexec(goBoogy, (char*)payload, 0, NULL, 0)==0)) {
 		//free(strg);
 		return 1;
@@ -3472,7 +3472,7 @@ printf("ttt\n");
 	return 0;
 }
 
-u_short isGoBoogyu (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isGoBoogyu (unsigned char *payload, const u16 mess_len) {
 
 	if ((regexec(goBoogy, (char*)payload, 0, NULL, 0)==0)) {
 		//free(strg);
@@ -3481,7 +3481,7 @@ u_short isGoBoogyu (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isHTTP (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isHTTP (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3498,7 +3498,7 @@ u_short isHTTP (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isAIM (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isAIM (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3510,7 +3510,7 @@ u_short isAIM (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isIRC (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isIRC (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3523,7 +3523,7 @@ u_short isIRC (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isMSN (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isMSN (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3536,7 +3536,7 @@ u_short isMSN (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isYahooMess (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isYahooMess (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3548,7 +3548,7 @@ u_short isYahooMess (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isHLCS (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isHLCS (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3560,17 +3560,17 @@ u_short isHLCS (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isHL2DEATH (const unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isHL2DEATH (const unsigned char *payload, const u16 mess_len) {
 
 	return 0;
 }
 
-u_short isHL2CS (const unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isHL2CS (const unsigned char *payload, const u16 mess_len) {
 
 	return 0;
 }
 
-u_short isHLDEATH (const unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isHLDEATH (const unsigned char *payload, const u16 mess_len) {
 
 	/*char* t = payload;
 	if(mess_len<3) return 0;
@@ -3590,12 +3590,12 @@ u_short isHLDEATH (const unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isQUAKE3 (const unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isQUAKE3 (const unsigned char *payload, const u16 mess_len) {
 
 	return 0;
 }
 
-u_short isDNS (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isDNS (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3607,7 +3607,7 @@ u_short isDNS (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isRTSP (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isRTSP (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3620,7 +3620,7 @@ u_short isRTSP (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isHTTPQuicktime (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isHTTPQuicktime (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3633,7 +3633,7 @@ u_short isHTTPQuicktime (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isHTTPVideo (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isHTTPVideo (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3646,7 +3646,7 @@ u_short isHTTPVideo (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isHTTPAudio (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isHTTPAudio (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3659,7 +3659,7 @@ u_short isHTTPAudio (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isPOP3 (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isPOP3 (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3672,7 +3672,7 @@ u_short isPOP3 (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isSMTP (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isSMTP (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3685,7 +3685,7 @@ u_short isSMTP (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isFTP (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isFTP (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3698,7 +3698,7 @@ u_short isFTP (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isSkypeOut (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isSkypeOut (unsigned char *payload, const u16 mess_len) {
 
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
@@ -3711,7 +3711,7 @@ u_short isSkypeOut (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isSkypeToSkype (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isSkypeToSkype (unsigned char *payload, const u16 mess_len) {
 
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
@@ -3724,7 +3724,7 @@ u_short isSkypeToSkype (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isSSL (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isSSL (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3736,7 +3736,7 @@ u_short isSSL (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isVALIDCERTSSL (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isVALIDCERTSSL (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3748,7 +3748,7 @@ u_short isVALIDCERTSSL (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isSSH (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isSSH (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3760,7 +3760,7 @@ u_short isSSH (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isNetBios (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isNetBios (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3772,7 +3772,7 @@ u_short isNetBios (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isNbns (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isNbns (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3784,7 +3784,7 @@ u_short isNbns (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isNbds (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isNbds (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3796,7 +3796,7 @@ u_short isNbds (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isBootstrap (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isBootstrap (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3808,7 +3808,7 @@ u_short isBootstrap (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isYouTube (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isYouTube (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3820,7 +3820,7 @@ u_short isYouTube (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isGoogleVideo (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isGoogleVideo (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3832,7 +3832,7 @@ u_short isGoogleVideo (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isZippyVideo (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isZippyVideo (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3844,7 +3844,7 @@ u_short isZippyVideo (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isVeoh (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isVeoh (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3856,7 +3856,7 @@ u_short isVeoh (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isVidilife (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isVidilife (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3868,7 +3868,7 @@ u_short isVidilife (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isOtherChat (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isOtherChat (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3880,7 +3880,7 @@ u_short isOtherChat (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isOtherVideoTCP (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isOtherVideoTCP (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3892,7 +3892,7 @@ u_short isOtherVideoTCP (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isOtherVideoUDP (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isOtherVideoUDP (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3904,7 +3904,7 @@ u_short isOtherVideoUDP (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isOtherMail (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isOtherMail (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3916,7 +3916,7 @@ u_short isOtherMail (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isOtherHTTP (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isOtherHTTP (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3928,7 +3928,7 @@ u_short isOtherHTTP (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isMySQL (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isMySQL (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3940,7 +3940,7 @@ u_short isMySQL (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isOtherDNS (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isOtherDNS (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3952,7 +3952,7 @@ u_short isOtherDNS (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isSoribada (unsigned char *payload, const u16 mess_len) {
+u_short CClassifier::isSoribada (unsigned char *payload, const u16 mess_len) {
 	//char *strg = (char*)malloc((mess_len+1)*sizeof(char));
 	//coupeEOF(payload, mess_len, strg);
 	//payload[mess_len-1]='\0';
@@ -3964,13 +3964,13 @@ u_short isSoribada (unsigned char *payload, const u16 mess_len) {
 	return 0;
 }
 
-u_short isAP2PID(u_short id) {
+u_short CClassifier::isAP2PID(u_short id) {
 	if( (id>100) && (id<201) ) 
 		return 1;
 	return 0;
 }
 
-u_short verID(u_short old_id, u_short new_id) {
+u_short CClassifier::verID(u_short old_id, u_short new_id) {
 	if(old_id == PROTO_ID_NONPAYLOAD) {//We can't classify a flow with NONPAYLOAD type only because his first packet
 		return new_id;
 	}
@@ -3987,7 +3987,8 @@ u_short verID(u_short old_id, u_short new_id) {
 	}
 	return old_id;
 }
-u_short isSuperClass(u_short id) {
+
+u_short CClassifier::isSuperClass(u_short id) {
 	if( (id==SSL_SUPER_CLASS_NUMBER) || (id==HTTP_SUPER_CLASS_NUMBER) || (id == 299) ) 
 		return 1;
 	return 0;

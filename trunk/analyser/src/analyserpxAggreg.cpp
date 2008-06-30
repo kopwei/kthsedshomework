@@ -232,7 +232,7 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 		flow_hsh->n_frames += flow->n_frames;
 
 		/* RTA - 26/05/08
-		Verification added for syncronization purposes
+		Verification added for synchronization purposes
 		*/
 		double end   = (double)flow_hsh->end_sec*(1e6) + (double)(flow_hsh->end_mic) ;    	
 		double act   = (double)flow->ini_sec*(1e6) + (double)(flow->ini_mic) ;
@@ -410,7 +410,7 @@ void printHash()
 	time(&init);
 
 	clock = (struct tm *)localtime(&(init));
-	getDate(&init,data,6) ;
+	CFlowUtil::getDate(&init,data,6) ;
 	snprintf(filenameCountStr,36,"%s_latestFile",data);
 	snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
 	while ((flow_hsh = (flow_t*) HashTableUtil::next_hash_walk(test_table))) {
@@ -496,7 +496,7 @@ void *verifyHashTimeOut(void *par)
 		clock = (struct tm *)localtime(&(init));
 		if((interCounter>=fileExpTime)&&(fileExpTime>0)){
 			filenameCount++;
-			getDate(&init,data,6) ;
+			CFlowUtil::getDate(&init,data,6) ;
 			snprintf(filenameCountStr,36,"%s_%u",data,filenameCount);
 			snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
 			interCounter=0;
@@ -504,7 +504,7 @@ void *verifyHashTimeOut(void *par)
 		if( ((clock->tm_hour) == 0)&&((clock->tm_min)<((int)((fileAdminTime*2)/60))) ) {
 			if(flag) {
 				filenameCount=0;
-				getDate(&init,data,6) ;
+				CFlowUtil::getDate(&init,data,6) ;
 				snprintf(filenameCountStr,36,"%s_%u",data,filenameCount);
 				snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);
 			}

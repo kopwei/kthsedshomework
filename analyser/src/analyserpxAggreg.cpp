@@ -39,7 +39,7 @@ unsigned long long bytes_cap = 0;
 
 CPacketStatistician statistician;
 
-void optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
+void CAnalyzerAggregator::optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 {
 	//Sync Table begin
 	//pthread_mutex_lock(&hash_lock);
@@ -70,7 +70,7 @@ void optimumCleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 	pthread_mutex_unlock(&hash_lock);
 
 }
-void cleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
+void CAnalyzerAggregator::cleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 {
 	flow_t *flow_hsh=NULL;
 	HashTableUtil::init_hash_walk(hash);
@@ -87,7 +87,7 @@ void cleanHash(hash_tab * hash, time_t sec, time_t usec, char *fileName)
 	return;
 }
 
-int verifyTimeOut(flow_t * flow1, flow_t * flow2)
+int CAnalyzerAggregator::verifyTimeOut(flow_t * flow1, flow_t * flow2)
 {
 	double temp1 = flow1->end_sec*(1e6) + (flow1->end_mic) ;
 	double temp2 = flow2->end_sec*(1e6) + (flow2->end_mic);
@@ -95,7 +95,7 @@ int verifyTimeOut(flow_t * flow1, flow_t * flow2)
 	return ( result > (TIMEOUT*(1e6)) );
 }
 
-void verifyTimeOutHash(flow_t *flow)
+void CAnalyzerAggregator::verifyTimeOutHash(flow_t *flow)
 {
 
 	static time_t start = 0;
@@ -150,7 +150,7 @@ void verifyTimeOutHash(flow_t *flow)
 
 }
 
-void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, ThreadParams *tp)
+void CAnalyzerAggregator::addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, ThreadParams *tp)
 {
 	flow_t *flow_hsh;
 	flow_t *tmp_flow;
@@ -304,8 +304,8 @@ void addFlowSync(flow_t * flow, const struct ip *ip, unsigned short ipLen, Threa
 * dissect packet
 */
 void
-mount_flow(u_char * args, const struct pcap_pkthdr *header,
-		   const u_char * packet, ThreadParams *tp)
+CAnalyzerAggregator::mount_flow(u_char * args, const struct pcap_pkthdr *header,
+								const u_char * packet, ThreadParams *tp)
 {
 
 	extern int outputThroughput;
@@ -394,7 +394,7 @@ mount_flow(u_char * args, const struct pcap_pkthdr *header,
 }
 
 //void printHash(char *fileName)
-void printHash()
+void CAnalyzerAggregator::printHash()
 {
 	flow_t *flow_hsh;
 	HashTableUtil::init_hash_walk(test_table);
@@ -441,7 +441,7 @@ void task_ctrl_C(int i)
 	exit(0);
 }
 
-void *verifyHashTimeOut(void *par)
+void * CAnalyzerAggregator::verifyHashTimeOut(void *par)
 {
 	int filenameCount = 0; int flag=1;
 	int fileAdminTime = ((admin_t *) par)->interval;
@@ -565,7 +565,7 @@ writeStringToLogFile(logFileName, buffer, NULL);
 return (void *) NULL;
 }*/
 
-int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp, int threadNum)
+int CAnalyzerAggregator::analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp, int threadNum)
 {
 	extern int analyserpxError;
 	pthread_t hashTimeOut;
@@ -634,7 +634,7 @@ int analyserpxStartMultiThreaded(cap_config * conf, int fileAdminTime, int fileE
 	return analyserpxError;
 }
 
-void *threadsLoop(void *par){
+void * CAnalyzerAggregator::threadsLoop(void *par){
 	ThreadParams       *tp = (ThreadParams*)par;
 	struct pcap_pkthdr *header;
 	const u_char       *packet;

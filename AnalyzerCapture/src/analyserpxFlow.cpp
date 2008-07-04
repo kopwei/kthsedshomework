@@ -24,7 +24,7 @@
 #include <netinet/in.h>
 #include <fstream>
 #include <iostream>
-#include "analyserpxTypes.h"
+
 #include "analyserpxFile.h"
 #include "analyserpxFlow.h"
 #include "classifier.h"

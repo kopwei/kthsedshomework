@@ -1,6 +1,7 @@
 #ifndef _ANALYSERPX_FLOW_
 #define _ANALYSERPX_FLOW_
 
+#include "analyserpxTypes.h"
 
 /*!     \file analyserpxFlow.h
 \brief Flow manipulation functions.

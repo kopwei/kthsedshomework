@@ -28,6 +28,7 @@
 #include "classifier.h"
 #include "analyserpxFlow.h"
 #include "cap.h"
+#include "userinputparams.h"
 #include "macro.h"
 
 using namespace std;
@@ -45,6 +46,13 @@ extern int slotsOffline;
 CAnalyzer analyzer;
 CPacketStatistician s_packetStatistician;
 
+int CAnalyzer::analyserpxStartMultiThreaded(const CUserInputParams* pParam)
+{
+	pthread_t hashTimeOut;
+	pthread_t packetStatTimeOut;
+	
+	return 0;
+}
 
 int CAnalyzer::analyserpxStartMultiThreaded ( cap_config * conf, int fileAdminTime, int fileExpTime,
         char *offLineFile, int flow_exp, int threadNum )
@@ -122,6 +130,8 @@ int CAnalyzer::analyserpxStartMultiThreaded ( cap_config * conf, int fileAdminTi
 	delete [] tps;
 	return analyserpxError;
 }
+
+
 
 void * CAnalyzer::threadsLoop ( void *par )
 {

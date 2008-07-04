@@ -20,7 +20,10 @@
 #ifndef IPHEADERUTIL_H
 #define IPHEADERUTIL_H
 
+//#include "neti.h"
 #include "analyserpxTypes.h"
+#include "resultenum.h"
+
 
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>

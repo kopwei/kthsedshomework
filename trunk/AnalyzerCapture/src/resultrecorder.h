@@ -20,7 +20,7 @@
 #ifndef RESULTRECORDER_H
 #define RESULTRECORDER_H
 
-#include "analyserpxTypes.h"
+#include "resultenum.h"
 
 class CPacketStatistician;
 

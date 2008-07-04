@@ -20,6 +20,8 @@
 #ifndef USERINPUTPARAMS_H
 #define USERINPUTPARAMS_H
 
+#include "resultenum.h"
+
 #include <string>
 
 using namespace std;
@@ -34,6 +36,7 @@ class CUserInputParams
 
 		~CUserInputParams();
 
+		ResultEnum ParseInputParams(const int argc, char** argv);
 		
 		const long long GetMaxFrameNumber() const;
 		
@@ -62,35 +65,13 @@ class CUserInputParams
 		const unsigned int GetThreadNumber() const;
 		
 
-		void SetMaxFrameNumber ( const long long& theValue );
-		
-		void SetCaptureInterface ( string theValue );
-
-		void SetMaxByteInFrame ( unsigned int theValue );
-
-		void SetFilePrefix ( string theValue );
-
-		void SetTrafficType ( string theValue );
-
-		void SetFlowTimeOutSeconds ( unsigned int theValue );
-
-		void SetOutputTimeBin ( unsigned int theValue );
-
-		void SetReadingFileName ( string theValue );
-
-		void SetOptimumFlowOutputEnabled ( bool theValue );
-
-		void SetLogFileName ( string theValue );
-
-		void SetOutputThroughputEnabled ( bool theValue );
-
-		void SetOutThroughputFileName ( string theValue );
-
-		void SetThreadNumber ( unsigned int theValue );
-
-
-
 	private:
+		
+		void printHelp ( char *progname );
+		
+		
+		
+		
 		long long m_llMaxFrameNumber; /** -cGetLogFileName	Maximum number of frames to be capured (Default=0 (infinity)) */
 		string m_strCaptureInterface;  /** -i	Specify the interface to be listened (Default=active interface) */
 		unsigned int m_iMaxByteInFrame;  /** -s	Maximum number of bytes to be captured in each frame (Default: 1518) */

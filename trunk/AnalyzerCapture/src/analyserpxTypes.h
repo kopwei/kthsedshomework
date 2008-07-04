@@ -112,12 +112,7 @@ typedef struct
 	cap_config          *conf;
 } ThreadParams;
 
-enum ResultEnum
-{
-	eOK,
- 	eCommonError,
-  	eNotImplemented
-};
+
 
 
 #endif

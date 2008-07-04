@@ -22,7 +22,7 @@
 #define  _SUBSCRIBER_STATISTIC_
 
 #include "PacketStatistic.h"
-#include "analyserpxTypes.h"
+#include "resultenum.h"
 
 class CPacketDigest;
 //////////////////////////////////////////////////////////////////////////

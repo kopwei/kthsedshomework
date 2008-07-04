@@ -116,10 +116,13 @@
     <groups>
       <group pattern="*.h" name="Header files" />
       <group pattern="*.cpp" name="Source files" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <showvcsfields>false</showvcsfields>
       <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidepatterns>*.o,*.lo,CVS</hidepatterns>
     </tree>
   </kdevfileview>
   <kdevdocumentation>
@@ -189,6 +192,9 @@
       <synchronize>true</synchronize>
       <orientation>Vertical</orientation>
     </splitheadersource>
+    <references>
+      <pcs>automatic_%2Fhome%2Fericsson%2FKDevelopProjects%2FAnalyzerCapture</pcs>
+    </references>
   </kdevcppsupport>
   <cppsupportpart>
     <filetemplates>

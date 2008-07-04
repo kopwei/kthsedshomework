@@ -26,6 +26,7 @@
 #include "PacketStatistic.h"
 #include "SubscriberStatistic.h"
 #include "resultrecorder.h"
+#include "resultenum.h"
 
 
 struct in_addr;

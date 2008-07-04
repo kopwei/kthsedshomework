@@ -23,6 +23,8 @@
 #include "PacketStatistician.h"
 #include "analyserpxAggreg.h"
 
+class CUserInputParams;
+
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
@@ -46,6 +48,7 @@ class CAnalyzer
 
 		int analyserpxStartMultiThreaded ( cap_config * conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp, int threadNum );
 
+		int analyserpxStartMultiThreaded (const CUserInputParams* pParam);
 
 	private:
 

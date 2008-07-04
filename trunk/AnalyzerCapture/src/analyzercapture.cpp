@@ -13,12 +13,14 @@
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
+
 #include "cap.h"
 #include "version.h"
 #include "analyzer.h"
 #include "expressions.h"
 #include "analyserpxFlow.h"
 #include "macro.h"
+#include "userinputparams.h"
 
 
 char fileName[256] = "cap0";
@@ -32,48 +34,6 @@ int flow_exp = 0;//This variable deals with flow exportation (Profiling)
 int analyserpxError = 0;
 int STR_MAX_LEN = 1474;
 
-void printHelp ( char *progname )
-{
-
-	fprintf ( stderr, "%s version " ANALYSERPXCAP_VERSION "\n", progname );
-	fprintf ( stderr, "%s monitors, collects and store traffic that is \n\
-	          visible in a interface. The packets are classified and aggregated \n\
-	          into flows and stored on a binary file. The binay file can be read by \n\
-	          the analyserpx_read program and the flows printed on screen in text format. \n\
-	          \n\
-	          Usage:	%s [-h] [-c count] [-i interface] [ -s snaplen ] [-w file] \n\
-	          [-e expression] [-t administrative time] [-l logFileName] \n\
-	          [-r input file] [-z number of time bins to change the output] \n\
-	          [-q threads number]\n\
-	          where\n\
-	          -h	this message\n\
-	          -c	Maximum number of frames to be capured (Default=0 (infinity))\n\
-	          -i	Specify the interface to be listened (Default=active interface)\n\
-	          -s	Maximum number of bytes to be captured in each frame (Default: 1518)\n\
-	          -w	File prefix where collected data will be stored (Default: cap)\n\
-	          -e	Select the traffic that will be captured. See tcpdump expression \n\
-	          for more details (Default: ip)\n\
-	          -t	Specify the time out in seconds (time bin)  for expired flows to be \n\
-	          flushed out of the memory (Default: 300)\n\
-	          -z	Specify how many time bins will be considered to generate a new \n\
-	          output file name. As default, 0 means all day long (Default: 0)\n\
-	          -r	Input file to offline capture\n\
-	          -b      Enabling an optimun flows exportation to Profiling (Disabled by default: 0)\n\
-	          -l	Specify the log file name (Default: logcap)\n\
-	          -m	Output throughput \n\
-	          -o	Specify the output file name for throughput measurement (Default: throughput)\n\
-	          -q	Specify the worker threads number (Default: 1)\n\
-	          \n\
-	          Examples:\n\
-	          %s -i eth0 -s 1518 -w cap -e ip -t 300 -l log\n\
-	          Captures flows of ip traffic from eth0 with at \n\
-	          maximum 1518 bytes length. The flows will be stored \n\
-	          on the files cap0, cap1...\n\
-	          \n\
-	          %s -w cap\n\
-	          Captures all traffic from the active interface.\n\
-	          ", progname, progname, progname, progname  );
-}
 
 int main(int argc, char **argv){
 
@@ -90,6 +50,9 @@ int main(int argc, char **argv){
 	int fileExpTime = 0;
 	int threadnumber = 1;
 	time_t tempo = 0;
+	
+	CUserInputParams userInputParam;
+	
 
 	while ((c = getopt(argc, argv, "hi:w:c:s:e:t:z:l:r:q:b:m::o")) != -1){
 		switch (c) {
@@ -129,7 +92,6 @@ int main(int argc, char **argv){
 				flow_exp = atoi(optarg);
 				break;
 			case 'h':
-				printHelp( argv[0] );
 				return 0;
 			case 'm':
 				outputThroughput = 1;
@@ -161,9 +123,12 @@ int main(int argc, char **argv){
 	fflush ( stdout );
 
 	printf ( "Number of worker threads: %d \n",threadnumber );
-	CAnalyzer* pAnalyzer = new CAnalyzer();
+	
+	userInputParam.ParseInputParams(argc, argv);
+	
+	CAnalyzer analyzer;
 	//analyserpxError = analyserpxStart(conf, fileAdminTime, fileExpTime, offLineFile,flow_exp);
-	analyserpxError = pAnalyzer->analyserpxStartMultiThreaded ( conf, fileAdminTime, fileExpTime, offLineFile,
+	analyserpxError = analyzer.analyserpxStartMultiThreaded ( conf, fileAdminTime, fileExpTime, offLineFile,
 	                  flow_exp, threadnumber );
 	if ( analyserpxError )
 	{
@@ -173,7 +138,6 @@ int main(int argc, char **argv){
 	{
 		printf ( "Capture complete.\n" );
 	}
-	FREE_OBJECT ( pAnalyzer );
 	fprintf ( stdout, "%s\n","deve deletar" );
 	freeExpressions();
 	fprintf ( stdout, "%s - OK\n","deve deletar" );

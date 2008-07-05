@@ -49,6 +49,8 @@ class CAnalyzer
 		int analyserpxStartMultiThreaded ( cap_config * conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp, int threadNum );
 
 		int analyserpxStartMultiThreaded (CUserInputParams* pParam);
+		
+		static bool tFlag;
 
 	private:
 
@@ -67,7 +69,7 @@ class CAnalyzer
 		
 		static CUserInputParams* s_pUserInputParams;
 		
-		static bool tFlag;
+		
 
 };
 

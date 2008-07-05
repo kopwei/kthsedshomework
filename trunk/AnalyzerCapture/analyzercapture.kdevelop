@@ -200,9 +200,7 @@
       <synchronize>true</synchronize>
       <orientation>Vertical</orientation>
     </splitheadersource>
-    <references>
-      <pcs>automatic_%2Fhome%2Fericsson%2FKDevelopProjects%2FAnalyzerCapture</pcs>
-    </references>
+    <references/>
   </kdevcppsupport>
   <cppsupportpart>
     <filetemplates>

@@ -10,19 +10,28 @@
 #include <string.h>
 
 
-cap_config* CCaptureUtil::new_cap_config()
+void CCaptureUtil::init_cap_config(cap_config* pCapConfig)
 {
-    cap_config *c = (cap_config *) malloc(sizeof(cap_config));
-    snprintf(c->dev,10,"%s","");//c->dev = NULL;
-    snprintf(c->errbuf,PCAP_ERRBUF_SIZE,"%s","");//c->errbuf = NULL;
-    snprintf(c->filter_app,3,"%s","ip");
-    //c->filter_app = "ip";
-    c->netp=0;
-    c->maskp=0;
-    c->numOfPackets = 0;
-    c->snap_len = 1518;
-    c->descr=NULL;
-    return c;
+    //cap_config *c = (cap_config *) malloc(sizeof(cap_config));
+//     snprintf(c->dev,10,"%s","");//c->dev = NULL;
+//     snprintf(c->errbuf,PCAP_ERRBUF_SIZE,"%s","");//c->errbuf = NULL;
+//     snprintf(c->filter_app,3,"%s","ip");
+//     //c->filter_app = "ip";
+//     c->netp=0;
+//     c->maskp=0;
+//     c->numOfPackets = 0;
+//     c->snap_len = 1518;
+//     c->descr=NULL;
+//     return c;
+	if (NULL == pCapConfig) return;
+	pCapConfig->strDev= "";
+	pCapConfig->errbuf = "";
+	pCapConfig->filter_app = "ip";
+	pCapConfig->netp = 0;
+	pCapConfig->maskp = 0;
+	pCapConfig->numOfPackets = 0;
+	pCapConfig->snap_len = 1518;
+	pCapConfig->descr = NULL;
 }
 
 

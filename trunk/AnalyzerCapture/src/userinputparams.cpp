@@ -18,16 +18,20 @@
  */
 #include "userinputparams.h"
 #include "analyserpxFlow.h"
+#include "analyserpxTypes.h"
+#include "cap.h"
 #include "version.h"
 
 #include "unistd.h"
 #include <iostream>
 
-using namespace std;
 
 CUserInputParams::CUserInputParams() :
-		m_llMaxFrameNumber ( 0 ), m_strCaptureInterface ( "activeinterface" ), m_iMaxByteInFrame ( 1518 ), m_strFilePrefix ( "cap" ), m_strTrafficType ( "ip" ), m_iFlowTimeOutSeconds ( 300 ), m_iOutputTimeBin ( 0 ), m_strReadingFileName ( "" ), m_bOptimumFlowOutputEnabled ( false ), m_strLogFileName ( "logcap" ), m_bOutputThroughputEnabled ( false ), m_strOutThroughputFileName ( "throuput" ), m_iThreadNumber ( 1 )
+		m_pCaptureConfig(NULL), m_strFilePrefix ( "cap" ),  m_iFlowTimeOutSeconds ( 300 ), m_iOutputTimeBin ( 0 ),
+			m_strReadingFileName ( "" ), m_bOptimumFlowOutputEnabled ( false ), m_strLogFileName ( "logcap" ), 
+			m_bOutputThroughputEnabled ( false ), m_strOutThroughputFileName ( "throuput" ), m_iThreadNumber ( 1 )
 {
+	m_pCaptureConfig = CCaptureUtil::new_cap_config();
 }
 
 CUserInputParams::~CUserInputParams()
@@ -45,7 +49,8 @@ ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )
 			case 'i':
 			{
 				// Set capture interface
-				m_strCaptureInterface = optarg;
+				m_pCaptureConfig->strDev = optarg;
+				// m_strCaptureInterface = optarg;
 				break;
 			}
 			case 'w':
@@ -65,17 +70,20 @@ ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )
 			}
 			case 'c':
 			{
-				m_llMaxFrameNumber = atoi ( optarg );
+
+				m_pCaptureConfig->numOfPackets = atoi ( optarg );
 				break;
 			}
 			case 's':
 			{
-				m_iMaxByteInFrame = atoi ( optarg ) ;
+				m_pCaptureConfig->snap_len = atoi ( optarg )
+				//m_iMaxByteInFrame = atoi ( optarg ) ;
 				break;
 			}
 			case 'e':
 			{
-				m_strTrafficType = optarg;
+				m_pCaptureConfig->filter_app = optarg;
+				//m_strTrafficType = optarg;
 				break;
 			}
 			case 't':
@@ -186,20 +194,25 @@ void CUserInputParams::printHelp ( char *progname )
 	          << "Captures all traffic from the active interface. " << endl;
 }
 
-const string CUserInputParams::GetCaptureInterface() const
+const cap_config* CUserInputParams::GetCaptureConfig() const
 {
-	return m_strCaptureInterface;
+	return m_pCaptureConfig;
 }
+
+// const string CUserInputParams::GetCaptureInterface() const
+// {
+// 	return m_strCaptureInterface;
+// }
 
 const unsigned int CUserInputParams::GetThreadNumber() const
 {
 	return m_iThreadNumber;
 }
 
-const long long CUserInputParams::GetMaxFrameNumber() const
-{
-	return m_llMaxFrameNumber;
-}
+// const long long CUserInputParams::GetMaxFrameNumber() const
+// {
+// 	return m_llMaxFrameNumber;
+// }
 
 
 
@@ -210,16 +223,16 @@ const string CUserInputParams::GetFilePrefix() const
 }
 
 
-const unsigned int CUserInputParams::GetMaxByteInFrame() const
-{
-	return m_iMaxByteInFrame;
-}
+// const unsigned int CUserInputParams::GetMaxByteInFrame() const
+// {
+// 	return m_iMaxByteInFrame;
+// }
 
 
-const string CUserInputParams::GetTrafficType() const
-{
-	return m_strTrafficType;
-}
+// const string CUserInputParams::GetTrafficType() const
+// {
+// 	return m_strTrafficType;
+// }
 
 
 const unsigned int CUserInputParams::GetFlowTimeOutSeconds() const

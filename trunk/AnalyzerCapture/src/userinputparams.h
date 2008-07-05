@@ -24,6 +24,8 @@
 
 #include <string>
 
+struct cap_config;
+
 using namespace std;
 
 /**
@@ -38,15 +40,7 @@ class CUserInputParams
 
 		ResultEnum ParseInputParams(const int argc, char** argv);
 		
-		const long long GetMaxFrameNumber() const;
-		
-		const string GetCaptureInterface() const;	
-		
-		const unsigned int GetMaxByteInFrame() const;
-		
 		const string GetFilePrefix() const;
-		
-		const string GetTrafficType() const;
 
 		const unsigned int GetFlowTimeOutSeconds() const;
 
@@ -64,19 +58,15 @@ class CUserInputParams
 		
 		const unsigned int GetThreadNumber() const;
 		
+		const cap_config* GetCaptureConfig() const { return m_pCaptureConfig; }
 
 	private:
 		
 		void printHelp ( char *progname );
 		
-		
-		
-		
-		long long m_llMaxFrameNumber; /** -cGetLogFileName	Maximum number of frames to be capured (Default=0 (infinity)) */
-		string m_strCaptureInterface;  /** -i	Specify the interface to be listened (Default=active interface) */
-		unsigned int m_iMaxByteInFrame;  /** -s	Maximum number of bytes to be captured in each frame (Default: 1518) */
+
+		cap_config* m_pCaptureConfig;
 		string m_strFilePrefix; /** -w	File prefix where collected data will be stored (Default: cap) */
-		string m_strTrafficType; /** -e	Select the traffic that will be captured. */
 		unsigned int m_iFlowTimeOutSeconds; /** -t	Specify the time out in seconds (time bin)  for expired flows to be flushed out of the memory (Default: 300) */
 		unsigned int m_iOutputTimeBin; /** -z	Specify how many time bins will be considered to generate a new	output file name. As default, 0 means all day long (Default: 0) */
 		string m_strReadingFileName; /** -r	Input file to offline capture */
@@ -85,8 +75,6 @@ class CUserInputParams
 		bool m_bOutputThroughputEnabled; /** -m	Output throughput*/
 		string m_strOutThroughputFileName /** -o	Specify the output file name for throughput measurement (Default: throughput) */;
 		unsigned int m_iThreadNumber; /** -q	Specify the worker threads number (Default: 1) */
-
-
 
 		/**
 				 * Avoid bit-wise copy

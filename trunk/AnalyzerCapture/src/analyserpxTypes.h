@@ -17,6 +17,9 @@
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 
+#include <string>
+
+using namespace std;
 /*!     \file analyserpxTypes.h
         \brief Common types header file.
 
@@ -64,13 +67,13 @@
 */
 typedef struct
 {
-	char dev[10];					/*!< capture device */
-	char errbuf[PCAP_ERRBUF_SIZE];			/*!< error buffer */
+	string strDev;					/*!< capture device */
+	string errbuf;			/*!< error buffer */
 	pcap_t *descr;					/*!< sniff handler */
 	struct bpf_program fp;				/*!< compiled program */
 	bpf_u_int32 maskp;				/*!< subnet mask */
 	bpf_u_int32 netp;				/*!< ip */
-	char filter_app[100];				/*!< well kown filter expression */
+	string filter_app;				/*!< well known filter expression */
 	int numOfPackets;				/*!< number of packets to capture */
 	unsigned short snap_len;			/*!< packet's length to capture */
 } cap_config;

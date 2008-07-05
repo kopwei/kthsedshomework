@@ -47,7 +47,7 @@ typedef void (*delete_function)(void *);
 \brief Hash table type definition.
  */
 struct hash_tab;
-typedef struct hash_tab hash_tab;
+//typedef struct hash_tab hash_tab;
 
 /*!     \fn extern void free_hash_table(hash_tab *table)
 \brief Removing a given hash table.

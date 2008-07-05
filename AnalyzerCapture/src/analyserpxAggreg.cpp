@@ -14,6 +14,8 @@
 #include "analyserpxFile.h"
 #include "circularbuffer.h"
 #include "classifier.h"
+#include "hashtab.h"
+#include "userinputparams.h"
 
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
 
@@ -22,11 +24,13 @@ hash_tab *test_table;
 
 time_t tvSec, tvUSec;
 
-int fileAdminTimeOff;
+CUserInputParams* CAnalyzerAggregator::s_pInputParams;
+
+//int fileAdminTimeOff;
 int filenameCount = 0;
-int flow_export=1;
-int slotsOffline;
-int numo=0;
+//int flow_export=1;
+//int slotsOffline;
+//int numo=0;
 
 
 // fixed
@@ -35,7 +39,10 @@ unsigned long long bytes_cap = 0;
 // fixed
 
 
-
+CAnalyzerAggregator::CAnalyzerAggregator(CUserInputParams* pUserInputParams)
+{
+	s_pInputParams = pUserInputParams;
+}
 
 
 void CAnalyzerAggregator::initVariables()

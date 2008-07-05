@@ -32,6 +32,7 @@ The integer number stored on this macro is used to identify a particular setfilt
 */
 const unsigned int PCAP_SETFILTER_ERROR = 12;
 #include "analyserpxTypes.h" 
+				 
 
 class CCaptureUtil
 {
@@ -69,7 +70,7 @@ public:
 	static void delete_cap_config(void *data);
 
 
-	static int initiate_capture(cap_config * c, int onlineCapMode, char *offLineFile);
+	static int initiate_capture(cap_config * c, const bool onlineCapMode, const string offLineFile);
 
 };
 #endif

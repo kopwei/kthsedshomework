@@ -7,8 +7,9 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string>
 
+using namespace std;
 
 void CCaptureUtil::init_cap_config(cap_config* pCapConfig)
 {
@@ -24,7 +25,7 @@ void CCaptureUtil::init_cap_config(cap_config* pCapConfig)
 //     c->descr=NULL;
 //     return c;
 	if (NULL == pCapConfig) return;
-	pCapConfig->strDev= "";
+	pCapConfig->dev= "";
 	pCapConfig->errbuf = "";
 	pCapConfig->filter_app = "ip";
 	pCapConfig->netp = 0;
@@ -39,21 +40,24 @@ void CCaptureUtil::init_cap_config(cap_config* pCapConfig)
 int CCaptureUtil::start_capture(pcap_handler func, u_char * arg, cap_config * c,
 		  int onlineCapMode, char *offLineFile)
 {
-    pcap_lookupnet(c->dev, &(c->netp), &(c->maskp), c->errbuf);
+	char* err = const_cast<char *>(c->errbuf.c_str());
+	pcap_lookupnet(c->dev.c_str(), &(c->netp), &(c->maskp), err);
     if (onlineCapMode == 1) {
         /* set our capture device */
-        if (strlen(c->dev) == 0) {
-   	    snprintf(c->dev,10,"%s",pcap_lookupdev(c->errbuf));
+        if (c->dev.length() == 0) {
+			char* pRs = pcap_lookupdev(err);
+			c->dev = string(pRs, strlen(pRs));
+   	    	//snprintf(c->dev,10,"%s",pcap_lookupdev(c->errbuf));
         }
 		/* open capture device in online mode */
-		c->descr = pcap_open_live(c->dev, c->snap_len, 1, 0, c->errbuf);
+		c->descr = pcap_open_live(c->dev.c_str(), c->snap_len, 1, 0, err);
 		if (c->descr == NULL) {
 	    	fprintf(stderr, " (pcap_open_live failed)");
 	    	return PCAP_OPEN_LIVE_ERROR;
 		}
     } else {
 		/* open capture device in offline mode */
-		c->descr = pcap_open_offline(offLineFile, c->errbuf);
+		c->descr = pcap_open_offline(offLineFile, err);
 		if (c->descr == NULL) {
 	    	fprintf(stderr, " (pcap_open_offline failed)");
 	    	return PCAP_OPEN_LIVE_ERROR;
@@ -61,7 +65,7 @@ int CCaptureUtil::start_capture(pcap_handler func, u_char * arg, cap_config * c,
     }
 
     /* apply the rules */
-    if (pcap_compile(c->descr, &(c->fp), c->filter_app, 0, c->netp) == -1) {
+    if (pcap_compile(c->descr, &(c->fp), c->filter_app.c_str(), 0, c->netp) == -1) {
 		fprintf(stderr, " (pcap_compile failed)");
 		return PCAP_COMPILE_ERROR;
     }
@@ -77,30 +81,32 @@ int CCaptureUtil::start_capture(pcap_handler func, u_char * arg, cap_config * c,
 }
 
 /* Add 22/05 - Rafael */
-int CCaptureUtil::initiate_capture(cap_config * c, int onlineCapMode, char *offLineFile)
+int CCaptureUtil::initiate_capture(cap_config * c, const bool onlineCapMode, const string offLineFile)
 {
-    pcap_lookupnet(c->dev, &(c->netp), &(c->maskp), c->errbuf);
-    if (onlineCapMode == 1) {
+	char* err = const_cast<char *>(c->errbuf.c_str());
+    pcap_lookupnet(c->dev.c_str(), &(c->netp), &(c->maskp), err);
+    if (onlineCapMode) {
         /* set our capture device */
-        if (strlen(c->dev) == 0) {
-   	    snprintf(c->dev,10,"%s",pcap_lookupdev(c->errbuf));
+        if (c->dev.length() == 0) {
+			char* pRs = pcap_lookupdev(err);
+			c->dev = string(pRs, strlen(pRs));
         }
 		/* open capture device in online mode */
-		c->descr = pcap_open_live(c->dev, c->snap_len, 1, 0, c->errbuf);
+		c->descr = pcap_open_live(c->dev.c_str(), c->snap_len, 1, 0, err);
 		if (c->descr == NULL) {
 	    	fprintf(stderr, " (pcap_open_live failed)");
 	    	return PCAP_OPEN_LIVE_ERROR;
 		}
     } else {
 		/* open capture device in offline mode */
-		c->descr = pcap_open_offline(offLineFile, c->errbuf);
+		c->descr = pcap_open_offline(offLineFile.c_str(), err);
 		if (c->descr == NULL) {
 	    	fprintf(stderr, " (pcap_open_offline failed)");
 	    	return PCAP_OPEN_LIVE_ERROR;
 		}
     }
     /* apply the rules */
-    if (pcap_compile(c->descr, &(c->fp), c->filter_app, 0, c->netp) == -1) {
+    if (pcap_compile(c->descr, &(c->fp), c->filter_app.c_str(), 0, c->netp) == -1) {
 		fprintf(stderr, " (pcap_compile failed)");
 		return PCAP_COMPILE_ERROR;
     }

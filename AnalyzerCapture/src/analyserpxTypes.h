@@ -65,9 +65,9 @@ using namespace std;
 /*!     \struct cap_config
         \brief Set of libpcap parameters.
 */
-typedef struct
+struct cap_config
 {
-	string strDev;					/*!< capture device */
+	string dev;					/*!< capture device */
 	string errbuf;			/*!< error buffer */
 	pcap_t *descr;					/*!< sniff handler */
 	struct bpf_program fp;				/*!< compiled program */
@@ -76,12 +76,12 @@ typedef struct
 	string filter_app;				/*!< well known filter expression */
 	int numOfPackets;				/*!< number of packets to capture */
 	unsigned short snap_len;			/*!< packet's length to capture */
-} cap_config;
+} ;
 
 /*!     \struct flow_t
 	\brief Flow type.
 */
-typedef struct
+struct flow_t
 {
 	u_short proto; 			/*!< protocol number*/
 	u_short class_proto; 		/*!< Classification protocol number*/
@@ -97,23 +97,23 @@ typedef struct
 	end_mic;		/*!< microseconds end time*/
 	struct in_addr 	src_ip,		/*!< source ip*/
 				dst_ip;		/*!< destination ip*/
-} flow_t;
+} ;
 
 /*!     \struct admin_t
 	\brief Adiministration Time type.
 */
-typedef struct
+struct admin_t
 {
 	int interval;                                   /*!< flow timeout.Time Bin definition*/
 	int hop;                                        /*!< output name file administration. time bins counter*/
-} admin_t;
+};
 
-typedef struct
+struct ThreadParams
 {
 	long long count[6];
 	long long counttotal;
-	cap_config          *conf;
-} ThreadParams;
+	//cap_config          *conf;
+} ;
 
 
 

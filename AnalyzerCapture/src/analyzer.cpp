@@ -33,105 +33,82 @@
 
 using namespace std;
 
-int onlineCapMode;
-
-extern int flow_export;
-extern int fileAdminTimeOff;
-extern int slotsOffline;
+//extern int flow_export;
+//extern int fileAdminTimeOff;
+//extern int slotsOffline;
 
 
-
-
+bool CAnalyzer::tFlag = true;
+CUserInputParams* CAnalyzer::s_pUserInputParams = NULL;
 
 CAnalyzer analyzer;
 CPacketStatistician s_packetStatistician;
 
-int CAnalyzer::analyserpxStartMultiThreaded(const CUserInputParams* pParam)
+int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 {
+	s_pUserInputParams = pParam;
 	pthread_t hashTimeOut;
 	pthread_t packetStatTimeOut;
+	admin_t control;
+	control.interval = pParam->GetFlowTimeOutSeconds();
+	control.hop = pParam->GetOutputTimeBin();
 	
-	return 0;
-}
-
-int CAnalyzer::analyserpxStartMultiThreaded ( cap_config * conf, int fileAdminTime, int fileExpTime,
-        char *offLineFile, int flow_exp, int threadNum )
-{
-	extern int analyserpxError;
-	pthread_t hashTimeOut;
-	pthread_t packetStatTimeOut;
-	extern char baseFileName[];
-	extern char fileName[];
-	extern int tFlag;
-	admin_t *control= ( admin_t * ) malloc ( sizeof ( admin_t ) );
-	control->interval=fileAdminTime;
-	control->hop=fileExpTime;
-	ThreadParams *tps        = new ThreadParams[threadNum];
-	pthread_t *workerthreads = new pthread_t[threadNum];
-	flow_export=flow_exp;
+	ThreadParams tps[pParam->GetThreadNumber()];
+	pthread_t workerthreads[pParam->GetThreadNumber()];
+	
 	/* interrupt routine to Ctrl-C */
 	signal ( SIGINT, task_ctrl_C );
-
+	
+	
 	pthread_mutex_init ( &Locks::cap_lock , NULL ) ;
 	CAnalyzerAggregator::initVariables();
 
 
-	for ( int i = 0; i < threadNum; ++i )
+	for ( int i = 0; i < pParam->GetThreadNumber(); ++i )
 	{
 		for ( int j = 0; j < 6; ++j )
 		{
 			tps[i].count[j]=0;
 		}
 		tps[i].counttotal = 0;
-		tps[i].conf = conf;
+		//tps[i].conf = pParam->GetCaptureConfig();
 	}
 
 
 
 	//pthread_create(&hashTimeOut, NULL, verifyHashTimeOut, &fileAdminTime);
-
-	if ( offLineFile == NULL )
+	string strFileName = pParam->GetFilePrefix();
+	if ( pParam->isOnlineMode() )
 	{
-		onlineCapMode = 1;
-		pthread_create ( &hashTimeOut, NULL, CAnalyzerAggregator::verifyHashTimeOut, control );
-		pthread_create( &packetStatTimeOut, NULL, CPacketStatistician::PacketStatisticTimeOut, control );
+		pthread_create ( &hashTimeOut, NULL, CAnalyzerAggregator::verifyHashTimeOut, &control );
+		pthread_create( &packetStatTimeOut, NULL, CPacketStatistician::PacketStatisticTimeOut, &control );
 	}
 	else
 	{
-		snprintf ( fileName,256,"%s_0",baseFileName );
-		onlineCapMode = 0;
-		fileAdminTimeOff = fileAdminTime;
-		slotsOffline=control->hop;
+		strFileName.append("_0");
 	}
 
-	analyserpxError = CCaptureUtil::initiate_capture ( conf, onlineCapMode, offLineFile );
+	int analyserpxError = CCaptureUtil::initiate_capture ( pParam->GetCaptureConfig(), pParam->isOnlineMode(), pParam->GetReadingFileName() );
 	if ( analyserpxError == 0 )
 	{
-		for ( int i = 0; i < threadNum; ++i )
+		for ( int i = 0; i < pParam->GetThreadNumber(); ++i )
 		{
 			pthread_create ( &workerthreads[i], NULL, threadsLoop, &tps[i] );
 		}
-		for ( int i = 0; i < threadNum; ++i )
+		for ( int i = 0; i < pParam->GetThreadNumber(); ++i )
 		{
 			pthread_join ( workerthreads[i],NULL );
 		}
 	}
-
-	tFlag=0;
+	tFlag = false;
 	//    printHash(fileName);
 	CAnalyzerAggregator::printHash();
-	if ( offLineFile == NULL )
+	if ( pParam->isOnlineMode() )
 	{
 		pthread_exit ( ( void* ) CAnalyzerAggregator::verifyHashTimeOut );
 	}
-	//printHash(fileName);
-	free ( control );
-	delete [] workerthreads;
-	delete [] tps;
 	return analyserpxError;
 }
-
-
 
 void * CAnalyzer::threadsLoop ( void *par )
 {
@@ -143,8 +120,9 @@ void * CAnalyzer::threadsLoop ( void *par )
 	int sizetmp;
 	long long count = 0;
 
+	cap_config* pCapConfig = s_pUserInputParams->GetCaptureConfig();
 	struct pcap_pkthdr *head = ( pcap_pkthdr* ) malloc ( sizeof ( const struct pcap_pkthdr ) );
-	const u_char       *pkt = ( unsigned char* ) malloc ( tp->conf->snap_len + 2 );
+	const u_char       *pkt = ( unsigned char* ) malloc ( pCapConfig->snap_len + 2 );
 
 	int res;
 	do
@@ -153,24 +131,24 @@ void * CAnalyzer::threadsLoop ( void *par )
 		while ( pthread_mutex_trylock ( &Locks::cap_lock ) != 0 )
 			{}
 		;
-		res = pcap_next_ex ( tp->conf->descr, &header, &packet );
+		res = pcap_next_ex ( pCapConfig->descr, &header, &packet );
 		if ( res >= 0 )
 		{
 			ip = ( struct ip * ) ( packet + ETHER_HDR_LEN );
 			sizetmp = ntohs ( ip->ip_len );
-			if ( sizetmp <= ( tp->conf->snap_len - ETHER_HDR_LEN ) )
+			if ( sizetmp <= ( pCapConfig->snap_len - ETHER_HDR_LEN ) )
 			{
 				size = sizetmp;
 			}
 			else
 			{
-				size = tp->conf->snap_len - ETHER_HDR_LEN;
+				size = pCapConfig->snap_len - ETHER_HDR_LEN;
 			}
 			memcpy ( ( void* ) head  , ( void* ) header, sizeof ( struct pcap_pkthdr ) );
 			memcpy ( ( void* ) pkt, ( void* ) packet, size + ETHER_HDR_LEN );
 
 			pthread_mutex_unlock ( &Locks::cap_lock );
-			analyzer.processNewPacket ( ( u_char * ) & ( tp->conf->snap_len ), head, pkt, tp );
+			analyzer.processNewPacket ( ( u_char * ) & ( pCapConfig->snap_len ), head, pkt, tp );
 			//mount_flow( (u_char *) & (tp->conf->snap_len), head, pkt, tp );
 			++tp->counttotal;
 		}

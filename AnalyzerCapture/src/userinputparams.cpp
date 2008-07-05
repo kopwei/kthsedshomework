@@ -28,7 +28,7 @@
 
 
 CUserInputParams::CUserInputParams() :
-		m_pCaptureConfig(NULL), m_strFilePrefix ( "cap" ),  m_iFlowTimeOutSeconds ( 300 ), m_iOutputTimeBin ( 0 ),
+		m_pCaptureConfig(NULL), m_bOnlineMode(true), m_strFilePrefix ( "cap" ),  m_iFlowTimeOutSeconds ( 300 ), m_iOutputTimeBin ( 0 ),
 			m_strReadingFileName ( "" ), m_bOptimumFlowOutputEnabled ( false ), m_strLogFileName ( "logcap" ), 
 			m_bOutputThroughputEnabled ( false ), m_strOutThroughputFileName ( "throuput" ), m_iThreadNumber ( 1 )
 {
@@ -53,8 +53,9 @@ ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )
 			case 'i':
 			{
 				// Set capture interface
-				m_pCaptureConfig->strDev = optarg;
+				m_pCaptureConfig->dev = optarg;
 				// m_strCaptureInterface = optarg;
+				m_bOnlineMode = true;
 				break;
 			}
 			case 'w':
@@ -80,7 +81,7 @@ ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )
 			}
 			case 's':
 			{
-				m_pCaptureConfig->snap_len = atoi ( optarg )
+				m_pCaptureConfig->snap_len = atoi ( optarg );
 				//m_iMaxByteInFrame = atoi ( optarg ) ;
 				break;
 			}
@@ -108,6 +109,7 @@ ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )
 			case 'r':
 			{
 				m_strReadingFileName = optarg;
+				m_bOnlineMode = false;
 				break;
 			}
 			case 'b':
@@ -198,7 +200,7 @@ void CUserInputParams::printHelp ( char *progname )
 	          << "Captures all traffic from the active interface. " << endl;
 }
 
-const cap_config* CUserInputParams::GetCaptureConfig() const
+cap_config* CUserInputParams::GetCaptureConfig() const
 {
 	return m_pCaptureConfig;
 }
@@ -280,3 +282,9 @@ const string CUserInputParams::GetOutThroughputFileName() const
 	return m_strOutThroughputFileName;
 }
 
+
+
+const bool CUserInputParams::isOnlineMode() const
+{
+	return m_bOnlineMode;
+}

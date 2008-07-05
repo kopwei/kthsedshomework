@@ -38,34 +38,38 @@ class CUserInputParams
 
 		~CUserInputParams();
 
-		ResultEnum ParseInputParams(const int argc, char** argv);
-		
+		ResultEnum ParseInputParams ( const int argc, char** argv );
+
 		const string GetFilePrefix() const;
 
 		const unsigned int GetFlowTimeOutSeconds() const;
 
 		const unsigned int GetOutputTimeBin() const;
-		
+
 		const string GetReadingFileName() const;
-		
+
 		const bool IsOptimumFlowOutputEnabled() const;
-		
+
 		const string GetLogFileName() const;
-		
+
 		const string GetOutThroughputFileName() const;
 
 		const bool IsOutputThroughputEnabled() const;
-		
+
 		const unsigned int GetThreadNumber() const;
-		
-		const cap_config* GetCaptureConfig() const { return m_pCaptureConfig; }
+
+		cap_config* GetCaptureConfig() const;
+
+		const bool isOnlineMode() const;
+
 
 	private:
-		
+
 		void printHelp ( char *progname );
-		
+
 
 		cap_config* m_pCaptureConfig;
+		bool m_bOnlineMode;
 		string m_strFilePrefix; /** -w	File prefix where collected data will be stored (Default: cap) */
 		unsigned int m_iFlowTimeOutSeconds; /** -t	Specify the time out in seconds (time bin)  for expired flows to be flushed out of the memory (Default: 300) */
 		unsigned int m_iOutputTimeBin; /** -z	Specify how many time bins will be considered to generate a new	output file name. As default, 0 means all day long (Default: 0) */

@@ -4,7 +4,7 @@
 #define HASH_SIZE 1000
 #define TEST_AMOUNT 100
 
-#include "hashtab.h"
+
 #include "analyserpxTypes.h"
 
 /*!     \file analyserpxAggreg.h
@@ -16,11 +16,15 @@ Define the procedures and variables used in the Analyser-PX's Aggregation Module
 /*!     \var hash_tab *test_table
 \brief Pointer to Hash structure that will be used to save flows.
  */
-extern hash_tab *test_table;
+//extern hash_tab *test_table;
+
+class CUserInputParams;
+struct hash_tab;
 
 class CAnalyzerAggregator
 {
 	public:
+		CAnalyzerAggregator(CUserInputParams* pInputParams);
 		/*!     \fn void addFlow(flow_t *flow, const struct ip *ip, unsigned short ipLen)
 			\brief Add a packet to a flow.
 
@@ -105,6 +109,9 @@ class CAnalyzerAggregator
 			\param *fileName	Name/location to save the expired flows.
 		 */
 		static void optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, char *fileName );
+		
+		
+		static CUserInputParams* s_pInputParams;
 
 
 };

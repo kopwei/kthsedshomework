@@ -48,7 +48,7 @@ class CAnalyzer
 
 		int analyserpxStartMultiThreaded ( cap_config * conf, int fileAdminTime, int fileExpTime, char *offLineFile, int flow_exp, int threadNum );
 
-		int analyserpxStartMultiThreaded (const CUserInputParams* pParam);
+		int analyserpxStartMultiThreaded (CUserInputParams* pParam);
 
 	private:
 
@@ -64,6 +64,10 @@ class CAnalyzer
 		\param i	Interrupt signal.
 		 */
 		static void task_ctrl_C ( int i );
+		
+		static CUserInputParams* s_pUserInputParams;
+		
+		static bool tFlag;
 
 };
 

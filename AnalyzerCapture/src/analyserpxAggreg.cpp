@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <iostream>
+#include <sstream>
 
 #include "analyserpxAggreg.h"
 #include "locks.h"
@@ -16,6 +17,8 @@
 #include "classifier.h"
 #include "hashtab.h"
 #include "userinputparams.h"
+#include "analyzer.h"
+#include "macro.h"
 
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
 
@@ -28,7 +31,7 @@ CUserInputParams* CAnalyzerAggregator::s_pInputParams;
 
 //int fileAdminTimeOff;
 int filenameCount = 0;
-//int flow_export=1;
+int flow_export=1;
 //int slotsOffline;
 //int numo=0;
 
@@ -39,7 +42,7 @@ unsigned long long bytes_cap = 0;
 // fixed
 
 
-CAnalyzerAggregator::CAnalyzerAggregator(CUserInputParams* pUserInputParams)
+CAnalyzerAggregator::CAnalyzerAggregator ( CUserInputParams* pUserInputParams )
 {
 	s_pInputParams = pUserInputParams;
 }
@@ -50,11 +53,12 @@ void CAnalyzerAggregator::initVariables()
 	pthread_mutex_init ( &Locks::hash_lock , NULL ) ;
 	pthread_mutex_init ( &Locks::print_lock , NULL ) ;
 	test_table = HashTableUtil::init_hash_table ( "ANALYSERPX_CAP_TABLE", CFlowUtil::compare_flow, CFlowUtil::flow_key,
-			CFlowUtil::delete_flow, HASH_SIZE );
+	             CFlowUtil::delete_flow, HASH_SIZE );
 }
 
-void CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, char *fileName )
+ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const char *fileName )
 {
+	ResultEnum rs = eOK;
 	//cout << "I entered the clean hash program" << endl;
 	//Sync Table begin
 	//pthread_mutex_lock(&hash_lock);
@@ -91,7 +95,7 @@ void CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, time_t
 
 	//Sync Table begin
 	pthread_mutex_unlock ( &Locks::hash_lock );
-	return;
+	return rs;
 
 }
 void CAnalyzerAggregator::cleanHash ( hash_tab * hash, time_t sec, time_t usec, char *fileName )
@@ -127,8 +131,8 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 	static time_t start = 0;
 	double dif;
 	char *str = ( char* ) malloc ( sizeof ( char ) *1024 );
-	extern char baseFileName[]; //-b modification on 1 August 2007
-	extern char fileName[];
+	//extern char baseFileName[]; //-b modification on 1 August 2007
+	//extern char fileName[];
 	static int offCount = 0;
 	//static int offCount = 0;
 	//u_short i = 0;
@@ -145,9 +149,9 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 	else
 	{
 		dif = difftime ( flow->end_sec,start );
-		if ( slotsOffline )
+		if ( s_pInputParams->GetOutputTimeBin() != 0 )
 		{
-			if ( dif >= ( ( ( double ) fileAdminTimeOff ) *slotsOffline ) )
+			if ( dif >= ( ( ( double ) s_pInputParams->GetFlowTimeOutSeconds() ) * s_pInputParams->GetOutputTimeBin() ) )
 			{
 				//char *buffer=malloc(sizeof(char)*17);;
 				//offCount++;
@@ -158,11 +162,13 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 				sec = tvSec;
 				usec = tvUSec;
 				//cleanHash(test_table, sec, usec, fileName);
+				//string fileName = s_pInputParams->GetFilePrefix();
+				
 				snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
 				optimumCleanHash ( test_table, sec, usec, fileName );//introduced on 1 August 2007, it aims to optimize
 				//the analyzer-px output according to -b parameter
 				offCount++;					  //as well as this line
-				numo=offCount;					  //and this another one
+				//numo=offCount;					  //and this another one
 				start = 0;
 				//free(buffer);
 
@@ -180,12 +186,12 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsigned short ipLen, u_short classifier, ThreadParams *tp )
 {
 	extern int onlineCapMode;
-	
+
 	flow_t *flow_hsh;
 	flow_t *tmp_flow;
 	flow_t *reverse_flow_hsh;
 
-	if ( !onlineCapMode )
+	if ( !s_pInputParams->isOnlineMode() )
 	{
 		verifyTimeOutHash ( flow );
 	}
@@ -414,9 +420,9 @@ void CAnalyzerAggregator::printHash()
 	//extern char fileName[];
 	//snprintf(fileName,256,"%s_%u",baseFileName, numo);
 	char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
-	extern char fileName[];
+	//extern char fileName[];
 	char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
-	extern char baseFileName[];
+	//extern char baseFileName[];
 	time_t init = 0;
 	time ( &init );
 
@@ -438,19 +444,20 @@ void CAnalyzerAggregator::printHash()
 
 void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 {
+	ResultEnum rs = eOK;
 	int filenameCount = 0;
 	int flag=1;
 	int fileAdminTime = ( ( admin_t * ) par )->interval;
 	int fileExpTime = ( ( admin_t * ) par )->hop;
 	time_t init = 0, final = 0, sec, usec;
 	struct tm *clock = NULL;
-	extern int analyserpxError;
-	extern char logFileName[];
-	extern char baseFileName[];
-	extern char fileName[];
-	extern char outputFileName[];
-	extern int outputThroughput;
-	extern int tFlag;
+	//extern int analyserpxError;
+	//extern char logFileName[];
+	//extern char baseFileName[];
+	//extern char fileName[];
+	//extern char outputFileName[];
+	//extern int outputThroughput;
+	//extern int tFlag;
 	int interCounter=0;
 
 	// fixed
@@ -459,27 +466,27 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 	unsigned long long frames_cal;
 	unsigned long long bytes_cal;
 	float fraction;
-	if ( outputThroughput )
+	if ( s_pInputParams->IsOutputThroughputEnabled() )
 	{
 		fraction = 1.0 / fileAdminTime;
 	}
 	// fixed
 
-	char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
-	char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
+	//char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
+	
 
-	while ( ( analyserpxError == 0 ) &&tFlag )
+	while ( /*( analyserpxError == 0 ) &&*/CAnalyzer::tFlag )
 	{
 		int sleepingTime =  fileAdminTime - ( final - init );
 		//cout << "I will sleep for " << sleepingTime << endl;
 		sleep ( sleepingTime );
 
 		// fixed
-		if ( outputThroughput )
+		if ( s_pInputParams->IsOutputThroughputEnabled() )
 		{
 			frames_cal = frames_cap - frames_caled;
 			//      bytes_cal = bytes_cap - bytes_caled;
-			FILE *out = fopen ( outputFileName, "a" );
+			FILE *out = fopen ( s_pInputParams->GetOutThroughputFileName().c_str(), "a" );
 			if ( out == NULL )
 				printf ( "error!\n" );
 			fprintf ( out, "# %.2f fps\n", frames_cal*fraction );
@@ -495,12 +502,12 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		time ( &init );
 
 		clock = ( struct tm * ) localtime ( & ( init ) );
+		string fileName;
 		if ( ( interCounter>=fileExpTime ) && ( fileExpTime>0 ) )
 		{
 			filenameCount++;
-			CFlowUtil::getDate ( &init,data,6 ) ;
-			snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
-			snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+			rs = GetFileName(filenameCount, &fileName);
+			EABASSERT(rs == eOK);
 			interCounter=0;
 		}
 		if ( ( ( clock->tm_hour ) == 0 ) && ( ( clock->tm_min ) < ( ( int ) ( ( fileAdminTime*2 ) /60 ) ) ) )
@@ -508,9 +515,10 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 			if ( flag )
 			{
 				filenameCount=0;
-				CFlowUtil::getDate ( &init,data,6 ) ;
-				snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
-				snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+				rs = GetFileName(filenameCount, &fileName);
+				EABASSERT(rs == eOK);
+			//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+				interCounter=0;
 			}
 			flag=0;
 		}
@@ -520,23 +528,44 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		}
 		//cleanHash(test_table, sec, usec, fileName);
 
-		optimumCleanHash ( test_table, sec, usec, fileName );//introduced on 1 August 2007, it aims to optimize
+		rs = optimumCleanHash ( test_table, sec, usec, fileName.c_str() );//introduced on 1 August 2007, it aims to optimize
+		EABASSERT(rs == eOK);
 		//the analyzer-px output according to -b parameter
 		interCounter++;
 		time ( &final );
 	}
-	if ( analyserpxError )
+	if ( eOK != rs )
 	{
 		char buffer[50];
-		snprintf ( buffer, 50,"ERROR CLEANING HASH. ERROR CODE: %u", analyserpxError );
-		CFileUtil::writeStringToLogFile ( logFileName, buffer, NULL );
+		snprintf ( buffer, 50,"ERROR CLEANING HASH. ERROR CODE: %u", rs );
+		CFileUtil::writeStringToLogFile ( s_pInputParams->GetLogFileName().c_str(), buffer, NULL );
 	}
 
-	free ( filenameCountStr );
+	//free ( filenameCountStr );
 	free ( data );
 
 	//pthread_exit (0);
 	return ( void * ) NULL;
+}
+
+ResultEnum CAnalyzerAggregator::GetFileName(const int count, string* fileName) const
+{
+	if (NULL == fileName) return eEmptyPointer;
+	fileName->clear();
+	fileName->append(s_pInputParams->GetFilePrefix());
+	ResultEnum rs = eOK;
+	char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
+	CFlowUtil::getDate ( &init,data,6 ) ;
+	string filenameCountStr = string(data, strlen(data));
+	filenameCountStr.append("_");
+	stringstream strCount;
+	strCount << count;
+	filenameCountStr.append(strCount.str());
+			//snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
+	fileName->append(filenameCountStr);
+			//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+	free(data);
+	return rs;
 }
 
 /*void *verifyHashTimeOut(void *par)

@@ -6,6 +6,7 @@
 
 
 #include "analyserpxTypes.h"
+#include "resultenum.h"
 
 /*!     \file analyserpxAggreg.h
 \brief Aggregation module header files.
@@ -108,7 +109,9 @@ class CAnalyzerAggregator
 			\param usec		Indicate the timestamp miliseconds of the last packet arrived.
 			\param *fileName	Name/location to save the expired flows.
 		 */
-		static void optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, char *fileName );
+		static ResultEnum optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const char *fileName );
+		
+		static ResultEnum GetFileName(const int count, string* fileName) const;
 		
 		
 		static CUserInputParams* s_pInputParams;

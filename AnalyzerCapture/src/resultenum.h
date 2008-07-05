@@ -26,6 +26,7 @@ enum ResultEnum
 {
 	eOK,
 	eCommonError,
+ 	eEmptyPointer,
 	eNotImplemented
 };
 

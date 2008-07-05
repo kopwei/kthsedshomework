@@ -46,7 +46,7 @@ public:
 	numOfPackets = 0; (no stop)
 	snap_len = 1518;
 	*/
-	static cap_config *new_cap_config();
+	static void init_cap_config(cap_config* pCapConfig);
 
 	/*!     \fn int start_capture(pcap_handler func, u_char* arg, cap_config *c, int onlineCapMode, char *offLineFile)
 	\brief Start the capture packets up.

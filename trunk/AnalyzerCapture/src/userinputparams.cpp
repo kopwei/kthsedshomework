@@ -21,6 +21,7 @@
 #include "analyserpxTypes.h"
 #include "cap.h"
 #include "version.h"
+#include "macro.h"
 
 #include "unistd.h"
 #include <iostream>
@@ -31,11 +32,14 @@ CUserInputParams::CUserInputParams() :
 			m_strReadingFileName ( "" ), m_bOptimumFlowOutputEnabled ( false ), m_strLogFileName ( "logcap" ), 
 			m_bOutputThroughputEnabled ( false ), m_strOutThroughputFileName ( "throuput" ), m_iThreadNumber ( 1 )
 {
-	m_pCaptureConfig = CCaptureUtil::new_cap_config();
+
+	m_pCaptureConfig = new cap_config();
+	CCaptureUtil::init_cap_config(m_pCaptureConfig);
 }
 
 CUserInputParams::~CUserInputParams()
 {
+	FREE_OBJECT(m_pCaptureConfig);
 }
 
 ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )

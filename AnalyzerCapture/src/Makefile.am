@@ -13,5 +13,4 @@ analyzercapture_LDFLAGS = $(all_libraries)
 noinst_HEADERS = PacketDigest.h PacketStatistic.h PacketStatistician.h \
 	SubscriberStatistic.h analyserpxAggreg.h analyserpxFile.h analyserpxFlow.h analyserpxTypes.h \
 	analyzer.h cap.h circularbuffer.h classifier.h expressions.h hashtab.h \
-	ipheaderutil.h locks.h macro.h resultenum.h resultrecorder.h userinputparams.h \
-	version.h
+	ipheaderutil.h locks.h macro.h resultrecorder.h userinputparams.h version.h

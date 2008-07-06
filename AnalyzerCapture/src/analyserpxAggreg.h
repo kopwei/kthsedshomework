@@ -26,6 +26,8 @@ class CAnalyzerAggregator
 {
 	public:
 		CAnalyzerAggregator(CUserInputParams* pInputParams);
+		
+		~CAnalyzerAggregator(void);
 		/*!     \fn void addFlow(flow_t *flow, const struct ip *ip, unsigned short ipLen)
 			\brief Add a packet to a flow.
 
@@ -111,10 +113,14 @@ class CAnalyzerAggregator
 		 */
 		static ResultEnum optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const char *fileName );
 		
-		static ResultEnum GetFileName(const int count, string* fileName) const;
+		static ResultEnum GetFileName(const int count, string* fileName);
 		
 		
 		static CUserInputParams* s_pInputParams;
+		static string m_strFileName;
+		static hash_tab* test_table;
+		static time_t tvSec;
+		static time_t tvUSec;
 
 
 };

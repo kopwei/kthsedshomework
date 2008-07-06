@@ -23,10 +23,11 @@
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
 
 // RTA 18-03-08 - to avoid multiple definitions
-hash_tab *test_table;
+hash_tab * CAnalyzerAggregator::test_table;
 
-time_t tvSec, tvUSec;
-
+time_t CAnalyzerAggregator::tvSec;
+time_t CAnalyzerAggregator::tvUSec;
+string CAnalyzerAggregator::m_strFileName;
 CUserInputParams* CAnalyzerAggregator::s_pInputParams;
 
 //int fileAdminTimeOff;
@@ -45,6 +46,11 @@ unsigned long long bytes_cap = 0;
 CAnalyzerAggregator::CAnalyzerAggregator ( CUserInputParams* pUserInputParams )
 {
 	s_pInputParams = pUserInputParams;
+}
+
+CAnalyzerAggregator::~CAnalyzerAggregator()
+{
+	//FREE_OBJECT(test_table);
 }
 
 
@@ -162,10 +168,14 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 				sec = tvSec;
 				usec = tvUSec;
 				//cleanHash(test_table, sec, usec, fileName);
-				//string fileName = s_pInputParams->GetFilePrefix();
+				m_strFileName = s_pInputParams->GetFilePrefix();
+				m_strFileName.append("_");
+				stringstream strCount;
+				strCount << offCount;
+				m_strFileName.append(strCount.str());
 				
-				snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
-				optimumCleanHash ( test_table, sec, usec, fileName );//introduced on 1 August 2007, it aims to optimize
+				//snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
+				optimumCleanHash ( test_table, sec, usec, m_strFileName.c_str() );//introduced on 1 August 2007, it aims to optimize
 				//the analyzer-px output according to -b parameter
 				offCount++;					  //as well as this line
 				//numo=offCount;					  //and this another one
@@ -185,7 +195,7 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 
 void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsigned short ipLen, u_short classifier, ThreadParams *tp )
 {
-	extern int onlineCapMode;
+	//extern int onlineCapMode;
 
 	flow_t *flow_hsh;
 	flow_t *tmp_flow;
@@ -264,8 +274,8 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 	}
 	else if ( verifyTimeOut ( flow_hsh, flow ) )
 	{
-		extern char fileName[];
-		CFlowUtil::printFlowToFile ( flow_hsh, fileName );
+		//extern char fileName[];
+		CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
 		HashTableUtil::clear_hash_entry ( test_table, flow_hsh );
 		HashTableUtil::add_hash_entry ( test_table, flow );
 		if ( ( reverse_flow_hsh == NULL ) )
@@ -384,10 +394,10 @@ void CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_p
                                        u_short classifier, ThreadParams *tp )
 {
 
-	extern int outputThroughput;
+	//extern int outputThroughput;
 
 	// fixed
-	if ( outputThroughput )
+	if ( s_pInputParams->IsOutputThroughputEnabled() )
 	{
 		frames_cap++;
 		bytes_cap += ( unsigned int ) ntohs ( pIpHeader->ip_len );
@@ -419,7 +429,7 @@ void CAnalyzerAggregator::printHash()
 	//extern char baseFileName[];
 	//extern char fileName[];
 	//snprintf(fileName,256,"%s_%u",baseFileName, numo);
-	char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
+	//char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
 	//extern char fileName[];
 	char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
 	//extern char baseFileName[];
@@ -428,14 +438,18 @@ void CAnalyzerAggregator::printHash()
 
 	clock = ( struct tm * ) localtime ( & ( init ) );
 	CFlowUtil::getDate ( &init,data,6 ) ;
-	snprintf ( filenameCountStr,36,"%s_latestFile",data );
-	snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+	m_strFileName = s_pInputParams->GetFilePrefix();
+	string date = string(data, strlen(data));
+	m_strFileName.append(date);
+	m_strFileName.append("_latestFile");
+	//snprintf ( filenameCountStr,36,"%s_latestFile",data );
+	//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
 	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( test_table ) ) )
 	{
 		//	fprintf(stdout,"Estamos aqui 1\n");
-		CFlowUtil::printFlowToFile ( flow_hsh, fileName );
+		CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
 	}
-	free ( filenameCountStr );
+	//free ( filenameCountStr );
 	free ( data );
 	HashTableUtil::clear_hash_table ( test_table );
 }
@@ -502,11 +516,11 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		time ( &init );
 
 		clock = ( struct tm * ) localtime ( & ( init ) );
-		string fileName;
+		//string fileName;
 		if ( ( interCounter>=fileExpTime ) && ( fileExpTime>0 ) )
 		{
 			filenameCount++;
-			rs = GetFileName(filenameCount, &fileName);
+			rs = GetFileName(filenameCount, &m_strFileName);
 			EABASSERT(rs == eOK);
 			interCounter=0;
 		}
@@ -515,7 +529,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 			if ( flag )
 			{
 				filenameCount=0;
-				rs = GetFileName(filenameCount, &fileName);
+				rs = GetFileName(filenameCount, &m_strFileName);
 				EABASSERT(rs == eOK);
 			//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
 				interCounter=0;
@@ -528,7 +542,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		}
 		//cleanHash(test_table, sec, usec, fileName);
 
-		rs = optimumCleanHash ( test_table, sec, usec, fileName.c_str() );//introduced on 1 August 2007, it aims to optimize
+		rs = optimumCleanHash ( test_table, sec, usec, m_strFileName.c_str() );//introduced on 1 August 2007, it aims to optimize
 		EABASSERT(rs == eOK);
 		//the analyzer-px output according to -b parameter
 		interCounter++;
@@ -542,14 +556,16 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 	}
 
 	//free ( filenameCountStr );
-	free ( data );
+	//free ( data );
 
 	//pthread_exit (0);
 	return ( void * ) NULL;
 }
 
-ResultEnum CAnalyzerAggregator::GetFileName(const int count, string* fileName) const
+ResultEnum CAnalyzerAggregator::GetFileName(const int count, string* fileName)
 {
+	time_t init = 0;
+	time ( &init );
 	if (NULL == fileName) return eEmptyPointer;
 	fileName->clear();
 	fileName->append(s_pInputParams->GetFilePrefix());

@@ -25,9 +25,9 @@ struct hash_tab;
 class CAnalyzerAggregator
 {
 	public:
-		CAnalyzerAggregator(CUserInputParams* pInputParams);
+		//CAnalyzerAggregator(CUserInputParams* pInputParams);
 		
-		~CAnalyzerAggregator(void);
+		//~CAnalyzerAggregator(void);
 		/*!     \fn void addFlow(flow_t *flow, const struct ip *ip, unsigned short ipLen)
 			\brief Add a packet to a flow.
 
@@ -63,7 +63,7 @@ class CAnalyzerAggregator
 				 */
 		static void printHash();
 		
-		static void initVariables();
+		static void initVariables(CUserInputParams* pUserInputParams);
 
 
 

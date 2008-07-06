@@ -15,8 +15,8 @@
     <projectname>AnalyzerCapture</projectname>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
-    <defaultencoding/>
+    <description></description>
+    <defaultencoding></defaultencoding>
   </general>
   <kdevautoproject>
     <general>
@@ -26,8 +26,8 @@
     <run>
       <mainprogram>/home/ericsson/KDevelopProjects/AnalyzerCapture/debug/src/analyzercapture</mainprogram>
       <terminal>true</terminal>
-      <programargs>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -o res -m</programargs>
-      <globaldebugarguments>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -o res -m</globaldebugarguments>
+      <programargs>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -m</programargs>
+      <globaldebugarguments>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -m</globaldebugarguments>
       <globalcwd>/home/ericsson/KDevelopProjects/AnalyzerCapture/debug</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autocompile>false</autocompile>
@@ -200,7 +200,9 @@
       <synchronize>true</synchronize>
       <orientation>Vertical</orientation>
     </splitheadersource>
-    <references/>
+    <references>
+      <pcs>automatic_%2Fhome%2Fericsson%2FKDevelopProjects%2FAnalyzerCapture</pcs>
+    </references>
   </kdevcppsupport>
   <cppsupportpart>
     <filetemplates>
@@ -210,11 +212,11 @@
   </cppsupportpart>
   <kdevdebugger>
     <general>
-      <gdbpath/>
-      <dbgshell/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <dbgshell></dbgshell>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>

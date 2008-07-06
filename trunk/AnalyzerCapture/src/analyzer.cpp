@@ -61,7 +61,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 	
 	
 	pthread_mutex_init ( &Locks::cap_lock , NULL ) ;
-	CAnalyzerAggregator::initVariables();
+	CAnalyzerAggregator::initVariables(pParam);
 
 
 	for ( int i = 0; i < pParam->GetThreadNumber(); ++i )

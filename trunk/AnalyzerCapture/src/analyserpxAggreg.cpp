@@ -43,21 +43,11 @@ unsigned long long bytes_cap = 0;
 // fixed
 
 
-CAnalyzerAggregator::CAnalyzerAggregator ( CUserInputParams* pUserInputParams )
-{
-	s_pInputParams = pUserInputParams;
-}
-
-CAnalyzerAggregator::~CAnalyzerAggregator()
-{
-	//FREE_OBJECT(test_table);
-}
-
-
-void CAnalyzerAggregator::initVariables()
+void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
 {
 	pthread_mutex_init ( &Locks::hash_lock , NULL ) ;
 	pthread_mutex_init ( &Locks::print_lock , NULL ) ;
+	s_pInputParams = pUserInputParams;
 	test_table = HashTableUtil::init_hash_table ( "ANALYSERPX_CAP_TABLE", CFlowUtil::compare_flow, CFlowUtil::flow_key,
 	             CFlowUtil::delete_flow, HASH_SIZE );
 }
@@ -169,11 +159,11 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 				usec = tvUSec;
 				//cleanHash(test_table, sec, usec, fileName);
 				m_strFileName = s_pInputParams->GetFilePrefix();
-				m_strFileName.append("_");
+				m_strFileName.append ( "_" );
 				stringstream strCount;
 				strCount << offCount;
-				m_strFileName.append(strCount.str());
-				
+				m_strFileName.append ( strCount.str() );
+
 				//snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
 				optimumCleanHash ( test_table, sec, usec, m_strFileName.c_str() );//introduced on 1 August 2007, it aims to optimize
 				//the analyzer-px output according to -b parameter
@@ -439,9 +429,9 @@ void CAnalyzerAggregator::printHash()
 	clock = ( struct tm * ) localtime ( & ( init ) );
 	CFlowUtil::getDate ( &init,data,6 ) ;
 	m_strFileName = s_pInputParams->GetFilePrefix();
-	string date = string(data, strlen(data));
-	m_strFileName.append(date);
-	m_strFileName.append("_latestFile");
+	string date = string ( data, strlen ( data ) );
+	m_strFileName.append ( date );
+	m_strFileName.append ( "_latestFile" );
 	//snprintf ( filenameCountStr,36,"%s_latestFile",data );
 	//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
 	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( test_table ) ) )
@@ -487,7 +477,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 	// fixed
 
 	//char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
-	
+
 
 	while ( /*( analyserpxError == 0 ) &&*/CAnalyzer::tFlag )
 	{
@@ -520,8 +510,8 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		if ( ( interCounter>=fileExpTime ) && ( fileExpTime>0 ) )
 		{
 			filenameCount++;
-			rs = GetFileName(filenameCount, &m_strFileName);
-			EABASSERT(rs == eOK);
+			rs = GetFileName ( filenameCount, &m_strFileName );
+			EABASSERT ( rs == eOK );
 			interCounter=0;
 		}
 		if ( ( ( clock->tm_hour ) == 0 ) && ( ( clock->tm_min ) < ( ( int ) ( ( fileAdminTime*2 ) /60 ) ) ) )
@@ -529,9 +519,9 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 			if ( flag )
 			{
 				filenameCount=0;
-				rs = GetFileName(filenameCount, &m_strFileName);
-				EABASSERT(rs == eOK);
-			//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+				rs = GetFileName ( filenameCount, &m_strFileName );
+				EABASSERT ( rs == eOK );
+				//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
 				interCounter=0;
 			}
 			flag=0;
@@ -543,7 +533,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		//cleanHash(test_table, sec, usec, fileName);
 
 		rs = optimumCleanHash ( test_table, sec, usec, m_strFileName.c_str() );//introduced on 1 August 2007, it aims to optimize
-		EABASSERT(rs == eOK);
+		EABASSERT ( rs == eOK );
 		//the analyzer-px output according to -b parameter
 		interCounter++;
 		time ( &final );
@@ -562,25 +552,25 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 	return ( void * ) NULL;
 }
 
-ResultEnum CAnalyzerAggregator::GetFileName(const int count, string* fileName)
+ResultEnum CAnalyzerAggregator::GetFileName ( const int count, string* fileName )
 {
 	time_t init = 0;
 	time ( &init );
-	if (NULL == fileName) return eEmptyPointer;
+	if ( NULL == fileName ) return eEmptyPointer;
 	fileName->clear();
-	fileName->append(s_pInputParams->GetFilePrefix());
+	fileName->append ( s_pInputParams->GetFilePrefix() );
 	ResultEnum rs = eOK;
 	char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
 	CFlowUtil::getDate ( &init,data,6 ) ;
-	string filenameCountStr = string(data, strlen(data));
-	filenameCountStr.append("_");
+	string filenameCountStr = string ( data, strlen ( data ) );
+	filenameCountStr.append ( "_" );
 	stringstream strCount;
 	strCount << count;
-	filenameCountStr.append(strCount.str());
-			//snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
-	fileName->append(filenameCountStr);
-			//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
-	free(data);
+	filenameCountStr.append ( strCount.str() );
+	//snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
+	fileName->append ( filenameCountStr );
+	//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+	free ( data );
 	return rs;
 }
 

@@ -25,7 +25,7 @@ RecordParameter::RecordParameter(RecordTypeEnum recordType)
 	m_recordType = recordType;
 }
 
-RecordParameter::GetRecordType() const
+RecordTypeEnum RecordParameter::GetRecordType() const
 {
 	return m_recordType;
 }
@@ -54,7 +54,7 @@ ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatis
 	return rs;
 }
 
-RecordTypeEnum CResultRecorder::RecordToXML(const CPacketStatistician* pStatistician)
+ResultEnum CResultRecorder::RecordToXML(const CPacketStatistician* pStatistician)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here

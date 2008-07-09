@@ -3994,3 +3994,8 @@ u_short CClassifier::isSuperClass(u_short id) {
 	return 0;
 }
 
+bool CClassifier::IsP2P( u_short id )
+{
+	return (id > DOWN_BASE_P2P_CLASS_NUMBER && id < UP_BASE_P2P_CLASS_NUMBER);
+}
+

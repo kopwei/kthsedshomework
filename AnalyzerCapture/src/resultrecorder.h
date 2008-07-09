@@ -24,15 +24,39 @@
 
 class CPacketStatistician;
 
+
+//////////////////////////////////////////////////////////////////////////
+
+/**
+ *	
+ */
+enum RecordTypeEnum
+{
+	eUnknown,
+	eRecordToTextFile,
+	eRecordToDatabase,
+	eRecordToXML
+};
+
+//////////////////////////////////////////////////////////////////////////
+/**
+ *	This class is a parameter class
+ */
 class RecordParameter
 {
-	
+public:
+	RecordParameter(RecordTypeEnum recordType);
+
+	RecordTypeEnum GetRecordType() const;
+
+private:
+	RecordTypeEnum m_recordType;
 };
 
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
-
+//////////////////////////////////////////////////////////////////////////
 /**
  * This class is a util class used for recording the result into file or database
  */
@@ -42,7 +66,13 @@ public:
 
     ~CResultRecorder();
 	
-	static ResultEnum RecordResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
+	ResultEnum RecordResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
+
+private:
+
+	ResultEnum RecordToDatabase(const CPacketStatistician* pStatistician);
+
+	ResultEnum RecordToXML(const CPacketStatistician* pStatistician);
 
 };
 

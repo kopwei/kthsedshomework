@@ -20,6 +20,7 @@
 #include "SubscriberStatistic.h"
 #include "PacketDigest.h"
 #include "ipheaderutil.h"
+#include "macro.h"
 
 #include <iostream>
 
@@ -42,11 +43,13 @@ ResultEnum CSubscriberStatistic::AddNewPacket(const CPacketDigest* pPacketDigest
 	
 	if (bIsSrcPacket)
 	{
-		m_uploadPacketStatistic.AddPacketInfo(pPacketDigest);
+		rs = m_uploadPacketStatistic.AddPacketInfo(pPacketDigest);
+		EABASSERT(rs == eOK);
 	}
 	else
 	{
-		m_downloadPacketStatistic.AddPacketInfo(pPacketDigest);
+		rs = m_downloadPacketStatistic.AddPacketInfo(pPacketDigest);
+		EABASSERT(rs == eOK);
 	}
 	
 	return rs;

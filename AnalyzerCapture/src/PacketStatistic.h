@@ -22,6 +22,7 @@
 #define _PACKET_STATISTIC_
 
 #include "PacketDigest.h"
+#include "resultenum.h"
 //class CPacketDigest;
 //#include <WinSock.h>
 //////////////////////////////////////////////////////////////////////////
@@ -37,7 +38,7 @@ public:
 	/**
 	 *	This method is used to add a new packet digest into the info base
 	 */
-	void					AddPacketInfo(const CPacketDigest* pDigest);
+	ResultEnum					AddPacketInfo(const CPacketDigest* pDigest);
 
 
 	/**

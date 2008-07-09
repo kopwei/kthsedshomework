@@ -21,8 +21,8 @@
 #ifndef _PACKET_STATISTIC_
 #define _PACKET_STATISTIC_
 
-
-class CPacketDigest;
+#include "PacketDigest.h"
+//class CPacketDigest;
 //#include <WinSock.h>
 //////////////////////////////////////////////////////////////////////////
 /**

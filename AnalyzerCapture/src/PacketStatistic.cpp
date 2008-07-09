@@ -18,7 +18,7 @@
  */
 
 #include "PacketStatistic.h"
-#include "PacketDigest.h"
+//#include "PacketDigest.h"
 #include "classifier.h"
 
 CPacketStatistic::CPacketStatistic(void) :

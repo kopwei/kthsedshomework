@@ -40,8 +40,9 @@ unsigned long long CPacketStatistic::GetTrafficVolume() const
 	return m_llTrafficVolume;
 }
 
-void CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest )
+ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest )
 {
+	ResultEnum rs = eOK;
 	++m_iPacketNumber;
 	m_llTrafficVolume += pDigest->getPacketSize();
 	if (CClassifier::IsP2P(pDigest->getProtocolClassification()))
@@ -49,7 +50,7 @@ void CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest )
 		++m_iP2PPacketNumber;
 		m_llP2PTrafficVolume += pDigest->getPacketSize();
 	}
-
+	return rs;
 }
 
 unsigned int CPacketStatistic::GetP2PPacketNumber() const

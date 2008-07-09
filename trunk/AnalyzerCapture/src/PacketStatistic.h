@@ -20,7 +20,9 @@
 
 #ifndef _PACKET_STATISTIC_
 #define _PACKET_STATISTIC_
-#include "PacketDigest.h"
+
+
+class CPacketDigest;
 //#include <WinSock.h>
 //////////////////////////////////////////////////////////////////////////
 /**
@@ -32,15 +34,49 @@ public:
 	CPacketStatistic(void);
 	~CPacketStatistic(void);
 
-	unsigned int			getPacketNumber();
-	unsigned long long		getTrafficVolume();
+	/**
+	 *	This method is used to add a new packet digest into the info base
+	 */
+	void					AddPacketInfo(const CPacketDigest* pDigest);
 
-	void					addPacketInfo(const CPacketDigest* pDigest);
+
+	/**
+	 *	Following methods are the get methods
+	 */
+	unsigned int			GetPacketNumber() const;
+	unsigned long long		GetTrafficVolume() const;
+	 
+
+	unsigned int			GetP2PPacketNumber() const;
+	unsigned long long		GetP2PTrafficVolume() const;
+
+	
 
 
 private:
 	unsigned int			m_iPacketNumber;	// Total Packet number between starting and ending time
 	unsigned long long		m_llTrafficVolume;	// Total traffic volume generated between starting and ending time
+
+	unsigned int			m_iEmptyPacketNumber;
+
+	unsigned int			m_iTCPPacketNumber;
+	unsigned long long		m_llTCPTrafficVolume;
+
+	unsigned int			m_iUDPPacketNumber;
+	unsigned long long		m_llUDPTrafficVolume;
+
+	unsigned int			m_iP2PPacketNumber;
+	unsigned long long		m_llP2PTrafficVolume;
+
+	unsigned int			m_iHTTPPacketNumber;
+	unsigned long long		m_llHTTPTrafficVolume;
+
+
+	unsigned int			m_iUnidentifiedPacketNumber;
+	unsigned long long		m_llUnidentifiedTrafficVolume;
+
+	//unsigned int			m_i
+
 
 
 };

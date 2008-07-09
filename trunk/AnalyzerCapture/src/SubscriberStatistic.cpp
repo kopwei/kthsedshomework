@@ -42,11 +42,11 @@ ResultEnum CSubscriberStatistic::AddNewPacket(const CPacketDigest* pPacketDigest
 	
 	if (bIsSrcPacket)
 	{
-		m_uploadPacketStatistic.addPacketInfo(pPacketDigest);
+		m_uploadPacketStatistic.AddPacketInfo(pPacketDigest);
 	}
 	else
 	{
-		m_downloadPacketStatistic.addPacketInfo(pPacketDigest);
+		m_downloadPacketStatistic.AddPacketInfo(pPacketDigest);
 	}
 	
 	return rs;
@@ -55,5 +55,5 @@ ResultEnum CSubscriberStatistic::AddNewPacket(const CPacketDigest* pPacketDigest
 void CSubscriberStatistic::PrintSummary()
 {
 	// Just for testing...
-	cout << "I am user " << m_ipAddress << " and I have received " << m_downloadPacketStatistic.getPacketNumber() << " Packets" << endl;
+	cout << "I am user " << m_ipAddress << " and I have received " << m_downloadPacketStatistic.GetPacketNumber() << " Packets" << endl;
 }

@@ -18,6 +18,17 @@
  */
 #include "resultrecorder.h"
 #include "PacketStatistician.h"
+#include "locks.h"
+
+RecordParameter::RecordParameter(RecordTypeEnum recordType)
+{
+	m_recordType = recordType;
+}
+
+RecordParameter::GetRecordType() const
+{
+	return m_recordType;
+}
 
 CResultRecorder::CResultRecorder()
 {
@@ -30,6 +41,20 @@ CResultRecorder::~CResultRecorder()
 
 
 ResultEnum CResultRecorder::RecordResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam)
+{
+	ResultEnum rs = eNotImplemented;
+	// TODO: Need implementation here
+	return rs;
+}
+
+ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatistician )
+{
+	ResultEnum rs = eNotImplemented;
+	// TODO: Need implementation here
+	return rs;
+}
+
+RecordTypeEnum CResultRecorder::RecordToXML(const CPacketStatistician* pStatistician)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here

@@ -18,6 +18,8 @@
  */
 
 #include "PacketStatistic.h"
+#include "PacketDigest.h"
+#include "classifier.h"
 
 CPacketStatistic::CPacketStatistic(void) :
 		m_llTrafficVolume(0), m_iPacketNumber(0)
@@ -28,18 +30,34 @@ CPacketStatistic::~CPacketStatistic(void)
 {
 }
 
-unsigned int CPacketStatistic::getPacketNumber()
+unsigned int CPacketStatistic::GetPacketNumber() const
 {
 	return m_iPacketNumber;
 }
 
-unsigned long long CPacketStatistic::getTrafficVolume()
+unsigned long long CPacketStatistic::GetTrafficVolume() const
 {
 	return m_llTrafficVolume;
 }
 
-void CPacketStatistic::addPacketInfo(const CPacketDigest* pDigest )
+void CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest )
 {
 	++m_iPacketNumber;
 	m_llTrafficVolume += pDigest->getPacketSize();
+	if (CClassifier::IsP2P(pDigest->getProtocolClassification()))
+	{
+		++m_iP2PPacketNumber;
+		m_llP2PTrafficVolume += pDigest->getPacketSize();
+	}
+
+}
+
+unsigned int CPacketStatistic::GetP2PPacketNumber() const
+{
+	return m_iP2PPacketNumber;
+}
+
+unsigned long long CPacketStatistic::GetP2PTrafficVolume() const
+{
+	return m_llP2PTrafficVolume;
 }

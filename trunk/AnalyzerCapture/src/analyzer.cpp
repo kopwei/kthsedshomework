@@ -193,12 +193,12 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
 	u_short ipLength = tempIpLength <= len ? tempIpLength : len;
 	u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
 
-	CPacketDigest* pPacketDigest = new CPacketDigest ( header, packet, classifier );
-	rs = s_packetStatistician.AddNewPacketInfo ( pPacketDigest );
+	CPacketDigest packetDigest( header, packet, classifier );
+	rs = s_packetStatistician.AddNewPacketInfo ( &packetDigest );
 	EABASSERT ( rs );
 
 	//m_totalPacketStatistic.addPacketInfo(&packetDigest);
-	FREE_OBJECT ( pPacketDigest );
+	//FREE_OBJECT ( pPacketDigest );
 	// Process the flows
 	CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
 	return rs;

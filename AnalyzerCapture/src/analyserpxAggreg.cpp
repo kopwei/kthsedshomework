@@ -69,12 +69,14 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 	HashTableUtil::init_hash_walk ( hash );
 	double hashTime=0, lastTime=0;
 	lastTime = sec* ( 1e6 ) + usec;
+	flow_collection collection;
 	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
 	{
 		hashTime = ( ( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( flow_hsh->end_mic() );
 		if ( flow_export )
 		{
-			CFlowUtil::addFlowToFile(flow_hsh, fileName);
+			*collection.add_flow() = *flow_hsh;
+			//CFlowUtil::addFlowToFile(flow_hsh, fileName);
 			//CFlowUtil::printFlowToFile ( flow_hsh, fileName );
 			if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
 			{
@@ -85,7 +87,8 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 		{
 			if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
 			{
-				CFlowUtil::addFlowToFile(flow_hsh, fileName);
+				*collection.add_flow() = *flow_hsh;
+				//CFlowUtil::addFlowToFile(flow_hsh, fileName);
 				//CFlowUtil::printFlowToFile ( flow_hsh, fileName );
 				HashTableUtil::clear_hash_entry ( hash, flow_hsh );
 			}
@@ -93,6 +96,7 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 
 	}
 
+	CFlowUtil::printFlowCollectionToFile(&collection, fileName);
 	//Sync Table begin
 	pthread_mutex_unlock ( &Locks::hash_lock );
 	return rs;

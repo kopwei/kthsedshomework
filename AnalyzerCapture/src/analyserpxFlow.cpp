@@ -102,57 +102,57 @@ flow_t* CFlowUtil::createFlow_t ( unsigned char proto, unsigned char class_proto
 
 }
 
-int CFlowUtil::printFlowToFile ( flow_t * flow, const char *file )
-{
-	int len1=strlen ( "stdout" );
-	int len2=strlen ( file );
-	if ( ! ( memcmp ( "stdout",file,len1>len2?len1:len2 ) ) )
-	{
-		char *buffer = ( char* ) malloc ( sizeof ( char ) *1024 );
-		char proto_format = FORMAT_PROTO_DEFAULT;
-		char flow_format = FORMAT_FLOW_DEFAULT;
-		snprintf ( buffer,2,"%s","" );
-		flowToString ( flow_format, proto_format, flow, buffer );
-		fprintf ( stdout,"%s\n",buffer );
-		free ( buffer );
-	}
-	//else {
-	//	FILE *printFlow = openFile(file, "a+b", NULL, NULL);
-	//	if (printFlow == NULL) {
-	//		//ERROR OPENING FILE
-	//		return 1;
-	//	}
-	//	if (fwrite(flow, sizeof(flow_t), 1, printFlow) != 1) {
-	//		//ERROR
-	//		closeFile(printFlow);
-	//		return 1;
-	//	}
-	//	closeFile(printFlow);
-	//	return 0;
-	//}
-	else
-	{
-		ofstream ofile ( file, ios::binary | ios::app );
-		if ( !ofile.is_open() ) return 1;
-		ofile.write ( reinterpret_cast<char *> ( flow ), sizeof ( flow_t ) );
-		ofile.close();
-	}
-	return 0;
-}
+//int CFlowUtil::printFlowToFile ( flow_t * flow, const char *file )
+//{
+//	int len1=strlen ( "stdout" );
+//	int len2=strlen ( file );
+//	if ( ! ( memcmp ( "stdout",file,len1>len2?len1:len2 ) ) )
+//	{
+//		char *buffer = ( char* ) malloc ( sizeof ( char ) *1024 );
+//		char proto_format = FORMAT_PROTO_DEFAULT;
+//		char flow_format = FORMAT_FLOW_DEFAULT;
+//		snprintf ( buffer,2,"%s","" );
+//		flowToString ( flow_format, proto_format, flow, buffer );
+//		fprintf ( stdout,"%s\n",buffer );
+//		free ( buffer );
+//	}
+//	//else {
+//	//	FILE *printFlow = openFile(file, "a+b", NULL, NULL);
+//	//	if (printFlow == NULL) {
+//	//		//ERROR OPENING FILE
+//	//		return 1;
+//	//	}
+//	//	if (fwrite(flow, sizeof(flow_t), 1, printFlow) != 1) {
+//	//		//ERROR
+//	//		closeFile(printFlow);
+//	//		return 1;
+//	//	}
+//	//	closeFile(printFlow);
+//	//	return 0;
+//	//}
+//	else
+//	{
+//		ofstream ofile ( file, ios::binary | ios::app );
+//		if ( !ofile.is_open() ) return 1;
+//		ofile.write ( reinterpret_cast<char *> ( flow ), sizeof ( flow_t ) );
+//		ofile.close();
+//	}
+//	return 0;
+//}
 
-flow_t* CFlowUtil::readFlowFromFile ( flow_t * flow, const char *file, int ind )
-{
-	FILE *readFlow = CFileUtil::openFile ( file, "rb", NULL, NULL );
-	fseek ( readFlow, ind * sizeof ( flow_t ), SEEK_SET );
-	if ( fread ( flow, sizeof ( flow_t ), 1, readFlow ) != 1 )
-	{
-		//ERROR
-		CFileUtil::closeFile ( readFlow );
-		return NULL;
-	}
-	CFileUtil::closeFile ( readFlow );
-	return flow;
-}
+//flow_t* CFlowUtil::readFlowFromFile ( flow_t * flow, const char *file, int ind )
+//{
+//	FILE *readFlow = CFileUtil::openFile ( file, "rb", NULL, NULL );
+//	fseek ( readFlow, ind * sizeof ( flow_t ), SEEK_SET );
+//	if ( fread ( flow, sizeof ( flow_t ), 1, readFlow ) != 1 )
+//	{
+//		//ERROR
+//		CFileUtil::closeFile ( readFlow );
+//		return NULL;
+//	}
+//	CFileUtil::closeFile ( readFlow );
+//	return flow;
+//}
 
 void CFlowUtil::adjustProtocol ( char* str_proto, char* final )
 {
@@ -437,7 +437,7 @@ ResultEnum CFlowUtil::addFlowToFile( flow_t* pFlow, const string& strFileName )
 		return eEmptyPointer;
 	ResultEnum rs = eNotImplemented;
 	flow_collection collection;
-	rs = readFlowColloectionFromFile(&collection, strFileName);
+	rs = readFlowCollectionFromFile(&collection, strFileName);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs!= eOK, rs);
 	*collection.add_flow() = *pFlow;
 	printFlowCollectionToFile(&collection, strFileName);
@@ -446,7 +446,7 @@ ResultEnum CFlowUtil::addFlowToFile( flow_t* pFlow, const string& strFileName )
 	return rs;
 }
 
-ResultEnum CFlowUtil::readFlowColloectionFromFile( flow_collection* pFlowCol, const string& strFileName )
+ResultEnum CFlowUtil::readFlowCollectionFromFile( flow_collection* pFlowCol, const string& strFileName )
 {
 	if (NULL == pFlowCol)
 		return eEmptyPointer;

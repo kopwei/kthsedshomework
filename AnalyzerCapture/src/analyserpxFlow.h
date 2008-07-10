@@ -131,7 +131,7 @@ public:
 
 	static ResultEnum addFlowToFile(flow_t* pFlow, const string& strFileName);
 
-	static ResultEnum readFlowColloectionFromFile(flow_collection* pFlowCol, const string& strFileName);
+	static ResultEnum readFlowCollectionFromFile(flow_collection* pFlowCol, const string& strFileName);
 
 	/*!     \fn void printFlowStruct(char format, char* str)
 	\brief Write the string flow header.

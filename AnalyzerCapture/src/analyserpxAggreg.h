@@ -89,7 +89,7 @@ class CAnalyzerAggregator
 			\param usec		Indicate the timestamp miliseconds of the last packet arrived.
 			\param *fileName	Name/location to save the expired flows.
 		 */
-		static void cleanHash ( hash_tab *hash, time_t sec, time_t usec, char *fileName );
+		//static void cleanHash ( hash_tab *hash, time_t sec, time_t usec, char *fileName );
 
 
 		/*!     \fn int verifyTimeOut(flow_t *flow1, flow_t *flow2)
@@ -112,7 +112,7 @@ class CAnalyzerAggregator
 			\param usec		Indicate the timestamp miliseconds of the last packet arrived.
 			\param *fileName	Name/location to save the expired flows.
 		 */
-		static ResultEnum optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const char *fileName );
+		static ResultEnum optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const string& fileName );
 		
 		static ResultEnum GetFileName(const int count, string* fileName);
 		

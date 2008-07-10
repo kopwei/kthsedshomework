@@ -411,3 +411,51 @@ u_short CFlowUtil::getDouLen ( double num )
 	}
 	return i;
 }
+
+ResultEnum CFlowUtil::printFlowCollectionToFile( flow_collection* pFlowCol, const string& strFileName )
+{
+	if (NULL == pFlowCol)
+		return eEmptyPointer;
+	ResultEnum rs = eOK;
+	// TODO: need implementation here
+	ofstream ofile ( strFileName.c_str(), ios::binary | ios::trunc );
+	if ( !ofile.is_open() ) return eCommonError;
+	//ofile.write ( reinterpret_cast<char *> ( flow ), sizeof ( flow_t ) );
+	if (! pFlowCol->SerializePartialToOstream(&ofile))
+	{
+		cerr << "Writing file failed" << endl;
+	}
+	ofile.close();
+	return rs;
+}
+
+ResultEnum CFlowUtil::addFlowToFile( flow_t* pFlow, const string& strFileName )
+{
+	if (NULL == pFlow)
+		return eEmptyPointer;
+	ResultEnum rs = eNotImplemented;
+	flow_collection collection;
+	rs = readFlowColloectionFromFile(&collection, strFileName);
+	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs!= eOK, rs);
+	collection.add_flow() = pFlow;
+	printFlowCollectionToFile(&collection, strFileName);
+	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs!= eOK, rs);
+	// TODO: need implementation here
+	return rs;
+}
+
+ResultEnum CFlowUtil::readFlowColloectionFromFile( flow_collection* pFlowCol, const string& strFileName )
+{
+	if (NULL == pFlowCol)
+		return eEmptyPointer;
+	ResultEnum rs = eOK;
+	// TODO: need implementation here
+	ifstream ifile(strFileName.c_str(), ios::binary | ios::trunc);
+	if (!ifile.is_open()) return eCommonError;
+	if (!pFlowCol->ParseFromIstream(&ifile))
+	{
+		cerr << "Reading file failed" << endl;
+	}
+	ifile.close();
+	return rs;
+}

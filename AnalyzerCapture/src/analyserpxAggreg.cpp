@@ -20,6 +20,7 @@
 #include "analyzer.h"
 #include "macro.h"
 #include "flow.pb.h"
+#include "flowcollection.pb.h"
 
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
 
@@ -53,7 +54,7 @@ void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
 	             CFlowUtil::delete_flow, HASH_SIZE );
 }
 
-ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const char *fileName )
+ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const string& fileName )
 {
 	ResultEnum rs = eOK;
 	//cout << "I entered the clean hash program" << endl;
@@ -73,7 +74,8 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 		hashTime = ( ( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( flow_hsh->end_mic() );
 		if ( flow_export )
 		{
-			CFlowUtil::printFlowToFile ( flow_hsh, fileName );
+			CFlowUtil::addFlowToFile(flow_hsh, fileName);
+			//CFlowUtil::printFlowToFile ( flow_hsh, fileName );
 			if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
 			{
 				HashTableUtil::clear_hash_entry ( hash, flow_hsh );
@@ -83,7 +85,8 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 		{
 			if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
 			{
-				CFlowUtil::printFlowToFile ( flow_hsh, fileName );
+				CFlowUtil::addFlowToFile(flow_hsh, fileName);
+				//CFlowUtil::printFlowToFile ( flow_hsh, fileName );
 				HashTableUtil::clear_hash_entry ( hash, flow_hsh );
 			}
 		}
@@ -95,24 +98,24 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 	return rs;
 
 }
-void CAnalyzerAggregator::cleanHash ( hash_tab * hash, time_t sec, time_t usec, char *fileName )
-{
-	flow_t *flow_hsh=NULL;
-	HashTableUtil::init_hash_walk ( hash );
-	double hashTime=0, lastTime=0;
-	lastTime = sec* ( 1e6 ) + usec;
-	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
-	{
-		hashTime = ( ( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( flow_hsh->end_mic() );
-		if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
-		{
-			CFlowUtil::printFlowToFile ( flow_hsh, fileName );
-			HashTableUtil::clear_hash_entry ( hash, flow_hsh );
-		}
-
-	}
-	return;
-}
+//void CAnalyzerAggregator::cleanHash ( hash_tab * hash, time_t sec, time_t usec, char *fileName )
+//{
+//	flow_t *flow_hsh=NULL;
+//	HashTableUtil::init_hash_walk ( hash );
+//	double hashTime=0, lastTime=0;
+//	lastTime = sec* ( 1e6 ) + usec;
+//	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
+//	{
+//		hashTime = ( ( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( flow_hsh->end_mic() );
+//		if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
+//		{
+//			CFlowUtil::printFlowToFile ( flow_hsh, fileName );
+//			HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+//		}
+//
+//	}
+//	return;
+//}
 
 int CAnalyzerAggregator::verifyTimeOut ( flow_t * flow1, flow_t * flow2 )
 {
@@ -267,7 +270,8 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 	else if ( verifyTimeOut ( flow_hsh, flow ) )
 	{
 		//extern char fileName[];
-		CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
+		CFlowUtil::addFlowToFile(flow_hsh, m_strFileName);
+		//CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
 		HashTableUtil::clear_hash_entry ( test_table, flow_hsh );
 		HashTableUtil::add_hash_entry ( test_table, flow );
 		if ( ( reverse_flow_hsh == NULL ) )
@@ -437,11 +441,14 @@ void CAnalyzerAggregator::printHash()
 	m_strFileName.append ( "_latestFile" );
 	//snprintf ( filenameCountStr,36,"%s_latestFile",data );
 	//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+	flow_collection collection;
 	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( test_table ) ) )
 	{
 		//	fprintf(stdout,"Estamos aqui 1\n");
-		CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
+		collection.add_flow() = flow_hsh;
+		//CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
 	}
+	CFlowUtil::printFlowCollectionToFile(&collection, m_strFileName);
 	//free ( filenameCountStr );
 	free ( data );
 	HashTableUtil::clear_hash_table ( test_table );

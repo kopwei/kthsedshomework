@@ -445,7 +445,7 @@ void CAnalyzerAggregator::printHash()
 	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( test_table ) ) )
 	{
 		//	fprintf(stdout,"Estamos aqui 1\n");
-		collection.add_flow() = flow_hsh;
+		*(collection.add_flow()) = *flow_hsh;
 		//CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
 	}
 	CFlowUtil::printFlowCollectionToFile(&collection, m_strFileName);

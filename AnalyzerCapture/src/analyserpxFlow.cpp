@@ -27,8 +27,10 @@
 
 #include "analyserpxFile.h"
 #include "analyserpxFlow.h"
+#include "flowcollection.pb.h"
 #include "classifier.h"
 #include "flow.pb.h"
+#include "macro.h"
 
 using namespace std;
 
@@ -437,7 +439,7 @@ ResultEnum CFlowUtil::addFlowToFile( flow_t* pFlow, const string& strFileName )
 	flow_collection collection;
 	rs = readFlowColloectionFromFile(&collection, strFileName);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs!= eOK, rs);
-	collection.add_flow() = pFlow;
+	*collection.add_flow() = *pFlow;
 	printFlowCollectionToFile(&collection, strFileName);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs!= eOK, rs);
 	// TODO: need implementation here

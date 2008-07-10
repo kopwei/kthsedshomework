@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <time.h>
 #include <netinet/in.h>
 #include <fstream>
@@ -28,6 +28,7 @@
 #include "analyserpxFile.h"
 #include "analyserpxFlow.h"
 #include "classifier.h"
+#include "flow.pb.h"
 
 using namespace std;
 
@@ -35,19 +36,19 @@ int CFlowUtil::compare_flow ( const void *data1, const void *data2 )
 {
 	const flow_t *check1 = ( const flow_t * ) data1;
 	const flow_t *check2 = ( const flow_t * ) data2;
-	return ( check1->src_ip.s_addr != check2->src_ip.s_addr
-	         || check1->dst_ip.s_addr != check2->dst_ip.s_addr
-	         || check1->dst_port != check2->dst_port
-	         || check1->src_port != check2->src_port
-	         || check1->proto != check2->proto );
+	return ( check1->src_ip() != check2->src_ip()
+	         || check1->dst_ip() != check2->dst_ip()
+	         || check1->dst_port() != check2->dst_port()
+	         || check1->src_port() != check2->src_port()
+	         || check1->proto() != check2->proto() );
 }
 
 unsigned long CFlowUtil::flow_key ( const void *data )
 {
 	const flow_t *what = ( const flow_t * ) data;
 
-	return ( unsigned ) what->src_ip.s_addr * 59 + what->dst_ip.s_addr +
-	       what->proto + ( ( unsigned ) what->dst_port << 16 ) + what->src_port;
+	return ( unsigned ) what->src_ip() * 59 + what->dst_ip() +
+	       what->proto() + ( ( unsigned ) what->dst_port() << 16 ) + what->src_port();
 }
 
 void CFlowUtil::delete_flow ( void *data )
@@ -57,42 +58,44 @@ void CFlowUtil::delete_flow ( void *data )
 	free ( data );
 }
 
-flow_t* CFlowUtil::createFlow_t ( unsigned char proto, unsigned char class_proto, char *src_if, char *dst_if,
+flow_t* CFlowUtil::createFlow_t ( unsigned char proto, unsigned char class_proto, string& src_if, string& dst_if,
                                   u_short src_port, u_short dst_port,
                                   unsigned int n_bytes, unsigned int n_frames,
                                   time_t ini_sec, time_t end_sec, time_t ini_mic,
                                   time_t end_mic, struct in_addr src_ip,
                                   struct in_addr dst_ip )
 {
-	flow_t *flow = ( flow_t * ) malloc ( sizeof ( flow_t ) );
+	flow_t *flow = new flow_t();
 	if ( flow == NULL )
 		return NULL;
-	flow->proto = proto;
-	flow->class_proto = class_proto;
-	if ( src_if != NULL )
+	flow->set_proto ( proto );
+	flow->set_class_proto ( class_proto );
+	if ( src_if.length() == 0 )
 	{
-		strncpy ( flow->src_if, src_if,strlen ( src_if ) );
+		flow->set_src_if ( src_if );
+		//strncpy ( flow->src_if, src_if,strlen ( src_if ) );
 	}
 	else
-		flow->src_if[0] = '\0';
+		flow->set_src_if ( "" );
 
-	if ( dst_if != NULL )
+	if ( dst_if.length() == 0 )
 	{
-		strncpy ( flow->dst_if, dst_if, IF_CHAR_SIZE );
+		flow->set_dst_if ( dst_if );
+		//strncpy ( flow->dst_if, dst_if, IF_CHAR_SIZE );
 	}
 	else
-		flow->dst_if[0] = '\0';
+		flow->set_dst_if ( "" );
 
-	flow->src_port = src_port;
-	flow->dst_port = dst_port;
-	flow->n_bytes = n_bytes;
-	flow->n_frames = n_frames;
-	flow->ini_sec = ini_sec;
-	flow->end_sec = end_sec;
-	flow->ini_mic = ini_mic;
-	flow->end_mic = end_mic;
-	flow->src_ip = src_ip;
-	flow->dst_ip = dst_ip;
+	flow->set_src_port ( src_port );
+	flow->set_dst_port ( dst_port );
+	flow->set_n_bytes ( n_bytes );
+	flow->set_n_frames ( n_frames );
+	flow->set_ini_sec ( ini_sec );
+	flow->set_end_sec ( end_sec );
+	flow->set_ini_mic ( ini_mic );
+	flow->set_end_mic ( end_mic );
+	flow->set_src_ip ( src_ip.s_addr );
+	flow->set_dst_ip ( dst_ip.s_addr );
 	return flow;
 
 }
@@ -182,19 +185,22 @@ void CFlowUtil::flowToString ( char format, char proto_format, flow_t * flow, ch
 	static char str_proto[50];
 	char final[15] = "";
 
-	strncpy ( srcIp, inet_ntoa ( flow->src_ip ),16 );
-	strncpy ( dstIp, inet_ntoa ( flow->dst_ip ),16 );
+	in_addr src_ip, dst_ip;
+	src_ip.s_addr = flow->src_ip();
+	dst_ip.s_addr = flow->dst_ip();
+	strncpy ( srcIp, inet_ntoa ( src_ip ),16 );
+	strncpy ( dstIp, inet_ntoa ( dst_ip ),16 );
 
 	if ( proto_format == FORMAT_PROTO_NAME )
 	{
-		strncpy ( str_proto, get_protocolName ( flow->class_proto ), 50 );
+		strncpy ( str_proto, get_protocolName ( flow->class_proto() ), 50 );
 		// fixedfile
 		strncpy ( final, str_proto, strlen ( str_proto ) );
 		//
 	}
 	else
 	{
-		snprintf ( str_proto,50, "%u", flow->class_proto );
+		snprintf ( str_proto,50, "%u", flow->class_proto() );
 		adjustProtocol ( str_proto, final );
 	}
 
@@ -205,10 +211,10 @@ void CFlowUtil::flowToString ( char format, char proto_format, flow_t * flow, ch
 		//	static struct tm tm;
 		static char str_start[80];
 
-		inisec = ( long ) ( flow->ini_sec );
-		inimil = ( long ) ( flow->ini_mic ) / 1000; // interpreted as microseconds
-		endsec = ( long ) ( flow->end_sec );
-		endmil = ( long ) ( flow->end_mic ) / 1000; // interpreted as microseconds
+		inisec = ( long ) ( flow->ini_sec() );
+		inimil = ( long ) ( flow->ini_mic() ) / 1000; // interpreted as microseconds
+		endsec = ( long ) ( flow->end_sec() );
+		endmil = ( long ) ( flow->end_mic() ) / 1000; // interpreted as microseconds
 
 		// calculates flow duration
 		snprintf ( str_start,80, "%ld", inisec*1000000+inimil );
@@ -243,33 +249,33 @@ void CFlowUtil::flowToString ( char format, char proto_format, flow_t * flow, ch
 		           /*flow->src_if,
 		           flow->dst_if, */
 		           srcIp,
-		           ntohs ( flow->src_port ),
+		           ntohs ( ( uint16_t ) ( flow->src_port() ) ),
 		           dstIp,
-		           ntohs ( flow->dst_port ),
-		           flow->n_bytes,
-		           flow->n_frames,
+		           ntohs ( ( uint16_t ) flow->dst_port() ),
+		           flow->n_bytes(),
+		           flow->n_frames(),
 		           final,
-		           flow->proto );
+		           flow->proto() );
 	}
 	else
 	{
 
 		// default format FORMAT_FLOW_SECONDS
 		snprintf ( temp,256, "%.0f,%.0f,%.0f,%.0f,%s,%d,%s,%d,%.0d,%.0d,%s,%d",
-		           ( double ) ( flow->ini_sec ),
-		           ( double ) ( flow->ini_mic ),
-		           ( double ) ( flow->end_sec ),
-		           ( double ) ( flow->end_mic ),
+		           ( double ) ( flow->ini_sec() ),
+		           ( double ) ( flow->ini_mic() ),
+		           ( double ) ( flow->end_sec() ),
+		           ( double ) ( flow->end_mic() ),
 		           /*(char *) (flow->src_if),
 		           (char *) flow->dst_if, */
 		           srcIp,
-		           ( int ) ntohs ( flow->src_port ),
+		           ( int ) ntohs ( ( uint16_t ) ( flow->src_port() ) ),
 		           dstIp,
-		           ( int ) ntohs ( flow->dst_port ),
-		           ( int ) flow->n_bytes,
-		           ( int ) flow->n_frames,
+		           ( int ) ntohs ( ( uint16_t ) ( flow->dst_port() ) ),
+		           ( int ) flow->n_bytes(),
+		           ( int ) flow->n_frames(),
 		           final,
-		           flow->proto );
+		           flow->proto() );
 	}
 	*str = '\0';
 	strncat ( str, temp,strlen ( temp ) );

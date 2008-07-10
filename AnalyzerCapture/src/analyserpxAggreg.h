@@ -20,6 +20,7 @@ Define the procedures and variables used in the Analyser-PX's Aggregation Module
 //extern hash_tab *test_table;
 
 class CUserInputParams;
+class flow_t;
 struct hash_tab;
 
 class CAnalyzerAggregator

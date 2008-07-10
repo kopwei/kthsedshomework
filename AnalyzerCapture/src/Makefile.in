@@ -53,9 +53,9 @@ am_analyzercapture_OBJECTS = PacketDigest.$(OBJEXT) \
 	analyserpxFile.$(OBJEXT) analyserpxFlow.$(OBJEXT) \
 	analyzer.$(OBJEXT) analyzercapture.$(OBJEXT) cap.$(OBJEXT) \
 	circularbuffer.$(OBJEXT) classifier.$(OBJEXT) \
-	expressions.$(OBJEXT) hashtab.$(OBJEXT) ipheaderutil.$(OBJEXT) \
-	locks.$(OBJEXT) resultrecorder.$(OBJEXT) \
-	userinputparams.$(OBJEXT)
+	expressions.$(OBJEXT) flow.pb.$(OBJEXT) hashtab.$(OBJEXT) \
+	ipheaderutil.$(OBJEXT) locks.$(OBJEXT) \
+	resultrecorder.$(OBJEXT) userinputparams.$(OBJEXT)
 analyzercapture_OBJECTS = $(am_analyzercapture_OBJECTS)
 analyzercapture_LDADD = $(LDADD)
 analyzercapture_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
@@ -190,7 +190,7 @@ top_srcdir = @top_srcdir@
 analyzercapture_SOURCES = PacketDigest.cpp PacketStatistic.cpp \
 	PacketStatistician.cpp SubscriberStatistic.cpp analyserpxAggreg.cpp analyserpxFile.cpp \
 	analyserpxFlow.cpp analyzer.cpp analyzercapture.cpp cap.cpp circularbuffer.cpp \
-	classifier.cpp expressions.cpp hashtab.cpp ipheaderutil.cpp locks.cpp \
+	classifier.cpp expressions.cpp flow.pb.cpp hashtab.cpp ipheaderutil.cpp locks.cpp \
 	resultrecorder.cpp userinputparams.cpp
 
 
@@ -201,7 +201,7 @@ INCLUDES = $(all_includes)
 analyzercapture_LDFLAGS = $(all_libraries) 
 noinst_HEADERS = PacketDigest.h PacketStatistic.h PacketStatistician.h \
 	SubscriberStatistic.h analyserpxAggreg.h analyserpxFile.h analyserpxFlow.h analyserpxTypes.h \
-	analyzer.h cap.h circularbuffer.h classifier.h expressions.h hashtab.h \
+	analyzer.h cap.h circularbuffer.h classifier.h expressions.h flow.pb.h hashtab.h \
 	ipheaderutil.h locks.h macro.h resultrecorder.h userinputparams.h version.h
 
 all: all-am
@@ -288,6 +288,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/circularbuffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/classifier.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/expressions.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/flow.pb.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hashtab.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ipheaderutil.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/locks.Po@am__quote@

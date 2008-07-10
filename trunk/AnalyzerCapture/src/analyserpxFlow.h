@@ -2,6 +2,7 @@
 #define _ANALYSERPX_FLOW_
 
 #include "analyserpxTypes.h"
+#include "resultenum.h"
 
 /*!     \file analyserpxFlow.h
 \brief Flow manipulation functions.
@@ -40,6 +41,7 @@ const unsigned int	FORMAT_PROTO_NAME =	2;
 const unsigned int	FORMAT_PROTO_DEFAULT =	FORMAT_PROTO_ID;
 
 class flow_t;
+class flow_collection;
 
 class CFlowUtil
 {
@@ -125,6 +127,12 @@ public:
 	*/
 	static int printFlowToFile(flow_t *flow, const char *file);
 
+	static ResultEnum printFlowCollectionToFile(flow_collection* pFlowCol, const string& strFileName);
+
+	static ResultEnum addFlowToFile(flow_t* pFlow, const string& strFileName);
+
+	static ResultEnum readFlowColloectionFromFile(flow_collection* pFlowCol, const string& strFileName);
+
 	/*!     \fn void printFlowStruct(char format, char* str)
 	\brief Write the string flow header.
 
@@ -132,6 +140,8 @@ public:
 	\param str	Pointer to receive the flow text header structure.
 	*/
 	static void printFlowStruct(char format, char* str);
+
+	
 
 	/*!     \fn flow_t *readFlowFromFile(flow_t *flow, const char *file, int ind)
 	\brief Read a flow from a binary file.

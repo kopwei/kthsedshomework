@@ -19,6 +19,7 @@
 #include "userinputparams.h"
 #include "analyzer.h"
 #include "macro.h"
+#include "flow.pb.h"
 
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
 
@@ -69,7 +70,7 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 	lastTime = sec* ( 1e6 ) + usec;
 	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
 	{
-		hashTime = ( ( flow_hsh->end_sec ) * ( 1e6 ) ) + ( flow_hsh->end_mic );
+		hashTime = ( ( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( flow_hsh->end_mic() );
 		if ( flow_export )
 		{
 			CFlowUtil::printFlowToFile ( flow_hsh, fileName );
@@ -102,7 +103,7 @@ void CAnalyzerAggregator::cleanHash ( hash_tab * hash, time_t sec, time_t usec, 
 	lastTime = sec* ( 1e6 ) + usec;
 	while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
 	{
-		hashTime = ( ( flow_hsh->end_sec ) * ( 1e6 ) ) + ( flow_hsh->end_mic );
+		hashTime = ( ( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( flow_hsh->end_mic() );
 		if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
 		{
 			CFlowUtil::printFlowToFile ( flow_hsh, fileName );
@@ -115,8 +116,8 @@ void CAnalyzerAggregator::cleanHash ( hash_tab * hash, time_t sec, time_t usec, 
 
 int CAnalyzerAggregator::verifyTimeOut ( flow_t * flow1, flow_t * flow2 )
 {
-	double temp1 = flow1->end_sec* ( 1e6 ) + ( flow1->end_mic ) ;
-	double temp2 = flow2->end_sec* ( 1e6 ) + ( flow2->end_mic );
+	double temp1 = flow1->end_sec()* ( 1e6 ) + ( flow1->end_mic() ) ;
+	double temp2 = flow2->end_sec()* ( 1e6 ) + ( flow2->end_mic() );
 	double result = temp2 - temp1;
 	return ( result > ( TIMEOUT* ( 1e6 ) ) );
 }
@@ -140,11 +141,11 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 
 	if ( start == 0 )
 	{
-		start = flow->end_sec;
+		start = flow->end_sec();
 	}
 	else
 	{
-		dif = difftime ( flow->end_sec,start );
+		dif = difftime ( flow->end_sec(),start );
 		if ( s_pInputParams->GetOutputTimeBin() != 0 )
 		{
 			if ( dif >= ( ( ( double ) s_pInputParams->GetFlowTimeOutSeconds() ) * s_pInputParams->GetOutputTimeBin() ) )
@@ -217,16 +218,16 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 	}
 	else
 	{
-		if ( ( flow_hsh->class_proto == PROTO_ID_NONPAYLOAD ) )
+		if ( ( flow_hsh->class_proto() == PROTO_ID_NONPAYLOAD ) )
 		{
 			//We can't classify a flow with NONPAYLOAD type only because his first packet
 			++tp->count[2];
 		}
-		else if ( ( flow_hsh->class_proto < DOWN_BASE_P2P_CLASS_NUMBER ) )
+		else if ( ( flow_hsh->class_proto() < DOWN_BASE_P2P_CLASS_NUMBER ) )
 		{
 			++tp->count[3];
 		}
-		else if ( CClassifier::isSuperClass ( flow_hsh->class_proto ) )
+		else if ( CClassifier::isSuperClass ( flow_hsh->class_proto() ) )
 		{
 			++tp->count[4];
 		} /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
@@ -235,9 +236,10 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 	}*/
 	}
 
-	tmp_flow = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, NULL, NULL, flow->dst_port, flow->src_port,
-	                                     ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec,
-	                                     flow->end_sec, flow->ini_mic, flow->end_mic, ip->ip_dst,ip->ip_src );
+	string strEmpty = "";
+	tmp_flow = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, strEmpty, strEmpty, flow->dst_port(), flow->src_port(),
+	                                     ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),
+	                                     flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
 	//Sync Table begin
 	//pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 )
@@ -251,14 +253,14 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 		HashTableUtil::add_hash_entry ( test_table, flow );
 		if ( ( reverse_flow_hsh == NULL ) )
 		{
-			flow->class_proto = classifier;
+			flow->set_class_proto(classifier);
 		}
 		else
 		{
 			u_short tmp_id=0;
-			tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto,classifier );
-			reverse_flow_hsh->class_proto = tmp_id;
-			flow->class_proto = tmp_id;
+			tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto(),classifier );
+			reverse_flow_hsh->set_class_proto(tmp_id);
+			flow->set_class_proto(tmp_id);
 		}
 
 	}
@@ -270,92 +272,92 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 		HashTableUtil::add_hash_entry ( test_table, flow );
 		if ( ( reverse_flow_hsh == NULL ) )
 		{
-			flow->class_proto = classifier;
+			flow->set_class_proto(classifier);
 		}
 		else
 		{
 			u_short tmp_id=0;
-			tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto,classifier );
-			reverse_flow_hsh->class_proto = tmp_id;
-			flow->class_proto = tmp_id;
+			tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto(),classifier );
+			reverse_flow_hsh->set_class_proto(tmp_id);
+			flow->set_class_proto(tmp_id);
 		}
 	}
 	else
 	{
-		flow_hsh->n_bytes += flow->n_bytes;
-		flow_hsh->n_frames += flow->n_frames;
+		flow_hsh->set_n_bytes(flow_hsh->n_bytes() + flow->n_bytes());
+		flow_hsh->set_n_frames(flow_hsh->n_frames() + flow->n_frames());
 
 		/* RTA - 26/05/08
 		Verification added for synchronization purposes
 		*/
-		double end   = ( double ) flow_hsh->end_sec* ( 1e6 ) + ( double ) ( flow_hsh->end_mic ) ;
-		double act   = ( double ) flow->ini_sec* ( 1e6 ) + ( double ) ( flow->ini_mic ) ;
+		double end   = ( double ) flow_hsh->end_sec()* ( 1e6 ) + ( double ) ( flow_hsh->end_mic() ) ;
+		double act   = ( double ) flow->ini_sec()* ( 1e6 ) + ( double ) ( flow->ini_mic() ) ;
 		if ( act > end )
 		{
-			flow_hsh->end_sec = flow->ini_sec;
-			flow_hsh->end_mic = flow->ini_mic;
+			flow_hsh->set_end_sec(flow->ini_sec());
+			flow_hsh->set_end_mic(flow->ini_mic());
 		}
 		else
 		{
-			double ini   = ( double ) flow_hsh->ini_sec* ( 1e6 ) + ( double ) ( flow_hsh->ini_mic ) ;
+			double ini   = ( double ) flow_hsh->ini_sec() * ( 1e6 ) + ( double ) ( flow_hsh->ini_mic() ) ;
 			if ( act < ini )
 			{
-				flow_hsh->ini_sec = flow->ini_sec;
-				flow_hsh->ini_mic = flow->ini_mic;
+				flow_hsh->set_ini_sec(flow->ini_sec());
+				flow_hsh->set_ini_mic (flow->ini_mic());
 			}
 		}
 
 		CFlowUtil::delete_flow ( flow );
-		if ( ( flow_hsh->class_proto == PROTO_ID_NONPAYLOAD ) )
+		if ( ( flow_hsh->class_proto() == PROTO_ID_NONPAYLOAD ) )
 		{
 			//We can't classify a flow with NONPAYLOAD type only because his first packet
 			if ( ( reverse_flow_hsh == NULL ) )
 			{
-				flow_hsh->class_proto = classifier;
+				flow_hsh->set_class_proto(classifier);
 			}
 			else
 			{
 				u_short tmp_id=0;
-				tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto,classifier );
-				reverse_flow_hsh->class_proto = tmp_id;
-				flow_hsh->class_proto = tmp_id;
+				tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto(),classifier );
+				reverse_flow_hsh->set_class_proto(tmp_id);
+				flow_hsh->set_class_proto(tmp_id);
 			}
 		}
-		else if ( ( flow_hsh->class_proto < DOWN_BASE_P2P_CLASS_NUMBER ) )
+		else if ( ( flow_hsh->class_proto() < DOWN_BASE_P2P_CLASS_NUMBER ) )
 		{
 			if ( ( classifier>=DOWN_BASE_P2P_CLASS_NUMBER ) && ( classifier<PROTO_ID_NONPAYLOAD ) )
 			{
 				if ( ( reverse_flow_hsh == NULL ) )
 				{
-					flow_hsh->class_proto = classifier;
+					flow_hsh->set_class_proto(classifier);
 				}
 				else
 				{
 					u_short tmp_id=0;
-					tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto,classifier );
-					reverse_flow_hsh->class_proto = tmp_id;
-					flow_hsh->class_proto = tmp_id;
+					tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto(),classifier );
+					reverse_flow_hsh->set_class_proto(tmp_id);
+					flow_hsh->set_class_proto(tmp_id);
 				}
 			}
 		}
-		else if ( CClassifier::isSuperClass ( flow_hsh->class_proto ) )
+		else if ( CClassifier::isSuperClass ( flow_hsh->class_proto() ) )
 		{
 			if ( ( classifier>=DOWN_BASE_P2P_CLASS_NUMBER ) && ( classifier<PROTO_ID_NONPAYLOAD ) )
 			{
 				if ( ( reverse_flow_hsh == NULL ) )
 				{
-					if ( ! ( classifier == 116 && flow_hsh->class_proto == 201 ) ) //adicionado temporariamente lembrar de tirar
-						flow_hsh->class_proto = classifier;
+					if ( ! ( classifier == 116 && flow_hsh->class_proto() == 201 ) ) //adicionado temporariamente lembrar de tirar
+						flow_hsh->set_class_proto(classifier);
 				}
 				else
 				{
 					u_short tmp_id=0;
-					tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto,classifier );
-					if ( ! ( tmp_id == 116 && flow_hsh->class_proto == 201 ) )
+					tmp_id = CClassifier::verID ( reverse_flow_hsh->class_proto(),classifier );
+					if ( ! ( tmp_id == 116 && flow_hsh->class_proto() == 201 ) )
 					{
 						//adicionado temporariamente lembrar de tirar
-						reverse_flow_hsh->class_proto = tmp_id;
-						flow_hsh->class_proto = tmp_id;
+						reverse_flow_hsh->set_class_proto(tmp_id);
+						flow_hsh->set_class_proto(tmp_id);
 					}
 				}
 			}
@@ -394,7 +396,8 @@ void CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_p
 	}
 	// fixed
 
-	flow_t* flow = CFlowUtil::createFlow_t ( pIpHeader->ip_p, pIpHeader->ip_p, NULL, NULL, src_port, dst_port,
+	string strEmpty = "";
+	flow_t* flow = CFlowUtil::createFlow_t ( pIpHeader->ip_p, pIpHeader->ip_p, strEmpty, strEmpty, src_port, dst_port,
 	               ( unsigned int ) ntohs ( pIpHeader->ip_len ), 1,
 	               ( time_t ) ( header->ts.tv_sec ),
 	               ( time_t ) ( header->ts.tv_sec ),

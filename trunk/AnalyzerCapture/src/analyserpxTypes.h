@@ -50,10 +50,6 @@ using namespace std;
 
 //struct flow_t;
 
-/*!     \def IF_CHAR_SIZE
-        \brief Define the maximum interface name length.
-*/
-#define IF_CHAR_SIZE 5
 
 /*!     \def TIMEOUT
 	\brief Default flow timeout.
@@ -78,26 +74,7 @@ struct cap_config
 	unsigned short snap_len;			/*!< packet's length to capture */
 } ;
 
-/*!     \struct flow_t
-	\brief Flow type.
-*/
-struct flow_t
-{
-	u_short proto; 			/*!< protocol number*/
-	u_short class_proto; 		/*!< Classification protocol number*/
-	char 	src_if[IF_CHAR_SIZE],	/*!< source native interface name*/
-	dst_if[IF_CHAR_SIZE];	/*!< destination native interface name*/
-	u_short dst_port,		/*!< source port*/
-	src_port; 		/*!< destination port*/
-	unsigned int 	n_bytes,	/*!< number of bytes*/
-	n_frames;	/*!< number of frames*/
-	time_t 	ini_sec,		/*!< seconds init time*/
-	ini_mic,		/*!< microseconds init time*/
-	end_sec,		/*!< seconds end time*/
-	end_mic;		/*!< microseconds end time*/
-	struct in_addr 	src_ip,		/*!< source ip*/
-				dst_ip;		/*!< destination ip*/
-} ;
+
 
 /*!     \struct admin_t
 	\brief Adiministration Time type.

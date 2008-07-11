@@ -27,7 +27,7 @@
 #include <netinet/in.h>
 #include <pthread.h>
 #include <iostream>
-#include <time>
+#include <time.h>
 
 using namespace std;
 
@@ -129,7 +129,7 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 {
 	// TODO: Need implementation here
-	CUserInputParams* pParams = dynamic_cast<CUserInputParams *>(pArg);
+	CUserInputParams* pParams = (CUserInputParams *)(pArg);
 	EABASSERT(NULL != pParams); ON_ERROR_RETURN(NULL == pParams, NULL);
 	//CResultRecorder recorder;
 	// TODO: Here we have to sleep for a certain amount of time and then start to

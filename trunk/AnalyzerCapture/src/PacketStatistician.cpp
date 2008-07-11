@@ -22,10 +22,12 @@
 #include "locks.h"
 #include "macro.h"
 #include "ipheaderutil.h"
+#include "resultrecorder.h"
 
 #include <netinet/in.h>
 #include <pthread.h>
 #include <iostream>
+#include <time>
 
 using namespace std;
 
@@ -35,10 +37,12 @@ using namespace std;
  * Re-definition
  */ 
 map<unsigned int, CSubscriberStatistic> CPacketStatistician::m_mapSubscriberStat;
-CResultRecorder CPacketStatistician::s_resultRecorder; 
+//CResultRecorder CPacketStatistician::s_resultRecorder; 
+time_t	CPacketStatistician::s_recordingTime;
 
 CPacketStatistician::CPacketStatistician ( void )
 {
+	time(&s_recordingTime);
 }
 
 CPacketStatistician::~CPacketStatistician ( void )
@@ -61,7 +65,7 @@ void CPacketStatistician::PrintStatisticResult()
 	cout << "I received " << m_totalPacketStatistic.GetPacketNumber() << " Packets" << endl;
 	cout << "The total volume number is " << m_totalPacketStatistic.GetTrafficVolume() << " Bytes" << endl;
 	
-	cout << "Totaly there are " << m_mapSubscriberStat.size() << " number of subscribers" << endl;
+	cout << "Totally there are " << m_mapSubscriberStat.size() << " number of subscribers" << endl;
 	
 	map<unsigned int, CSubscriberStatistic>::iterator itor = m_mapSubscriberStat.begin();
 	for( ; itor != m_mapSubscriberStat.end(); ++itor )
@@ -125,5 +129,20 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 {
 	// TODO: Need implementation here
+	CUserInputParams* pParams = dynamic_cast<CUserInputParams *>(pArg);
+	EABASSERT(NULL != pParams); ON_ERROR_RETURN(NULL == pParams, NULL);
+	//CResultRecorder recorder;
+	// TODO: Here we have to sleep for a certain amount of time and then start to
+	// record something
+
+
+
 	return NULL;
+}
+
+ResultEnum CPacketStatistician::RecordStatisticResult( const CUserInputParams* pParams )
+{
+	ResultEnum rs = eNotImplemented;
+	// TODO: Need implementation here 
+	return rs;
 }

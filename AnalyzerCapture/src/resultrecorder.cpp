@@ -19,15 +19,11 @@
 #include "resultrecorder.h"
 #include "PacketStatistician.h"
 #include "locks.h"
+#include "macro.h"
 
-RecordParameter::RecordParameter(RecordTypeEnum recordType)
+RecordParameter::RecordParameter(const RecordTypeEnum recordType, const time_t& startTime, const time_t& endTime)
+: m_recordType(recordType), m_startTime(startTime), m_endTime(endTime)
 {
-	m_recordType = recordType;
-}
-
-RecordTypeEnum RecordParameter::GetRecordType() const
-{
-	return m_recordType;
 }
 
 CResultRecorder::CResultRecorder()
@@ -40,21 +36,33 @@ CResultRecorder::~CResultRecorder()
 }
 
 
-ResultEnum CResultRecorder::RecordResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam)
+ResultEnum CResultRecorder::RecordTimeOutResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here
+	switch (pParam->RecordType())
+	{
+	case eRecordToDatabase:
+		rs = RecordToDatabase(pStatistician, pParam);
+		EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+		break;
+	default:
+		break;
+	}
+	
 	return rs;
 }
 
-ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatistician )
+ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatistician ,const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here
+	map<unsigned int, CSubscriberStatistic> recordingMap = pStatistician->GetStatisticMap();
+	
 	return rs;
 }
 
-ResultEnum CResultRecorder::RecordToXML(const CPacketStatistician* pStatistician)
+ResultEnum CResultRecorder::RecordToXML(const CPacketStatistician* pStatistician, const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here

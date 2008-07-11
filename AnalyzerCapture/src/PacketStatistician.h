@@ -44,23 +44,36 @@ public:
 	CPacketStatistician(void);
 	~CPacketStatistician(void);
 
-	ResultEnum AddNewPacketInfo(const CPacketDigest* pPacketDigest);
+	/**
+	 *	This method will be called 
+	 */
+	ResultEnum			AddNewPacketInfo(const CPacketDigest* pPacketDigest);
 	
-	static void*	PacketStatisticTimeOut(void* pArg);
+	static void*		PacketStatisticTimeOut(void* pArg);
 	
-	void PrintStatisticResult();
+	void				PrintStatisticResult();
+
+	map<unsigned int, CSubscriberStatistic> GetStatisticMap() const {return m_mapSubscriberStat;}
 
 private:
 	
-	ResultEnum AddPacketToMap(const CPacketDigest* pPacketDigest);
+	/**
+	 *	This method is used to store the information of new packet
+	 */
+	ResultEnum			AddPacketToMap(const CPacketDigest* pPacketDigest);
+
+	/**
+	 *	This method is used to record current info 
+	 */
+	static ResultEnum	RecordStatisticResult(const CUserInputParams* pParams);
 	
+
+
 	CPacketStatistic		m_totalPacketStatistic;
-	//CSubscriberStatistic	m_subscriberStatistic;
-	//
 	static map<unsigned int, CSubscriberStatistic> m_mapSubscriberStat;
 	
-	static CResultRecorder		s_resultRecorder;
-
+	//static CResultRecorder		s_resultRecorder;
+	static time_t			s_recordingTime;
 };
 
 #endif

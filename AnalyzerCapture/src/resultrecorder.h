@@ -45,17 +45,19 @@ enum RecordTypeEnum
 class RecordParameter
 {
 public:
-	RecordParameter(RecordTypeEnum recordType);
+	RecordParameter(const RecordTypeEnum recordType, const time_t& startTime, const time_t& endTime);
 
-	RecordTypeEnum GetRecordType() const;
+	RecordTypeEnum RecordType() const { return m_recordType; }
+	time_t StartTime() const { return m_startTime; }
+	time_t EndTime() const { return m_endTime; }
 
 private:
 	RecordTypeEnum m_recordType;
+	time_t m_startTime;	
+	time_t m_endTime;
+	
 };
 
-/**
-	@author LM Ericsson,,, <ericsson@ericsson-computer>
-*/
 //////////////////////////////////////////////////////////////////////////
 /**
  * This class is a util class used for recording the result into file or database
@@ -66,13 +68,15 @@ public:
 
     ~CResultRecorder();
 	
-	ResultEnum RecordResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
+	ResultEnum RecordTimeOutResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
+
+	ResultEnum RecordDailyResult(const CPacketStatistic* pPacketStat);
 
 private:
 
-	ResultEnum RecordToDatabase(const CPacketStatistician* pStatistician);
+	ResultEnum RecordToDatabase(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
 
-	ResultEnum RecordToXML(const CPacketStatistician* pStatistician);
+	ResultEnum RecordToXML(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
 
 };
 

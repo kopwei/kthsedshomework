@@ -21,8 +21,10 @@
 #define RESULTRECORDER_H
 
 #include "resultenum.h"
+#include "time.h"
 
 class CPacketStatistician;
+class CPacketStatistic;
 
 
 //////////////////////////////////////////////////////////////////////////

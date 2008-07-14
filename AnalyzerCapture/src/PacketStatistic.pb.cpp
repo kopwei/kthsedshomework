@@ -15,19 +15,29 @@ const ::google::protobuf::Descriptor* CPacketStatistic_descriptor_ = NULL;
 
 }  // namespace
 
-ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest )
+ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest)
 {
 	ResultEnum rs = eOK;
-	++m_llpacketnumber_;
-	m_lltrafficvolume_ += pDigest->getPacketSize();
-	if (CClassifier::IsP2P(pDigest->getProtocolClassification()))
+	unsigned int size = pDigest->getPacketSize();
+	++packetnumber_;
+	trafficvolume_ += size;
+	u_short classfication = pDigest->getProtocolClassification();
+	// If it is p2p packet 
+	if (CClassifier::IsP2P(classfication))
 	{
-		++m_llp2ppacketnumber_;
-		m_llp2ptrafficvolume_ += pDigest->getPacketSize();
+		p2ppacketnumber_++;
+		p2ptrafficvolume_ += size;
 	}
+	// If it is http packet and not p2p, then 
+	else if (CClassifier::isHTTP(classfication))
+	{
+		httppacketnumber_++;
+		httptrafficvolume_ += size;
+	}
+	
+	// TODO: need more implementation here
 	return rs;
 }
-
 
 void proto_BuildDescriptors_PacketStatistic_2eproto() {
   static bool already_here = false;
@@ -38,18 +48,16 @@ void proto_BuildDescriptors_PacketStatistic_2eproto() {
     ::google::protobuf::DescriptorPool::internal_generated_pool();
 
   const ::google::protobuf::FileDescriptor* file = pool->InternalBuildGeneratedFile(
-    "\n\025PacketStatistic.proto\"\241\003\n\020CPacketStati"
-    "stic\022\030\n\020m_llPacketNumber\030\001 \002(\006\022\031\n\021m_llTr"
-    "afficVolume\030\002 \002(\006\022\035\n\025m_llEmptyPacketNumb"
-    "er\030\003 \002(\006\022\033\n\023m_llTCPPacketNumber\030\004 \002(\006\022\034\n"
-    "\024m_llTCPTrafficVolume\030\005 \002(\006\022\033\n\023m_llUDPPa"
-    "cketNumber\030\006 \002(\006\022\034\n\024m_llUDPTrafficVolume"
-    "\030\007 \002(\006\022\033\n\023m_llP2PPacketNumber\030\010 \002(\006\022\034\n\024m"
-    "_llP2PTrafficVolume\030\t \002(\006\022\034\n\024m_llHTTPPac"
-    "ketNumber\030\n \002(\006\022\035\n\025m_llHTTPTrafficVolume"
-    "\030\013 \002(\006\022$\n\034m_llUnidentifiedPacketNumber\030\014"
-    " \002(\006\022%\n\035m_llUnidentifiedTrafficVolume\030\r "
-    "\002(\006", 443);
+    "\n\025PacketStatistic.proto\"\355\002\n\020CPacketStati"
+    "stic\022\024\n\014packetNumber\030\001 \002(\006\022\025\n\rtrafficVol"
+    "ume\030\002 \002(\006\022\031\n\021emptyPacketNumber\030\003 \002(\006\022\027\n\017"
+    "tcpPacketNumber\030\004 \002(\006\022\030\n\020tcpTrafficVolum"
+    "e\030\005 \002(\006\022\027\n\017udpPacketNumber\030\006 \002(\006\022\030\n\020udpT"
+    "rafficVolume\030\007 \002(\006\022\027\n\017p2pPacketNumber\030\010 "
+    "\002(\006\022\030\n\020p2pTrafficVolume\030\t \002(\006\022\030\n\020httpPac"
+    "ketNumber\030\n \002(\006\022\031\n\021httpTrafficVolume\030\013 \002"
+    "(\006\022 \n\030unidentifiedPacketNumber\030\014 \002(\006\022!\n\031"
+    "unidentifiedTrafficVolume\030\r \002(\006", 391);
   CPacketStatistic_descriptor_ = file->message_type(0);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     CPacketStatistic_descriptor_, &CPacketStatistic::default_instance());
@@ -81,19 +89,19 @@ const CPacketStatistic CPacketStatistic::default_instance_;
 
 
 const int CPacketStatistic::_offsets_[13] = {
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_llpacketnumber_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_lltrafficvolume_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_llemptypacketnumber_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_lltcppacketnumber_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_lltcptrafficvolume_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_lludppacketnumber_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_lludptrafficvolume_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_llp2ppacketnumber_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_llp2ptrafficvolume_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_llhttppacketnumber_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_llhttptrafficvolume_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_llunidentifiedpacketnumber_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, m_llunidentifiedtrafficvolume_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, packetnumber_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, trafficvolume_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, emptypacketnumber_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, tcppacketnumber_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, tcptrafficvolume_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, udppacketnumber_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, udptrafficvolume_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, p2ppacketnumber_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, p2ptrafficvolume_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, httppacketnumber_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, httptrafficvolume_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, unidentifiedpacketnumber_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CPacketStatistic, unidentifiedtrafficvolume_),
 };
 
 CPacketStatistic::CPacketStatistic()
@@ -101,19 +109,19 @@ CPacketStatistic::CPacketStatistic()
                  this, &default_instance_,
                  _offsets_, _has_bits_, NULL),
     _cached_size_(0),
-    m_llpacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_lltrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_llemptypacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_lltcppacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_lltcptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_lludppacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_lludptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_llp2ppacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_llp2ptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_llhttppacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_llhttptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_llunidentifiedpacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_llunidentifiedtrafficvolume_(GOOGLE_ULONGLONG(0)) {
+    packetnumber_(GOOGLE_ULONGLONG(0)),
+    trafficvolume_(GOOGLE_ULONGLONG(0)),
+    emptypacketnumber_(GOOGLE_ULONGLONG(0)),
+    tcppacketnumber_(GOOGLE_ULONGLONG(0)),
+    tcptrafficvolume_(GOOGLE_ULONGLONG(0)),
+    udppacketnumber_(GOOGLE_ULONGLONG(0)),
+    udptrafficvolume_(GOOGLE_ULONGLONG(0)),
+    p2ppacketnumber_(GOOGLE_ULONGLONG(0)),
+    p2ptrafficvolume_(GOOGLE_ULONGLONG(0)),
+    httppacketnumber_(GOOGLE_ULONGLONG(0)),
+    httptrafficvolume_(GOOGLE_ULONGLONG(0)),
+    unidentifiedpacketnumber_(GOOGLE_ULONGLONG(0)),
+    unidentifiedtrafficvolume_(GOOGLE_ULONGLONG(0)) {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   if (this == &default_instance_) {
   }
@@ -124,19 +132,19 @@ CPacketStatistic::CPacketStatistic(const CPacketStatistic& from)
                  this, &default_instance_,
                  _offsets_, _has_bits_, NULL),
     _cached_size_(0),
-    m_llpacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_lltrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_llemptypacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_lltcppacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_lltcptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_lludppacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_lludptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_llp2ppacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_llp2ptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_llhttppacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_llhttptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    m_llunidentifiedpacketnumber_(GOOGLE_ULONGLONG(0)),
-    m_llunidentifiedtrafficvolume_(GOOGLE_ULONGLONG(0)) {
+    packetnumber_(GOOGLE_ULONGLONG(0)),
+    trafficvolume_(GOOGLE_ULONGLONG(0)),
+    emptypacketnumber_(GOOGLE_ULONGLONG(0)),
+    tcppacketnumber_(GOOGLE_ULONGLONG(0)),
+    tcptrafficvolume_(GOOGLE_ULONGLONG(0)),
+    udppacketnumber_(GOOGLE_ULONGLONG(0)),
+    udptrafficvolume_(GOOGLE_ULONGLONG(0)),
+    p2ppacketnumber_(GOOGLE_ULONGLONG(0)),
+    p2ptrafficvolume_(GOOGLE_ULONGLONG(0)),
+    httppacketnumber_(GOOGLE_ULONGLONG(0)),
+    httptrafficvolume_(GOOGLE_ULONGLONG(0)),
+    unidentifiedpacketnumber_(GOOGLE_ULONGLONG(0)),
+    unidentifiedtrafficvolume_(GOOGLE_ULONGLONG(0)) {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   MergeFrom(from);
 }

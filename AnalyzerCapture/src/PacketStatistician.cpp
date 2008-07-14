@@ -62,8 +62,8 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 
 void CPacketStatistician::PrintStatisticResult()
 {
-	cout << "I received " << m_totalPacketStatistic.GetPacketNumber() << " Packets" << endl;
-	cout << "The total volume number is " << m_totalPacketStatistic.GetTrafficVolume() << " Bytes" << endl;
+	cout << "I received " << m_totalPacketStatistic.packetnumber() << " Packets" << endl;
+	cout << "The total volume number is " << m_totalPacketStatistic.trafficvolume() << " Bytes" << endl;
 	
 	cout << "Totally there are " << m_mapSubscriberStat.size() << " number of subscribers" << endl;
 	

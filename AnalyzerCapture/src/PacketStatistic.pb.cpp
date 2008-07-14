@@ -29,11 +29,11 @@ ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest)
 		p2ptrafficvolume_ += size;
 	}
 	// If it is http packet and not p2p, then 
-	else if (CClassifier::isHTTP(classfication))
-	{
-		httppacketnumber_++;
-		httptrafficvolume_ += size;
-	}
+	//else if (CClassifier::isHTTP(classfication))
+	//{
+	//	httppacketnumber_++;
+	//	httptrafficvolume_ += size;
+	//}
 	
 	// TODO: need more implementation here
 	return rs;

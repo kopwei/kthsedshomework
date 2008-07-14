@@ -16,11 +16,14 @@
  *   along with this program; if not, write to the
  *   Copyright (C) 2008 by Ericsson
  */
+
+#define MYSQLPP_MYSQL_HEADERS_BURIED
+
 #include "resultrecorder.h"
 #include "PacketStatistician.h"
 #include "locks.h"
 #include "macro.h"
-#include "mysql/mysql.h"
+#include "mysql++/mysql++.h"
 
 RecordParameter::RecordParameter(const RecordTypeEnum recordType, const time_t& startTime, const time_t& endTime)
 : m_recordType(recordType), m_startTime(startTime), m_endTime(endTime)
@@ -59,7 +62,8 @@ ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatis
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here
 	map<unsigned int, CSubscriberStatistic> recordingMap = pStatistician->GetStatisticMap();
-	MYSQL* pMysql = mysql_init(NULL);
+	//MYSQL* pMysql = mysql_init(NULL);
+	mysqlpp::Connection con;
 	
 	return rs;
 }

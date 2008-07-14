@@ -22,6 +22,7 @@
 
 #include "resultenum.h"
 #include "time.h"
+#include "mysql++/mysql++.h"
 
 class CPacketStatistician;
 class CPacketStatistic;
@@ -80,6 +81,17 @@ private:
 
 	ResultEnum RecordToXML(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
 
+	ResultEnum RecordStatisticIntoTable(const string& strTableName, const unsigned int iSubuscriber, 
+		const time_t start_time, const time_t end_time, 
+		const CSubscriberStatistic* pSubStat);
+
+	ResultEnum CheckDatabase(const string& strDbName);
+
+	ResultEnum CheckTable(const string& strTableName);
+
+	ResultEnum GetCurrentDate(string& strDate) const;
+
+	mysqlpp::Connection			m_connection;
 };
 
 #endif

@@ -713,7 +713,15 @@ public:
 	*/
 	static u_short isSuperClass(u_short id);
 
-	static bool IsP2P(u_short id);
+	//////////////////////////////////////////////////////////////////////////
+	
+	static bool IsP2P(const u_short id);
+
+	static bool IsHTTP(const u_short id);
+
+	static bool IsNonPayload(const u_short id);
+
+
 private:
 
 	/*!     \fn u_short isBittorrent (const unsigned char *payload, const u16 mess_len)

@@ -3994,8 +3994,18 @@ u_short CClassifier::isSuperClass(u_short id) {
 	return 0;
 }
 
-bool CClassifier::IsP2P( u_short id )
+bool CClassifier::IsP2P( const u_short id )
 {
 	return (id > DOWN_BASE_P2P_CLASS_NUMBER && id < UP_BASE_P2P_CLASS_NUMBER);
+}
+
+bool CClassifier::IsHTTP( const u_short id )
+{
+	return (id == PROTO_ID_HTTP);
+}
+
+bool CClassifier::IsNonPayload( const u_short id )
+{
+	return (PROTO_ID_NONPAYLOAD == id);
 }
 

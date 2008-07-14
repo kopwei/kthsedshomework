@@ -58,5 +58,6 @@ ResultEnum CSubscriberStatistic::AddNewPacket(const CPacketDigest* pPacketDigest
 void CSubscriberStatistic::PrintSummary()
 {
 	// Just for testing...
-	cout << "I am user " << m_ipAddress << " and I have received " << m_downloadPacketStatistic.packetnumber() << " Packets" << endl;
+	cout << "I am user " << m_ipAddress << " and I have received " 
+		<< m_downloadPacketStatistic.packetnumber() << " Packets" << endl;
 }

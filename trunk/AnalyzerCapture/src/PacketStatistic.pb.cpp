@@ -8,6 +8,7 @@
 
 #include "PacketDigest.h"
 #include "classifier.h"
+#include "macro.h"
 
 namespace {
 
@@ -19,21 +20,17 @@ ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest)
 {
 	ResultEnum rs = eOK;
 	unsigned int size = pDigest->getPacketSize();
+	// Modify the total statistic
 	++packetnumber_;
 	trafficvolume_ += size;
+
+	u_short protocol = pDigest->getProtocol();
+	rs = distributeByProtocol(protocol, size);
+	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+
 	u_short classfication = pDigest->getProtocolClassification();
-	// If it is p2p packet 
-	if (CClassifier::IsP2P(classfication))
-	{
-		p2ppacketnumber_++;
-		p2ptrafficvolume_ += size;
-	}
-	// If it is http packet and not p2p, then 
-	//else if (CClassifier::isHTTP(classfication))
-	//{
-	//	httppacketnumber_++;
-	//	httptrafficvolume_ += size;
-	//}
+	rs = distributedByClassification(classfication, size);
+	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 	
 	// TODO: need more implementation here
 	return rs;
@@ -174,4 +171,50 @@ CPacketStatistic::GetReflection() const {
 
 ::google::protobuf::Message::Reflection* CPacketStatistic::GetReflection() {
   return &_reflection_;
+}
+
+ResultEnum CPacketStatistic::distributeByProtocol(const unsigned short sProtocolId, const unsigned int iPacketSize)
+{
+	ResultEnum rs = eOK;
+	if (PROTO_ID_TCP == sProtocolId)
+	{
+		tcppacketnumber_++;
+		tcptrafficvolume_ += iPacketSize;
+	}
+	else if (PROTO_ID_UDP == sProtocolId)
+	{
+		udppacketnumber_++;
+		udptrafficvolume_ += iPacketSize;
+	}	
+	// TODO: May need more implementation here
+	return rs;
+}
+
+ResultEnum CPacketStatistic::distributedByClassification(const unsigned short sClassId, const unsigned int iPacketSize)
+{
+	ResultEnum rs = eOK;
+	// If it is p2p packet 
+	if (CClassifier::IsP2P(sClassId))
+	{
+		p2ppacketnumber_++;
+		p2ptrafficvolume_ += iPacketSize;
+	}
+	// If it is http packet and not p2p, then 
+	else if (CClassifier::isHTTP(sClassId))
+	{
+		httppacketnumber_++;
+		httptrafficvolume_ += iPacketSize;
+	}
+	else if (CClassifier::IsNonPayload(sClassId))
+	{
+		emptypacketnumber_++;
+	}
+
+	//TODO: need more implementation here
+	else
+	{
+		unidentifiedpacketnumber_++;
+		unidentifiedtrafficvolume_ += iPacketSize;
+	}
+	return rs;
 }

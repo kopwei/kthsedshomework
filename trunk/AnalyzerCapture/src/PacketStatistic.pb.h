@@ -29,164 +29,178 @@ class CPacketDigest;
 // ===================================================================
 
 class CPacketStatistic : public ::google::protobuf::Message {
- public:
-  CPacketStatistic();
-  virtual ~CPacketStatistic();
-  
-  CPacketStatistic(const CPacketStatistic& from);
+public:
+	CPacketStatistic();
+	virtual ~CPacketStatistic();
 
-  /*
-   *	This method is used to add a new packet digest into the info base
-   */
-  ResultEnum		AddPacketInfo(const CPacketDigest* pDigest);
+	CPacketStatistic(const CPacketStatistic& from);
+
+	/*
+	*	This method is used to add a new packet digest into the info base
+	*/
+	ResultEnum		AddPacketInfo(const CPacketDigest* pDigest);
 
 
-  inline CPacketStatistic& operator=(const CPacketStatistic& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  
-  inline static const CPacketStatistic& default_instance() {
-    return default_instance_;
-  }
-  
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _reflection_.unknown_fields();
-  }
-  
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return _reflection_.mutable_unknown_fields();
-  }
-  
-  static const ::google::protobuf::Descriptor* descriptor();
-  
-  // implements Message ----------------------------------------------
-  
-  CPacketStatistic* New() const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SetCachedSize(int size) const { _cached_size_ = size; }
-  public:
-  
-  const ::google::protobuf::Descriptor* GetDescriptor() const;
-  const ::google::protobuf::Message::Reflection* GetReflection() const;
-  ::google::protobuf::Message::Reflection* GetReflection();
-  
-  // nested types ----------------------------------------------------
-  
-  // accessors -------------------------------------------------------
-  
-  // required fixed64 packetNumber = 1;
-  inline bool has_packetnumber() const;
-  inline void clear_packetnumber();
-  inline ::google::protobuf::uint64 packetnumber() const;
-  inline void set_packetnumber(::google::protobuf::uint64 value);
-  
-  // required fixed64 trafficVolume = 2;
-  inline bool has_trafficvolume() const;
-  inline void clear_trafficvolume();
-  inline ::google::protobuf::uint64 trafficvolume() const;
-  inline void set_trafficvolume(::google::protobuf::uint64 value);
-  
-  // required fixed64 emptyPacketNumber = 3;
-  inline bool has_emptypacketnumber() const;
-  inline void clear_emptypacketnumber();
-  inline ::google::protobuf::uint64 emptypacketnumber() const;
-  inline void set_emptypacketnumber(::google::protobuf::uint64 value);
-  
-  // required fixed64 tcpPacketNumber = 4;
-  inline bool has_tcppacketnumber() const;
-  inline void clear_tcppacketnumber();
-  inline ::google::protobuf::uint64 tcppacketnumber() const;
-  inline void set_tcppacketnumber(::google::protobuf::uint64 value);
-  
-  // required fixed64 tcpTrafficVolume = 5;
-  inline bool has_tcptrafficvolume() const;
-  inline void clear_tcptrafficvolume();
-  inline ::google::protobuf::uint64 tcptrafficvolume() const;
-  inline void set_tcptrafficvolume(::google::protobuf::uint64 value);
-  
-  // required fixed64 udpPacketNumber = 6;
-  inline bool has_udppacketnumber() const;
-  inline void clear_udppacketnumber();
-  inline ::google::protobuf::uint64 udppacketnumber() const;
-  inline void set_udppacketnumber(::google::protobuf::uint64 value);
-  
-  // required fixed64 udpTrafficVolume = 7;
-  inline bool has_udptrafficvolume() const;
-  inline void clear_udptrafficvolume();
-  inline ::google::protobuf::uint64 udptrafficvolume() const;
-  inline void set_udptrafficvolume(::google::protobuf::uint64 value);
-  
-  // required fixed64 p2pPacketNumber = 8;
-  inline bool has_p2ppacketnumber() const;
-  inline void clear_p2ppacketnumber();
-  inline ::google::protobuf::uint64 p2ppacketnumber() const;
-  inline void set_p2ppacketnumber(::google::protobuf::uint64 value);
-  
-  // required fixed64 p2pTrafficVolume = 9;
-  inline bool has_p2ptrafficvolume() const;
-  inline void clear_p2ptrafficvolume();
-  inline ::google::protobuf::uint64 p2ptrafficvolume() const;
-  inline void set_p2ptrafficvolume(::google::protobuf::uint64 value);
-  
-  // required fixed64 httpPacketNumber = 10;
-  inline bool has_httppacketnumber() const;
-  inline void clear_httppacketnumber();
-  inline ::google::protobuf::uint64 httppacketnumber() const;
-  inline void set_httppacketnumber(::google::protobuf::uint64 value);
-  
-  // required fixed64 httpTrafficVolume = 11;
-  inline bool has_httptrafficvolume() const;
-  inline void clear_httptrafficvolume();
-  inline ::google::protobuf::uint64 httptrafficvolume() const;
-  inline void set_httptrafficvolume(::google::protobuf::uint64 value);
-  
-  // required fixed64 unidentifiedPacketNumber = 12;
-  inline bool has_unidentifiedpacketnumber() const;
-  inline void clear_unidentifiedpacketnumber();
-  inline ::google::protobuf::uint64 unidentifiedpacketnumber() const;
-  inline void set_unidentifiedpacketnumber(::google::protobuf::uint64 value);
-  
-  // required fixed64 unidentifiedTrafficVolume = 13;
-  inline bool has_unidentifiedtrafficvolume() const;
-  inline void clear_unidentifiedtrafficvolume();
-  inline ::google::protobuf::uint64 unidentifiedtrafficvolume() const;
-  inline void set_unidentifiedtrafficvolume(::google::protobuf::uint64 value);
-  
- private:
-  ::google::protobuf::internal::GeneratedMessageReflection _reflection_;
-  mutable int _cached_size_;
-  
-  ::google::protobuf::uint64 packetnumber_;
-  ::google::protobuf::uint64 trafficvolume_;
-  ::google::protobuf::uint64 emptypacketnumber_;
-  ::google::protobuf::uint64 tcppacketnumber_;
-  ::google::protobuf::uint64 tcptrafficvolume_;
-  ::google::protobuf::uint64 udppacketnumber_;
-  ::google::protobuf::uint64 udptrafficvolume_;
-  ::google::protobuf::uint64 p2ppacketnumber_;
-  ::google::protobuf::uint64 p2ptrafficvolume_;
-  ::google::protobuf::uint64 httppacketnumber_;
-  ::google::protobuf::uint64 httptrafficvolume_;
-  ::google::protobuf::uint64 unidentifiedpacketnumber_;
-  ::google::protobuf::uint64 unidentifiedtrafficvolume_;
-  
-  static const CPacketStatistic default_instance_;
-  static const int _offsets_[13];
-  
-  ::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
-  
-  // WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
-  inline bool _has_bit(int index) const {
-    return (_has_bits_[index / 32] & (1u << (index % 32))) != 0;
-  }
-  inline void _set_bit(int index) {
-    _has_bits_[index / 32] |= (1u << (index % 32));
-  }
-  inline void _clear_bit(int index) {
-    _has_bits_[index / 32] &= ~(1u << (index % 32));
-  }
+	inline CPacketStatistic& operator=(const CPacketStatistic& from) {
+		CopyFrom(from);
+		return *this;
+	}
+
+	inline static const CPacketStatistic& default_instance() {
+		return default_instance_;
+	}
+
+	inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+		return _reflection_.unknown_fields();
+	}
+
+	inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+		return _reflection_.mutable_unknown_fields();
+	}
+
+	static const ::google::protobuf::Descriptor* descriptor();
+
+	// implements Message ----------------------------------------------
+
+	CPacketStatistic* New() const;
+	int GetCachedSize() const { return _cached_size_; }
+private:
+	void SetCachedSize(int size) const { _cached_size_ = size; }
+public:
+
+	const ::google::protobuf::Descriptor* GetDescriptor() const;
+	const ::google::protobuf::Message::Reflection* GetReflection() const;
+	::google::protobuf::Message::Reflection* GetReflection();
+
+	// nested types ----------------------------------------------------
+
+	// accessors -------------------------------------------------------
+
+	// required fixed64 packetNumber = 1;
+	inline bool has_packetnumber() const;
+	inline void clear_packetnumber();
+	inline ::google::protobuf::uint64 packetnumber() const;
+	inline void set_packetnumber(::google::protobuf::uint64 value);
+
+	// required fixed64 trafficVolume = 2;
+	inline bool has_trafficvolume() const;
+	inline void clear_trafficvolume();
+	inline ::google::protobuf::uint64 trafficvolume() const;
+	inline void set_trafficvolume(::google::protobuf::uint64 value);
+
+	// required fixed64 emptyPacketNumber = 3;
+	inline bool has_emptypacketnumber() const;
+	inline void clear_emptypacketnumber();
+	inline ::google::protobuf::uint64 emptypacketnumber() const;
+	inline void set_emptypacketnumber(::google::protobuf::uint64 value);
+
+	// required fixed64 tcpPacketNumber = 4;
+	inline bool has_tcppacketnumber() const;
+	inline void clear_tcppacketnumber();
+	inline ::google::protobuf::uint64 tcppacketnumber() const;
+	inline void set_tcppacketnumber(::google::protobuf::uint64 value);
+
+	// required fixed64 tcpTrafficVolume = 5;
+	inline bool has_tcptrafficvolume() const;
+	inline void clear_tcptrafficvolume();
+	inline ::google::protobuf::uint64 tcptrafficvolume() const;
+	inline void set_tcptrafficvolume(::google::protobuf::uint64 value);
+
+	// required fixed64 udpPacketNumber = 6;
+	inline bool has_udppacketnumber() const;
+	inline void clear_udppacketnumber();
+	inline ::google::protobuf::uint64 udppacketnumber() const;
+	inline void set_udppacketnumber(::google::protobuf::uint64 value);
+
+	// required fixed64 udpTrafficVolume = 7;
+	inline bool has_udptrafficvolume() const;
+	inline void clear_udptrafficvolume();
+	inline ::google::protobuf::uint64 udptrafficvolume() const;
+	inline void set_udptrafficvolume(::google::protobuf::uint64 value);
+
+	// required fixed64 p2pPacketNumber = 8;
+	inline bool has_p2ppacketnumber() const;
+	inline void clear_p2ppacketnumber();
+	inline ::google::protobuf::uint64 p2ppacketnumber() const;
+	inline void set_p2ppacketnumber(::google::protobuf::uint64 value);
+
+	// required fixed64 p2pTrafficVolume = 9;
+	inline bool has_p2ptrafficvolume() const;
+	inline void clear_p2ptrafficvolume();
+	inline ::google::protobuf::uint64 p2ptrafficvolume() const;
+	inline void set_p2ptrafficvolume(::google::protobuf::uint64 value);
+
+	// required fixed64 httpPacketNumber = 10;
+	inline bool has_httppacketnumber() const;
+	inline void clear_httppacketnumber();
+	inline ::google::protobuf::uint64 httppacketnumber() const;
+	inline void set_httppacketnumber(::google::protobuf::uint64 value);
+
+	// required fixed64 httpTrafficVolume = 11;
+	inline bool has_httptrafficvolume() const;
+	inline void clear_httptrafficvolume();
+	inline ::google::protobuf::uint64 httptrafficvolume() const;
+	inline void set_httptrafficvolume(::google::protobuf::uint64 value);
+
+	// required fixed64 unidentifiedPacketNumber = 12;
+	inline bool has_unidentifiedpacketnumber() const;
+	inline void clear_unidentifiedpacketnumber();
+	inline ::google::protobuf::uint64 unidentifiedpacketnumber() const;
+	inline void set_unidentifiedpacketnumber(::google::protobuf::uint64 value);
+
+	// required fixed64 unidentifiedTrafficVolume = 13;
+	inline bool has_unidentifiedtrafficvolume() const;
+	inline void clear_unidentifiedtrafficvolume();
+	inline ::google::protobuf::uint64 unidentifiedtrafficvolume() const;
+	inline void set_unidentifiedtrafficvolume(::google::protobuf::uint64 value);
+
+private:
+	::google::protobuf::internal::GeneratedMessageReflection _reflection_;
+	mutable int _cached_size_;
+
+	::google::protobuf::uint64 packetnumber_;
+	::google::protobuf::uint64 trafficvolume_;
+	::google::protobuf::uint64 emptypacketnumber_;
+	::google::protobuf::uint64 tcppacketnumber_;
+	::google::protobuf::uint64 tcptrafficvolume_;
+	::google::protobuf::uint64 udppacketnumber_;
+	::google::protobuf::uint64 udptrafficvolume_;
+	::google::protobuf::uint64 p2ppacketnumber_;
+	::google::protobuf::uint64 p2ptrafficvolume_;
+	::google::protobuf::uint64 httppacketnumber_;
+	::google::protobuf::uint64 httptrafficvolume_;
+	::google::protobuf::uint64 unidentifiedpacketnumber_;
+	::google::protobuf::uint64 unidentifiedtrafficvolume_;
+
+	static const CPacketStatistic default_instance_;
+	static const int _offsets_[13];
+
+	::google::protobuf::uint32 _has_bits_[(13 + 31) / 32];
+
+	// WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
+	inline bool _has_bit(int index) const {
+		return (_has_bits_[index / 32] & (1u << (index % 32))) != 0;
+	}
+	inline void _set_bit(int index) {
+		_has_bits_[index / 32] |= (1u << (index % 32));
+	}
+	inline void _clear_bit(int index) {
+		_has_bits_[index / 32] &= ~(1u << (index % 32));
+	}
+
+	/*
+	 *	My own private functions
+	 */
+	/*
+	 *	This method will distribute the packet by its protocol e.g. TCP, UDP, etc.
+	 */
+	ResultEnum distributeByProtocol(const unsigned short sProtocolId, const unsigned int iPacketSize);
+
+	/*
+	 *	This method will distribute the packet by its classification, e.g. P2P, Web, etc.
+	 */
+	ResultEnum distributedByClassification(const unsigned short sClassId, const unsigned int iPacketSize);
+
 };
 // ===================================================================
 
@@ -200,210 +214,210 @@ class CPacketStatistic : public ::google::protobuf::Message {
 
 // required fixed64 packetNumber = 1;
 inline bool CPacketStatistic::has_packetnumber() const {
-  return _has_bit(0);
+	return _has_bit(0);
 }
 inline void CPacketStatistic::clear_packetnumber() {
-  packetnumber_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(0);
+	packetnumber_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(0);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::packetnumber() const {
-  return packetnumber_;
+	return packetnumber_;
 }
 inline void CPacketStatistic::set_packetnumber(::google::protobuf::uint64 value) {
-  _set_bit(0);
-  packetnumber_ = value;
+	_set_bit(0);
+	packetnumber_ = value;
 }
 
 // required fixed64 trafficVolume = 2;
 inline bool CPacketStatistic::has_trafficvolume() const {
-  return _has_bit(1);
+	return _has_bit(1);
 }
 inline void CPacketStatistic::clear_trafficvolume() {
-  trafficvolume_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(1);
+	trafficvolume_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(1);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::trafficvolume() const {
-  return trafficvolume_;
+	return trafficvolume_;
 }
 inline void CPacketStatistic::set_trafficvolume(::google::protobuf::uint64 value) {
-  _set_bit(1);
-  trafficvolume_ = value;
+	_set_bit(1);
+	trafficvolume_ = value;
 }
 
 // required fixed64 emptyPacketNumber = 3;
 inline bool CPacketStatistic::has_emptypacketnumber() const {
-  return _has_bit(2);
+	return _has_bit(2);
 }
 inline void CPacketStatistic::clear_emptypacketnumber() {
-  emptypacketnumber_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(2);
+	emptypacketnumber_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(2);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::emptypacketnumber() const {
-  return emptypacketnumber_;
+	return emptypacketnumber_;
 }
 inline void CPacketStatistic::set_emptypacketnumber(::google::protobuf::uint64 value) {
-  _set_bit(2);
-  emptypacketnumber_ = value;
+	_set_bit(2);
+	emptypacketnumber_ = value;
 }
 
 // required fixed64 tcpPacketNumber = 4;
 inline bool CPacketStatistic::has_tcppacketnumber() const {
-  return _has_bit(3);
+	return _has_bit(3);
 }
 inline void CPacketStatistic::clear_tcppacketnumber() {
-  tcppacketnumber_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(3);
+	tcppacketnumber_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(3);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::tcppacketnumber() const {
-  return tcppacketnumber_;
+	return tcppacketnumber_;
 }
 inline void CPacketStatistic::set_tcppacketnumber(::google::protobuf::uint64 value) {
-  _set_bit(3);
-  tcppacketnumber_ = value;
+	_set_bit(3);
+	tcppacketnumber_ = value;
 }
 
 // required fixed64 tcpTrafficVolume = 5;
 inline bool CPacketStatistic::has_tcptrafficvolume() const {
-  return _has_bit(4);
+	return _has_bit(4);
 }
 inline void CPacketStatistic::clear_tcptrafficvolume() {
-  tcptrafficvolume_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(4);
+	tcptrafficvolume_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(4);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::tcptrafficvolume() const {
-  return tcptrafficvolume_;
+	return tcptrafficvolume_;
 }
 inline void CPacketStatistic::set_tcptrafficvolume(::google::protobuf::uint64 value) {
-  _set_bit(4);
-  tcptrafficvolume_ = value;
+	_set_bit(4);
+	tcptrafficvolume_ = value;
 }
 
 // required fixed64 udpPacketNumber = 6;
 inline bool CPacketStatistic::has_udppacketnumber() const {
-  return _has_bit(5);
+	return _has_bit(5);
 }
 inline void CPacketStatistic::clear_udppacketnumber() {
-  udppacketnumber_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(5);
+	udppacketnumber_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(5);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::udppacketnumber() const {
-  return udppacketnumber_;
+	return udppacketnumber_;
 }
 inline void CPacketStatistic::set_udppacketnumber(::google::protobuf::uint64 value) {
-  _set_bit(5);
-  udppacketnumber_ = value;
+	_set_bit(5);
+	udppacketnumber_ = value;
 }
 
 // required fixed64 udpTrafficVolume = 7;
 inline bool CPacketStatistic::has_udptrafficvolume() const {
-  return _has_bit(6);
+	return _has_bit(6);
 }
 inline void CPacketStatistic::clear_udptrafficvolume() {
-  udptrafficvolume_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(6);
+	udptrafficvolume_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(6);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::udptrafficvolume() const {
-  return udptrafficvolume_;
+	return udptrafficvolume_;
 }
 inline void CPacketStatistic::set_udptrafficvolume(::google::protobuf::uint64 value) {
-  _set_bit(6);
-  udptrafficvolume_ = value;
+	_set_bit(6);
+	udptrafficvolume_ = value;
 }
 
 // required fixed64 p2pPacketNumber = 8;
 inline bool CPacketStatistic::has_p2ppacketnumber() const {
-  return _has_bit(7);
+	return _has_bit(7);
 }
 inline void CPacketStatistic::clear_p2ppacketnumber() {
-  p2ppacketnumber_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(7);
+	p2ppacketnumber_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(7);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::p2ppacketnumber() const {
-  return p2ppacketnumber_;
+	return p2ppacketnumber_;
 }
 inline void CPacketStatistic::set_p2ppacketnumber(::google::protobuf::uint64 value) {
-  _set_bit(7);
-  p2ppacketnumber_ = value;
+	_set_bit(7);
+	p2ppacketnumber_ = value;
 }
 
 // required fixed64 p2pTrafficVolume = 9;
 inline bool CPacketStatistic::has_p2ptrafficvolume() const {
-  return _has_bit(8);
+	return _has_bit(8);
 }
 inline void CPacketStatistic::clear_p2ptrafficvolume() {
-  p2ptrafficvolume_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(8);
+	p2ptrafficvolume_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(8);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::p2ptrafficvolume() const {
-  return p2ptrafficvolume_;
+	return p2ptrafficvolume_;
 }
 inline void CPacketStatistic::set_p2ptrafficvolume(::google::protobuf::uint64 value) {
-  _set_bit(8);
-  p2ptrafficvolume_ = value;
+	_set_bit(8);
+	p2ptrafficvolume_ = value;
 }
 
 // required fixed64 httpPacketNumber = 10;
 inline bool CPacketStatistic::has_httppacketnumber() const {
-  return _has_bit(9);
+	return _has_bit(9);
 }
 inline void CPacketStatistic::clear_httppacketnumber() {
-  httppacketnumber_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(9);
+	httppacketnumber_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(9);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::httppacketnumber() const {
-  return httppacketnumber_;
+	return httppacketnumber_;
 }
 inline void CPacketStatistic::set_httppacketnumber(::google::protobuf::uint64 value) {
-  _set_bit(9);
-  httppacketnumber_ = value;
+	_set_bit(9);
+	httppacketnumber_ = value;
 }
 
 // required fixed64 httpTrafficVolume = 11;
 inline bool CPacketStatistic::has_httptrafficvolume() const {
-  return _has_bit(10);
+	return _has_bit(10);
 }
 inline void CPacketStatistic::clear_httptrafficvolume() {
-  httptrafficvolume_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(10);
+	httptrafficvolume_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(10);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::httptrafficvolume() const {
-  return httptrafficvolume_;
+	return httptrafficvolume_;
 }
 inline void CPacketStatistic::set_httptrafficvolume(::google::protobuf::uint64 value) {
-  _set_bit(10);
-  httptrafficvolume_ = value;
+	_set_bit(10);
+	httptrafficvolume_ = value;
 }
 
 // required fixed64 unidentifiedPacketNumber = 12;
 inline bool CPacketStatistic::has_unidentifiedpacketnumber() const {
-  return _has_bit(11);
+	return _has_bit(11);
 }
 inline void CPacketStatistic::clear_unidentifiedpacketnumber() {
-  unidentifiedpacketnumber_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(11);
+	unidentifiedpacketnumber_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(11);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::unidentifiedpacketnumber() const {
-  return unidentifiedpacketnumber_;
+	return unidentifiedpacketnumber_;
 }
 inline void CPacketStatistic::set_unidentifiedpacketnumber(::google::protobuf::uint64 value) {
-  _set_bit(11);
-  unidentifiedpacketnumber_ = value;
+	_set_bit(11);
+	unidentifiedpacketnumber_ = value;
 }
 
 // required fixed64 unidentifiedTrafficVolume = 13;
 inline bool CPacketStatistic::has_unidentifiedtrafficvolume() const {
-  return _has_bit(12);
+	return _has_bit(12);
 }
 inline void CPacketStatistic::clear_unidentifiedtrafficvolume() {
-  unidentifiedtrafficvolume_ = GOOGLE_ULONGLONG(0);
-  _clear_bit(12);
+	unidentifiedtrafficvolume_ = GOOGLE_ULONGLONG(0);
+	_clear_bit(12);
 }
 inline ::google::protobuf::uint64 CPacketStatistic::unidentifiedtrafficvolume() const {
-  return unidentifiedtrafficvolume_;
+	return unidentifiedtrafficvolume_;
 }
 inline void CPacketStatistic::set_unidentifiedtrafficvolume(::google::protobuf::uint64 value) {
-  _set_bit(12);
-  unidentifiedtrafficvolume_ = value;
+	_set_bit(12);
+	unidentifiedtrafficvolume_ = value;
 }
 
 #endif  // PROTOBUF_PacketStatistic_2eproto__INCLUDED

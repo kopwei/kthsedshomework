@@ -36,6 +36,12 @@ public:
 	ResultEnum AddNewPacket(const CPacketDigest* pPacketDigest);
 	
 	void PrintSummary();
+
+	unsigned int GetIPAddress() const {return m_ipAddress;}
+
+	CPacketStatistic GetUploadStatistic() const {return m_uploadPacketStatistic;}
+
+	CPacketStatistic GetDownloadStatistic() const {return m_downloadPacketStatistic;}
 	
 
 private:

@@ -20,6 +20,7 @@
 #include "PacketStatistician.h"
 #include "locks.h"
 #include "macro.h"
+#include "mysql/mysql.h"
 
 RecordParameter::RecordParameter(const RecordTypeEnum recordType, const time_t& startTime, const time_t& endTime)
 : m_recordType(recordType), m_startTime(startTime), m_endTime(endTime)
@@ -58,6 +59,7 @@ ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatis
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here
 	map<unsigned int, CSubscriberStatistic> recordingMap = pStatistician->GetStatisticMap();
+	MYSQL* pMysql = mysql_init(NULL);
 	
 	return rs;
 }

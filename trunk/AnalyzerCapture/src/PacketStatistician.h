@@ -23,7 +23,7 @@
 
 #include <map>
 #include "analyserpxAggreg.h"
-#include "PacketStatistic.h"
+#include "PacketStatistic.pb.h"
 #include "SubscriberStatistic.h"
 #include "resultrecorder.h"
 #include "resultenum.h"

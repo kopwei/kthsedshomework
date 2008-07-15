@@ -27,6 +27,7 @@
 #include "time.h"
 #include "mysql++/mysql++.h"
 #include <string>
+#include <google/protobuf/stubs/common.h>
 
 using namespace std;
 
@@ -97,6 +98,8 @@ private:
 	ResultEnum CheckTable(const string& strTableName);
 
 	ResultEnum GetCurrentDate(string& strDate) const;
+
+	unsigned long long ConvertToLong(google::protobuf::uint64 val);
 
 	mysqlpp::Connection			m_connection;
 };

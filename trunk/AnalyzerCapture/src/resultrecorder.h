@@ -99,8 +99,6 @@ private:
 
 	ResultEnum GetCurrentDate(string& strDate) const;
 
-	unsigned long long ConvertToLong(google::protobuf::uint64 val);
-
 	mysqlpp::Connection			m_connection;
 };
 

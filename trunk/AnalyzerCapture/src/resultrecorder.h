@@ -24,6 +24,8 @@
 #define MYSQLPP_MYSQL_HEADERS_BURIED
 
 #include "resultenum.h"
+#include "SubscriberStatistic.h"
+
 #include "time.h"
 #include "mysql++/mysql++.h"
 #include <string>

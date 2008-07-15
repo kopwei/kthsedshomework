@@ -200,7 +200,7 @@ ResultEnum CPacketStatistic::distributedByClassification(const unsigned short sC
 		p2ptrafficvolume_ += iPacketSize;
 	}
 	// If it is http packet and not p2p, then 
-	else if (CClassifier::isHTTP(sClassId))
+	else if (CClassifier::IsHTTP(sClassId))
 	{
 		httppacketnumber_++;
 		httptrafficvolume_ += iPacketSize;

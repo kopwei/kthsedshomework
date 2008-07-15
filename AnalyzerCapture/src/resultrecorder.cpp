@@ -17,12 +17,13 @@
 *   Copyright (C) 2008 by Ericsson
 */
 
-#define MYSQLPP_MYSQL_HEADERS_BURIED
+
 
 #include "resultrecorder.h"
 #include "PacketStatistician.h"
 #include "locks.h"
 #include "macro.h"
+#include "analyserpxFlow.h"
 
 
 RecordParameter::RecordParameter(const RecordTypeEnum recordType, const time_t& startTime, const time_t& endTime)
@@ -133,12 +134,13 @@ ResultEnum CResultRecorder::CheckTable( const string& strTableName )
 	// TODO: Need implementation here
 
 	// Check if the table is already inside
-	mysqlpp::Query query = m_connection.query("show tables");
+	mysqlpp::Query query = m_connection.query();
+	query << "show tables";
 	mysqlpp::StoreQueryResult qr = query.store();
 	bool bFound = false;
 	for (int i = 0; i < qr[0].size(); i++)
 	{
-		if (strTableName == qr[0][i])
+		if (strTableName == (string)qr[0][i])
 		{
 			bFound = true;
 			break;
@@ -208,10 +210,10 @@ ResultEnum CResultRecorder::GetCurrentDate( string& strDate ) const
 
 ResultEnum CResultRecorder::RecordStatisticIntoTable( const string& strTableName, const unsigned int iSubuscriber, 
 													 const time_t start_time, const time_t end_time, 
-													 const CSubscriberStatistic* pSubStat )
+													 const CSubscriberStatistic& subStat )
 {
 	ResultEnum rs = eNotImplemented;
-	if (NULL == pSubStat || 0 == strTableName.length())
+	if (0 == strTableName.length())
 		return eCommonError;
 	// TODO: Need implementation here
 	unsigned long long id = iSubuscriber;
@@ -223,9 +225,9 @@ ResultEnum CResultRecorder::RecordStatisticIntoTable( const string& strTableName
 		<< " %11q, %12q, %13q, %14q, %15q, %16q, %17q, %18q, %19q, %20q, "
 		<< " %21q, %22q, %23q, %24q, %25q, %26q, %27q, %28q, %29q, %30q) " ;
 	query.parse();
-	CPacketStatistic uploadStat = pSubStat->GetUploadStatistic();
-	CPacketStatistic downloadStat = pSubStat->GetDownloadStatistic();
-	query.execute(strTableName.c_str(), id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time,
+	CPacketStatistic uploadStat = subStat.GetUploadStatistic();
+	CPacketStatistic downloadStat = subStat.GetDownloadStatistic();
+	query.execute(strTableName, id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time,
 		uploadStat.packetnumber(), uploadStat.trafficvolume(), uploadStat.emptypacketnumber(),
 		uploadStat.tcppacketnumber(), uploadStat.tcptrafficvolume(), uploadStat.udppacketnumber(), uploadStat.udptrafficvolume(),
 		uploadStat.httppacketnumber(), uploadStat.httptrafficvolume(), uploadStat.p2ppacketnumber(), uploadStat.p2ptrafficvolume(),

@@ -17,15 +17,22 @@
  *   Copyright (C) 2008 by Ericsson
  */
 
+
 #ifndef RESULTRECORDER_H
 #define RESULTRECORDER_H
+
+#define MYSQLPP_MYSQL_HEADERS_BURIED
 
 #include "resultenum.h"
 #include "time.h"
 #include "mysql++/mysql++.h"
+#include <string>
+
+using namespace std;
 
 class CPacketStatistician;
 class CPacketStatistic;
+class CSubscriberStatistic;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -83,7 +90,7 @@ private:
 
 	ResultEnum RecordStatisticIntoTable(const string& strTableName, const unsigned int iSubuscriber, 
 		const time_t start_time, const time_t end_time, 
-		const CSubscriberStatistic* pSubStat);
+		const CSubscriberStatistic& subStat);
 
 	ResultEnum CheckDatabase(const string& strDbName);
 

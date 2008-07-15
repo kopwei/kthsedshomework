@@ -23,6 +23,7 @@
 #include "macro.h"
 #include "ipheaderutil.h"
 #include "resultrecorder.h"
+#include "analyzer.h"
 
 #include <netinet/in.h>
 #include <pthread.h>
@@ -32,11 +33,10 @@
 using namespace std;
 
 
-
 /*
  * Re-definition
  */ 
-map<unsigned int, CSubscriberStatistic> CPacketStatistician::m_mapSubscriberStat;
+StatisticMap CPacketStatistician::s_mapSubscriberStat;
 //CResultRecorder CPacketStatistician::s_resultRecorder; 
 time_t	CPacketStatistician::s_recordingTime;
 
@@ -55,7 +55,7 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 	ResultEnum rs = eOK;
 	rs = AddPacketToMap(pPacketDigest);
 	EABASSERT ( rs );
-	//m_mapSubscriberStat.insert
+	//s_mapSubscriberStat.insert
 
 	m_totalPacketStatistic.AddPacketInfo ( pPacketDigest );
 }
@@ -65,10 +65,10 @@ void CPacketStatistician::PrintStatisticResult()
 	cout << "I received " << m_totalPacketStatistic.packetnumber() << " Packets" << endl;
 	cout << "The total volume number is " << m_totalPacketStatistic.trafficvolume() << " Bytes" << endl;
 	
-	cout << "Totally there are " << m_mapSubscriberStat.size() << " number of subscribers" << endl;
+	cout << "Totally there are " << s_mapSubscriberStat.size() << " number of subscribers" << endl;
 	
-	map<unsigned int, CSubscriberStatistic>::iterator itor = m_mapSubscriberStat.begin();
-	for( ; itor != m_mapSubscriberStat.end(); ++itor )
+	map<unsigned int, CSubscriberStatistic>::iterator itor = s_mapSubscriberStat.begin();
+	for( ; itor != s_mapSubscriberStat.end(); ++itor )
 	{
 		itor->second.PrintSummary();
 	}
@@ -83,8 +83,8 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 	int src_key = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
 
 	// First try to find if there is a match
-	map<unsigned int, CSubscriberStatistic>::iterator itor = m_mapSubscriberStat.find ( src_key );
-	bool bSrcFound = m_mapSubscriberStat.end() != itor ? true : false;
+	map<unsigned int, CSubscriberStatistic>::iterator itor = s_mapSubscriberStat.find ( src_key );
+	bool bSrcFound = s_mapSubscriberStat.end() != itor ? true : false;
 
 	// Lock the map and add specific values;
 	while ( pthread_mutex_trylock ( &Locks::packetMap_lock ) != 0 )
@@ -100,7 +100,7 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 		CSubscriberStatistic* pSubscriber = new CSubscriberStatistic ( src_key );
 		pSubscriber->AddNewPacket ( pPacketDigest );
 		EABASSERT ( rs );
-		m_mapSubscriberStat.insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, *pSubscriber ) );
+		s_mapSubscriberStat.insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, *pSubscriber ) );
 	}
 	pthread_mutex_unlock ( &Locks::packetMap_lock );
 
@@ -108,8 +108,8 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 	in_addr dstAddr = pPacketDigest->getDestAddress();
 	unsigned int dst_key = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
 
-	itor = m_mapSubscriberStat.find ( dst_key );
-	if ( m_mapSubscriberStat.end() != itor )
+	itor = s_mapSubscriberStat.find ( dst_key );
+	if ( s_mapSubscriberStat.end() != itor )
 	{
 		// Lock the map and add specific values;
 		while ( pthread_mutex_trylock ( &Locks::packetMap_lock ) != 0 )
@@ -142,7 +142,7 @@ void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 		time(&currentTime);
 		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);
 		s_recordingTime = currentTime;
-		ResultEnum rs = recorder.RecordTimeOutResult(this, parameter);
+		ResultEnum rs = recorder.RecordTimeOutResult(s_mapSubscriberStat, parameter);
 		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);
 	}
 

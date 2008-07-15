@@ -28,6 +28,7 @@
 #include "resultrecorder.h"
 #include "resultenum.h"
 
+typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
 
 struct in_addr;
 
@@ -53,7 +54,7 @@ public:
 	
 	void				PrintStatisticResult();
 
-	map<unsigned int, CSubscriberStatistic> GetStatisticMap() const {return m_mapSubscriberStat;}
+	StatisticMap		GetStatisticMap() const {return s_mapSubscriberStat;}
 
 private:
 	
@@ -70,7 +71,7 @@ private:
 
 
 	CPacketStatistic		m_totalPacketStatistic;
-	static map<unsigned int, CSubscriberStatistic> m_mapSubscriberStat;
+	static StatisticMap		s_mapSubscriberStat;
 	
 	//static CResultRecorder		s_resultRecorder;
 	static time_t			s_recordingTime;

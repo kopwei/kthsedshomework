@@ -48,7 +48,7 @@ CResultRecorder::~CResultRecorder()
 }
 
 
-ResultEnum CResultRecorder::RecordTimeOutResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam)
+ResultEnum CResultRecorder::RecordTimeOutResult(const StatisticMap& statMap, const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here
@@ -65,10 +65,10 @@ ResultEnum CResultRecorder::RecordTimeOutResult(const CPacketStatistician* pStat
 	return rs;
 }
 
-ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatistician ,const RecordParameter* pParam)
+ResultEnum CResultRecorder::RecordToDatabase( const StatisticMap& statMap ,const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
-	if (NULL == pStatistician || NULL == pParam)
+	if (NULL == pParam)
 		return eEmptyPointer;
 	// Check if the database "Analyzer" is there
 	string strDbName = "analyzer";
@@ -90,7 +90,7 @@ ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatis
 
 	// TODO: Need implementation here
 	pthread_mutex_lock(&Locks::packetMap_lock);
-	map<unsigned int, CSubscriberStatistic> recordingMap = pStatistician->GetStatisticMap();
+	StatisticMap recordingMap = statMap;
 	pthread_mutex_unlock(&Locks::packetMap_lock);
 
 	map<unsigned int, CSubscriberStatistic>::const_iterator itor = recordingMap.begin();

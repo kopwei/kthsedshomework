@@ -34,6 +34,7 @@ using namespace std;
 class CPacketStatistician;
 class CPacketStatistic;
 
+typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -78,15 +79,15 @@ public:
 
     ~CResultRecorder();
 	
-	ResultEnum RecordTimeOutResult(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
+	ResultEnum RecordTimeOutResult(const StatisticMap& statMap, const RecordParameter* pParam);
 
 	ResultEnum RecordDailyResult(const CPacketStatistic* pPacketStat);
 
 private:
 
-	ResultEnum RecordToDatabase(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
+	ResultEnum RecordToDatabase(const StatisticMap& statMap, const RecordParameter* pParam);
 
-	ResultEnum RecordToXML(const CPacketStatistician* pStatistician, const RecordParameter* pParam);
+	ResultEnum RecordToXML(const StatisticMap& statMap, const RecordParameter* pParam);
 
 	ResultEnum RecordStatisticIntoTable(const string& strTableName, const unsigned int iSubuscriber, 
 		const time_t start_time, const time_t end_time, 

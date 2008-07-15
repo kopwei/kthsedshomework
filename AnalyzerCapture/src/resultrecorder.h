@@ -33,7 +33,6 @@ using namespace std;
 
 class CPacketStatistician;
 class CPacketStatistic;
-class CSubscriberStatistic;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -91,7 +90,7 @@ private:
 
 	ResultEnum RecordStatisticIntoTable(const string& strTableName, const unsigned int iSubuscriber, 
 		const time_t start_time, const time_t end_time, 
-		const CSubscriberStatistic& subStat);
+		const CPacketStatistic& stat);
 
 	ResultEnum CheckDatabase(const string& strDbName);
 

@@ -25,7 +25,6 @@
 #include "macro.h"
 #include "analyserpxFlow.h"
 
-
 RecordParameter::RecordParameter(const RecordTypeEnum recordType, const time_t& startTime, const time_t& endTime)
 : m_recordType(recordType), m_startTime(startTime), m_endTime(endTime)
 {
@@ -81,7 +80,12 @@ ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatis
 	rs = GetCurrentDate(strTableName);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
-	rs = CheckTable(strTableName);
+	string strUploadTableName = strTableName.append("_upload");
+	rs = CheckTable(strUploadTableName);
+	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+
+	string strDownloadTableName = strTableName.append("_download");
+	rs = CheckTable(strDownloadTableName);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
 	// TODO: Need implementation here
@@ -92,7 +96,12 @@ ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatis
 	map<unsigned int, CSubscriberStatistic>::const_iterator itor = recordingMap.begin();
 	for (; itor != recordingMap.end(); ++itor)
 	{
-		rs = RecordStatisticIntoTable(strTableName, itor->first, pParam->StartTime(), pParam->EndTime(), itor->second);
+		rs = RecordStatisticIntoTable(strTableName, itor->first, pParam->StartTime(), pParam->EndTime(), 
+			itor->second.GetUploadStatistic());
+		EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+
+		rs = RecordStatisticIntoTable(strTableName, itor->first, pParam->StartTime(), pParam->EndTime(), 
+			itor->second.GetDownloadStatistic());
 		EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 	}
 
@@ -155,36 +164,19 @@ ResultEnum CResultRecorder::CheckTable( const string& strTableName )
 			<< " subscriber INT UNSIGNED not NULL," 
 			<< " start_time INT not NULL, " 
 			<< " end_time INT not NULL, "
-//			<< " total_packet BIGINT UNSIGNED not NULL, "
-			//<< " total_volume BIGINT UNSIGNED not NULL, "
-			// Upload fields
-			<< " upload_packet BIGINT UNSIGNED not NULL, "
-			<< " upload_volume BIGINT UNSIGNED not NULL, "
-			<< " upload_empty_packet BIGINT UNSIGNED not NULL, "
-			<< " upload_tcp_packet BIGINT UNSIGNED not NULL, "
-			<< " upload_tcp_volume BIGINT UNSIGNED not NULL, "
-			<< " upload_udp_packet BIGINT UNSIGNED not NULL, "
-			<< " upload_udp_volume BIGINT UNSIGNED not NULL, "
-			<< " upload_http_packet BIGINT UNSIGNED not NULL, "
-			<< " upload_http_volume BIGINT UNSIGNED not NULL, "
-			<< " upload_p2p_packet BIGINT UNSIGNED not NULL, "
-			<< " upload_p2p_volume BIGINT UNSIGNED not NULL, "
-			<< " upload_unidentified_packet BIGINT UNSIGNED not NULL, "
-			<< " upload_unidentified_volume BIGINT UNSIGNED not NULL, "
-			// Download fields
-			<< " download_packet BIGINT UNSIGNED not NULL, "
-			<< " download_volume BIGINT UNSIGNED not NULL, "
-			<< " download_empty_packet BIGINT UNSIGNED not NULL, "
-			<< " download_tcp_packet BIGINT UNSIGNED not NULL, "
-			<< " download_tcp_volume BIGINT UNSIGNED not NULL, "
-			<< " download_udp_packet BIGINT UNSIGNED not NULL, "
-			<< " download_udp_volume BIGINT UNSIGNED not NULL, "
-			<< " download_http_packet BIGINT UNSIGNED not NULL, "
-			<< " download_http_volume BIGINT UNSIGNED not NULL, "
-			<< " download_p2p_packet BIGINT UNSIGNED not NULL, "
-			<< " download_p2p_volume BIGINT UNSIGNED not NULL, "
-			<< " download_unidentified_packet BIGINT UNSIGNED not NULL, "
-			<< " download_unidentified_volume BIGINT UNSIGNED not NULL "
+			<< " total_packet BIGINT UNSIGNED not NULL, "
+			<< " total_volume BIGINT UNSIGNED not NULL, "
+			<< " empty_packet BIGINT UNSIGNED not NULL, "
+			<< " tcp_packet BIGINT UNSIGNED not NULL, "
+			<< " tcp_volume BIGINT UNSIGNED not NULL, "
+			<< " udp_packet BIGINT UNSIGNED not NULL, "
+			<< " udp_volume BIGINT UNSIGNED not NULL, "
+			<< " http_packet BIGINT UNSIGNED not NULL, "
+			<< " http_volume BIGINT UNSIGNED not NULL, "
+			<< " p2p_packet BIGINT UNSIGNED not NULL, "
+			<< " p2p_volume BIGINT UNSIGNED not NULL, "
+			<< " unidentified_packet BIGINT UNSIGNED not NULL, "
+			<< " unidentified_volume BIGINT UNSIGNED not NULL, "
 			<< " )" ;
 
 		query.parse();
@@ -208,25 +200,26 @@ ResultEnum CResultRecorder::GetCurrentDate( string& strDate ) const
 	return rs;
 }
 
-ResultEnum CResultRecorder::RecordStatisticIntoTable( const string& strTableName, const unsigned int iSubuscriber, 
+ResultEnum CResultRecorder::RecordStatisticIntoTable(const string& strTableName, const unsigned int iSubuscriber, 
 													 const time_t start_time, const time_t end_time, 
-													 const CSubscriberStatistic& subStat )
+													 const CPacketStatistic& stat)
 {
-	ResultEnum rs = eNotImplemented;
+	ResultEnum rs = eOK;
 	if (0 == strTableName.length())
 		return eCommonError;
 	// TODO: Need implementation here
 	unsigned long long id = iSubuscriber;
 
-
 	mysqlpp::Query query = m_connection.query();
 	query << " INSERT INTO %0q VALUES ( " 
 		<< " %1q, %2q, %3q, %4q, %5q, %6q, %7q, %8q, %9q, %10q, "
-		<< " %11q, %12q, %13q, %14q, %15q, %16q, %17q, %18q, %19q, %20q, "
-		<< " %21q, %22q, %23q, %24q, %25q, %26q, %27q, %28q, %29q, %30q) " ;
+		<< " %11q, %12q, %13q, %14q, %15q, %16q, %17q) " ;
 	query.parse();
-	CPacketStatistic uploadStat = subStat.GetUploadStatistic();
-	CPacketStatistic downloadStat = subStat.GetDownloadStatistic();
+
+	query.execute(strTableName, id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time, stat.packetnumber(),
+		stat.trafficvolume(), stat.emptypacketnumber(), stat.tcppacketnumber(), stat.tcptrafficvolume(),
+		stat.udppacketnumber(), stat.udptrafficvolume(), stat.httppacketnumber(), stat.httptrafficvolume(),
+		stat.p2ppacketnumber(), stat.p2ptrafficvolume(), stat.unidentifiedpacketnumber(), stat.unidentifiedtrafficvolume());
 
 	return rs;
 }

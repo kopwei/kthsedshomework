@@ -34,7 +34,7 @@ CResultRecorder::CResultRecorder()
 {
 	try 
 	{
-		m_connection.connect(0, "localhost", "ericsson", "ericsson");
+		m_connection.connect("analyzer", "localhost", "root", "ericsson");
 	}
 	catch (exception& er) 
 	{
@@ -71,20 +71,25 @@ ResultEnum CResultRecorder::RecordToDatabase( const StatisticMap& statMap ,const
 	if (NULL == pParam)
 		return eEmptyPointer;
 	// Check if the database "Analyzer" is there
-	string strDbName = "analyzer";
-	rs = CheckDatabase(strDbName);
-	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+	//string strDbName = "analyzer";
+	//rs = CheckDatabase(strDbName);
+	//EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 	
 	// Check if the table with date is there;
-	string strTableName;
-	rs = GetCurrentDate(strTableName);
+	string strTableName = "packet";
+	string dateString;
+	rs = GetCurrentDate(dateString);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+	strTableName += dateString;
 
-	string strUploadTableName = strTableName.append("_upload");
+	string upString = "upload";
+	string strUploadTableName = upString + strTableName;
+	//cerr << strUploadTableName <<endl;
 	rs = CheckTable(strUploadTableName);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
-	string strDownloadTableName = strTableName.append("_download");
+	string downString = "download";
+	string strDownloadTableName = downString + strTableName;
 	rs = CheckTable(strDownloadTableName);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
@@ -93,7 +98,7 @@ ResultEnum CResultRecorder::RecordToDatabase( const StatisticMap& statMap ,const
 	StatisticMap recordingMap = statMap;
 	pthread_mutex_unlock(&Locks::packetMap_lock);
 
-	map<unsigned int, CSubscriberStatistic>::const_iterator itor = recordingMap.begin();
+	StatisticMap::const_iterator itor = recordingMap.begin();
 	for (; itor != recordingMap.end(); ++itor)
 	{
 		rs = RecordStatisticIntoTable(strUploadTableName, itor->first, pParam->StartTime(), pParam->EndTime(), 
@@ -122,11 +127,11 @@ ResultEnum CResultRecorder::CheckDatabase( const string& strDbName )
 	ResultEnum rs = eOK;
 	// TODO: Need implementation here
 	mysqlpp::NoExceptions ne(m_connection);
-	if (!m_connection.select_db(strDbName))
+	if (!m_connection.select_db(strDbName.c_str()))
 	{
-		if (m_connection.create_db(strDbName))
+		if (m_connection.create_db(strDbName.c_str()))
 		{
-			if(!m_connection.select_db(strDbName))
+			if(!m_connection.select_db(strDbName.c_str()))
 				return eCommonError;
 		}
 		else
@@ -147,19 +152,25 @@ ResultEnum CResultRecorder::CheckTable( const string& strTableName )
 	query << "show tables";
 	mysqlpp::StoreQueryResult qr = query.store();
 	bool bFound = false;
-	for (int i = 0; i < qr[0].size(); i++)
+
+	for (int i = 0; i < qr.size(); i++)
 	{
-		if (strTableName == (string)qr[0][i])
+		string str = (string)(qr[i][0]);
+		int strlen = str.length();
+		int orstrlen = strTableName.length();
+		if (0 == strTableName.compare(str))
 		{
 			bFound = true;
 			break;
 		}
 	}
+
 	// If there is no such table, create it
 	if (!bFound)
 	{
 		query.reset();
-		query << "CREATE TABLE %0q ( "
+		//query = m_connection.query();
+		query << "CREATE TABLE %0 ( "
 			<< " id BIGINT UNSIGNED not NULL PRIMARY KEY, "
 			<< " subscriber INT UNSIGNED not NULL," 
 			<< " start_time INT not NULL, " 
@@ -176,9 +187,9 @@ ResultEnum CResultRecorder::CheckTable( const string& strTableName )
 			<< " p2p_packet BIGINT UNSIGNED not NULL, "
 			<< " p2p_volume BIGINT UNSIGNED not NULL, "
 			<< " unidentified_packet BIGINT UNSIGNED not NULL, "
-			<< " unidentified_volume BIGINT UNSIGNED not NULL, "
+			<< " unidentified_volume BIGINT UNSIGNED not NULL"
 			<< " )" ;
-
+		//string tableName = string(strTableName);
 		query.parse();
 		query.execute(strTableName.c_str());
 
@@ -193,10 +204,10 @@ ResultEnum CResultRecorder::GetCurrentDate( string& strDate ) const
 	// TODO: Need implementation here
 	time_t init = 0;
 	time ( &init );
-	char date[7]; 
+	char date[6]; 
 	if (!CFlowUtil::getDate(&init, date, sizeof(date)))
 		return eCommonError;
-	strDate = string(date, sizeof(date));
+	strDate = (string(date, sizeof(date)));
 	return rs;
 }
 
@@ -205,18 +216,20 @@ ResultEnum CResultRecorder::RecordStatisticIntoTable(const string& strTableName,
 													 const CPacketStatistic& stat)
 {
 	ResultEnum rs = eOK;
+	if (iSubuscriber == 0)
+		return rs;
 	if (0 == strTableName.length())
 		return eCommonError;
 	// TODO: Need implementation here
-	unsigned long long id = iSubuscriber;
+	unsigned long long id = ((unsigned long long)iSubuscriber) << 16 + start_time;
 
 	mysqlpp::Query query = m_connection.query();
-	query << " INSERT INTO %0q VALUES ( " 
+	query << " INSERT INTO %0 VALUES ( " 
 		<< " %1q, %2q, %3q, %4q, %5q, %6q, %7q, %8q, %9q, %10q, "
 		<< " %11q, %12q, %13q, %14q, %15q, %16q, %17q) " ;
 	query.parse();
 
-	query.execute(strTableName, id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time, stat.packetnumber(),
+	query.execute(strTableName.c_str(), id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time, stat.packetnumber(),
 		stat.trafficvolume(), stat.emptypacketnumber(), stat.tcppacketnumber(), stat.tcptrafficvolume(),
 		stat.udppacketnumber(), stat.udptrafficvolume(), stat.httppacketnumber(), stat.httptrafficvolume(),
 		stat.p2ppacketnumber(), stat.p2ptrafficvolume(), stat.unidentifiedpacketnumber(), stat.unidentifiedtrafficvolume());

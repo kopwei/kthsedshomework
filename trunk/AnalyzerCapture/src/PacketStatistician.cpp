@@ -144,6 +144,9 @@ void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 		s_recordingTime = currentTime;
 		ResultEnum rs = recorder.RecordTimeOutResult(s_mapSubscriberStat, &parameter);
 		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);
+		pthread_mutex_lock ( &Locks::packetMap_lock );
+		s_mapSubscriberStat.clear();
+		pthread_mutex_unlock ( &Locks::packetMap_lock );
 	}
 
 

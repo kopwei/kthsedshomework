@@ -228,15 +228,19 @@ ResultEnum CResultRecorder::RecordStatisticIntoTable( const string& strTableName
 	CPacketStatistic uploadStat = subStat.GetUploadStatistic();
 	CPacketStatistic downloadStat = subStat.GetDownloadStatistic();
 	query.execute(strTableName, id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time,
-		uploadStat.packetnumber(), uploadStat.trafficvolume(), uploadStat.emptypacketnumber(),
-		uploadStat.tcppacketnumber(), uploadStat.tcptrafficvolume(), uploadStat.udppacketnumber(), uploadStat.udptrafficvolume(),
-		uploadStat.httppacketnumber(), uploadStat.httptrafficvolume(), uploadStat.p2ppacketnumber(), uploadStat.p2ptrafficvolume(),
-		uploadStat.unidentifiedpacketnumber(), uploadStat.unidentifiedtrafficvolume(),
-		downloadStat.packetnumber(), downloadStat.trafficvolume(), downloadStat.emptypacketnumber(),
-		downloadStat.tcppacketnumber(), downloadStat.tcptrafficvolume(), downloadStat.udppacketnumber(), downloadStat.udptrafficvolume(),
-		downloadStat.httppacketnumber(), downloadStat.httptrafficvolume(), downloadStat.p2ppacketnumber(), downloadStat.p2ptrafficvolume(),
-		downloadStat.unidentifiedpacketnumber(), downloadStat.unidentifiedtrafficvolume());
-
+		ConvertToLong(uploadStat.packetnumber()), ConvertToLong(uploadStat.trafficvolume()), ConvertToLong(uploadStat.emptypacketnumber()),
+		ConvertToLong(uploadStat.tcppacketnumber()), ConvertToLong(uploadStat.tcptrafficvolume()), ConvertToLong(uploadStat.udppacketnumber()), ConvertToLong(uploadStat.udptrafficvolume()),
+		ConvertToLong(uploadStat.httppacketnumber()), ConvertToLong(uploadStat.httptrafficvolume()), ConvertToLong(uploadStat.p2ppacketnumber()), ConvertToLong(uploadStat.p2ptrafficvolume()),
+		ConvertToLong(uploadStat.unidentifiedpacketnumber()), ConvertToLong(uploadStat.unidentifiedtrafficvolume()),
+		ConvertToLong(downloadStat.packetnumber()), ConvertToLong(downloadStat.trafficvolume()), ConvertToLong(downloadStat.emptypacketnumber()),
+		ConvertToLong(downloadStat.tcppacketnumber()), ConvertToLong(downloadStat.tcptrafficvolume()), ConvertToLong(downloadStat.udppacketnumber()), ConvertToLong(downloadStat.udptrafficvolume()),
+		ConvertToLong(downloadStat.httppacketnumber()), ConvertToLong(downloadStat.httptrafficvolume()), ConvertToLong(downloadStat.p2ppacketnumber()), ConvertToLong(downloadStat.p2ptrafficvolume()),
+		ConvertToLong(downloadStat.unidentifiedpacketnumber()), ConvertToLong(downloadStat.unidentifiedtrafficvolume()),
 
 	return rs;
+}
+
+unsigned long long CResultRecorder::ConvertToLong( google::protobuf::uint64 val )
+{
+	return (unsigned long long)(val);
 }

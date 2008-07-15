@@ -96,11 +96,11 @@ ResultEnum CResultRecorder::RecordToDatabase( const CPacketStatistician* pStatis
 	map<unsigned int, CSubscriberStatistic>::const_iterator itor = recordingMap.begin();
 	for (; itor != recordingMap.end(); ++itor)
 	{
-		rs = RecordStatisticIntoTable(strTableName, itor->first, pParam->StartTime(), pParam->EndTime(), 
+		rs = RecordStatisticIntoTable(strUploadTableName, itor->first, pParam->StartTime(), pParam->EndTime(), 
 			itor->second.GetUploadStatistic());
 		EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
-		rs = RecordStatisticIntoTable(strTableName, itor->first, pParam->StartTime(), pParam->EndTime(), 
+		rs = RecordStatisticIntoTable(strDownloadTableName, itor->first, pParam->StartTime(), pParam->EndTime(), 
 			itor->second.GetDownloadStatistic());
 		EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 	}

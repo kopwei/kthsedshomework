@@ -107,6 +107,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 	if ( pParam->isOnlineMode() )
 	{
 		pthread_exit ( ( void* ) CAnalyzerAggregator::verifyHashTimeOut );
+		pthread_exit((void*) CPacketStatistician::PacketStatisticTimeOut );
 	}
 	return analyserpxError;
 }

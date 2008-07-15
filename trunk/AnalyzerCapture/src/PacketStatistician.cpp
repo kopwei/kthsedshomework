@@ -134,6 +134,17 @@ void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 	//CResultRecorder recorder;
 	// TODO: Here we have to sleep for a certain amount of time and then start to
 	// record something
+	while (CAnalyzer::tFlag)
+	{
+		sleep(30);
+		CResultRecorder recorder;
+		time_t currentTime;
+		time(&currentTime);
+		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);
+		s_recordingTime = currentTime;
+		ResultEnum rs = recorder.RecordTimeOutResult(this, parameter);
+		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);
+	}
 
 
 

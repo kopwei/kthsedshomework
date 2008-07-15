@@ -55,7 +55,7 @@ ResultEnum CResultRecorder::RecordTimeOutResult(const StatisticMap& statMap, con
 	switch (pParam->RecordType())
 	{
 	case eRecordToDatabase:
-		rs = RecordToDatabase(pStatistician, pParam);
+		rs = RecordToDatabase(statMap, pParam);
 		EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 		break;
 	default:
@@ -110,7 +110,7 @@ ResultEnum CResultRecorder::RecordToDatabase( const StatisticMap& statMap ,const
 	return rs;
 }
 
-ResultEnum CResultRecorder::RecordToXML(const CPacketStatistician* pStatistician, const RecordParameter* pParam)
+ResultEnum CResultRecorder::RecordToXML(const StatisticMap& statMap, const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here

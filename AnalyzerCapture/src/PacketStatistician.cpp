@@ -142,7 +142,7 @@ void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 		time(&currentTime);
 		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);
 		s_recordingTime = currentTime;
-		ResultEnum rs = recorder.RecordTimeOutResult(s_mapSubscriberStat, parameter);
+		ResultEnum rs = recorder.RecordTimeOutResult(s_mapSubscriberStat, &parameter);
 		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);
 	}
 

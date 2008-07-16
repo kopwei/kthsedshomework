@@ -54,7 +54,7 @@ public:
 	
 	void				PrintStatisticResult();
 
-	StatisticMap		GetStatisticMap() const {return s_mapSubscriberStat;}
+	//StatisticMap		GetStatisticMap() const {return s_mapSubscriberStat;}
 
 private:
 	

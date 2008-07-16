@@ -119,8 +119,8 @@ ResultEnum CPacketStatistic::distributedByClassification(const unsigned short sC
 	//TODO: need more implementation here
 	else
 	{
-		unidentifiedpacketnumber++;
-		unidentifiedtrafficvolume += iPacketSize;
+		m_unidentifiedpacketnumber++;
+		m_unidentifiedtrafficvolume += iPacketSize;
 	}
 	return rs;
 }

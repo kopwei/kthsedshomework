@@ -229,8 +229,9 @@ ResultEnum CResultRecorder::RecordStatisticIntoTable(const string& strTableName,
 		<< " %1q, %2q, %3q, %4q, %5q, %6q, %7q, %8q, %9q, %10q, "
 		<< " %11q, %12q, %13q, %14q, %15q, %16q, %17q) " ;
 	query.parse();
+	unsigned long long packetNumber = stat.packetnumber();
 
-	query.execute(strTableName.c_str(), id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time, stat.packetnumber(),
+	query.execute(strTableName.c_str(), id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time, packetNumber,
 		stat.trafficvolume(), stat.emptypacketnumber(), stat.tcppacketnumber(), stat.tcptrafficvolume(),
 		stat.udppacketnumber(), stat.udptrafficvolume(), stat.httppacketnumber(), stat.httptrafficvolume(),
 		stat.p2ppacketnumber(), stat.p2ptrafficvolume(), stat.unidentifiedpacketnumber(), stat.unidentifiedtrafficvolume());

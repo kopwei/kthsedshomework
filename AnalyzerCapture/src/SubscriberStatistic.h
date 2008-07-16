@@ -21,7 +21,7 @@
 #ifndef _SUBSCRIBER_STATISTIC_
 #define  _SUBSCRIBER_STATISTIC_
 
-#include "PacketStatistic.pb.h"
+#include "PacketStatistic.h"
 #include "resultenum.h"
 
 class CPacketDigest;

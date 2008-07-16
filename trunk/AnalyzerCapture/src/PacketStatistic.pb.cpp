@@ -129,19 +129,19 @@ CPacketStatistic::CPacketStatistic(const CPacketStatistic& from)
                  this, &default_instance_,
                  _offsets_, _has_bits_, NULL),
     _cached_size_(0),
-    packetnumber_(GOOGLE_ULONGLONG(0)),
-    trafficvolume_(GOOGLE_ULONGLONG(0)),
-    emptypacketnumber_(GOOGLE_ULONGLONG(0)),
-    tcppacketnumber_(GOOGLE_ULONGLONG(0)),
-    tcptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    udppacketnumber_(GOOGLE_ULONGLONG(0)),
-    udptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    p2ppacketnumber_(GOOGLE_ULONGLONG(0)),
-    p2ptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    httppacketnumber_(GOOGLE_ULONGLONG(0)),
-    httptrafficvolume_(GOOGLE_ULONGLONG(0)),
-    unidentifiedpacketnumber_(GOOGLE_ULONGLONG(0)),
-    unidentifiedtrafficvolume_(GOOGLE_ULONGLONG(0)) {
+    packetnumber_(from.packetnumber_),
+    trafficvolume_(from.trafficvolume_),
+    emptypacketnumber_(from.emptypacketnumber_),
+    tcppacketnumber_(from.tcppacketnumber_),
+    tcptrafficvolume_(from.tcptrafficvolume_),
+    udppacketnumber_(from.udppacketnumber_),
+    udptrafficvolume_(from.udptrafficvolume_),
+    p2ppacketnumber_(from.p2ppacketnumber_),
+    p2ptrafficvolume_(from.p2ptrafficvolume_),
+    httppacketnumber_(from.httppacketnumber_),
+    httptrafficvolume_(from.httptrafficvolume_),
+    unidentifiedpacketnumber_(from.unidentifiedpacketnumber_),
+    unidentifiedtrafficvolume_(from.unidentifiedtrafficvolume_) {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   MergeFrom(from);
 }

@@ -97,10 +97,10 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 	}
 	else
 	{
-		CSubscriberStatistic* pSubscriber = new CSubscriberStatistic ( src_key );
-		pSubscriber->AddNewPacket ( pPacketDigest );
+		CSubscriberStatistic pSubscriber( src_key );
+		pSubscriber.AddNewPacket ( pPacketDigest );
 		EABASSERT ( rs );
-		s_mapSubscriberStat.insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, *pSubscriber ) );
+		s_mapSubscriberStat.insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, pSubscriber ) );
 	}
 	pthread_mutex_unlock ( &Locks::packetMap_lock );
 
@@ -140,13 +140,13 @@ void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 		CResultRecorder recorder;
 		time_t currentTime;
 		time(&currentTime);
-		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);
-		s_recordingTime = currentTime;
+		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);		
 		ResultEnum rs = recorder.RecordTimeOutResult(s_mapSubscriberStat, &parameter);
 		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);
 		pthread_mutex_lock ( &Locks::packetMap_lock );
 		s_mapSubscriberStat.clear();
 		pthread_mutex_unlock ( &Locks::packetMap_lock );
+		s_recordingTime = currentTime;
 	}
 
 

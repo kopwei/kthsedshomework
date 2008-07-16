@@ -33,15 +33,19 @@ public:
 	CSubscriberStatistic(const unsigned int ipAddress);
 	~CSubscriberStatistic(void);
 	
+	CSubscriberStatistic(const CSubscriberStatistic& subStat);
+	
+	//const CSubscriberStatistic& operator= (const CSubscriberStatistic& subStat);	
+	
 	ResultEnum AddNewPacket(const CPacketDigest* pPacketDigest);
 	
 	void PrintSummary();
 
 	unsigned int GetIPAddress() const {return m_ipAddress;}
 
-	CPacketStatistic GetUploadStatistic() const {return m_uploadPacketStatistic;}
+	const CPacketStatistic& GetUploadStatistic() const {return *(&m_uploadPacketStatistic);}
 
-	CPacketStatistic GetDownloadStatistic() const {return m_downloadPacketStatistic;}
+	const CPacketStatistic& GetDownloadStatistic() const {return *(&m_downloadPacketStatistic);}
 	
 
 private:

@@ -33,7 +33,6 @@
 
 using namespace std;
 
-class CPacketStatistician;
 class CPacketStatistic;
 
 typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;

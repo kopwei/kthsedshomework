@@ -24,8 +24,8 @@
       <useconfiguration>debug</useconfiguration>
     </general>
     <run>
-      <mainprogram/>
-      <terminal>true</terminal>
+      <mainprogram>/home/ericsson/KDevelopProjects/AnalyzerCapture/debug/src/analyzercapture</mainprogram>
+      <terminal>false</terminal>
       <programargs>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -m</programargs>
       <globaldebugarguments>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -m</globaldebugarguments>
       <globalcwd>/home/ericsson/KDevelopProjects/AnalyzerCapture/debug</globalcwd>

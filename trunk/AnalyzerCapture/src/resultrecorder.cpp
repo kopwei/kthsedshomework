@@ -20,7 +20,6 @@
 
 
 #include "resultrecorder.h"
-#include "PacketStatistician.h"
 #include "locks.h"
 #include "macro.h"
 #include "analyserpxFlow.h"
@@ -110,6 +109,7 @@ ResultEnum CResultRecorder::RecordToDatabase( const StatisticMap& statMap ,const
 		EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 	}
 
+	//pthread_mutex_unlock(&Locks::packetMap_lock);
 	//MYSQL* pMysql = mysql_init(NULL);
 	
 	return rs;
@@ -221,7 +221,8 @@ ResultEnum CResultRecorder::RecordStatisticIntoTable(const string& strTableName,
 	if (0 == strTableName.length())
 		return eCommonError;
 	// TODO: Need implementation here
-	unsigned long long id = ((unsigned long long)iSubuscriber) << 16 + start_time;
+	unsigned long long iSub = ((unsigned long long)iSubuscriber) << 32;
+	unsigned long long id = iSub + start_time;
 
 	mysqlpp::Query query = m_connection.query();
 	query << " INSERT INTO %0 VALUES ( " 

@@ -426,22 +426,21 @@ void CAnalyzerAggregator::printHash()
 {
 	flow_t *flow_hsh;
 	HashTableUtil::init_hash_walk ( test_table );
-	struct tm *clock = NULL;
+	//struct tm *clock = NULL;
 	//extern char baseFileName[];
 	//extern char fileName[];
 	//snprintf(fileName,256,"%s_%u",baseFileName, numo);
 	//char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
 	//extern char fileName[];
-	char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
+	//char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
 	//extern char baseFileName[];
 	time_t init = 0;
 	time ( &init );
-
-	clock = ( struct tm * ) localtime ( & ( init ) );
-	CFlowUtil::getDate ( &init,data,6 ) ;
+	string strDate;
+	//clock = ( struct tm * ) localtime ( & ( init ) );
+	CFlowUtil::getDate ( &init,strDate) ;
 	m_strFileName = s_pInputParams->GetFilePrefix();
-	string date = string ( data, strlen ( data ) );
-	m_strFileName.append ( date );
+	m_strFileName.append ( strDate );
 	m_strFileName.append ( "_latestFile" );
 	//snprintf ( filenameCountStr,36,"%s_latestFile",data );
 	//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
@@ -454,7 +453,7 @@ void CAnalyzerAggregator::printHash()
 	}
 	CFlowUtil::printFlowCollectionToFile(&collection, m_strFileName);
 	//free ( filenameCountStr );
-	free ( data );
+	//free ( data );
 	HashTableUtil::clear_hash_table ( test_table );
 }
 
@@ -574,9 +573,11 @@ ResultEnum CAnalyzerAggregator::GetFileName ( const int count, string* fileName 
 	fileName->clear();
 	fileName->append ( s_pInputParams->GetFilePrefix() );
 	ResultEnum rs = eOK;
-	char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
-	CFlowUtil::getDate ( &init,data,6 ) ;
-	string filenameCountStr = string ( data, strlen ( data ) );
+	// char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
+	//string strDate;
+	string filenameCountStr;
+	CFlowUtil::getDate ( &init,filenameCountStr) ;
+	
 	filenameCountStr.append ( "_" );
 	stringstream strCount;
 	strCount << count;
@@ -584,7 +585,7 @@ ResultEnum CAnalyzerAggregator::GetFileName ( const int count, string* fileName 
 	//snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
 	fileName->append ( filenameCountStr );
 	//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
-	free ( data );
+	//free ( data );
 	return rs;
 }
 

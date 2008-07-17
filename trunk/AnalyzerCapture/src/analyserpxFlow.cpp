@@ -389,8 +389,21 @@ int CFlowUtil::getDate ( time_t *tloc, char *str, int str_len )
 int CFlowUtil::getDate( const time_t* tloc, string& str)
 {
 	tm* clock = localtime(tloc);
-	// TODO: Need implmentation here
-	return 0;
+	// TODO: Need implementation here
+	stringstream strstream;
+	if (clock->tm_mday < 9)
+	{
+		strstream << 0;
+	}
+	strstream << clock->tm_mday;
+	if (clock->tm_mon + 1 < 9)
+	{
+		strstream << 0;
+	}
+	strstream << clock->tm_mon;
+	strstream << (clock->tm_year -100);
+	str = strstream.str();
+	return 1;
 }
 u_short CFlowUtil::getIntLen ( unsigned long num )
 {

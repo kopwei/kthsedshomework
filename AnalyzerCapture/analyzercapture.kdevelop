@@ -15,19 +15,19 @@
     <projectname>AnalyzerCapture</projectname>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
-    <description/>
-    <defaultencoding/>
+    <description></description>
+    <defaultencoding></defaultencoding>
   </general>
   <kdevautoproject>
     <general>
       <activetarget>src/analyzercapture</activetarget>
-      <useconfiguration>debug</useconfiguration>
+      <useconfiguration>optimized</useconfiguration>
     </general>
     <run>
       <mainprogram>/home/ericsson/KDevelopProjects/AnalyzerCapture/debug/src/analyzercapture</mainprogram>
       <terminal>false</terminal>
-      <programargs>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -m</programargs>
-      <globaldebugarguments>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -m</globaldebugarguments>
+      <programargs>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -q 2 -m</programargs>
+      <globaldebugarguments>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -q 2 -m</globaldebugarguments>
       <globalcwd>/home/ericsson/KDevelopProjects/AnalyzerCapture/debug</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autocompile>false</autocompile>
@@ -42,6 +42,16 @@
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O2 -g0</cxxflags>
+        <envvars/>
+        <configargs></configargs>
+        <topsourcedir></topsourcedir>
+        <cppflags></cppflags>
+        <ldflags>-lpcap -lpthread -lprotobuf -lmysqlpp</ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags></cflags>
+        <f77flags></f77flags>
       </optimized>
       <debug>
         <configargs>--enable-debug=full</configargs>
@@ -194,11 +204,11 @@
       <includePaths>.;</includePaths>
     </codecompletion>
     <creategettersetter>
-      <prefixGet/>
+      <prefixGet></prefixGet>
       <prefixSet>set</prefixSet>
       <prefixVariable>m_,_</prefixVariable>
       <parameterName>theValue</parameterName>
-      <inlineGet>false</inlineGet>
+      <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
     <splitheadersource>
@@ -218,11 +228,11 @@
   </cppsupportpart>
   <kdevdebugger>
     <general>
-      <gdbpath/>
-      <dbgshell/>
-      <configGdbScript/>
-      <runShellScript/>
-      <runGdbScript/>
+      <gdbpath></gdbpath>
+      <dbgshell></dbgshell>
+      <configGdbScript></configGdbScript>
+      <runShellScript></runShellScript>
+      <runGdbScript></runGdbScript>
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>

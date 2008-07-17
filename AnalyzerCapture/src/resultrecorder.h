@@ -76,19 +76,19 @@ private:
  */
 class CResultRecorder{
 public:
-    CResultRecorder();
+	CResultRecorder(const StatisticMap& statMap);
 
     ~CResultRecorder();
 	
-	ResultEnum RecordTimeOutResult(const StatisticMap& statMap, const RecordParameter* pParam);
+	ResultEnum RecordTimeOutResult(const RecordParameter* pParam);
 
-	ResultEnum RecordDailyResult(const CPacketStatistic* pPacketStat);
+	ResultEnum RecordDailyResult(const CPacketStatistic* pPacketStat, const RecordParameter* pParam);
 
 private:
 
-	ResultEnum RecordToDatabase(const StatisticMap& statMap, const RecordParameter* pParam);
+	ResultEnum RecordToDatabase(const RecordParameter* pParam);
 
-	ResultEnum RecordToXML(const StatisticMap& statMap, const RecordParameter* pParam);
+	ResultEnum RecordToXML(const RecordParameter* pParam);
 
 	ResultEnum RecordStatisticIntoTable(const string& strTableName, const unsigned int iSubuscriber, 
 		const time_t start_time, const time_t end_time, 
@@ -100,6 +100,7 @@ private:
 
 	ResultEnum GetCurrentDate(string& strDate) const;
 
+	StatisticMap 				m_packetMap;
 	mysqlpp::Connection			m_connection;
 };
 

@@ -26,7 +26,7 @@ char baseFileName[100] = "cap";
 char logFileName[100] = "logcap";
 char outputFileName[100] = "throughput";
 int outputThroughput = 0;
-int tFlag = 1;
+bool tFlag = true;
 int flow_exp = 0;//This variable deals with flow exportation (Profiling)
 
 int analyserpxError = 0;

@@ -70,6 +70,11 @@ ResultEnum CResultRecorder::RecordTimeOutResult(const RecordParameter* pParam)
 ResultEnum CResultRecorder::RecordToDatabase(const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
+	if (m_packetMap.empty())
+	{
+		return eOK;
+	}
+	
 	if (NULL == pParam)
 		return eEmptyPointer;
 	// Check if the database "Analyzer" is there
@@ -202,10 +207,9 @@ ResultEnum CResultRecorder::GetCurrentDate( string& strDate ) const
 	// TODO: Need implementation here
 	time_t init = 0;
 	time ( &init );
-	char date[6]; 
-	if (!CFlowUtil::getDate(&init, date, sizeof(date)))
+	//char date[6]; 
+	if (!CFlowUtil::getDate(&init, strDate))
 		return eCommonError;
-	strDate = (string(date, sizeof(date)));
 	return rs;
 }
 

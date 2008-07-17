@@ -171,7 +171,7 @@ public:
 	\param str_len	Destination string length.
 	\return		Return 1 if all the procedures were perfectly done, and 0 otherwise.
 	*/
-	static int getDate(time_t *tloc, char *str, int str_len);
+	//static int getDate(time_t *tloc, char *str, int str_len);
 
 	static int getDate(const time_t* tloc, string& str);
 	/*!     \fn u_short getIntLen(unsigned long num)

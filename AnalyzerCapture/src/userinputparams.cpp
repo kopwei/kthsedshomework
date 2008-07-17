@@ -62,15 +62,16 @@ ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )
 			{
 				time_t tempo;
 				time ( &tempo );
-				char* data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
-				CFlowUtil::getDate ( &tempo,data,6 );
+				// char* data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
+				string strDate;
+				CFlowUtil::getDate ( &tempo, strDate );
 
 				string strBaseFileName = optarg;
-				strBaseFileName.append ( data );
+				strBaseFileName.append ( strDate );
 				strBaseFileName.append ( "_0" );
 				m_strFilePrefix =  strBaseFileName;
 
-				free ( data );
+				//free ( data );
 				break;
 			}
 			case 'c':

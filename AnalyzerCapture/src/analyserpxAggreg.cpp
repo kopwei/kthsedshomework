@@ -390,8 +390,8 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 * dissect packet
 */
 void CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_pkthdr *header,
-                                       const ip * pIpHeader, u_int16_t src_port, u_int16_t dst_port,
-                                       u_short classifier, ThreadParams *tp )
+                                       const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port,
+                                       const u_short classifier, ThreadParams *tp )
 {
 
 	//extern int outputThroughput;

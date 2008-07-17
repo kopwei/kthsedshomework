@@ -60,16 +60,14 @@ void CFlowUtil::delete_flow ( void *data )
 	free ( data );
 }
 
-flow_t* CFlowUtil::createFlow_t ( unsigned char proto, unsigned char class_proto, string& src_if, string& dst_if,
-                                  u_short src_port, u_short dst_port,
-                                  unsigned int n_bytes, unsigned int n_frames,
-                                  time_t ini_sec, time_t end_sec, time_t ini_mic,
-                                  time_t end_mic, struct in_addr src_ip,
-                                  struct in_addr dst_ip )
+ResultEnum CFlowUtil::createFlow_t(const unsigned char proto, const unsigned char class_proto, const string& src_if, 
+								   const string& dst_if, const u_short src_port, const u_short dst_port, 
+								   const unsigned int n_bytes, const unsigned int n_frames, const time_t ini_sec, 
+								   const time_t end_sec, const time_t ini_mic, const time_t end_mic, 
+								   const in_addr& ip_src, const in_addr& ip_dst, flow_t* flow)
 {
-	flow_t *flow = new flow_t();
 	if ( flow == NULL )
-		return NULL;
+		return eEmptyPointer;
 	flow->set_proto ( proto );
 	flow->set_class_proto ( class_proto );
 	if ( src_if.length() == 0 )
@@ -98,7 +96,7 @@ flow_t* CFlowUtil::createFlow_t ( unsigned char proto, unsigned char class_proto
 	flow->set_end_mic ( end_mic );
 	flow->set_src_ip ( src_ip.s_addr );
 	flow->set_dst_ip ( dst_ip.s_addr );
-	return flow;
+	return eOK;
 
 }
 

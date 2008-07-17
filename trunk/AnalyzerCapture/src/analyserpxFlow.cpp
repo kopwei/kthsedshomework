@@ -385,6 +385,13 @@ int CFlowUtil::getDate ( time_t *tloc, char *str, int str_len )
 	}
 	return 1;
 }
+
+int CFlowUtil::getDate( const time_t* tloc, string& str)
+{
+	tm* clock = localtime(tloc);
+	// TODO: Need implmentation here
+	return 0;
+}
 u_short CFlowUtil::getIntLen ( unsigned long num )
 {
 	unsigned long number=10;

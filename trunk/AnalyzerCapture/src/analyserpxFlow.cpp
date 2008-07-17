@@ -365,26 +365,26 @@ const char* CFlowUtil::get_protocolName ( unsigned short proto_id )
 	}
 }
 
-int CFlowUtil::getDate ( time_t *tloc, char *str, int str_len )
-{
-	if ( str_len<6 ) return 0;
-	struct tm *clock = ( struct tm * ) localtime ( ( tloc ) );
-	if ( ( clock->tm_mon+1 ) >9 )
-	{
-		if ( ( clock->tm_mday ) >9 )
-			snprintf ( str,7, "%d%d0%d", clock->tm_mday,clock->tm_mon+1, ( clock->tm_year )-100 );
-		else
-			snprintf ( str,7, "0%d%d0%d", clock->tm_mday,clock->tm_mon+1, ( clock->tm_year )-100 );
-	}
-	else
-	{
-		if ( ( clock->tm_mday ) >9 )
-			snprintf ( str,7, "%d0%d0%d", clock->tm_mday,clock->tm_mon+1, ( clock->tm_year )-100 );
-		else
-			snprintf ( str,7, "0%d0%d0%d", clock->tm_mday,clock->tm_mon+1, ( clock->tm_year )-100 );
-	}
-	return 1;
-}
+//int CFlowUtil::getDate ( time_t *tloc, char *str, int str_len )
+//{
+//	if ( str_len<6 ) return 0;
+//	struct tm *clock = ( struct tm * ) localtime ( ( tloc ) );
+//	if ( ( clock->tm_mon+1 ) >9 )
+//	{
+//		if ( ( clock->tm_mday ) >9 )
+//			snprintf ( str,7, "%d%d0%d", clock->tm_mday,clock->tm_mon+1, ( clock->tm_year )-100 );
+//		else
+//			snprintf ( str,7, "0%d%d0%d", clock->tm_mday,clock->tm_mon+1, ( clock->tm_year )-100 );
+//	}
+//	else
+//	{
+//		if ( ( clock->tm_mday ) >9 )
+//			snprintf ( str,7, "%d0%d0%d", clock->tm_mday,clock->tm_mon+1, ( clock->tm_year )-100 );
+//		else
+//			snprintf ( str,7, "0%d0%d0%d", clock->tm_mday,clock->tm_mon+1, ( clock->tm_year )-100 );
+//	}
+//	return 1;
+//}
 
 int CFlowUtil::getDate( const time_t* tloc, string& str)
 {

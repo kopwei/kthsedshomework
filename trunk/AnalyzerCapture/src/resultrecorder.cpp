@@ -29,7 +29,8 @@ RecordParameter::RecordParameter(const RecordTypeEnum recordType, const time_t& 
 {
 }
 
-CResultRecorder::CResultRecorder()
+CResultRecorder::CResultRecorder(const StatisticMap& statMap) :
+		m_packetMap(statMap)
 {
 	try 
 	{
@@ -39,6 +40,8 @@ CResultRecorder::CResultRecorder()
 	{
 		cerr << "Connection failed: " << er.what() << endl;
 	}
+	// copy map to improve performance
+	m_packetMap = statMap;
 }
 
 
@@ -47,14 +50,14 @@ CResultRecorder::~CResultRecorder()
 }
 
 
-ResultEnum CResultRecorder::RecordTimeOutResult(const StatisticMap& statMap, const RecordParameter* pParam)
+ResultEnum CResultRecorder::RecordTimeOutResult(const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here
 	switch (pParam->RecordType())
 	{
 	case eRecordToDatabase:
-		rs = RecordToDatabase(statMap, pParam);
+		rs = RecordToDatabase(pParam);
 		EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 		break;
 	default:
@@ -64,7 +67,7 @@ ResultEnum CResultRecorder::RecordTimeOutResult(const StatisticMap& statMap, con
 	return rs;
 }
 
-ResultEnum CResultRecorder::RecordToDatabase( const StatisticMap& statMap ,const RecordParameter* pParam)
+ResultEnum CResultRecorder::RecordToDatabase(const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
 	if (NULL == pParam)
@@ -92,13 +95,8 @@ ResultEnum CResultRecorder::RecordToDatabase( const StatisticMap& statMap ,const
 	rs = CheckTable(strDownloadTableName);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
-	// TODO: Need implementation here
-	pthread_mutex_lock(&Locks::packetMap_lock);
-	StatisticMap recordingMap = statMap;
-	pthread_mutex_unlock(&Locks::packetMap_lock);
-
-	StatisticMap::const_iterator itor = recordingMap.begin();
-	for (; itor != recordingMap.end(); ++itor)
+	StatisticMap::const_iterator itor = m_packetMap.begin();
+	for (; itor != m_packetMap.end(); ++itor)
 	{
 		rs = RecordStatisticIntoTable(strUploadTableName, itor->first, pParam->StartTime(), pParam->EndTime(), 
 			itor->second.GetUploadStatistic());
@@ -115,7 +113,7 @@ ResultEnum CResultRecorder::RecordToDatabase( const StatisticMap& statMap ,const
 	return rs;
 }
 
-ResultEnum CResultRecorder::RecordToXML(const StatisticMap& statMap, const RecordParameter* pParam)
+ResultEnum CResultRecorder::RecordToXML(const RecordParameter* pParam)
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here

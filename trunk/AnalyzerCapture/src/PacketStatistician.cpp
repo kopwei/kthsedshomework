@@ -137,15 +137,16 @@ void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 	while (CAnalyzer::tFlag)
 	{
 		sleep(30);
-		CResultRecorder recorder;
-		time_t currentTime;
-		time(&currentTime);
-		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);		
-		ResultEnum rs = recorder.RecordTimeOutResult(s_mapSubscriberStat, &parameter);
-		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);
 		pthread_mutex_lock ( &Locks::packetMap_lock );
+		CResultRecorder recorder(s_mapSubscriberStat);
 		s_mapSubscriberStat.clear();
 		pthread_mutex_unlock ( &Locks::packetMap_lock );
+		
+		time_t currentTime;
+		time(&currentTime);
+		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);				
+		ResultEnum rs = recorder.RecordTimeOutResult(&parameter);
+		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);		
 		s_recordingTime = currentTime;
 	}
 

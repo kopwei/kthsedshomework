@@ -244,17 +244,16 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 	}
 
 	string strEmpty = "";
-	flow_t tmp_flow;
-	ResultEnum rs = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, strEmpty, strEmpty, flow->dst_port(), flow->src_port(),
+	tmp_flow = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, strEmpty, strEmpty, flow->dst_port(), flow->src_port(),
 	                                     ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),
-	                                     flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src, &tmp_flow);
+	                                     flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
 	//Sync Table begin
 	//pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 )
 		{}
 	;
 	flow_hsh         = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
-	reverse_flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, &tmp_flow );
+	reverse_flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, tmp_flow );
 
 	if ( flow_hsh == NULL )
 	{
@@ -384,7 +383,7 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 
 	pthread_mutex_unlock ( &Locks::hash_lock );
 	//Sync Table End
-	//CFlowUtil::delete_flow ( tmp_flow );
+	CFlowUtil::delete_flow ( tmp_flow );
 }
 
 /*
@@ -406,19 +405,18 @@ void CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_p
 	// fixed
 
 	string strEmpty = "";
-	flow_t flow;
-	ResultEnum rs = CFlowUtil::createFlow_t ( pIpHeader->ip_p, pIpHeader->ip_p, strEmpty, strEmpty, src_port, dst_port,
+	flow_t* flow = CFlowUtil::createFlow_t ( pIpHeader->ip_p, pIpHeader->ip_p, strEmpty, strEmpty, src_port, dst_port,
 	               ( unsigned int ) ntohs ( pIpHeader->ip_len ), 1,
 	               ( time_t ) ( header->ts.tv_sec ),
 	               ( time_t ) ( header->ts.tv_sec ),
 	               ( time_t ) ( header->ts.tv_usec ),
 	               ( time_t ) ( header->ts.tv_usec ), pIpHeader->ip_src,
-	               pIpHeader->ip_dst , &flow);
-	EABASSERT (rs == eOK); //ON_ERROR_RETURN(rs != eOK, )
+	               pIpHeader->ip_dst );
+
 	tvSec = ( time_t ) ( header->ts.tv_sec );
 	tvUSec = ( time_t ) ( header->ts.tv_usec );
 
-	addFlowSync ( &flow, pIpHeader, ipLen, classifier, tp );
+	addFlowSync ( flow, pIpHeader, ipLen, classifier, tp );
 
 	return;
 }

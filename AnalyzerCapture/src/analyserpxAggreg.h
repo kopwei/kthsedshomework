@@ -118,7 +118,7 @@ class CAnalyzerAggregator
 		
 		
 		static CUserInputParams* s_pInputParams;
-		static string m_strFileName;
+		static string s_strFileName;
 		static hash_tab* test_table;
 		static time_t tvSec;
 		static time_t tvUSec;

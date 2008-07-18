@@ -402,7 +402,7 @@ int CFlowUtil::getDate( const time_t* tloc, string& str)
 	{
 		strstream << 0;
 	}
-	strstream << clock->tm_mon;
+	strstream << clock->tm_mon + 1;
 	strstream << (clock->tm_year -100);
 	str = strstream.str();
 	return 1;

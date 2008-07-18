@@ -528,9 +528,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		if ( ( interCounter>=fileExpTime ) && ( fileExpTime>0 ) )
 		{
 			filenameCount++;
-			pthread_mutex_lock(&Locks::fileName_lock);
-			rs = GetFileName ( filenameCount, &s_strFileName );
-			pthread_mutex_unlock(&Locks::fileName_lock);
+			rs = GetFileName ( filenameCount);
 			EABASSERT ( rs == eOK );
 			interCounter=0;
 		}
@@ -539,9 +537,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 			if ( flag )
 			{
 				filenameCount=0;
-				pthread_mutex_lock(&Locks::fileName_lock);
-				rs = GetFileName ( filenameCount, &s_strFileName );
-				pthread_mutex_unlock(&Locks::fileName_lock);
+				rs = GetFileName ( filenameCount);
 				EABASSERT ( rs == eOK );
 				//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
 				interCounter=0;
@@ -554,7 +550,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		}
 		//cleanHash(test_table, sec, usec, fileName);
 
-		rs = optimumCleanHash ( test_table, sec, usec, s_strFileName.c_str() );//introduced on 1 August 2007, it aims to optimize
+		rs = optimumCleanHash ( test_table, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
 		EABASSERT ( rs == eOK );
 		//the analyzer-px output according to -b parameter
 		interCounter++;
@@ -574,13 +570,11 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 	return ( void * ) NULL;
 }
 
-ResultEnum CAnalyzerAggregator::GetFileName ( const int count, string* fileName )
+ResultEnum CAnalyzerAggregator::GetFileName ( const int count)
 {
 	time_t init = 0;
 	time ( &init );
-	if ( NULL == fileName ) return eEmptyPointer;
-	fileName->clear();
-	fileName->append ( s_pInputParams->GetFilePrefix() );
+	
 	ResultEnum rs = eOK;
 	// char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
 	//string strDate;
@@ -592,7 +586,10 @@ ResultEnum CAnalyzerAggregator::GetFileName ( const int count, string* fileName 
 	strCount << count;
 	filenameCountStr.append ( strCount.str() );
 	//snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
-	fileName->append ( filenameCountStr );
+	pthread_mutex_lock(&Locks::fileName_lock);
+	s_strFileName = s_pInputParams->GetFilePrefix();
+	s_strFileName.append ( filenameCountStr );
+	pthread_mutex_unlock(&Locks::fileName_lock);
 	//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
 	//free ( data );
 	return rs;

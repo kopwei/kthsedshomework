@@ -114,7 +114,7 @@ class CAnalyzerAggregator
 		 */
 		static ResultEnum optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const string& fileName );
 		
-		static ResultEnum GetFileName(const int count, string* fileName);
+		static ResultEnum GetFileName(const int count);
 		
 		
 		static CUserInputParams* s_pInputParams;

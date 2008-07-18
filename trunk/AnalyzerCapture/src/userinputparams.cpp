@@ -67,8 +67,8 @@ ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )
 				CFlowUtil::getDate ( &tempo, strDate );
 
 				string strBaseFileName = optarg;
-				strBaseFileName.append ( strDate );
-				strBaseFileName.append ( "_0" );
+				//strBaseFileName.append ( strDate );
+				//strBaseFileName.append ( "_0" );
 				m_strFilePrefix =  strBaseFileName;
 
 				//free ( data );

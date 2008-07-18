@@ -25,3 +25,5 @@ pthread_mutex_t Locks::print_lock;
 pthread_mutex_t Locks::hash_lock;
 
 pthread_mutex_t Locks::packetMap_lock;
+
+pthread_mutex_t Locks::fileName_lock;

@@ -29,7 +29,7 @@ hash_tab * CAnalyzerAggregator::test_table;
 
 time_t CAnalyzerAggregator::tvSec;
 time_t CAnalyzerAggregator::tvUSec;
-string CAnalyzerAggregator::m_strFileName;
+string CAnalyzerAggregator::s_strFileName;
 CUserInputParams* CAnalyzerAggregator::s_pInputParams;
 
 //int fileAdminTimeOff;
@@ -49,6 +49,7 @@ void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
 {
 	pthread_mutex_init ( &Locks::hash_lock , NULL ) ;
 	pthread_mutex_init ( &Locks::print_lock , NULL ) ;
+	pthread_mutex_init( &Locks::fileName_lock, NULL);
 	s_pInputParams = pUserInputParams;
 	test_table = HashTableUtil::init_hash_table ( "ANALYSERPX_CAP_TABLE", CFlowUtil::compare_flow, CFlowUtil::flow_key,
 	             CFlowUtil::delete_flow, HASH_SIZE );
@@ -134,7 +135,7 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 
 	static time_t start = 0;
 	double dif;
-	char *str = ( char* ) malloc ( sizeof ( char ) *1024 );
+	//char *str = ( char* ) malloc ( sizeof ( char ) *1024 );
 	//extern char baseFileName[]; //-b modification on 1 August 2007
 	//extern char fileName[];
 	static int offCount = 0;
@@ -143,7 +144,7 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 	time_t sec=0, usec=0;
 
 
-	char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 ); //-b modification on 1 August 2007
+	//char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 ); //-b modification on 1 August 2007
 
 
 	if ( start == 0 )
@@ -166,14 +167,16 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 				sec = tvSec;
 				usec = tvUSec;
 				//cleanHash(test_table, sec, usec, fileName);
-				m_strFileName = s_pInputParams->GetFilePrefix();
-				m_strFileName.append ( "_" );
+				pthread_mutex_lock(&Locks::fileName_lock);
+				s_strFileName = s_pInputParams->GetFilePrefix();
+				s_strFileName.append ( "_" );
 				stringstream strCount;
 				strCount << offCount;
-				m_strFileName.append ( strCount.str() );
+				s_strFileName.append ( strCount.str() );
+				pthread_mutex_unlock(&Locks::fileName_lock);
 
 				//snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
-				optimumCleanHash ( test_table, sec, usec, m_strFileName.c_str() );//introduced on 1 August 2007, it aims to optimize
+				optimumCleanHash ( test_table, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
 				//the analyzer-px output according to -b parameter
 				offCount++;					  //as well as this line
 				//numo=offCount;					  //and this another one
@@ -185,8 +188,8 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 
 
 	}
-	free ( str );
-	free ( filenameCountStr );
+	//free ( str );
+	//free ( filenameCountStr );
 
 
 }
@@ -274,7 +277,7 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 	else if ( verifyTimeOut ( flow_hsh, flow ) )
 	{
 		//extern char fileName[];
-		CFlowUtil::addFlowToFile(flow_hsh, m_strFileName);
+		CFlowUtil::addFlowToFile(flow_hsh, s_strFileName);
 		//CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
 		HashTableUtil::clear_hash_entry ( test_table, flow_hsh );
 		HashTableUtil::add_hash_entry ( test_table, flow );
@@ -439,9 +442,11 @@ void CAnalyzerAggregator::printHash()
 	string strDate;
 	//clock = ( struct tm * ) localtime ( & ( init ) );
 	CFlowUtil::getDate ( &init,strDate) ;
-	m_strFileName = s_pInputParams->GetFilePrefix();
-	m_strFileName.append ( strDate );
-	m_strFileName.append ( "_latestFile" );
+	pthread_mutex_lock(&Locks::fileName_lock);
+	s_strFileName = s_pInputParams->GetFilePrefix();
+	s_strFileName.append ( strDate );
+	s_strFileName.append ( "_latestFile" );
+	pthread_mutex_unlock(&Locks::fileName_lock);
 	//snprintf ( filenameCountStr,36,"%s_latestFile",data );
 	//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
 	flow_collection collection;
@@ -451,7 +456,7 @@ void CAnalyzerAggregator::printHash()
 		*(collection.add_flow()) = *flow_hsh;
 		//CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
 	}
-	CFlowUtil::printFlowCollectionToFile(&collection, m_strFileName);
+	CFlowUtil::printFlowCollectionToFile(&collection, s_strFileName);
 	//free ( filenameCountStr );
 	//free ( data );
 	HashTableUtil::clear_hash_table ( test_table );
@@ -523,7 +528,9 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		if ( ( interCounter>=fileExpTime ) && ( fileExpTime>0 ) )
 		{
 			filenameCount++;
-			rs = GetFileName ( filenameCount, &m_strFileName );
+			pthread_mutex_lock(&Locks::fileName_lock);
+			rs = GetFileName ( filenameCount, &s_strFileName );
+			pthread_mutex_unlock(&Locks::fileName_lock);
 			EABASSERT ( rs == eOK );
 			interCounter=0;
 		}
@@ -532,7 +539,9 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 			if ( flag )
 			{
 				filenameCount=0;
-				rs = GetFileName ( filenameCount, &m_strFileName );
+				pthread_mutex_lock(&Locks::fileName_lock);
+				rs = GetFileName ( filenameCount, &s_strFileName );
+				pthread_mutex_unlock(&Locks::fileName_lock);
 				EABASSERT ( rs == eOK );
 				//snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
 				interCounter=0;
@@ -545,7 +554,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 		}
 		//cleanHash(test_table, sec, usec, fileName);
 
-		rs = optimumCleanHash ( test_table, sec, usec, m_strFileName.c_str() );//introduced on 1 August 2007, it aims to optimize
+		rs = optimumCleanHash ( test_table, sec, usec, s_strFileName.c_str() );//introduced on 1 August 2007, it aims to optimize
 		EABASSERT ( rs == eOK );
 		//the analyzer-px output according to -b parameter
 		interCounter++;

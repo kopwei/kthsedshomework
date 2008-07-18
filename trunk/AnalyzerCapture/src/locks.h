@@ -31,6 +31,7 @@ public:
 	static pthread_mutex_t print_lock;
 	static pthread_mutex_t hash_lock;
 	static pthread_mutex_t packetMap_lock;
+	static pthread_mutex_t fileName_lock;
 };
 
 #endif

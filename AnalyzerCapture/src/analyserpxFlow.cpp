@@ -17,12 +17,13 @@
 *   Copyright (C) 2008 by Ericsson
 */
 
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <stdio.h>
 #include <string>
 #include <time.h>
 #include <netinet/in.h>
 #include <fstream>
+#include <sstream>
 #include <iostream>
 
 #include "analyserpxFile.h"
@@ -60,14 +61,17 @@ void CFlowUtil::delete_flow ( void *data )
 	free ( data );
 }
 
-ResultEnum CFlowUtil::createFlow_t(const unsigned char proto, const unsigned char class_proto, const string& src_if, 
-								   const string& dst_if, const u_short src_port, const u_short dst_port, 
-								   const unsigned int n_bytes, const unsigned int n_frames, const time_t ini_sec, 
-								   const time_t end_sec, const time_t ini_mic, const time_t end_mic, 
-								   const in_addr& ip_src, const in_addr& ip_dst, flow_t* flow)
+flow_t* CFlowUtil::createFlow_t ( const unsigned char proto, const unsigned char class_proto, 
+								  const string& src_if, const string& dst_if,
+                                  const u_short src_port, const u_short dst_port,
+                                  unsigned int n_bytes, unsigned int n_frames,
+                                  const time_t ini_sec, const time_t end_sec, const time_t ini_mic,
+                                  const time_t end_mic, in_addr src_ip,
+                                  in_addr dst_ip )
 {
+	flow_t *flow = new flow_t();
 	if ( flow == NULL )
-		return eEmptyPointer;
+		return NULL;
 	flow->set_proto ( proto );
 	flow->set_class_proto ( class_proto );
 	if ( src_if.length() == 0 )
@@ -96,7 +100,7 @@ ResultEnum CFlowUtil::createFlow_t(const unsigned char proto, const unsigned cha
 	flow->set_end_mic ( end_mic );
 	flow->set_src_ip ( src_ip.s_addr );
 	flow->set_dst_ip ( dst_ip.s_addr );
-	return eOK;
+	return flow;
 
 }
 

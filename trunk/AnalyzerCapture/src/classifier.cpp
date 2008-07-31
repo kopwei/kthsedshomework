@@ -2873,38 +2873,38 @@ u_short CClassifier::getID(const struct ip *iph, const u_short ipLen, const u_sh
 	
 	switch (src_port)
 	{
-	case IPPORT_FTP:
+	case 21:
 		return PROTO_ID_FTP;
-	case IPPORT_FTP_DATA:
+	case 20:
 		return PROTO_ID_FTP;
-	case IPPORT_HTTPS:
+	case 443:
 		return PROTO_ID_HTTP;
 	case 80:  /* HTTP */
 		return PROTO_ID_HTTP;
-	case IPPORT_SMTP:
+	case 25:
 		return PROTO_ID_SMTP;
 	case 465: 
 		return PROTO_ID_SMTP;
-	case IPPORT_POP3:
+	case 110:
 		return PROTO_ID_POP3;
 	case 993:
 		return PROTO_ID_POP3;
 	}
 	switch (dst_port)
 	{
-	case IPPORT_FTP:
+	case 21:
 		return PROTO_ID_FTP;
-	case IPPORT_FTP_DATA:
+	case 20:
 		return PROTO_ID_FTP;
-	case IPPORT_HTTPS:
+	case 443:
 		return PROTO_ID_HTTP;
 	case 80:  /* HTTP */
 		return PROTO_ID_HTTP;
-	case IPPORT_SMTP:
+	case 25:
 		return PROTO_ID_SMTP;
 	case 465: 
 		return PROTO_ID_SMTP;
-	case IPPORT_POP3:
+	case 110:
 		return PROTO_ID_POP3;
 	case 993:
 		return PROTO_ID_POP3;

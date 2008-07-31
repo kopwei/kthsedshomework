@@ -45,7 +45,7 @@ unsigned char* CClassifier::getPayload ( const struct ip *iph )
 	return payload;
 }
 
-unsigned short CClassifier::getPayloadLen ( const struct ip *iph, u_short ipLen )
+unsigned short CClassifier::getPayloadLen ( const struct ip *iph, const u_short ipLen )
 {
 	unsigned char *transport = ( unsigned char * ) iph + iph->ip_hl * 4;
 	// if protocol is TCP
@@ -238,7 +238,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 										if ( mess_len >= 9 )
 											if ( memcmp ( payload + 6, "et/", 3 ) == 0 )
 												if ( ( payload[mess_len - 2] == 0x0d ) && ( payload[mess_len - 1] == 0x0a ) )
-													return 110;
+													return PROTO_ID_GNU;
 										break;
 										/* message scrape */
 									case 0x73: /* s */
@@ -256,7 +256,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 										if ( mess_len >= 13 )
 											if ( memcmp ( payload + 6, "ri-res/", 7 ) == 0 )
 												if ( ( payload[mess_len - 2] == 0x0d ) && ( payload[mess_len - 1] == 0x0a ) )
-													return 110;
+													return PROTO_ID_GNU;
 										break;
 								}
 								if ( ( payload[mess_len - 2] == 0x0d ) && ( payload[mess_len - 1] == 0x0a ) )
@@ -282,7 +282,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 								/*payload pattern extracted from Blinc signatures paper*/
 								if ( mess_len >= 9 )
 									if ( ( memcmp ( payload + 2, "T hash:", 7 ) == 0 ) || ( memcmp ( payload + 2, "T sha1:", 7 ) == 0 ) )
-										return 103;
+										return PROTO_ID_ARES;
 								if ( mess_len >= 9 )
 									if ( memcmp ( payload + 2, "T.sha1:", 6 ) == 0 )
 										return 129;
@@ -299,7 +299,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 						/*payload pattern extracted from Blinc signatures paper*/
 						if ( mess_len >= 9 )
 							if ( memcmp ( payload + 2, "UTELLA", 6 ) == 0 )
-								return 110;
+								return PROTO_ID_GNU;
 						break;
 					case 0x4f: /* O */
 						if ( mess_len >= 4 )
@@ -315,9 +315,9 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 						if ( memcmp ( payload + 2, "TP/1.1 503 ", 11 ) == 0 )
 						{
 							if ( ( memcmp ( payload + 13, "Que", 3 ) == 0 ) || ( memcmp ( payload + 13, "Ful", 3 ) == 0 ) || ( memcmp ( payload + 13, "Not", 3 ) == 0 ) )
-								return 110;
+								return PROTO_ID_GNU;
 							if ( memcmp ( payload + 13, "Bus", 3 ) == 0 )
-								return 103;
+								return PROTO_ID_ARES;
 						}
 				break;
 			case 0x4d: /* M */
@@ -361,7 +361,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 						/*payload pattern extracted from Blinc signatures paper*/
 						if ( mess_len >= 5 )
 							if ( memcmp ( payload + 2, "SH ", 3 ) == 0 )
-								return 103;
+								return PROTO_ID_ARES;
 						break;
 					case 0x75: /* u */
 						if ( mess_len == 209 || mess_len == 345 || mess_len == 473
@@ -390,7 +390,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 						/*payload pattern extracted from Blinc signatures paper*/
 						if ( mess_len >= 11 )
 							if ( ( memcmp ( payload + 2, "rver: Mor", 9 ) == 0 ) || ( memcmp ( payload + 2, "rver: Lim", 9 ) == 0 ) )
-								return 110;
+								return PROTO_ID_GNU;
 						break;
 				}
 				break;
@@ -399,14 +399,14 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 				if ( mess_len >= 16 )
 					if ( payload[1] == 0x73 )
 						if ( memcmp ( payload + 2, "er-Agent: Lime", 14 ) == 0 )
-							return 110;
+							return PROTO_ID_GNU;
 				break;
 			case 0x56: /* V */
 				/*payload pattern extracted from Blinc signatures paper*/
 				if ( mess_len >= 16 )
 					if ( payload[1] == 0x65 )
 						if ( memcmp ( payload + 2, "ndor-Message: ", 14 ) == 0 )
-							return 110;
+							return PROTO_ID_GNU;
 				break;
 			case 0x58: /* X */
 				/*payload pattern extracted from Blinc signatures paper*/
@@ -416,7 +416,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 						        ( memcmp ( payload + 2, "Ext-", 4 ) == 0 ) || ( memcmp ( payload + 2, "Try-", 4 ) == 0 ) || ( memcmp ( payload + 2, "Degree", 6 ) == 0 ) ||
 						        ( memcmp ( payload + 2, "Lo", 2 ) == 0 ) || ( memcmp ( payload + 2, "Max-", 4 ) == 0 ) || ( memcmp ( payload + 2, "Version", 7 ) == 0 ) ||
 						        ( memcmp ( payload + 2, "Dynami", 6 ) == 0 ) )
-							return 110;
+							return PROTO_ID_GNU;
 				break;
 			case 0x61: /* a */
 				if ( mess_len >= 8 )
@@ -472,14 +472,14 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 								case 0x5a:
 									/* ares connect */
 									if ( mess_len == 6 && payload[5] == 0x05 )
-										return 103;
+										return PROTO_ID_ARES;
 									break;
 								case 0x09:
 									/* ares search, min 3 chars --> 14 bytes
 									 * lets define a search can be up to 30 chars --> max 34 bytes
 									 */
 									if ( mess_len >= 14 && mess_len <= 34 )
-										return 103;
+										return PROTO_ID_ARES;
 									break;
 							}
 						}
@@ -540,7 +540,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 				case 0x42: /* B */
 					if ( mess_len >= 44 )
 						if ( memcmp ( payload + 34, "usy Queued", 10 ) == 0 )
-							return 110;
+							return PROTO_ID_GNU;
 					break;
 			}
 		}
@@ -1645,13 +1645,13 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 				if (isKazaa_all(payload, mess_len))
 					return 107;		//Kazaa 51->107
 				if (isGnu(payload, mess_len))
-					return 110;		//GNU 3 53->110
+					return PROTO_ID_GNU;		//GNU 3 53->110
 				if (isGnu_all(payload, mess_len))
-					return 110;		//GNU 3 53->110
+					return PROTO_ID_GNU;		//GNU 3 53->110
 				if (isSoul(payload, mess_len))
 					return 120;		//Soulseek 5 55->120
 				if (isAres(payload, mess_len))
-					return 103;		//Ares 9  59->103
+					return PROTO_ID_ARES;		//Ares 9  59->103
 				if (isMute(payload, mess_len))
 					return 115;		//Mute 13    63->115
 				if(isNap(payload, mess_len))
@@ -1829,7 +1829,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 					case 0x4e:
 						if ( mess_len >= 11 )
 							if ( payload[2] == 0x44 )
-								return 110;
+								return PROTO_ID_GNU;
 						break;
 				}
 				break;
@@ -1868,10 +1868,10 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 				case 0x47: /* G */
 					if ( mess_len >= 11 )
 						if ( memcmp ( payload + 9, "ND", 2 ) == 0 )
-							return 110;
+							return PROTO_ID_GNU;
 					if ( mess_len >= 18 )
 						if ( memcmp ( payload + 9, "NUTELLA ", 8 ) == 0 )
-							return 110;
+							return PROTO_ID_GNU;
 					break;
 				case 0x64: /* d */
 					if ( mess_len < 10 )
@@ -2000,7 +2000,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 						case 0x01:
 							if ( mess_len == 23 )
 								if ( ( get_u32 ( payload, 18 ) == ntohl ( 0x00000000 ) ) && ( get_u8 ( payload, 22 ) == 0x00 ) )
-									return 110;
+									return PROTO_ID_GNU;
 							break;
 					}
 					break;
@@ -2008,7 +2008,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 				case 0x01:
 					if ( mess_len >= 23 )
 						if ( ( get_u32 ( payload, 17 ) == ntohl ( 0x01001f00 ) ) && ( get_u16 ( payload, 21 ) == ntohs ( 0x0000 ) ) )
-							return 110;
+							return PROTO_ID_GNU;
 					break;
 			}
 		}
@@ -2021,7 +2021,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 				case 0x4c: /* L */
 					if ( mess_len >= 27 )
 						if ( memcmp ( payload + 24, "IME", 3 ) == 0 )
-							return 110;
+							return PROTO_ID_GNU;
 					break;
 			}
 		}
@@ -2775,7 +2775,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 				if (isKazaau(payload, mess_len))
 					return 107;		//kazaa 21     81->107
 				if (isGnuu(payload, mess_len))
-					return 110;		//gnu 23     83->110
+					return PROTO_ID_GNU;		//gnu 23     83->110
 				if (isDcu(payload, mess_len))
 					return 105;		//Dc 27              87->105
 				if(isEarthu(payload, mess_len))
@@ -2855,6 +2855,62 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 	//others
 	return 19;
 
+}
+
+u_short CClassifier::getID(const struct ip *iph, const u_short ipLen, const u_short src_port, const u_short dst_port )
+{
+	unsigned char* payLoad = getPayload(iph);
+	u_short mess_len = getPayloadLen(iph, ipLen);
+	if (isBittorrent(payLoad, mess_len))
+	{
+		return PROTO_ID_BITTORRENT;
+	}
+	
+	if (src_port > 1024 && dst_port > 1024)
+	{
+		return PROTO_ID_UNKNOWN;
+	}
+	
+	switch (src_port)
+	{
+	case IPPORT_FTP:
+		return PROTO_ID_FTP;
+	case IPPORT_FTP_DATA:
+		return PROTO_ID_FTP;
+	case IPPORT_HTTPS:
+		return PROTO_ID_HTTP;
+	case 80:  /* HTTP */
+		return PROTO_ID_HTTP;
+	case IPPORT_SMTP:
+		return PROTO_ID_SMTP;
+	case 465: 
+		return PROTO_ID_SMTP;
+	case IPPORT_POP3:
+		return PROTO_ID_POP3;
+	case 993:
+		return PROTO_ID_POP3;
+	}
+	switch (dst_port)
+	{
+	case IPPORT_FTP:
+		return PROTO_ID_FTP;
+	case IPPORT_FTP_DATA:
+		return PROTO_ID_FTP;
+	case IPPORT_HTTPS:
+		return PROTO_ID_HTTP;
+	case 80:  /* HTTP */
+		return PROTO_ID_HTTP;
+	case IPPORT_SMTP:
+		return PROTO_ID_SMTP;
+	case 465: 
+		return PROTO_ID_SMTP;
+	case IPPORT_POP3:
+		return PROTO_ID_POP3;
+	case 993:
+		return PROTO_ID_POP3;
+	}
+	return PROTO_ID_UNKNOWN;
+	
 }
 
 //Earth

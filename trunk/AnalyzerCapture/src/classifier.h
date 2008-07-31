@@ -696,6 +696,8 @@ public:
 	*/
 	static u_short getID(const struct ip *iph, u_short ipLen);
 
+	static u_short getID(const struct ip *iph, const u_short ipLen, const u_short src_port, const u_short dst_port/*, const struct ip *iph, u_short ipLen*/);
+
 	/*!     \fn u_short verID(u_short old_id, u_short new_id)
 	\brief Check identifier code hierarchy.
 
@@ -1360,7 +1362,7 @@ private:
 
 	static unsigned char* getPayload(const struct ip *iph);
 
-	static unsigned short getPayloadLen(const struct ip *iph, u_short ipLen);
+	static unsigned short getPayloadLen(const struct ip *iph, const u_short ipLen);
 
 };
 extern int STR_MAX_LEN;

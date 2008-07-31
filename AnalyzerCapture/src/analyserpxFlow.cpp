@@ -403,6 +403,8 @@ int CFlowUtil::getDate( const time_t* tloc, string& str)
 		strstream << 0;
 	}
 	strstream << clock->tm_mon + 1;
+	if (clock->tm_year < 110)
+		strstream << 0;
 	strstream << (clock->tm_year -100);
 	str = strstream.str();
 	return 1;

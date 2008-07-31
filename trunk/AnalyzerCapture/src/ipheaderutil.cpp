@@ -43,21 +43,24 @@ ResultEnum CIPHeaderUtil::GetSrcAndDstPort ( const u_char* packet, u_int16_t* sr
 	switch (pIPHeader->ip_p)
 	{
 		case IPPROTO_TCP:
-			*src_port =
-					((struct tcphdr *) (packet + size_ethernet +
-					size_ip))->th_sport;
-			*dst_port =
-					((struct tcphdr *) (packet + size_ethernet +
-					size_ip))->th_dport;
+		{
+			tcphdr* pTcphead = (tcphdr *) (packet + size_ethernet + size_ip);
+			*src_port = 
+					htons(pTcphead->th_sport);
+			*dst_port = 
+					htons(pTcphead->th_dport);
 			break;
+		}
 		case IPPROTO_UDP:
+		{
 			*src_port =
-					((struct udphdr *) (packet + size_ethernet +
+					((udphdr *) (packet + size_ethernet +
 					size_ip))->uh_sport;
 			*dst_port =
-					((struct udphdr *) (packet + size_ethernet +
+					((udphdr *) (packet + size_ethernet +
 					size_ip))->uh_dport;
 			break;
+		}
 		case IPPROTO_ICMP:
 			*src_port = htons(0);
 			*dst_port = htons(0);

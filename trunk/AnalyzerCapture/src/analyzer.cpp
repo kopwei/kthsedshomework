@@ -195,6 +195,8 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
 	u_short ipLength = tempIpLength <= len ? tempIpLength : len;
 	//u_short classifier = 0; //CClassifier::getID ( pIPHeader, ipLength );
 	u_short classifier = CClassifier::getID(pIPHeader, ipLength, src_port, dst_port);
+	if (classifier == PROTO_ID_HTTP)
+		cout << "I received an HTTP packet" << endl ;
 	CPacketDigest packetDigest( header, packet, classifier );
 	rs = s_packetStatistician.AddNewPacketInfo ( &packetDigest );
 	EABASSERT ( rs );

@@ -2861,9 +2861,12 @@ u_short CClassifier::getID(const struct ip *iph, const u_short ipLen, const u_sh
 {
 	unsigned char* payLoad = getPayload(iph);
 	u_short mess_len = getPayloadLen(iph, ipLen);
-	if (isBittorrent(payLoad, mess_len))
+	if (NULL != payLoad) 
 	{
-		return PROTO_ID_BITTORRENT;
+		if (isBittorrent(payLoad, mess_len))
+		{
+			return PROTO_ID_BITTORRENT;
+		}
 	}
 	
 	if (src_port > 1024 && dst_port > 1024)

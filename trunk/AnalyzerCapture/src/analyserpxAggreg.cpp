@@ -52,7 +52,7 @@ void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
 	pthread_mutex_init( &Locks::fileName_lock, NULL);
 	s_pInputParams = pUserInputParams;
 	test_table = HashTableUtil::init_hash_table ( "ANALYSERPX_CAP_TABLE", CFlowUtil::compare_flow, CFlowUtil::flow_key,
-	             CFlowUtil::delete_flow, HASH_SIZE );
+		CFlowUtil::delete_flow, HASH_SIZE );
 }
 
 ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const string& fileName )
@@ -62,7 +62,7 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 	//Sync Table begin
 	//pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 )
-		{}
+	{}
 	;
 	printf ( "Clean \n" );
 
@@ -210,7 +210,7 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 	//Sync Table begin
 	//pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 )
-		{}
+	{}
 	;
 
 	flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
@@ -241,19 +241,19 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 		{
 			++tp->count[4];
 		} /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
-		++tp->count[5];
-		classifier = getID(ip, ipLen);
-	}*/
+		  ++tp->count[5];
+		  classifier = getID(ip, ipLen);
+		  }*/
 	}
 
 	string strEmpty = "";
 	tmp_flow = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, strEmpty, strEmpty, flow->dst_port(), flow->src_port(),
-	                                     ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),
-	                                     flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
+		( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),
+		flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
 	//Sync Table begin
 	//pthread_mutex_lock(&hash_lock);
 	while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 )
-		{}
+	{}
 	;
 	flow_hsh         = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
 	reverse_flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, tmp_flow );
@@ -373,15 +373,15 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 				}
 			}
 		} /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
-		if( ((classifier<=UP_BASE_P2P_CLASS_NUMBER) && (classifier>=DOWN_BASE_P2P_CLASS_NUMBER)) ) {
-		if((reverse_flow_hsh == NULL)) {
-		flow_hsh->class_proto = classifier;
-	} else {
-		reverse_flow_hsh->class_proto = classifier;
-		flow_hsh->class_proto = classifier;
-	}
-	}
-	}*/
+		  if( ((classifier<=UP_BASE_P2P_CLASS_NUMBER) && (classifier>=DOWN_BASE_P2P_CLASS_NUMBER)) ) {
+		  if((reverse_flow_hsh == NULL)) {
+		  flow_hsh->class_proto = classifier;
+		  } else {
+		  reverse_flow_hsh->class_proto = classifier;
+		  flow_hsh->class_proto = classifier;
+		  }
+		  }
+		  }*/
 	}
 
 	pthread_mutex_unlock ( &Locks::hash_lock );
@@ -393,8 +393,8 @@ void CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsi
 * dissect packet
 */
 void CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_pkthdr *header,
-                                       const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port,
-                                       const u_short classifier, ThreadParams *tp )
+									  const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port,
+									  const u_short classifier, ThreadParams *tp )
 {
 
 	//extern int outputThroughput;
@@ -409,12 +409,12 @@ void CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_p
 
 	string strEmpty = "";
 	flow_t* flow = CFlowUtil::createFlow_t ( pIpHeader->ip_p, pIpHeader->ip_p, strEmpty, strEmpty, src_port, dst_port,
-	               ( unsigned int ) ntohs ( pIpHeader->ip_len ), 1,
-	               ( time_t ) ( header->ts.tv_sec ),
-	               ( time_t ) ( header->ts.tv_sec ),
-	               ( time_t ) ( header->ts.tv_usec ),
-	               ( time_t ) ( header->ts.tv_usec ), pIpHeader->ip_src,
-	               pIpHeader->ip_dst );
+		( unsigned int ) ntohs ( pIpHeader->ip_len ), 1,
+		( time_t ) ( header->ts.tv_sec ),
+		( time_t ) ( header->ts.tv_sec ),
+		( time_t ) ( header->ts.tv_usec ),
+		( time_t ) ( header->ts.tv_usec ), pIpHeader->ip_src,
+		pIpHeader->ip_dst );
 
 	tvSec = ( time_t ) ( header->ts.tv_sec );
 	tvUSec = ( time_t ) ( header->ts.tv_usec );
@@ -574,13 +574,13 @@ ResultEnum CAnalyzerAggregator::GetFileName ( const int count)
 {
 	time_t init = 0;
 	time ( &init );
-	
+
 	ResultEnum rs = eOK;
 	// char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
 	//string strDate;
 	string filenameCountStr;
 	CFlowUtil::getDate ( &init,filenameCountStr) ;
-	
+
 	filenameCountStr.append ( "_" );
 	stringstream strCount;
 	strCount << count;

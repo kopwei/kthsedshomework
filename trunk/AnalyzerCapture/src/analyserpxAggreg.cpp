@@ -31,6 +31,7 @@ time_t CAnalyzerAggregator::tvSec;
 time_t CAnalyzerAggregator::tvUSec;
 string CAnalyzerAggregator::s_strFileName;
 CUserInputParams* CAnalyzerAggregator::s_pInputParams;
+std::map<u_short, FlowDigest> CAnalyzerAggregator::s_digestMap;
 
 //int fileAdminTimeOff;
 int filenameCount = 0;
@@ -424,7 +425,7 @@ void CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_p
 	return;
 }
 
-void CAnalyzerAggregator::processNewFlow(const flow_t* f)
+ResultEnum CAnalyzerAggregator::processNewFlow(const flow_t* f)
 {
 	u_short proto = f->class_proto();
 	FlowDigestMap::iterator itor = s_digestMap.find(proto);
@@ -442,7 +443,7 @@ void CAnalyzerAggregator::processNewFlow(const flow_t* f)
 	}	
 }
 
-void CAnalyzerAggregator::printStatistic()
+ResultEnum CAnalyzerAggregator::printStatistic()
 {
 	int totalPacket = 0;
 	int totalVolume = 0;

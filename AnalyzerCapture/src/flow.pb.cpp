@@ -9,11 +9,13 @@
 namespace {
 
 const ::google::protobuf::Descriptor* flow_t_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  flow_t_reflection_ = NULL;
 
 }  // namespace
 
 
-void proto_BuildDescriptors_flow_2eproto() {
+void protobuf_BuildDesc_flow_2eproto() {
   static bool already_here = false;
   if (already_here) return;
   already_here = true;
@@ -30,6 +32,15 @@ void proto_BuildDescriptors_flow_2eproto() {
     "end_sec\030\013 \002(\r\022\017\n\007end_mic\030\014 \002(\r\022\016\n\006src_ip"
     "\030\r \002(\r\022\016\n\006dst_ip\030\016 \002(\r", 262);
   flow_t_descriptor_ = file->message_type(0);
+  flow_t_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      flow_t_descriptor_,
+      &flow_t::default_instance(),
+      flow_t::_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(flow_t, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(flow_t, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     flow_t_descriptor_, &flow_t::default_instance());
 }
@@ -37,7 +48,7 @@ void proto_BuildDescriptors_flow_2eproto() {
 // Force BuildDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_flow_2eproto {
   StaticDescriptorInitializer_flow_2eproto() {
-    proto_BuildDescriptors_flow_2eproto();
+    protobuf_BuildDesc_flow_2eproto();
   }
 } static_descriptor_initializer_flow_2eproto_;
 
@@ -78,10 +89,7 @@ const int flow_t::_offsets_[14] = {
 };
 
 flow_t::flow_t()
-  : _reflection_(descriptor(),
-                 this, &default_instance_,
-                 _offsets_, _has_bits_, NULL),
-    _cached_size_(0),
+  : _cached_size_(0),
     proto_(0u),
     class_proto_(0u),
     src_if_(const_cast< ::std::string*>(&_default_src_if_)),
@@ -102,10 +110,7 @@ flow_t::flow_t()
 }
 
 flow_t::flow_t(const flow_t& from)
-  : _reflection_(descriptor(),
-                 this, &default_instance_,
-                 _offsets_, _has_bits_, NULL),
-    _cached_size_(0),
+  : _cached_size_(0),
     proto_(0u),
     class_proto_(0u),
     src_if_(const_cast< ::std::string*>(&_default_src_if_)),
@@ -136,7 +141,7 @@ flow_t::~flow_t() {
 }
 
 const ::google::protobuf::Descriptor* flow_t::descriptor() {
-  if (flow_t_descriptor_ == NULL) proto_BuildDescriptors_flow_2eproto();
+  if (flow_t_descriptor_ == NULL) protobuf_BuildDesc_flow_2eproto();
   return flow_t_descriptor_;
 }
 
@@ -148,11 +153,7 @@ const ::google::protobuf::Descriptor* flow_t::GetDescriptor() const {
   return descriptor();
 }
 
-const ::google::protobuf::Message::Reflection*
-flow_t::GetReflection() const {
-  return &_reflection_;
-}
-
-::google::protobuf::Message::Reflection* flow_t::GetReflection() {
-  return &_reflection_;
+const ::google::protobuf::Reflection* flow_t::GetReflection() const {
+  if (flow_t_reflection_ == NULL) protobuf_BuildDesc_flow_2eproto();
+  return flow_t_reflection_;
 }

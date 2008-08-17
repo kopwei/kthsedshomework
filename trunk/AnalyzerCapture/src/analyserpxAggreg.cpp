@@ -424,6 +424,47 @@ void CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_p
 	return;
 }
 
+void CAnalyzerAggregator::processNewFlow(const flow_t* f)
+{
+	u_short proto = f->class_proto();
+	FlowDigestMap::iterator itor = s_digestMap.find(proto);
+	if (s_digestMap.end() != itor)
+	{
+		itor->second.packetNumber += f->n_frames();
+		itor->second.volume += f->n_bytes();
+	}
+	else
+	{
+		FlowDigest* pDigest = new FlowDigest();
+		pDigest->packetNumber = f->n_frames();
+		pDigest->volume = f->n_bytes();
+		s_digestMap.insert(pair<u_short, FlowDigest>(proto, *pDigest));
+	}	
+}
+
+void CAnalyzerAggregator::printStatistic()
+{
+	int totalPacket = 0;
+	int totalVolume = 0;
+	FlowDigestMap::const_iterator const_itor;
+	for (const_itor = s_digestMap.begin(); const_itor != s_digestMap.end(); ++const_itor)
+	{
+		totalPacket += const_itor->second.packetNumber;
+		totalVolume += const_itor->second.volume;
+	}
+	cout << "Totally there are " << totalPacket << " frames" << endl;
+	cout << "Totally there are " << totalVolume << " bytes" << endl;
+	for (const_itor = s_digestMap.begin(); const_itor != s_digestMap.end(); ++const_itor)
+	{
+		float packetPercent = (float)(const_itor->second.packetNumber) / (float)totalPacket * 100;
+		float volumePercent = (float)(const_itor->second.volume) / (float)totalVolume * 100;
+		cout << const_itor->first << " : packet " << const_itor->second.packetNumber << "  " <<packetPercent << "% " 
+			<< " : volume " << const_itor->second.volume << "  " << volumePercent << "%" << endl;
+	}
+}
+
+
+
 //void printHash(char *fileName)
 void CAnalyzerAggregator::printHash()
 {
@@ -454,12 +495,15 @@ void CAnalyzerAggregator::printHash()
 	{
 		//	fprintf(stdout,"Estamos aqui 1\n");
 		*(collection.add_flow()) = *flow_hsh;
+		processNewFlow(flow_hsh);
 		//CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
 	}
 	CFlowUtil::printFlowCollectionToFile(&collection, s_strFileName);
+	printStatistic();
 	//free ( filenameCountStr );
 	//free ( data );
 	HashTableUtil::clear_hash_table ( test_table );
+	s_digestMap.clear();
 }
 
 

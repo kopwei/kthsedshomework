@@ -7,6 +7,7 @@
 
 #include "analyserpxTypes.h"
 #include "resultenum.h"
+#include <map>
 
 /*!     \file analyserpxAggreg.h
 \brief Aggregation module header files.
@@ -22,6 +23,12 @@ Define the procedures and variables used in the Analyser-PX's Aggregation Module
 class CUserInputParams;
 class flow_t;
 struct hash_tab;
+
+struct FlowDigest
+{
+	unsigned int packetNumber;
+	unsigned int volume;
+};
 
 class CAnalyzerAggregator
 {
@@ -128,13 +135,9 @@ class CAnalyzerAggregator
 		static time_t tvUSec;
 
 		
-		struct FlowDigest
-		{
-			unsigned int packetNumber;
-			unsigned int volume;
-		};
 		
-		typedef map<u_short, FlowDigest> FlowDigestMap;
+		
+		typedef std::map<u_short, FlowDigest> FlowDigestMap;
 
 		static FlowDigestMap s_digestMap;
 

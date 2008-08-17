@@ -5,16 +5,18 @@
 #include <google/protobuf/io/coded_stream.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format_inl.h>
-void proto_BuildDescriptors_flow_2eproto();
+void protobuf_BuildDesc_flow_2eproto();
 
 namespace {
 
 const ::google::protobuf::Descriptor* flow_collection_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  flow_collection_reflection_ = NULL;
 
 }  // namespace
 
 
-void proto_BuildDescriptors_flowcollection_2eproto() {
+void protobuf_BuildDesc_flowcollection_2eproto() {
   static bool already_here = false;
   if (already_here) return;
   already_here = true;
@@ -22,11 +24,20 @@ void proto_BuildDescriptors_flowcollection_2eproto() {
   ::google::protobuf::DescriptorPool* pool =
     ::google::protobuf::DescriptorPool::internal_generated_pool();
 
-  ::proto_BuildDescriptors_flow_2eproto();
+  ::protobuf_BuildDesc_flow_2eproto();
   const ::google::protobuf::FileDescriptor* file = pool->InternalBuildGeneratedFile(
     "\n\024flowcollection.proto\032\nflow.proto\"(\n\017fl"
     "ow_collection\022\025\n\004flow\030\001 \003(\0132\007.flow_t", 76);
   flow_collection_descriptor_ = file->message_type(0);
+  flow_collection_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      flow_collection_descriptor_,
+      &flow_collection::default_instance(),
+      flow_collection::_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(flow_collection, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(flow_collection, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     flow_collection_descriptor_, &flow_collection::default_instance());
 }
@@ -34,7 +45,7 @@ void proto_BuildDescriptors_flowcollection_2eproto() {
 // Force BuildDescriptors() to be called at static initialization time.
 struct StaticDescriptorInitializer_flowcollection_2eproto {
   StaticDescriptorInitializer_flowcollection_2eproto() {
-    proto_BuildDescriptors_flowcollection_2eproto();
+    protobuf_BuildDesc_flowcollection_2eproto();
   }
 } static_descriptor_initializer_flowcollection_2eproto_;
 
@@ -49,20 +60,14 @@ const int flow_collection::_offsets_[1] = {
 };
 
 flow_collection::flow_collection()
-  : _reflection_(descriptor(),
-                 this, &default_instance_,
-                 _offsets_, _has_bits_, NULL),
-    _cached_size_(0) {
+  : _cached_size_(0) {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   if (this == &default_instance_) {
   }
 }
 
 flow_collection::flow_collection(const flow_collection& from)
-  : _reflection_(descriptor(),
-                 this, &default_instance_,
-                 _offsets_, _has_bits_, NULL),
-    _cached_size_(0) {
+  : _cached_size_(0) {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   MergeFrom(from);
 }
@@ -73,7 +78,7 @@ flow_collection::~flow_collection() {
 }
 
 const ::google::protobuf::Descriptor* flow_collection::descriptor() {
-  if (flow_collection_descriptor_ == NULL) proto_BuildDescriptors_flowcollection_2eproto();
+  if (flow_collection_descriptor_ == NULL) protobuf_BuildDesc_flowcollection_2eproto();
   return flow_collection_descriptor_;
 }
 
@@ -85,11 +90,7 @@ const ::google::protobuf::Descriptor* flow_collection::GetDescriptor() const {
   return descriptor();
 }
 
-const ::google::protobuf::Message::Reflection*
-flow_collection::GetReflection() const {
-  return &_reflection_;
-}
-
-::google::protobuf::Message::Reflection* flow_collection::GetReflection() {
-  return &_reflection_;
+const ::google::protobuf::Reflection* flow_collection::GetReflection() const {
+  if (flow_collection_reflection_ == NULL) protobuf_BuildDesc_flowcollection_2eproto();
+  return flow_collection_reflection_;
 }

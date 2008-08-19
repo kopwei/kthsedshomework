@@ -30,6 +30,8 @@
 #include <iostream>
 #include <time.h>
 
+#include <fstream>
+
 using namespace std;
 
 
@@ -39,10 +41,15 @@ using namespace std;
 StatisticMap CPacketStatistician::s_mapSubscriberStat;
 //CResultRecorder CPacketStatistician::s_resultRecorder; 
 time_t	CPacketStatistician::s_recordingTime;
+int		CPacketStatistician::s_packetLengthDist[MAXSIZE];
 
 CPacketStatistician::CPacketStatistician ( void )
 {
 	time(&s_recordingTime);
+	for(int i = 0 ; i < MAXSIZE; i++)
+	{
+		s_packetLengthDist[i] = 0;
+	}
 }
 
 CPacketStatistician::~CPacketStatistician ( void )
@@ -56,7 +63,9 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 	rs = AddPacketToMap(pPacketDigest);
 	EABASSERT ( rs );
 	//s_mapSubscriberStat.insert
-
+	int size = pPacketDigest->getPacketSize();
+	if (size >= 0 && size < MAXSIZE)
+		++(s_packetLengthDist[size]);
 	m_totalPacketStatistic.AddPacketInfo ( pPacketDigest );
 }
 
@@ -72,6 +81,10 @@ void CPacketStatistician::PrintStatisticResult()
 	{
 		itor->second.PrintSummary();
 	}
+	
+	
+	// Only for testing
+	RecordStatisticResult(NULL);
 	
 }
 
@@ -159,5 +172,11 @@ ResultEnum CPacketStatistician::RecordStatisticResult( const CUserInputParams* p
 {
 	ResultEnum rs = eNotImplemented;
 	// TODO: Need implementation here 
+	char* fileName = "packetLength";
+	ofstream ostream(fileName);
+	for (int i = 0; i < MAXSIZE; i++)
+	{
+		ostream << s_packetLengthDist[i] << " ";
+	}
 	return rs;
 }

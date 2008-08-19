@@ -32,6 +32,8 @@ typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
 
 struct in_addr;
 
+const int MAXSIZE = 1501;
+
 using namespace std;
 //////////////////////////////////////////////////////////////////////////
 /**
@@ -75,6 +77,8 @@ private:
 	
 	//static CResultRecorder		s_resultRecorder;
 	static time_t			s_recordingTime;
+	
+	static int				s_packetLengthDist[MAXSIZE];
 };
 
 #endif

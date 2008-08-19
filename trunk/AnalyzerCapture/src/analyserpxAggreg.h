@@ -56,7 +56,7 @@ class CAnalyzerAggregator
 			\param *header 	header of a dumped packet in the file
 			\param *packet	an arrived packet
 		 */
-		static void mount_flow ( unsigned short ipLen, const struct pcap_pkthdr *header,
+		static flow_t* mount_flow ( unsigned short ipLen, const struct pcap_pkthdr *header,
 		                         const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port, const u_short classifier, ThreadParams *tpp );
 		
 		
@@ -82,7 +82,7 @@ class CAnalyzerAggregator
 
 		
 
-		static void addFlowSync ( flow_t * flow, const struct ip *ip, unsigned short ipLen, u_short classifier, ThreadParams *tp );
+		static flow_t* addFlowSync ( flow_t * flow, const struct ip *ip, unsigned short ipLen, u_short classifier, ThreadParams *tp );
 
 
 

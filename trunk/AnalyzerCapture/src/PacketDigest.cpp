@@ -19,18 +19,19 @@
 
 #include "PacketDigest.h"
 #include "netinet/ip.h"
-
+#include "flow.pb.h"
 //const int ETHER_HDR_LEN = 14;
 
-CPacketDigest::CPacketDigest ( const pcap_pkthdr* header, const u_char* packet, u_short classifier )
+CPacketDigest::CPacketDigest ( const pcap_pkthdr* header, const u_char* packet, flow_t* flow )
 {
-	m_timeStamp = header->ts.tv_usec + header->ts.tv_sec * ( 1e6 );
-	m_sPacketSize = header->len;
-	ip* pIpHeader = ( ip * ) ( packet + ETHER_HDR_LEN );
-	m_srcIPAddr = pIpHeader->ip_src;
-	m_destIPAddr = pIpHeader->ip_dst;
-	m_sProtocol = pIpHeader->ip_p;
-	m_sClass = classifier;
+    m_timeStamp = header->ts.tv_usec + header->ts.tv_sec * ( 1e6 );
+    m_sPacketSize = header->len;
+    ip* pIpHeader = ( ip * ) ( packet + ETHER_HDR_LEN );
+    m_srcIPAddr = pIpHeader->ip_src;
+    m_destIPAddr = pIpHeader->ip_dst;
+    m_sProtocol = pIpHeader->ip_p;
+    m_pFlow = flow;
+    //m_sClass = classifier;
 
 }
 
@@ -43,7 +44,7 @@ CPacketDigest::~CPacketDigest ( void )
  */
 const time_t CPacketDigest::getTimeStamp() const
 {
-	return m_timeStamp;
+    return m_timeStamp;
 }
 
 /**
@@ -51,25 +52,29 @@ const time_t CPacketDigest::getTimeStamp() const
  */
 in_addr CPacketDigest::getSrcAddress() const
 {
-	return m_srcIPAddr;
+    return m_srcIPAddr;
 }
 
 in_addr CPacketDigest::getDestAddress() const
 {
-	return m_destIPAddr;
+    return m_destIPAddr;
 }
 
 unsigned int CPacketDigest::getPacketSize() const
 {
-	return m_sPacketSize;
+    return m_sPacketSize;
 }
 
 unsigned short CPacketDigest::getProtocol() const
 {
-	return m_sProtocol;
+    return m_sProtocol;
 }
 
 unsigned short CPacketDigest::getProtocolClassification() const
 {
-	return m_sClass;
+    if (NULL != m_pFlow)
+        return m_pFlow->class_proto();
+    else
+		return 0;		
+
 }

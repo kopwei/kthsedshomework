@@ -173,6 +173,7 @@ void * CAnalyzer::threadsLoop ( void *par )
 	}
 	printf ( "Packets not classified : %d \n", tmp );
 	pthread_mutex_unlock ( &Locks::print_lock );
+	s_packetStatistician.PrintStatisticResult();
 	free ( head );
 	//free(pkt);
 }
@@ -195,11 +196,13 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
 	u_short ipLength = tempIpLength <= len ? tempIpLength : len;
 	u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
 	//u_short classifier = CClassifier::getID(pIPHeader, ipLength, src_port, dst_port);
-	CPacketDigest packetDigest( header, packet, classifier );
+	
+	// Process the flows
+	flow_t* pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
+	
+	CPacketDigest packetDigest( header, packet, pflow );
 	rs = s_packetStatistician.AddNewPacketInfo ( &packetDigest );
 	EABASSERT ( rs );
-	// Process the flows
-	CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
 	return rs;
 }
 

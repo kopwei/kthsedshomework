@@ -58,7 +58,7 @@ class CAnalyzer
 
 		static void *threadsLoop ( void *par );
 
-		ResultEnum processNewPacket ( unsigned char *args, const struct pcap_pkthdr *header, const u_char *packet, ThreadParams *tp );
+		static ResultEnum processNewPacket ( unsigned char *args, const struct pcap_pkthdr *header, const u_char *packet, ThreadParams *tp );
 
 		/*!     \fn void task_ctrl_C(int i)
 		\brief CTRL+C Interpreter function.

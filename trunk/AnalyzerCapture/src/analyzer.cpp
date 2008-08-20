@@ -137,11 +137,7 @@ void * CAnalyzer::threadsLoop ( void *par )
 		;
 		res = pcap_next_ex ( pCapConfig->descr, &header, &packet );
 		if ( res >= 0 )
-		{
-			if ()
-			{
-			}
-			
+		{			
 			
 			header->ts.tv_sec;
 			ip = ( struct ip * ) ( packet + ETHER_HDR_LEN );

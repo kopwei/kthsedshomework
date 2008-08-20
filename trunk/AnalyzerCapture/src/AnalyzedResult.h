@@ -20,6 +20,9 @@
 #pragma once
 
 #include "resultenum.h"
+#include "time.h"
+
+class CPacketDigest;
 
 class CAnalyzedResult
 {

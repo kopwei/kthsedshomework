@@ -33,7 +33,7 @@ public:
 	static pthread_mutex_t packetMap_lock;
 	static pthread_mutex_t fileName_lock;
 	static pthread_mutex_t storing_lock;
-	static pthread_mutex_t packetLength_lock;
+	static pthread_mutex_t time_lock;
 };
 
 #endif

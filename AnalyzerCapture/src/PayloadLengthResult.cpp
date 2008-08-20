@@ -66,7 +66,7 @@ ResultEnum CPayloadLengthResult::PrintResult()
 	return rs;
 }
 
-ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(const unsigned int* pArray)
+ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned int* pArray)
 {
 	if (NULL == pArray)
 	{
@@ -75,54 +75,52 @@ ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(const unsigned int* pAr
 	stringstream strstream;
 	
 	// Year
-	if (m_startTime.tm_year < 110)
-		strstream << 0;
-	strstream << (m_startTime.tm_year + 100);
+	strstream << (m_endTime.tm_year + 1900);
 	// Month
-	if (m_startTime.tm_mon + 1 < 9)
+	if (m_endTime.tm_mon + 1 < 9)
 	{
 		strstream << 0;
 	}
-	strstream << m_startTime.tm_mon + 1;
+	strstream << m_endTime.tm_mon + 1;
 	// Day
-	if (m_startTime.tm_mday < 9)
+	if (m_endTime.tm_mday < 9)
 	{
 		strstream << 0;
 	}
-	strstream << m_startTime.tm_mday;
+	strstream << m_endTime.tm_mday;
 	// Hour
-	if (m_startTime.tm_hour < 10)
+	if (m_endTime.tm_hour < 10)
 	{
 		strstream << 0;
-		if (m_startTime.tm_hour = 0)
+		if (m_endTime.tm_hour = 0)
 		{
-			strstream << 0:
+			strstream << 0;
 		}
 		else 
 		{
-			strstream << m_startTime.tm_hour;
+			strstream << m_endTime.tm_hour;
 		}
 	}
 	else 
 	{
-		strstream << m_startTime.tm_hour;
+		strstream << m_endTime.tm_hour;
 	}
 	// Minute
-	if (m_startTime.tm_min < 10)
+	if (m_endTime.tm_min < 10)
 	{
 		strstream << 0;
-		if (m_startTime.tm_min = 0)
+		if (m_endTime.tm_min = 0)
 		{
-			strstream << 0:
+			strstream << 0;
 		}
 		else 
 		{
-			strstream << m_startTime.tm_min;
+			strstream << m_endTime.tm_min;
 		}
 	}
 	else 
 	{
-		strstream << m_startTime.tm_min;
+		strstream << m_endTime.tm_min;
 	}
 	string datestr = strstream.str();
 	// Only for testing
@@ -131,8 +129,11 @@ ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(const unsigned int* pAr
 	for (int i = 0; i < PAYLOAD_MAXSIZE; i++)
 	{
 		ofile << pArray[i] << "   ";
+		pArray[i] = 0;
 	}
 	ofile << endl;
+	
+	
 
 	return eOK;
 }

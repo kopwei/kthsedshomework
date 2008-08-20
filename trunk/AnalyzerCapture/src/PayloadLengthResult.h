@@ -33,9 +33,13 @@ public:
 
 	ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest);
 
-	ResultEnum PrintResult() const;
+	ResultEnum PrintResult();
 
 private:
+	
+	ResultEnum PrintPacketLengthToFile(const unsigned int* pArray);
+	
 	unsigned int m_packetLength[PAYLOAD_MAXSIZE];
-
+	unsigned int m_tempPacketLength[PAYLOAD_MAXSIZE];
+	unsigned int* m_pCurrentArray;
 };

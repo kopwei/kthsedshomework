@@ -69,18 +69,19 @@ void CPacketStatistician::SetInputParams(CUserInputParams* pParams)
 	m_pInputParams = pParams;
 }
 
-void CPacketStatistician::PrintStatisticResult()
+void CPacketStatistician::PrintStatisticResult(const tm* t)
 {
-	cout << "I received " << m_totalPacketStatistic.packetnumber() << " Packets" << endl;
-	cout << "The total volume number is " << m_totalPacketStatistic.trafficvolume() << " Bytes" << endl;
+//	cout << "I received " << m_totalPacketStatistic.packetnumber() << " Packets" << endl;
+//	cout << "The total volume number is " << m_totalPacketStatistic.trafficvolume() << " Bytes" << endl;
 	
-	cout << "Totally there are " << m_mapSubscriberStat.size() << " number of subscribers" << endl;
+//	cout << "Totally there are " << m_mapSubscriberStat.size() << " number of subscribers" << endl;
 	
-	map<unsigned int, CSubscriberStatistic>::iterator itor = m_mapSubscriberStat.begin();
-	for( ; itor != m_mapSubscriberStat.end(); ++itor )
-	{
-		itor->second.PrintSummary();
-	}
+//	map<unsigned int, CSubscriberStatistic>::iterator itor = m_mapSubscriberStat.begin();
+//	for( ; itor != m_mapSubscriberStat.end(); ++itor )
+//	{
+//		itor->second.PrintSummary();
+//	}
+	m_payloadLengthResult.setEndTime(*t);
 	m_payloadLengthResult.PrintResult();
 	
 	// Only for testing

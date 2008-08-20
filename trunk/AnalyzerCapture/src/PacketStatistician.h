@@ -34,6 +34,7 @@ typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
 using namespace std;
 
 class CUserInputParams;
+struct tm;
 
 //////////////////////////////////////////////////////////////////////////
 /**
@@ -54,7 +55,7 @@ public:
 	
 	static void*		PacketStatisticTimeOut(void* pArg);
 	
-	void				PrintStatisticResult();
+	void				PrintStatisticResult(const tm* t);
 
 	//StatisticMap		GetStatisticMap() const {return s_mapSubscriberStat;}
 

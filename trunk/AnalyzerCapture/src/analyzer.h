@@ -69,7 +69,7 @@ class CAnalyzer
 		 */
 		static void task_ctrl_C ( int i );
 
-		static bool NeedStoreResult(const pcap_pkthdr* header, const time_t& t);
+		static bool NeedStoreResult(const pcap_pkthdr* header, const tm* t);
 
 		static ResultEnum RecordStatus(const tm* t);
 		

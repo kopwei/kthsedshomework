@@ -251,24 +251,26 @@ void CAnalyzer::task_ctrl_C ( int i )
 	CAnalyzerAggregator::printHash();
 	printf ( " <- Interrupt received.\nProgram will exit now!\n" );
 
-	s_packetStatistician.PrintStatisticResult();
+	//s_packetStatistician.PrintStatisticResult();
 
 	/*free(filenameCountStr);
 	free(data);*/
 	exit ( 0 );
 }
 
-bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const time_t& t )
+bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )
 {
 	//TODO: need implementation here
 
+	
 	return false;
 }
 
 ResultEnum CAnalyzer::RecordStatus(const tm* t)
 {
 	// TODO:
-	return eNotImplemented;
+	s_packetStatistician.PrintStatisticResult(t);
+	return eOK;
 }
 
 

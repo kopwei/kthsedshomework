@@ -43,6 +43,9 @@ bool CAnalyzer::tFlag = true;
 CUserInputParams* CAnalyzer::s_pUserInputParams = NULL;
 
 CPacketStatistician CAnalyzer::s_packetStatistician;
+bool CAnalyzer::s_bIsFirstTime = true;
+bool CAnalyzer::s_bIsStoring = false;
+tm*  CAnalyzer::s_refTime;
 
 int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 {
@@ -58,6 +61,8 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 	
 	/* interrupt routine to Ctrl-C */
 	signal ( SIGINT, task_ctrl_C );
+	time_t t = 0;
+	s_refTime = localtime(&t);
 	
 	
 	pthread_mutex_init ( &Locks::cap_lock , NULL ) ;
@@ -125,8 +130,7 @@ void * CAnalyzer::threadsLoop ( void *par )
 	struct pcap_pkthdr *head = ( pcap_pkthdr* ) malloc ( sizeof ( const struct pcap_pkthdr ) );
 	const u_char       *pkt = ( unsigned char* ) malloc ( pCapConfig->snap_len + 2 );
 
-	time_t t = 0;
-	tm* refTime = localtime(&t);
+	
 
 	int res;
 	do
@@ -138,8 +142,29 @@ void * CAnalyzer::threadsLoop ( void *par )
 		res = pcap_next_ex ( pCapConfig->descr, &header, &packet );
 		if ( res >= 0 )
 		{			
+			// If the result storing is needed, we set the flag of storing to true
+			if (NeedStoreResult(header, s_refTime) && !s_bIsStoring)
+			{
+				if (0 == pthread_mutex_trylock(&Locks::storing_lock))
+				{
+					s_bIsStoring = true;
+					s_refTime = localtime(&(header->ts.tv_sec));
+					
+					if (s_bIsFirstTime)
+					{
+						s_bIsFirstTime = false;
+					}
+					else
+					{
+						tm t = *s_refTime;
+						RecordStatus(&t);
+					}					
+					s_bIsStoring = false;
+					pthread_mutex_unlock(&Locks::storing_lock);
+				}								
+			}
 			
-			header->ts.tv_sec;
+			// Start to analyze
 			ip = ( struct ip * ) ( packet + ETHER_HDR_LEN );
 			sizetmp = ntohs ( ip->ip_len );
 			if ( sizetmp <= ( pCapConfig->snap_len - ETHER_HDR_LEN ) )
@@ -177,7 +202,7 @@ void * CAnalyzer::threadsLoop ( void *par )
 	}
 	printf ( "Packets not classified : %d \n", tmp );
 	pthread_mutex_unlock ( &Locks::print_lock );
-	s_packetStatistician.PrintStatisticResult();
+	//s_packetStatistician.PrintStatisticResult();
 	free ( head );
 	//free(pkt);
 }
@@ -238,6 +263,12 @@ bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const time_t& t )
 	//TODO: need implementation here
 
 	return false;
+}
+
+ResultEnum CAnalyzer::RecordStatus(const tm* t)
+{
+	// TODO:
+	return eNotImplemented;
 }
 
 

@@ -22,6 +22,7 @@
 #include "analyserpxFlow.h"
 #include <sstream>
 #include <string>
+#include <fstream>
 
 
 using namespace std;
@@ -67,21 +68,71 @@ ResultEnum CPayloadLengthResult::PrintResult()
 
 ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(const unsigned int* pArray)
 {
-	stringstream strstream;
-	if (m_startTime.tm_mday < 9)
+	if (NULL == pArray)
 	{
-		strstream << 0;
+		return eEmptyPointer;
 	}
-	strstream << m_startTime.tm_mday;
+	stringstream strstream;
+	
+	// Year
+	if (m_startTime.tm_year < 110)
+		strstream << 0;
+	strstream << (m_startTime.tm_year + 100);
+	// Month
 	if (m_startTime.tm_mon + 1 < 9)
 	{
 		strstream << 0;
 	}
 	strstream << m_startTime.tm_mon + 1;
-	if (m_startTime.tm_year < 110)
+	// Day
+	if (m_startTime.tm_mday < 9)
+	{
 		strstream << 0;
-	strstream << (m_startTime.tm_year -100);
-
+	}
+	strstream << m_startTime.tm_mday;
+	// Hour
+	if (m_startTime.tm_hour < 10)
+	{
+		strstream << 0;
+		if (m_startTime.tm_hour = 0)
+		{
+			strstream << 0:
+		}
+		else 
+		{
+			strstream << m_startTime.tm_hour;
+		}
+	}
+	else 
+	{
+		strstream << m_startTime.tm_hour;
+	}
+	// Minute
+	if (m_startTime.tm_min < 10)
+	{
+		strstream << 0;
+		if (m_startTime.tm_min = 0)
+		{
+			strstream << 0:
+		}
+		else 
+		{
+			strstream << m_startTime.tm_min;
+		}
+	}
+	else 
+	{
+		strstream << m_startTime.tm_min;
+	}
 	string datestr = strstream.str();
-	return eNotImplemented;
+	// Only for testing
+	ofstream ofile ( "payloadlength", ios::binary | ios::app );
+	ofile << datestr << "  ";
+	for (int i = 0; i < PAYLOAD_MAXSIZE; i++)
+	{
+		ofile << pArray[i] << "   ";
+	}
+	ofile << endl;
+
+	return eOK;
 }

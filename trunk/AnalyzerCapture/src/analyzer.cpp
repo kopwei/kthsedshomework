@@ -261,14 +261,14 @@ void CAnalyzer::task_ctrl_C ( int i )
 bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )
 {
 	//TODO: need implementation here
-
-	
-	return false;
+	tm* time = localtime(&(header->ts.tv_sec));
+	return (time->tm_min != t->tm_min)
 }
 
 ResultEnum CAnalyzer::RecordStatus(const tm* t)
 {
 	// TODO:
+	//s_refTime
 	s_packetStatistician.PrintStatisticResult(t);
 	return eOK;
 }

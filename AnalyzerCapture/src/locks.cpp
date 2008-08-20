@@ -29,3 +29,5 @@ pthread_mutex_t Locks::packetMap_lock;
 pthread_mutex_t Locks::fileName_lock;
 
 pthread_mutex_t Locks::storing_lock;
+
+pthread_mutex_t Locks::packetLength_lock;

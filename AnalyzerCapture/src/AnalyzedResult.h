@@ -20,9 +20,10 @@
 #pragma once
 
 #include "resultenum.h"
-#include "time.h"
+#include <time.h>
 
 class CPacketDigest;
+//struct tm;
 
 class CAnalyzedResult
 {
@@ -32,10 +33,17 @@ public:
 
 	virtual ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest) = 0;
 
-	virtual ResultEnum PrintResult() const = 0;
+	virtual ResultEnum PrintResult() = 0;
+	
+	void 		setStartTime(const tm& t) {m_startTime = t;}
+	void 		setEndTime(const tm& t) {m_endTime = t;}
 
 protected:
-	time_t		m_startTime;
-	time_t		m_endTime;			
+	tm			m_startTime;
+	tm			m_endTime;			
+	
+private:
+	CAnalyzedResult(const CAnalyzedResult&)	;
+	const CAnalyzedResult& operator = (const CAnalyzedResult&);
 
 };

@@ -25,16 +25,16 @@
 #include "analyserpxAggreg.h"
 #include "PacketStatistic.h"
 #include "SubscriberStatistic.h"
+#include "PayloadLengthResult.h"
 #include "resultrecorder.h"
 #include "resultenum.h"
 
 typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
 
-struct in_addr;
-
-const int MAXSIZE = 1501;
-
 using namespace std;
+
+class CUserInputParams;
+
 //////////////////////////////////////////////////////////////////////////
 /**
  *	This class is a class used for analyzing the packets
@@ -58,6 +58,8 @@ public:
 
 	//StatisticMap		GetStatisticMap() const {return s_mapSubscriberStat;}
 
+	void				SetInputParams(CUserInputParams* pParams);
+
 private:
 	
 	/**
@@ -68,17 +70,24 @@ private:
 	/**
 	 *	This method is used to record current info 
 	 */
-	static ResultEnum	RecordStatisticResult(const CUserInputParams* pParams);
+	//static ResultEnum	RecordStatisticResult(const CUserInputParams* pParams);
 	
+	/*
+	 *	Avoid bitwise copy
+	 */
+	CPacketStatistician(const CPacketStatistician&);
+	CPacketStatistician& operator = (const CPacketStatistician&);
 
 
 	CPacketStatistic		m_totalPacketStatistic;
-	static StatisticMap		s_mapSubscriberStat;
+	StatisticMap			m_mapSubscriberStat;
 	
 	//static CResultRecorder		s_resultRecorder;
-	static time_t			s_recordingTime;
+	//static time_t			s_recordingTime;
 	
-	static int				s_packetLengthDist[MAXSIZE];
+	CPayloadLengthResult	m_payloadLengthResult;
+
+	CUserInputParams*		m_pInputParams;
 };
 
 #endif

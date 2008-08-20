@@ -41,22 +41,20 @@ public:
     ~CPacketDigest ( void );
 
     const time_t		getTimeStamp() const;
-    in_addr			getSrcAddress() const;
-    in_addr			getDestAddress() const;
+    in_addr				getSrcAddress() const;
+    in_addr				getDestAddress() const;
     unsigned int		getPacketSize() const;
     unsigned short		getProtocol() const;
     unsigned short		getProtocolClassification() const;
 
 private:
-    time_t			m_timeStamp;		// Time
-    in_addr			m_srcIPAddr;		// Source IP Address
-    in_addr			m_destIPAddr;		// Destination IP Address
+    time_t				m_timeStamp;		// Time
+    in_addr				m_srcIPAddr;		// Source IP Address
+    in_addr				m_destIPAddr;		// Destination IP Address
     unsigned int		m_sPacketSize;		// Packet size
     unsigned short		m_sProtocol;		// Protocol
     //unsigned short		m_sClass;		// Protocol classification
-    flow_t*			m_pFlow;		// Flow which the packet belongs to
-    
-
+    flow_t*				m_pFlow;			// Flow which the packet belongs to
 };
 
 #endif

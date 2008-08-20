@@ -24,6 +24,7 @@
 #include "ipheaderutil.h"
 #include "resultrecorder.h"
 #include "analyzer.h"
+#include "userinputparams.h"
 
 #include <netinet/in.h>
 #include <pthread.h>
@@ -38,18 +39,14 @@ using namespace std;
 /*
  * Re-definition
  */ 
-StatisticMap CPacketStatistician::s_mapSubscriberStat;
+//StatisticMap CPacketStatistician::m_mapSubscriberStat;
 //CResultRecorder CPacketStatistician::s_resultRecorder; 
-time_t	CPacketStatistician::s_recordingTime;
-int		CPacketStatistician::s_packetLengthDist[MAXSIZE];
+//time_t	CPacketStatistician::s_recordingTime;
+//CPayloadLengthResult		CPacketStatistician::s_payloadLengthResult;
 
 CPacketStatistician::CPacketStatistician ( void )
 {
-	time(&s_recordingTime);
-	for(int i = 0 ; i < MAXSIZE; i++)
-	{
-		s_packetLengthDist[i] = 0;
-	}
+	//time(&s_recordingTime);
 }
 
 CPacketStatistician::~CPacketStatistician ( void )
@@ -62,11 +59,14 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 	ResultEnum rs = eOK;
 	rs = AddPacketToMap(pPacketDigest);
 	EABASSERT ( rs );
-	//s_mapSubscriberStat.insert
-	int size = pPacketDigest->getPacketSize();
-	if (size >= 0 && size < MAXSIZE)
-		++(s_packetLengthDist[size]);
+	//m_mapSubscriberStat.insert
+	m_payloadLengthResult.AddNewPacketInfo(pPacketDigest);
 	m_totalPacketStatistic.AddPacketInfo ( pPacketDigest );
+}
+
+void CPacketStatistician::SetInputParams(CUserInputParams* pParams)
+{
+	m_pInputParams = pParams;
 }
 
 void CPacketStatistician::PrintStatisticResult()
@@ -74,17 +74,17 @@ void CPacketStatistician::PrintStatisticResult()
 	cout << "I received " << m_totalPacketStatistic.packetnumber() << " Packets" << endl;
 	cout << "The total volume number is " << m_totalPacketStatistic.trafficvolume() << " Bytes" << endl;
 	
-	cout << "Totally there are " << s_mapSubscriberStat.size() << " number of subscribers" << endl;
+	cout << "Totally there are " << m_mapSubscriberStat.size() << " number of subscribers" << endl;
 	
-	map<unsigned int, CSubscriberStatistic>::iterator itor = s_mapSubscriberStat.begin();
-	for( ; itor != s_mapSubscriberStat.end(); ++itor )
+	map<unsigned int, CSubscriberStatistic>::iterator itor = m_mapSubscriberStat.begin();
+	for( ; itor != m_mapSubscriberStat.end(); ++itor )
 	{
 		itor->second.PrintSummary();
 	}
-	
+	m_payloadLengthResult.PrintResult();
 	
 	// Only for testing
-	RecordStatisticResult(NULL);
+	//RecordStatisticResult(NULL);
 	
 }
 
@@ -96,8 +96,8 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 	int src_key = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
 
 	// First try to find if there is a match
-	map<unsigned int, CSubscriberStatistic>::iterator itor = s_mapSubscriberStat.find ( src_key );
-	bool bSrcFound = s_mapSubscriberStat.end() != itor ? true : false;
+	map<unsigned int, CSubscriberStatistic>::iterator itor = m_mapSubscriberStat.find ( src_key );
+	bool bSrcFound = m_mapSubscriberStat.end() != itor ? true : false;
 
 	// Lock the map and add specific values;
 	while ( pthread_mutex_trylock ( &Locks::packetMap_lock ) != 0 )
@@ -113,7 +113,7 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 		CSubscriberStatistic pSubscriber( src_key );
 		pSubscriber.AddNewPacket ( pPacketDigest );
 		EABASSERT ( rs );
-		s_mapSubscriberStat.insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, pSubscriber ) );
+		m_mapSubscriberStat.insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, pSubscriber ) );
 	}
 	pthread_mutex_unlock ( &Locks::packetMap_lock );
 
@@ -121,8 +121,8 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 	in_addr dstAddr = pPacketDigest->getDestAddress();
 	unsigned int dst_key = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
 
-	itor = s_mapSubscriberStat.find ( dst_key );
-	if ( s_mapSubscriberStat.end() != itor )
+	itor = m_mapSubscriberStat.find ( dst_key );
+	if ( m_mapSubscriberStat.end() != itor )
 	{
 		// Lock the map and add specific values;
 		while ( pthread_mutex_trylock ( &Locks::packetMap_lock ) != 0 )
@@ -141,42 +141,42 @@ ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDig
 
 void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 {
-	// TODO: Need implementation here
-	CUserInputParams* pParams = (CUserInputParams *)(pArg);
-	EABASSERT(NULL != pParams); ON_ERROR_RETURN(NULL == pParams, NULL);
-	//CResultRecorder recorder;
-	// TODO: Here we have to sleep for a certain amount of time and then start to
-	// record something
-	while (CAnalyzer::tFlag)
-	{
-		sleep(30);
-		pthread_mutex_lock ( &Locks::packetMap_lock );
-		CResultRecorder recorder(s_mapSubscriberStat);
-		s_mapSubscriberStat.clear();
-		pthread_mutex_unlock ( &Locks::packetMap_lock );
-		
-		time_t currentTime;
-		time(&currentTime);
-		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);				
-		ResultEnum rs = recorder.RecordTimeOutResult(&parameter);
-		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);		
-		s_recordingTime = currentTime;
-	}
-
-
-
+//	// TODO: Need implementation here
+//	CUserInputParams* pParams = (CUserInputParams *)(pArg);
+//	EABASSERT(NULL != pParams); ON_ERROR_RETURN(NULL == pParams, NULL);
+//	//CResultRecorder recorder;
+//	// TODO: Here we have to sleep for a certain amount of time and then start to
+//	// record something
+//	while (CAnalyzer::tFlag)
+//	{
+//		sleep(30);
+//		pthread_mutex_lock ( &Locks::packetMap_lock );
+//		CResultRecorder recorder(m_mapSubscriberStat);
+//		m_mapSubscriberStat.clear();
+//		pthread_mutex_unlock ( &Locks::packetMap_lock );
+//		
+//		time_t currentTime;
+//		time(&currentTime);
+//		RecordParameter parameter(eRecordToDatabase, s_recordingTime, currentTime);				
+//		ResultEnum rs = recorder.RecordTimeOutResult(&parameter);
+//		EABASSERT(eOK == rs); ON_ERROR_RETURN(eOK != rs, NULL);		
+//		s_recordingTime = currentTime;
+//	}
+//
+//
+//
 	return NULL;
 }
 
-ResultEnum CPacketStatistician::RecordStatisticResult( const CUserInputParams* pParams )
-{
-	ResultEnum rs = eNotImplemented;
-	// TODO: Need implementation here 
-	char* fileName = "packetLength";
-	ofstream ostream(fileName);
-	for (int i = 0; i < MAXSIZE; i++)
-	{
-		ostream << s_packetLengthDist[i] << " ";
-	}
-	return rs;
-}
+//ResultEnum CPacketStatistician::RecordStatisticResult( const CUserInputParams* pParams )
+//{
+//	ResultEnum rs = eNotImplemented;
+//	//// TODO: Need implementation here 
+//	//char* fileName = "packetLength";
+//	//ofstream ostream(fileName);
+//	//for (int i = 0; i < MAXSIZE; i++)
+//	//{
+//	//	ostream << s_packetLengthDist[i] << " ";
+//	//}
+//	return rs;
+//}

@@ -25,6 +25,7 @@
 
 struct pcap_pkthdr;
 class CUserInputParams;
+struct tm;
 
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
@@ -70,12 +71,17 @@ class CAnalyzer
 
 		static bool NeedStoreResult(const pcap_pkthdr* header, const time_t& t);
 
-		static ResultEnum RecordStatus();
+		static ResultEnum RecordStatus(const tm* t);
 		
 		static CUserInputParams* s_pUserInputParams;
 		
 		static CPacketStatistician		s_packetStatistician;
-		
+
+		static bool s_bIsStoring;
+
+		static bool s_bIsFirstTime;
+
+		static tm*  s_refTime;
 };
 
 #endif

@@ -42,8 +42,7 @@ using namespace std;
 bool CAnalyzer::tFlag = true;
 CUserInputParams* CAnalyzer::s_pUserInputParams = NULL;
 
-CAnalyzer analyzer;
-CPacketStatistician s_packetStatistician;
+CPacketStatistician CAnalyzer::s_packetStatistician;
 
 int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 {
@@ -126,6 +125,9 @@ void * CAnalyzer::threadsLoop ( void *par )
 	struct pcap_pkthdr *head = ( pcap_pkthdr* ) malloc ( sizeof ( const struct pcap_pkthdr ) );
 	const u_char       *pkt = ( unsigned char* ) malloc ( pCapConfig->snap_len + 2 );
 
+	time_t t = 0;
+	tm* refTime = localtime(&t);
+
 	int res;
 	do
 	{
@@ -136,6 +138,12 @@ void * CAnalyzer::threadsLoop ( void *par )
 		res = pcap_next_ex ( pCapConfig->descr, &header, &packet );
 		if ( res >= 0 )
 		{
+			if ()
+			{
+			}
+			
+			
+			header->ts.tv_sec;
 			ip = ( struct ip * ) ( packet + ETHER_HDR_LEN );
 			sizetmp = ntohs ( ip->ip_len );
 			if ( sizetmp <= ( pCapConfig->snap_len - ETHER_HDR_LEN ) )
@@ -150,7 +158,7 @@ void * CAnalyzer::threadsLoop ( void *par )
 			memcpy ( ( void* ) pkt, ( void* ) packet, size + ETHER_HDR_LEN );
 
 			pthread_mutex_unlock ( &Locks::cap_lock );
-			analyzer.processNewPacket ( ( u_char * ) & ( pCapConfig->snap_len ), head, pkt, tp );
+			processNewPacket ( ( u_char * ) & ( pCapConfig->snap_len ), head, pkt, tp );
 			//mount_flow( (u_char *) & (tp->conf->snap_len), head, pkt, tp );
 			++tp->counttotal;
 		}
@@ -227,6 +235,13 @@ void CAnalyzer::task_ctrl_C ( int i )
 	/*free(filenameCountStr);
 	free(data);*/
 	exit ( 0 );
+}
+
+bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const time_t& t )
+{
+	//TODO: need implementation here
+
+	return false;
 }
 
 

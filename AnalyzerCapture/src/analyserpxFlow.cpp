@@ -58,7 +58,7 @@ void CFlowUtil::delete_flow ( void *data )
 {
 	if ( !data )
 		return;
-	free ( data );
+	FREE_OBJECT(data);
 }
 
 flow_t* CFlowUtil::createFlow_t ( const unsigned char proto, const unsigned char class_proto, 

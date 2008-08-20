@@ -23,6 +23,7 @@
 #include "PacketStatistician.h"
 #include "analyserpxAggreg.h"
 
+struct pcap_pkthdr;
 class CUserInputParams;
 
 /**
@@ -66,11 +67,15 @@ class CAnalyzer
 		\param i	Interrupt signal.
 		 */
 		static void task_ctrl_C ( int i );
+
+		static bool NeedStoreResult(const pcap_pkthdr* header, const time_t& t);
+
+		static ResultEnum RecordStatus();
 		
 		static CUserInputParams* s_pUserInputParams;
 		
+		static CPacketStatistician		s_packetStatistician;
 		
-
 };
 
 #endif

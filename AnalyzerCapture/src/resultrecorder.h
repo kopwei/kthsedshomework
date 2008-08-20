@@ -79,6 +79,8 @@ public:
 	CResultRecorder(const StatisticMap& statMap);
 
     ~CResultRecorder();
+
+	ResultEnum RecordPacketLength();
 	
 	ResultEnum RecordTimeOutResult(const RecordParameter* pParam);
 

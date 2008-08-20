@@ -18,6 +18,7 @@
  */
 
 #include "PayloadLengthResult.h"
+#include "PacketDigest.h"
 
 CPayloadLengthResult::CPayloadLengthResult(void)
 {

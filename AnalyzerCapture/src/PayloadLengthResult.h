@@ -19,7 +19,8 @@
 
 
 #pragma once
-#include "analyzedresult.h"
+
+#include "AnalyzedResult.h"
 
 const int PAYLOAD_MAXSIZE = 1501;
 

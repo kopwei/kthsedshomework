@@ -37,7 +37,7 @@ public:
 
 private:
 	
-	ResultEnum PrintPacketLengthToFile(const unsigned int* pArray);
+	ResultEnum PrintPacketLengthToFile(unsigned int* pArray);
 	
 	unsigned int m_packetLength[PAYLOAD_MAXSIZE];
 	unsigned int m_tempPacketLength[PAYLOAD_MAXSIZE];

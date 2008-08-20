@@ -22,10 +22,10 @@
 
 #include "PacketStatistician.h"
 #include "analyserpxAggreg.h"
+//#include <y>
 
 struct pcap_pkthdr;
 class CUserInputParams;
-struct tm;
 
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
@@ -81,7 +81,7 @@ class CAnalyzer
 
 		static bool s_bIsFirstTime;
 
-		static tm*  s_refTime;
+		static tm  s_refTime;
 };
 
 #endif

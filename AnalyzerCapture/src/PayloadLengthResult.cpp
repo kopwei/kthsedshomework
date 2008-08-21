@@ -20,8 +20,8 @@
 #include "PayloadLengthResult.h"
 #include "PacketDigest.h"
 #include "analyserpxFlow.h"
-#include <sstream>
-#include <string>
+#include "CommonUtil.h"
+#include <iostream>
 #include <fstream>
 
 
@@ -72,65 +72,73 @@ ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned int* pArray)
 	{
 		return eEmptyPointer;
 	}
-	stringstream strstream;
+	string strZero = CommonUtil::itoa(0, 10);
 	
 	// Year
-	strstream << (m_endTime.tm_year + 1900);
+	string year = CommonUtil::itoa(m_endTime.tm_year + 1900, 10);
 	// Month
+	string month;
 	if (m_endTime.tm_mon + 1 < 9)
 	{
-		strstream << 0;
+		month.append(strZero);
 	}
-	strstream << m_endTime.tm_mon + 1;
+	month.append(CommonUtil::itoa(m_endTime.tm_mon + 1, 10));
 	// Day
+	string day;
 	if (m_endTime.tm_mday < 9)
 	{
-		strstream << 0;
+		day.append(strZero);
 	}
-	strstream << m_endTime.tm_mday;
+	day.append(CommonUtil::itoa(m_endTime.tm_mday, 10));
 	// Hour
+	string hour;
 	if (m_endTime.tm_hour < 10)
 	{
-		strstream << 0;
+		hour.append(strZero);
 		if (m_endTime.tm_hour = 0)
 		{
-			strstream << 0;
+			hour.append(strZero);
 		}
 		else 
 		{
-			strstream << m_endTime.tm_hour;
+			hour.append(CommonUtil::itoa(m_endTime.tm_hour, 10));
 		}
 	}
 	else 
 	{
-		strstream << m_endTime.tm_hour;
+		hour.append(CommonUtil::itoa(m_endTime.tm_hour, 10));
 	}
 	// Minute
+	string minute;
 	if (m_endTime.tm_min < 10)
 	{
-		strstream << 0;
+		minute.append(strZero);
 		if (m_endTime.tm_min = 0)
 		{
-			strstream << 0;
+			minute.append(strZero);;
 		}
 		else 
 		{
-			strstream << m_endTime.tm_min;
+			minute.append(CommonUtil::itoa(m_endTime.tm_min, 10));
 		}
 	}
 	else 
 	{
-		strstream << m_endTime.tm_min;
+		minute.append(CommonUtil::itoa(m_endTime.tm_min, 10));
 	}
-	string datestr = strstream.str();
+	string datestr = year + month + day + hour + minute;
+	//cout << "date is " << datestr << endl;
 	// Only for testing
 	ofstream ofile ( "payloadlength", ios::binary | ios::app );
-	ofile << datestr << "  ";
+	string indent = "  ";
+	ofile << datestr << indent;
+	//cout << "date printed ..."<<endl;
 	for (int i = 0; i < PAYLOAD_MAXSIZE; i++)
 	{
-		ofile << pArray[i] << "   ";
+		ofile << pArray[i] << indent;
 		pArray[i] = 0;
 	}
+	//cout << "finish print" << endl;
 	ofile << endl;
 	
 	

@@ -21,7 +21,7 @@
 #include <pcap.h>
 #include <signal.h>		//ctrl+c routine
 #include <iostream>
-#include <sstream>
+
 
 #include "analyzer.h"
 #include "locks.h"
@@ -32,12 +32,16 @@
 #include "userinputparams.h"
 #include "macro.h"
 #include "PacketDigest.h"
+#include "CommonUtil.h"
 
 using namespace std;
 
 //extern int flow_export;
 //extern int fileAdminTimeOff;
 //extern int slotsOffline;
+
+
+	
 
 
 bool CAnalyzer::tFlag = true;
@@ -94,27 +98,34 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
         strFileName.append("_0");
     }
     int analyserpxError;
-    for (int i = 1; i < 15; i++)
+    for (int j = 4; j < 15; j++)
     {
-        stringstream strstream;
-        //strstream >> pParam->GetReadingFileName();
-        strstream << i;
-		string intstr = strstream.str();
+		string intstr = CommonUtil::itoa(j, 10);
+		//cout << "number string ready: " << intstr << endl;
+		//cin >> c ;
 		string namebase = pParam->GetReadingFileName();
-		namebase.append(intstr);
+		//cout << "name base ready "<< namebase << endl;
+		//cin >> c;
+		namebase.append(intstr);	
+		//cout << "Name ready " << namebase << endl;
+		//cin >> c; 
 		analyserpxError = CCaptureUtil::initiate_capture ( pParam->GetCaptureConfig(), pParam->isOnlineMode(), namebase );
         if ( analyserpxError == 0 )
         {
+			
             for ( int i = 0; i < pParam->GetThreadNumber(); ++i )
             {
                 pthread_create ( &workerthreads[i], NULL, threadsLoop, &tps[i] );
+				//cout << "thread " << i << "created" <<endl;
             }
             for ( int i = 0; i < pParam->GetThreadNumber(); ++i )
             {
                 pthread_join ( workerthreads[i],NULL );
+				//cout << "thread " << i << "terminated" <<endl;
             }
         }
-		cout << i << " round finished " <<  endl;
+		
+		cout <<"File "<< namebase << " processing finished " <<  endl;
     }
     tFlag = false;
     //    printHash(fileName);
@@ -129,10 +140,11 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 
 void * CAnalyzer::threadsLoop ( void *par )
 {
+	
     ThreadParams       *tp = ( ThreadParams* ) par;
     struct pcap_pkthdr *header;
     const u_char       *packet;
-    const struct ip *ip;	/* IP header */
+    const struct ip *ip;	// IP header 
 	int size;
     int sizetmp;
     long long count = 0;
@@ -144,15 +156,19 @@ void * CAnalyzer::threadsLoop ( void *par )
 
 
     int res;
+	
     do
     {
+		
         //pthread_mutex_lock(&cap_lock);
         while ( pthread_mutex_trylock ( &Locks::cap_lock ) != 0 )
             {}
         ;
         res = pcap_next_ex ( pCapConfig->descr, &header, &packet );
+		
         if ( res >= 0 )
         {
+			
             if (s_bIsFirstTime)
             {
                 if (0 == pthread_mutex_trylock(&Locks::time_lock))
@@ -163,18 +179,23 @@ void * CAnalyzer::threadsLoop ( void *par )
                 }
             }
             // If the result storing is needed, we set the flag of storing to true
-            if (NeedStoreResult(header, &s_refTime) && !s_bIsStoring)
+			tm refTime = s_refTime;
+			if (NeedStoreResult(header, &refTime) && !s_bIsStoring)
             {
-                if (0 == pthread_mutex_trylock(&Locks::storing_lock))
+               if (0 == pthread_mutex_trylock(&Locks::storing_lock))
                 {
+					
                     s_bIsStoring = true;
                     s_refTime = *(localtime(&(header->ts.tv_sec)));
                     tm t = s_refTime;
+					//cout << "entered to record"<< endl;
                     RecordStatus(&t);
                     s_bIsStoring = false;
-                    pthread_mutex_unlock(&Locks::storing_lock);
+				   
+                    pthread_mutex_unlock(&Locks::storing_lock);				   
                 }
             }
+			
 
             // Start to analyze
             ip = ( struct ip * ) ( packet + ETHER_HDR_LEN );
@@ -200,9 +221,11 @@ void * CAnalyzer::threadsLoop ( void *par )
             pthread_mutex_unlock ( &Locks::cap_lock );
         }
 
-
+		
+		
     }
     while ( res >= 0 );
+	
 //	pthread_mutex_lock ( &Locks::print_lock );
 //	printf ( "Packets count : %d \n", tp->counttotal );
 //	long long tmp = tp->counttotal;
@@ -218,6 +241,8 @@ void * CAnalyzer::threadsLoop ( void *par )
     //s_packetStatistician.PrintStatisticResult(localtime(&(header->ts.tv_sec)));
     free ( head );
     //free(pkt);
+	
+
 }
 
 ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_pkthdr *header, const u_char *packet,
@@ -236,11 +261,13 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
     u_short tempIpLength = * ( ( u_short* ) arg ) - ETHER_HDR_LEN;
     u_short len = ntohs ( pIPHeader->ip_len );
     u_short ipLength = tempIpLength <= len ? tempIpLength : len;
-    u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
+	u_short classifier = 0;
+    //u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
     //u_short classifier = CClassifier::getID(pIPHeader, ipLength, src_port, dst_port);
 
     // Process the flows
-    flow_t* pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
+	flow_t* pflow = NULL;
+    //pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
 
     CPacketDigest packetDigest( header, packet, pflow );
     rs = s_packetStatistician.AddNewPacketInfo ( &packetDigest );

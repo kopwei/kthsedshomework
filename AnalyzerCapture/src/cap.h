@@ -70,7 +70,7 @@ public:
 	static void delete_cap_config(void *data);
 
 
-	static int initiate_capture(cap_config * c, const bool onlineCapMode, const string offLineFile);
+	static int initiate_capture(cap_config * c, const bool onlineCapMode, const string& offLineFile);
 
 };
 #endif

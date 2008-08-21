@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -81,8 +82,13 @@ int CCaptureUtil::start_capture(pcap_handler func, u_char * arg, cap_config * c,
 }
 
 /* Add 22/05 - Rafael */
-int CCaptureUtil::initiate_capture(cap_config * c, const bool onlineCapMode, const string offLineFile)
+int CCaptureUtil::initiate_capture(cap_config * c, const bool onlineCapMode, const string& offLineFile)
 {
+	if (NULL == c)
+	{
+		cout << "empty configure pointer" << endl;
+		return -1;
+	}
 	char* err = const_cast<char *>(c->errbuf.c_str());
     pcap_lookupnet(c->dev.c_str(), &(c->netp), &(c->maskp), err);
     if (onlineCapMode) {

@@ -129,7 +129,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
     }
     tFlag = false;
     //    printHash(fileName);
-    //CAnalyzerAggregator::printHash();   
+    CAnalyzerAggregator::printHash();   
     if ( pParam->isOnlineMode() )
     {
         pthread_exit ( ( void* ) CAnalyzerAggregator::verifyHashTimeOut );
@@ -261,8 +261,8 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
     u_short tempIpLength = * ( ( u_short* ) arg ) - ETHER_HDR_LEN;
     u_short len = ntohs ( pIPHeader->ip_len );
     u_short ipLength = tempIpLength <= len ? tempIpLength : len;
-	u_short classifier = 0;
-    //u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
+	//u_short classifier = 0;
+    u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
     //u_short classifier = CClassifier::getID(pIPHeader, ipLength, src_port, dst_port);
 
     // Process the flows

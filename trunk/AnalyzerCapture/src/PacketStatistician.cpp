@@ -18,7 +18,7 @@
  */
 
 #include "PacketStatistician.h"
-#include "PacketDigest.h"
+
 //#include "locks.h"
 #include "macro.h"
 #include "ipheaderutil.h"

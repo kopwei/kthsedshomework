@@ -21,7 +21,7 @@
 #define TRAFFICANALYZEDRESULT_H
 
 #include "AnalyzedResult.h"
-
+#include "SubscriberStatistic.h"
 #include <map>
 
 using namespace std;
@@ -72,7 +72,7 @@ private:
 	};
 
 
-	ResultEnum			PrintInfoToFile(const TrafficCounter* pCounter);
+	ResultEnum			PrintInfoToFile(TrafficCounter* pCounter);
 
 	TrafficCounter m_traffic_counter;
 	TrafficCounter m_temp_traffic_counter;

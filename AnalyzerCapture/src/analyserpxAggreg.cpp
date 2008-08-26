@@ -31,7 +31,7 @@ time_t CAnalyzerAggregator::tvSec;
 time_t CAnalyzerAggregator::tvUSec;
 string CAnalyzerAggregator::s_strFileName;
 CUserInputParams* CAnalyzerAggregator::s_pInputParams;
-//CTrafficAnalyzedResult CAnalyzerAggregator::trafficResult;
+CTrafficAnalyzedResult CAnalyzerAggregator::trafficResult;
 std::map<u_short, FlowDigest> CAnalyzerAggregator::s_digestMap;
 
 //int fileAdminTimeOff;
@@ -643,6 +643,11 @@ ResultEnum CAnalyzerAggregator::GetFileName ( const int count)
     //snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
     //free ( data );
     return rs;
+}
+
+ResultEnum CAnalyzerAggregator::PrintTrafficResult( const tm* t )
+{
+
 }
 
 /*void *verifyHashTimeOut(void *par)

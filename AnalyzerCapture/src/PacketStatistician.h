@@ -29,7 +29,6 @@
 #include "resultrecorder.h"
 #include "resultenum.h"
 
-typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
 
 using namespace std;
 
@@ -59,15 +58,10 @@ public:
 
 	//StatisticMap		GetStatisticMap() const {return s_mapSubscriberStat;}
 
-	void				SetInputParams(CUserInputParams* pParams);
+	//void				SetInputParams(CUserInputParams* pParams);
 
 private:
 	
-	/**
-	 *	This method is used to store the information of new packet
-	 */
-	ResultEnum			AddPacketToMap(const CPacketDigest* pPacketDigest);
-
 	/**
 	 *	This method is used to record current info 
 	 */
@@ -80,13 +74,15 @@ private:
 	CPacketStatistician& operator = (const CPacketStatistician&);
 
 
-	CPacketStatistic		m_totalPacketStatistic;
-	StatisticMap			m_mapSubscriberStat;
+//	CPacketStatistic		m_totalPacketStatistic;
+//	StatisticMap			m_mapSubscriberStat;
 	
 	//static CResultRecorder		s_resultRecorder;
 	//static time_t			s_recordingTime;
 	
 	CPayloadLengthResult	m_payloadLengthResult;
+
+	CTrafficAnalyzedResult  m_trafficResult;
 
 	CUserInputParams*		m_pInputParams;
 };

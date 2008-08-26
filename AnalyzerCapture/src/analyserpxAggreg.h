@@ -138,7 +138,7 @@ class CAnalyzerAggregator
 		static time_t tvUSec;
 
 		
-		//static CTrafficAnalyzedResult trafficResult;
+		static CTrafficAnalyzedResult trafficResult;
 		
 		typedef std::map<u_short, FlowDigest> FlowDigestMap;
 

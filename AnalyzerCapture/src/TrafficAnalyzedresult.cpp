@@ -18,9 +18,13 @@
  */
 #include "TrafficAnalyzedresult.h"
 #include "locks.h"
-#include "SubscriberStatistic.h"
+
 #include "ipheaderutil.h"
+#include "PacketDigest.h"
+#include "macro.h"
+
 #include <netinet/in.h>
+#include <fstream>
 
 
 CTrafficAnalyzedResult::CTrafficAnalyzedResult()
@@ -110,7 +114,7 @@ bool CTrafficAnalyzedResult::IsSubscriber( const int ip_addr ) const
 	return true;
 }
 
-ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( const TrafficCounter* pCounter )
+ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( TrafficCounter* pCounter )
 {
 	string datestr = GetTimeStr(false);
 	ofstream ofile ( "traffic.ret", ios::binary | ios::app );

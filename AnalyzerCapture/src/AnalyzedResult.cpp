@@ -18,6 +18,7 @@
  */
 
 #include "AnalyzedResult.h"
+#include "CommonUtil.h"
 
 CAnalyzedResult::CAnalyzedResult(void)
 {

@@ -26,6 +26,8 @@
 class CPacketDigest;
 //struct tm;
 
+using namespace std;
+
 class CAnalyzedResult
 {
 public:
@@ -41,7 +43,7 @@ public:
 
 protected:
 
-	const string GetTimeStr(const bool bIsStart);
+	const 	std::string GetTimeStr(const bool bIsStart);
 
 	tm			m_startTime;
 	tm			m_endTime;			

@@ -31,6 +31,7 @@ time_t CAnalyzerAggregator::tvSec;
 time_t CAnalyzerAggregator::tvUSec;
 string CAnalyzerAggregator::s_strFileName;
 CUserInputParams* CAnalyzerAggregator::s_pInputParams;
+//CTrafficAnalyzedResult CAnalyzerAggregator::trafficResult;
 std::map<u_short, FlowDigest> CAnalyzerAggregator::s_digestMap;
 
 //int fileAdminTimeOff;

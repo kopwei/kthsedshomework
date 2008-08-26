@@ -7,6 +7,7 @@
 
 #include "analyserpxTypes.h"
 #include "resultenum.h"
+#include "TrafficAnalyzedresult.h"
 #include <map>
 
 /*!     \file analyserpxAggreg.h
@@ -72,6 +73,8 @@ class CAnalyzerAggregator
 		static void printHash();
 		
 		static void initVariables(CUserInputParams* pUserInputParams);
+		
+		static ResultEnum PrintTrafficResult(const tm* t);
 
 
 
@@ -135,7 +138,7 @@ class CAnalyzerAggregator
 		static time_t tvUSec;
 
 		
-		
+		//static CTrafficAnalyzedResult trafficResult;
 		
 		typedef std::map<u_short, FlowDigest> FlowDigestMap;
 

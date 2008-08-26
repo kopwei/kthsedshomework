@@ -72,64 +72,10 @@ ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned int* pArray)
 	{
 		return eEmptyPointer;
 	}
-	string strZero = CommonUtil::itoa(0, 10);
-	
-	// Year
-	string year = CommonUtil::itoa(m_endTime.tm_year + 1900, 10);
-	// Month
-	string month;
-	if (m_endTime.tm_mon + 1 < 9)
-	{
-		month.append(strZero);
-	}
-	month.append(CommonUtil::itoa(m_endTime.tm_mon + 1, 10));
-	// Day
-	string day;
-	if (m_endTime.tm_mday < 9)
-	{
-		day.append(strZero);
-	}
-	day.append(CommonUtil::itoa(m_endTime.tm_mday, 10));
-	// Hour
-	string hour;
-	if (m_endTime.tm_hour < 10)
-	{
-		hour.append(strZero);
-		if (m_endTime.tm_hour = 0)
-		{
-			hour.append(strZero);
-		}
-		else 
-		{
-			hour.append(CommonUtil::itoa(m_endTime.tm_hour, 10));
-		}
-	}
-	else 
-	{
-		hour.append(CommonUtil::itoa(m_endTime.tm_hour, 10));
-	}
-	// Minute
-	string minute;
-	if (m_endTime.tm_min < 10)
-	{
-		minute.append(strZero);
-		if (m_endTime.tm_min = 0)
-		{
-			minute.append(strZero);;
-		}
-		else 
-		{
-			minute.append(CommonUtil::itoa(m_endTime.tm_min, 10));
-		}
-	}
-	else 
-	{
-		minute.append(CommonUtil::itoa(m_endTime.tm_min, 10));
-	}
-	string datestr = year + month + day + hour + minute;
+	string datestr = GetTimeStr(false);
 	//cout << "date is " << datestr << endl;
 	// Only for testing
-	ofstream ofile ( "payloadlength", ios::binary | ios::app );
+	ofstream ofile ( "payloadlength.ret", ios::binary | ios::app );
 	string indent = "  ";
 	ofile << datestr << indent;
 	//cout << "date printed ..."<<endl;

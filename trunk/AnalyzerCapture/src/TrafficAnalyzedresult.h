@@ -22,17 +22,62 @@
 
 #include "AnalyzedResult.h"
 
+#include <map>
+
+using namespace std;
+
+typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
+
+
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
 class CTrafficAnalyzedResult : public CAnalyzedResult
 {
+
+	
+
 public:
     CTrafficAnalyzedResult();
 
     ~CTrafficAnalyzedResult();
+
+	ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest);
+
+	ResultEnum PrintResult();
 	
 	
+private:
+
+	/**
+	 *	This method is used to store the information of new packet
+	 */
+	ResultEnum			AddPacketToMap(const CPacketDigest* pPacketDigest);
+
+	bool				IsSubscriber(const int ip_addr) const;
+
+	
+
+	CPacketStatistic		m_totalPacketStatistic;
+	StatisticMap			m_mapSubscriberStat;
+
+	struct TrafficCounter
+	{
+		TrafficCounter(void) : frame_number(0), volume(0), user_number(0){}
+		
+		void clear() {frame_number = 0; volume = 0; user_number = 0;}
+		unsigned long long frame_number;
+		unsigned long long volume;
+		unsigned int user_number;
+	};
+
+
+	ResultEnum			PrintInfoToFile(const TrafficCounter* pCounter);
+
+	TrafficCounter m_traffic_counter;
+	TrafficCounter m_temp_traffic_counter;
+	
+	TrafficCounter* m_pCounter;
 
 };
 

@@ -17,15 +17,108 @@
  *   Copyright (C) 2008 by Ericsson AB
  */
 #include "TrafficAnalyzedresult.h"
+#include "locks.h"
+#include "SubscriberStatistic.h"
+#include "ipheaderutil.h"
+#include <netinet/in.h>
+
 
 CTrafficAnalyzedResult::CTrafficAnalyzedResult()
  : CAnalyzedResult()
 {
+	m_pCounter = &m_traffic_counter;
 }
 
 
 CTrafficAnalyzedResult::~CTrafficAnalyzedResult()
 {
+}
+
+ResultEnum CTrafficAnalyzedResult::PrintResult()
+{
+	if (&m_traffic_counter == m_pCounter)
+	{
+		m_pCounter = &m_temp_traffic_counter;
+		PrintInfoToFile(&m_traffic_counter);
+	}
+	else
+	{
+		m_pCounter = &m_traffic_counter;
+		PrintInfoToFile(&m_temp_traffic_counter);
+	}
+}
+
+ResultEnum CTrafficAnalyzedResult::AddPacketToMap( const CPacketDigest* pPacketDigest )
+{
+	ResultEnum rs = eOK;
+	++m_pCounter->frame_number;
+	m_pCounter->volume += pPacketDigest->getPacketSize();
+	// Create a new subscriber
+	in_addr srcAddr = pPacketDigest->getSrcAddress();
+	int src_key = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
+
+	// First try to find if there is a match
+	StatisticMap::iterator itor = m_mapSubscriberStat.find ( src_key );
+	bool bSrcFound = m_mapSubscriberStat.end() != itor ? true : false;
+
+	// Lock the map and add specific values;
+	pthread_mutex_lock ( &Locks::packetMap_lock );
+	if ( bSrcFound )
+	{
+		rs = ( itor->second ).AddNewPacket ( pPacketDigest );
+		EABASSERT ( rs ); //ON_ERROR_RETURN()
+	}
+	else
+	{
+		CSubscriberStatistic pSubscriber( src_key );
+		pSubscriber.AddNewPacket ( pPacketDigest );
+		EABASSERT ( rs );
+		m_mapSubscriberStat.insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, pSubscriber ) );
+		if (IsSubscriber(src_key))
+		{
+			++m_pCounter->user_number;
+		}		
+	}
+	pthread_mutex_unlock ( &Locks::packetMap_lock );
+
+	// Try to find if there is a destination match
+	in_addr dstAddr = pPacketDigest->getDestAddress();
+	unsigned int dst_key = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
+
+	itor = m_mapSubscriberStat.find ( dst_key );
+	if ( m_mapSubscriberStat.end() != itor )
+	{
+		// Lock the map and add specific values;
+		pthread_mutex_lock ( &Locks::packetMap_lock );
+		rs = ( itor->second ).AddNewPacket ( pPacketDigest );
+		EABASSERT ( rs ); //ON_ERROR_RETURN()
+		pthread_mutex_unlock ( &Locks::packetMap_lock );
+	}
+	return rs;
+}
+
+ResultEnum CTrafficAnalyzedResult::AddNewPacketInfo( const CPacketDigest* pDigest )
+{
+	ResultEnum rs = AddPacketToMap(pDigest);
+	rs = m_totalPacketStatistic.AddPacketInfo(pDigest);
+	return rs;
+}
+
+bool CTrafficAnalyzedResult::IsSubscriber( const int ip_addr ) const
+{
+	// TODO: Need implementation here
+	return true;
+}
+
+ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( const TrafficCounter* pCounter )
+{
+	string datestr = GetTimeStr(false);
+	ofstream ofile ( "traffic.ret", ios::binary | ios::app );
+	string indent = "  ";
+	ofile << datestr << indent;
+	//cout << "date printed ..."<<endl;
+	ofile << pCounter->frame_number << indent << pCounter->volume << indent << pCounter->user_number << endl;
+	pCounter->clear();
 }
 
 

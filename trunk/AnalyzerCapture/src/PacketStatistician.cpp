@@ -19,19 +19,19 @@
 
 #include "PacketStatistician.h"
 #include "PacketDigest.h"
-#include "locks.h"
+//#include "locks.h"
 #include "macro.h"
 #include "ipheaderutil.h"
 #include "resultrecorder.h"
 #include "analyzer.h"
 #include "userinputparams.h"
 
-#include <netinet/in.h>
-#include <pthread.h>
+//#include <netinet/in.h>
+//#include <pthread.h>
 #include <iostream>
 #include <time.h>
 
-#include <fstream>
+//#include <fstream>
 
 using namespace std;
 
@@ -57,17 +57,18 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 {
 	//m_subscriberStatistic.
 	ResultEnum rs = eOK;
-	rs = AddPacketToMap(pPacketDigest);
+	rs = m_trafficResult.AddNewPacketInfo(pPacketDigest);
 	EABASSERT ( rs );
 	//m_mapSubscriberStat.insert
-	m_payloadLengthResult.AddNewPacketInfo(pPacketDigest);
-	m_totalPacketStatistic.AddPacketInfo ( pPacketDigest );
+	rs = m_payloadLengthResult.AddNewPacketInfo(pPacketDigest);
+	EABASSERT ( rs );
+	//m_totalPacketStatistic.AddPacketInfo ( pPacketDigest );
 }
 
-void CPacketStatistician::SetInputParams(CUserInputParams* pParams)
-{
-	m_pInputParams = pParams;
-}
+//void CPacketStatistician::SetInputParams(CUserInputParams* pParams)
+//{
+//	m_pInputParams = pParams;
+//}
 
 void CPacketStatistician::PrintStatisticResult(const tm* t)
 {
@@ -84,59 +85,12 @@ void CPacketStatistician::PrintStatisticResult(const tm* t)
 	m_payloadLengthResult.setEndTime(*t);
 	m_payloadLengthResult.PrintResult();
 	
+	m_trafficResult.setEndTime(*t);
+	m_trafficResult.PrintResult();
+	
 	// Only for testing
 	//RecordStatisticResult(NULL);
 	
-}
-
-ResultEnum CPacketStatistician::AddPacketToMap ( const CPacketDigest* pPacketDigest )
-{
-	ResultEnum rs = eOK;
-	// Create a new subscriber
-	in_addr srcAddr = pPacketDigest->getSrcAddress();
-	int src_key = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
-
-	// First try to find if there is a match
-	map<unsigned int, CSubscriberStatistic>::iterator itor = m_mapSubscriberStat.find ( src_key );
-	bool bSrcFound = m_mapSubscriberStat.end() != itor ? true : false;
-
-	// Lock the map and add specific values;
-	while ( pthread_mutex_trylock ( &Locks::packetMap_lock ) != 0 )
-		{}
-	;
-	if ( bSrcFound )
-	{
-		rs = ( itor->second ).AddNewPacket ( pPacketDigest );
-		EABASSERT ( rs ); //ON_ERROR_RETURN()
-	}
-	else
-	{
-		CSubscriberStatistic pSubscriber( src_key );
-		pSubscriber.AddNewPacket ( pPacketDigest );
-		EABASSERT ( rs );
-		m_mapSubscriberStat.insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, pSubscriber ) );
-	}
-	pthread_mutex_unlock ( &Locks::packetMap_lock );
-
-	// Try to find if there is a destination match
-	in_addr dstAddr = pPacketDigest->getDestAddress();
-	unsigned int dst_key = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
-
-	itor = m_mapSubscriberStat.find ( dst_key );
-	if ( m_mapSubscriberStat.end() != itor )
-	{
-		// Lock the map and add specific values;
-		while ( pthread_mutex_trylock ( &Locks::packetMap_lock ) != 0 )
-			{}
-		;
-
-		rs = ( itor->second ).AddNewPacket ( pPacketDigest );
-		EABASSERT ( rs ); //ON_ERROR_RETURN()
-		pthread_mutex_unlock ( &Locks::packetMap_lock );
-	}
-
-
-	return rs;
 }
 
 

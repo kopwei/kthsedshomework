@@ -21,6 +21,7 @@
 
 #include "resultenum.h"
 #include <time.h>
+#include <string>
 
 class CPacketDigest;
 //struct tm;
@@ -39,6 +40,9 @@ public:
 	void 		setEndTime(const tm& t) {m_endTime = t;}
 
 protected:
+
+	const string GetTimeStr(const bool bIsStart);
+
 	tm			m_startTime;
 	tm			m_endTime;			
 	

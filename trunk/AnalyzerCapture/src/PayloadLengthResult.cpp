@@ -32,7 +32,8 @@ CPayloadLengthResult::CPayloadLengthResult(void)
 	for(int i = 0 ; i < PAYLOAD_MAXSIZE; i++)
 	{
 		m_packetLength[i] = 0;
-		m_tempPacketLength[i]=0;
+		m_tempPacketLength[i] = 0;
+		m_dailyPacketLength[i] = 0;
 	}
 	m_pCurrentArray = m_packetLength;
 }
@@ -91,3 +92,9 @@ ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned int* pArray)
 
 	return eOK;
 }
+
+ResultEnum CPayloadLengthResult::PrintDailyResult()
+{
+
+}
+

@@ -186,10 +186,17 @@ void * CAnalyzer::threadsLoop ( void *par )
                 {
 					
                     s_bIsStoring = true;
+					bool bNeedDailyStat = NeedStoreDailyResult(header, &refTime);
                     s_refTime = *(localtime(&(header->ts.tv_sec)));
                     tm t = s_refTime;
 					//cout << "entered to record"<< endl;
                     RecordStatus(&t);
+					// If the day is end, we have to store the daily result
+					if (bNeedDailyStat)
+					{
+						RecordDailyStatus(&t);
+					}
+					
                     s_bIsStoring = false;
 				   
                     pthread_mutex_unlock(&Locks::storing_lock);				   
@@ -312,7 +319,23 @@ ResultEnum CAnalyzer::RecordStatus(const tm* t)
     // TODO:
     //s_refTime
     s_packetStatistician.PrintStatisticResult(t);
+	CAnalyzerAggregator::PrintStatisticResult(t);
+
     return eOK;
+}
+
+bool CAnalyzer::NeedStoreDailyResult( const pcap_pkthdr* header, const tm* t )
+{
+	tm* time = localtime(&(header->ts.tv_sec));
+	int packetMin = time->tm_min;
+	int refMin = t->tm_min;
+	return (time->tm_mday != t->tm_mday);
+}
+
+ResultEnum CAnalyzer::RecordDailyStatus( const tm* t )
+{
+	// TODO:
+	return eNotImplemented;
 }
 
 

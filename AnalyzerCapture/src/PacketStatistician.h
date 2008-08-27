@@ -28,7 +28,7 @@
 #include "PayloadLengthResult.h"
 #include "resultrecorder.h"
 #include "resultenum.h"
-
+#include "TrafficAnalyzedresult.h"
 
 using namespace std;
 

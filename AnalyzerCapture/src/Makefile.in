@@ -50,10 +50,11 @@ PROGRAMS = $(bin_PROGRAMS)
 am_analyzercapture_OBJECTS = AnalyzedResult.$(OBJEXT) \
 	CommonUtil.$(OBJEXT) PacketDigest.$(OBJEXT) \
 	PacketStatistic.$(OBJEXT) PacketStatistician.$(OBJEXT) \
-	PayloadLengthResult.$(OBJEXT) SubscriberStatistic.$(OBJEXT) \
-	TrafficAnalyzedresult.$(OBJEXT) analyserpxAggreg.$(OBJEXT) \
-	analyserpxFile.$(OBJEXT) analyserpxFlow.$(OBJEXT) \
-	analyzer.$(OBJEXT) analyzercapture.$(OBJEXT) cap.$(OBJEXT) \
+	PacketTypeStat.$(OBJEXT) PayloadLengthResult.$(OBJEXT) \
+	SubscriberStatistic.$(OBJEXT) TrafficAnalyzedresult.$(OBJEXT) \
+	analyserpxAggreg.$(OBJEXT) analyserpxFile.$(OBJEXT) \
+	analyserpxFlow.$(OBJEXT) analyzer.$(OBJEXT) \
+	analyzercapture.$(OBJEXT) cap.$(OBJEXT) \
 	circularbuffer.$(OBJEXT) classifier.$(OBJEXT) \
 	expressions.$(OBJEXT) flow.pb.$(OBJEXT) \
 	flowcollection.pb.$(OBJEXT) hashtab.$(OBJEXT) \
@@ -191,11 +192,11 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 analyzercapture_SOURCES = AnalyzedResult.cpp CommonUtil.cpp PacketDigest.cpp \
-	PacketStatistic.cpp PacketStatistician.cpp PayloadLengthResult.cpp SubscriberStatistic.cpp \
-	TrafficAnalyzedresult.cpp analyserpxAggreg.cpp analyserpxFile.cpp analyserpxFlow.cpp analyzer.cpp \
-	analyzercapture.cpp cap.cpp circularbuffer.cpp classifier.cpp expressions.cpp flow.pb.cpp \
-	flowcollection.pb.cpp hashtab.cpp ipheaderutil.cpp locks.cpp resultrecorder.cpp \
-	userinputparams.cpp
+	PacketStatistic.cpp PacketStatistician.cpp PacketTypeStat.cpp PayloadLengthResult.cpp \
+	SubscriberStatistic.cpp TrafficAnalyzedresult.cpp analyserpxAggreg.cpp analyserpxFile.cpp \
+	analyserpxFlow.cpp analyzer.cpp analyzercapture.cpp cap.cpp circularbuffer.cpp \
+	classifier.cpp expressions.cpp flow.pb.cpp flowcollection.pb.cpp hashtab.cpp \
+	ipheaderutil.cpp locks.cpp resultrecorder.cpp userinputparams.cpp
 
 
 # set the include path found by configure
@@ -285,6 +286,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PacketDigest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PacketStatistic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PacketStatistician.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PacketTypeStat.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PayloadLengthResult.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SubscriberStatistic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/TrafficAnalyzedresult.Po@am__quote@

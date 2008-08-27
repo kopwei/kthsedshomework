@@ -22,6 +22,8 @@
 #include "ipheaderutil.h"
 #include "PacketDigest.h"
 #include "macro.h"
+#include "hashtab.h"
+#include "analyserpxAggreg.h"
 
 #include <netinet/in.h>
 #include <fstream>
@@ -122,7 +124,7 @@ ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( TrafficCounter* pCounter )
 	int iFlowNumber = HashTableUtil::num_hash_entries(CAnalyzerAggregator::test_table);
 	ofile << datestr << indent;
 	//cout << "date printed ..."<<endl;
-	ofile << pCounter->frame_number << indent << pCounter->volume << indent << pCounter->user_number << endl;
+	ofile << pCounter->frame_number << indent << pCounter->volume << indent << pCounter->user_number << indent << iFlowNumber << endl;
 	pCounter->clear();
 }
 

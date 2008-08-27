@@ -39,6 +39,8 @@ public:
 	
 	static const in_addr* ConvertIntToIP(const unsigned int pIntIP);
 	
+	//static const unsigned long long ConvertMACToLong(const char* );
+	
 
 };
 

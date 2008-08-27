@@ -64,10 +64,10 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
     ResultEnum rs = eOK;
     //cout << "I entered the clean hash program" << endl;
     //Sync Table begin
-    //pthread_mutex_lock(&hash_lock);
-    while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 ) {}
-    ;
-    printf ( "Clean \n" );
+	pthread_mutex_lock(&Locks::hash_lock);
+//    while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 ) {}
+//    ;
+    cout << "Clean " << endl;
 
     flow_t *flow_hsh=NULL;
     HashTableUtil::init_hash_walk ( hash );

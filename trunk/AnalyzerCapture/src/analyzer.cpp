@@ -274,7 +274,7 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
 
     // Process the flows
 	flow_t* pflow = NULL;
-    //pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
+    pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
 
     CPacketDigest packetDigest( header, packet, pflow );
     rs = s_packetStatistician.AddNewPacketInfo ( &packetDigest );

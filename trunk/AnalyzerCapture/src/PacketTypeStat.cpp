@@ -19,6 +19,7 @@
 
 #include "PacketTypeStat.h"
 #include "flow.pb.h"
+#include "analyserpxFlow.h"
 #include <iostream>
 #include <fstream>
 
@@ -32,26 +33,26 @@ CPacketTypeStat::~CPacketTypeStat(void)
 
 ResultEnum CPacketTypeStat::processNewFlow( const flow_t* flow )
 {
-	u_short proto = f->class_proto();
+	u_short proto = flow->class_proto();
 	FlowDigestMap::iterator itor = s_digestMap.find(proto);
 	if (s_digestMap.end() != itor)
 	{
-		itor->second.packetNumber += f->n_frames();
-		itor->second.volume += f->n_bytes();
+		itor->second.packetNumber += flow->n_frames();
+		itor->second.volume += flow->n_bytes();
 	}
 	else
 	{
 		FlowDigest* pDigest = new FlowDigest();
-		pDigest->packetNumber = f->n_frames();
-		pDigest->volume = f->n_bytes();
+		pDigest->packetNumber = flow->n_frames();
+		pDigest->volume = flow->n_bytes();
 		s_digestMap.insert(pair<u_short, FlowDigest>(proto, *pDigest));
 	}
 }
 
 ResultEnum CPacketTypeStat::PrintResult()
 {
-	int totalPacket = 0;
-	int totalVolume = 0;
+	unsigned long long totalPacket = 0;
+	unsigned long long totalVolume = 0;
 	FlowDigestMap::const_iterator const_itor;
 	for (const_itor = s_digestMap.begin(); const_itor != s_digestMap.end(); ++const_itor)
 	{
@@ -62,9 +63,9 @@ ResultEnum CPacketTypeStat::PrintResult()
 	cout << "Totally there are " << totalVolume << " bytes" << endl;
 	for (const_itor = s_digestMap.begin(); const_itor != s_digestMap.end(); ++const_itor)
 	{
-		float packetPercent = (float)(const_itor->second.packetNumber) / (float)totalPacket * 100;
-		float volumePercent = (float)(const_itor->second.volume) / (float)totalVolume * 100;
-		cout << const_itor->first << " : packet " << const_itor->second.packetNumber << "  " <<packetPercent << "% "
+		double packetPercent = (double)(const_itor->second.packetNumber) / (double)totalPacket * 100;
+		double volumePercent = (double)(const_itor->second.volume) / (double)totalVolume * 100;
+		cout << CFlowUtil::get_protocolName(const_itor->first) << " : packet " << const_itor->second.packetNumber << "  " <<packetPercent << "% "
 			<< " : volume " << const_itor->second.volume << "  " << volumePercent << "%" << endl;
 	}
 }

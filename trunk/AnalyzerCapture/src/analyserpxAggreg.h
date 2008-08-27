@@ -7,7 +7,8 @@
 
 #include "analyserpxTypes.h"
 #include "resultenum.h"
-#include "TrafficAnalyzedresult.h"
+//#include "TrafficAnalyzedresult.h"
+#include "PacketTypeStat.h"
 #include <map>
 
 /*!     \file analyserpxAggreg.h

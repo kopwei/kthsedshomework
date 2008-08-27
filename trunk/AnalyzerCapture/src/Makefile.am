@@ -1,10 +1,10 @@
 bin_PROGRAMS = analyzercapture
 analyzercapture_SOURCES = AnalyzedResult.cpp CommonUtil.cpp PacketDigest.cpp \
-	PacketStatistic.cpp PacketStatistician.cpp PayloadLengthResult.cpp SubscriberStatistic.cpp \
-	TrafficAnalyzedresult.cpp analyserpxAggreg.cpp analyserpxFile.cpp analyserpxFlow.cpp analyzer.cpp \
-	analyzercapture.cpp cap.cpp circularbuffer.cpp classifier.cpp expressions.cpp flow.pb.cpp \
-	flowcollection.pb.cpp hashtab.cpp ipheaderutil.cpp locks.cpp resultrecorder.cpp \
-	userinputparams.cpp
+	PacketStatistic.cpp PacketStatistician.cpp PacketTypeStat.cpp PayloadLengthResult.cpp \
+	SubscriberStatistic.cpp TrafficAnalyzedresult.cpp analyserpxAggreg.cpp analyserpxFile.cpp \
+	analyserpxFlow.cpp analyzer.cpp analyzercapture.cpp cap.cpp circularbuffer.cpp \
+	classifier.cpp expressions.cpp flow.pb.cpp flowcollection.pb.cpp hashtab.cpp \
+	ipheaderutil.cpp locks.cpp resultrecorder.cpp userinputparams.cpp
 
 # set the include path found by configure
 INCLUDES= $(all_includes)

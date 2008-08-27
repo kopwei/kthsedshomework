@@ -35,6 +35,8 @@ public:
 
 	ResultEnum PrintResult();
 
+	ResultEnum PrintDailyResult();
+
 private:
 	
 	ResultEnum PrintPacketLengthToFile(unsigned int* pArray);
@@ -42,4 +44,6 @@ private:
 	unsigned int m_packetLength[PAYLOAD_MAXSIZE];
 	unsigned int m_tempPacketLength[PAYLOAD_MAXSIZE];
 	unsigned int* m_pCurrentArray;
+
+	unsigned int m_dailyPacketLength[PAYLOAD_MAXSIZE];
 };

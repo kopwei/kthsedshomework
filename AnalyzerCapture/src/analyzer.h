@@ -71,7 +71,11 @@ class CAnalyzer
 
 		static bool NeedStoreResult(const pcap_pkthdr* header, const tm* t);
 
+		static bool NeedStoreDailyResult(const pcap_pkthdr* header, const tm* t);
+
 		static ResultEnum RecordStatus(const tm* t);
+
+		static ResultEnum RecordDailyStatus(const tm* t);
 		
 		static CUserInputParams* s_pUserInputParams;
 		

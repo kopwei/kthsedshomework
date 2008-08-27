@@ -37,6 +37,8 @@ public:
 	virtual ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest) = 0;
 
 	virtual ResultEnum PrintResult() = 0;
+
+	virtual ResultEnum PrintDailyResult();
 	
 	void 		setStartTime(const tm& t) {m_startTime = t;}
 	void 		setEndTime(const tm& t) {m_endTime = t;}

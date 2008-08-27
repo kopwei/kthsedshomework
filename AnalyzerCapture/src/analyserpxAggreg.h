@@ -25,12 +25,6 @@ class CUserInputParams;
 class flow_t;
 struct hash_tab;
 
-struct FlowDigest
-{
-	unsigned int packetNumber;
-	unsigned int volume;
-};
-
 class CAnalyzerAggregator
 {
 	public:
@@ -74,8 +68,9 @@ class CAnalyzerAggregator
 		
 		static void initVariables(CUserInputParams* pUserInputParams);
 		
-		static ResultEnum PrintTrafficResult(const tm* t);
-
+		static ResultEnum PrintStatisticResult(const tm* t);
+		
+		static hash_tab* test_table;
 
 
 	private :
@@ -126,23 +121,22 @@ class CAnalyzerAggregator
 		
 		static ResultEnum GetFileName(const int count);
 
-		static ResultEnum processNewFlow(const flow_t* flow);
+		
 
-		static ResultEnum printStatistic();
+		//static ResultEnum printStatistic();
 		
 		
 		static CUserInputParams* s_pInputParams;
 		static string s_strFileName;
-		static hash_tab* test_table;
+		
 		static time_t tvSec;
 		static time_t tvUSec;
+		static int s_iFileNameCount;
 
 		
-		static CTrafficAnalyzedResult trafficResult;
+		static CPacketTypeStat s_PacketTypeStat;
 		
-		typedef std::map<u_short, FlowDigest> FlowDigestMap;
-
-		static FlowDigestMap s_digestMap;
+		
 
 };
 

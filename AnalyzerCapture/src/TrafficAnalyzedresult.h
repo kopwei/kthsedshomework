@@ -45,6 +45,8 @@ public:
 	ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest);
 
 	ResultEnum PrintResult();
+
+	ResultEnum PrintDailyResult();
 	
 	
 private:

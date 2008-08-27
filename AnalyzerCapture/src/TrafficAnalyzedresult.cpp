@@ -119,10 +119,16 @@ ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( TrafficCounter* pCounter )
 	string datestr = GetTimeStr(false);
 	ofstream ofile ( "traffic.ret", ios::binary | ios::app );
 	string indent = "  ";
+	int iFlowNumber = HashTableUtil::num_hash_entries(CAnalyzerAggregator::test_table);
 	ofile << datestr << indent;
 	//cout << "date printed ..."<<endl;
 	ofile << pCounter->frame_number << indent << pCounter->volume << indent << pCounter->user_number << endl;
 	pCounter->clear();
+}
+
+ResultEnum CTrafficAnalyzedResult::PrintDailyResult()
+{
+	//m_totalPacketStatistic.
 }
 
 

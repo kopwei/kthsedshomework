@@ -227,6 +227,9 @@ GLOBAL_PX regex_t* nbns;
         This variable stores the regular expression of nbds messages.
 */
 GLOBAL_PX regex_t* nbds;
+GLOBAL_PX regex_t* nbns2;
+GLOBAL_PX regex_t* nbns3;
+GLOBAL_PX regex_t* nbns4;
 
 /*!     \var regex_t* bootstrap
         \brief bootstrap regular expression variable.

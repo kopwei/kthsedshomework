@@ -27,17 +27,17 @@
 CPacketStatistic::CPacketStatistic( void ) :
 m_packetnumber(0), 
 m_trafficvolume(0), 
-m_emptypacketnumber(0), 
+//m_emptypacketnumber(0), 
 m_tcppacketnumber(0),
 m_tcptrafficvolume(0),
 m_udppacketnumber(0),
-m_udptrafficvolume(0),
-m_p2ppacketnumber(0),
-m_p2ptrafficvolume(0),
-m_httppacketnumber(0),
-m_httptrafficvolume(0),
-m_unidentifiedpacketnumber(0),
-m_unidentifiedtrafficvolume(0)
+m_udptrafficvolume(0)
+//m_p2ppacketnumber(0),
+//m_p2ptrafficvolume(0),
+//m_httppacketnumber(0),
+//m_httptrafficvolume(0),
+//m_unidentifiedpacketnumber(0),
+//m_unidentifiedtrafficvolume(0)
 {}
 
 CPacketStatistic::~CPacketStatistic( void )
@@ -46,17 +46,18 @@ CPacketStatistic::~CPacketStatistic( void )
 CPacketStatistic::CPacketStatistic(const CPacketStatistic& stat) :
 m_packetnumber(stat.m_packetnumber), 
 m_trafficvolume(stat.m_trafficvolume), 
-m_emptypacketnumber(stat.m_emptypacketnumber), 
+//m_emptypacketnumber(stat.m_emptypacketnumber), 
 m_tcppacketnumber(stat.m_tcppacketnumber),
 m_tcptrafficvolume(stat.m_tcptrafficvolume),
 m_udppacketnumber(stat.m_udppacketnumber),
 m_udptrafficvolume(stat.m_udptrafficvolume),
-m_p2ppacketnumber(stat.m_p2ppacketnumber),
-m_p2ptrafficvolume(stat.m_p2ptrafficvolume),
-m_httppacketnumber(stat.m_httppacketnumber),
-m_httptrafficvolume(stat.m_httptrafficvolume),
-m_unidentifiedpacketnumber(stat.m_unidentifiedpacketnumber),
-m_unidentifiedtrafficvolume(stat.m_unidentifiedtrafficvolume)
+m_trafficMap(stat.m_trafficMap)
+//m_p2ppacketnumber(stat.m_p2ppacketnumber),
+//m_p2ptrafficvolume(stat.m_p2ptrafficvolume),
+//m_httppacketnumber(stat.m_httppacketnumber),
+//m_httptrafficvolume(stat.m_httptrafficvolume),
+//m_unidentifiedpacketnumber(stat.m_unidentifiedpacketnumber),
+//m_unidentifiedtrafficvolume(stat.m_unidentifiedtrafficvolume)
 {}
 
 ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest)
@@ -94,33 +95,24 @@ ResultEnum CPacketStatistic::distributeByProtocol(const unsigned short sProtocol
 	}	
 	// TODO: May need more implementation here
 	return rs;
-}
+} 
 
 ResultEnum CPacketStatistic::distributedByClassification(const unsigned short sClassId, const unsigned int iPacketSize)
 {
 	ResultEnum rs = eOK;
 	// If it is p2p packet 
-	if (CClassifier::IsP2P(sClassId))
+	map<ushort, MetaTraffic>::iterator itor = m_trafficMap.find(sClassId);
+	if (itor != m_trafficMap.end())
 	{
-		m_p2ppacketnumber++;
-		m_p2ptrafficvolume += iPacketSize;
+		++itor->second.packetnumber;
+		itor->second.trafficvolume += iPacketSize;
 	}
-	// If it is http packet and not p2p, then 
-	else if (CClassifier::IsHTTP(sClassId))
-	{
-		m_httppacketnumber++;
-		m_httptrafficvolume += iPacketSize;
-	}
-	else if (CClassifier::IsNonPayload(sClassId))
-	{
-		m_emptypacketnumber++;
-	}
-
-	//TODO: need more implementation here
 	else
 	{
-		m_unidentifiedpacketnumber++;
-		m_unidentifiedtrafficvolume += iPacketSize;
+		MetaTraffic meta;
+		meta.packetnumber = 1;
+		meta.trafficvolume = iPacketSize;
+		m_trafficMap.insert(pair<ushort, MetaTraffic>(sClassId, meta));
 	}
 	return rs;
 }

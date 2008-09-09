@@ -212,7 +212,7 @@ ResultEnum CResultRecorder::GetCurrentDate( string& strDate ) const
 		return eCommonError;
 	return rs;
 }
-
+ 
 ResultEnum CResultRecorder::RecordStatisticIntoTable(const string& strTableName, const unsigned int iSubuscriber, 
 													 const time_t start_time, const time_t end_time, 
 													 const CPacketStatistic& stat)
@@ -233,10 +233,10 @@ ResultEnum CResultRecorder::RecordStatisticIntoTable(const string& strTableName,
 	query.parse();
 	unsigned long long packetNumber = stat.packetnumber();
 
-	query.execute(strTableName.c_str(), id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time, packetNumber,
+/*	query.execute(strTableName.c_str(), id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time, packetNumber,
 		stat.trafficvolume(), stat.emptypacketnumber(), stat.tcppacketnumber(), stat.tcptrafficvolume(),
 		stat.udppacketnumber(), stat.udptrafficvolume(), stat.httppacketnumber(), stat.httptrafficvolume(),
 		stat.p2ppacketnumber(), stat.p2ptrafficvolume(), stat.unidentifiedpacketnumber(), stat.unidentifiedtrafficvolume());
-
+*/
 	return rs;
 }

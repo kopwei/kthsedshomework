@@ -53,8 +53,8 @@ private:
     in_addr				m_destIPAddr;		// Destination IP Address
     unsigned int		m_sPacketSize;		// Packet size
     unsigned short		m_sProtocol;		// Protocol
-    //unsigned short		m_sClass;		// Protocol classification
-    flow_t*				m_pFlow;			// Flow which the packet belongs to
+    unsigned short		m_sClass;		// Protocol classification
+    //flow_t*				m_pFlow;			// Flow which the packet belongs to
 };
 
 #endif

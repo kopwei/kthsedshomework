@@ -30,8 +30,8 @@ CPacketDigest::CPacketDigest ( const pcap_pkthdr* header, const u_char* packet, 
     m_srcIPAddr = pIpHeader->ip_src;
     m_destIPAddr = pIpHeader->ip_dst;
     m_sProtocol = pIpHeader->ip_p;
-    m_pFlow = flow;
-    //m_sClass = classifier;
+    //m_pFlow = flow; 
+    m_sClass = flow->class_proto();
 
 }
 
@@ -72,9 +72,9 @@ unsigned short CPacketDigest::getProtocol() const
 
 unsigned short CPacketDigest::getProtocolClassification() const
 {
-    if (NULL != m_pFlow)
-        return m_pFlow->class_proto();
-    else
-		return 0;		
+//    if (NULL != m_pFlow)
+//        return m_pFlow->class_proto();
+//    else
+		return m_sClass;		
 
 }

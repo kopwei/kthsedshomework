@@ -98,15 +98,15 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
         strFileName.append("_0");
     }
     int analyserpxError;
-    for (int j = 4; j < 15; j++)
-    {
-		string intstr = CommonUtil::itoa(j, 10);
+//    for (int j = 4; j < 15; j++)
+//    {
+//		string intstr = CommonUtil::itoa(j, 10);
 		//cout << "number string ready: " << intstr << endl;
 		//cin >> c ;
 		string namebase = pParam->GetReadingFileName();
 		//cout << "name base ready "<< namebase << endl;
 		//cin >> c;
-		namebase.append(intstr);	
+//		namebase.append(intstr);	
 		//cout << "Name ready " << namebase << endl;
 		//cin >> c; 
 		analyserpxError = CCaptureUtil::initiate_capture ( pParam->GetCaptureConfig(), pParam->isOnlineMode(), namebase );
@@ -125,8 +125,8 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
             }
         }
 		
-		cout <<"File "<< namebase << " processing finished " <<  endl;
-    }
+//		cout <<"File "<< namebase << " processing finished " <<  endl;
+//    }
     tFlag = false;
     //    printHash(fileName);
     CAnalyzerAggregator::printHash();   

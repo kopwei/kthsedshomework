@@ -21,6 +21,9 @@
 #define _PACKET_STATISTIC_
 
 #include "resultenum.h"
+#include <map>
+
+using namespace std;
 
 class CPacketDigest;
 
@@ -41,17 +44,17 @@ class CPacketStatistic
 
 		_uint_64 packetnumber() const {return m_packetnumber;}
 		_uint_64 trafficvolume() const {return m_trafficvolume;}
-		_uint_64 emptypacketnumber() const {return m_emptypacketnumber;}
+//		_uint_64 emptypacketnumber() const {return m_emptypacketnumber;}
 		_uint_64 tcppacketnumber() const {return m_tcppacketnumber;}
 		_uint_64 tcptrafficvolume() const {return m_tcptrafficvolume;}
 		_uint_64 udppacketnumber() const {return m_udppacketnumber;}
 		_uint_64 udptrafficvolume() const {return m_udptrafficvolume;}
-		_uint_64 p2ppacketnumber() const {return m_p2ppacketnumber;}
-		_uint_64 p2ptrafficvolume() const {return m_p2ptrafficvolume;}
-		_uint_64 httppacketnumber() const {return m_httppacketnumber;}
-		_uint_64 httptrafficvolume() const {return m_httptrafficvolume;}
-		_uint_64 unidentifiedpacketnumber() const {return m_unidentifiedpacketnumber;}
-		_uint_64 unidentifiedtrafficvolume() const {return m_unidentifiedtrafficvolume;}
+//		_uint_64 p2ppacketnumber() const {return m_p2ppacketnumber;}
+//		_uint_64 p2ptrafficvolume() const {return m_p2ptrafficvolume;}
+//		_uint_64 httppacketnumber() const {return m_httppacketnumber;}
+//		_uint_64 httptrafficvolume() const {return m_httptrafficvolume;}
+//		_uint_64 unidentifiedpacketnumber() const {return m_unidentifiedpacketnumber;}
+//		_uint_64 unidentifiedtrafficvolume() const {return m_unidentifiedtrafficvolume;}
 
 
 	private:
@@ -72,17 +75,26 @@ class CPacketStatistic
 
 		_uint_64 m_packetnumber;
 		_uint_64 m_trafficvolume;
-		_uint_64 m_emptypacketnumber;
+//		_uint_64 m_emptypacketnumber;
 		_uint_64 m_tcppacketnumber;
 		_uint_64 m_tcptrafficvolume;
 		_uint_64 m_udppacketnumber;
 		_uint_64 m_udptrafficvolume;
-		_uint_64 m_p2ppacketnumber;
-		_uint_64 m_p2ptrafficvolume;
-		_uint_64 m_httppacketnumber;
-		_uint_64 m_httptrafficvolume;
-		_uint_64 m_unidentifiedpacketnumber;
-		_uint_64 m_unidentifiedtrafficvolume;
+//		_uint_64 m_p2ppacketnumber;
+//		_uint_64 m_p2ptrafficvolume;
+//		_uint_64 m_httppacketnumber;
+//		_uint_64 m_httptrafficvolume;
+//		_uint_64 m_unidentifiedpacketnumber;
+//		_uint_64 m_unidentifiedtrafficvolume;
+		
+		// 
+		struct MetaTraffic
+		{
+			_uint_64 packetnumber;
+			_uint_64 trafficvolume;
+		};
+		map<ushort, MetaTraffic> m_trafficMap;
+		
 };
 
 #endif

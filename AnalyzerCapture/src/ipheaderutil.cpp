@@ -20,6 +20,7 @@
 #include "ipheaderutil.h"
 
 #include <netinet/in.h>
+#include <net/ethernet.h>
 
 
 ResultEnum CIPHeaderUtil::GetIPHeader ( const u_char* packet, ip*& pIPHeader )
@@ -81,10 +82,22 @@ const unsigned int CIPHeaderUtil::ConvertIPToInt ( const in_addr* pIPAddr )
 	//return add.S_addr;
 }
 
+
 const in_addr* CIPHeaderUtil::ConvertIntToIP ( const unsigned int pIntIP )
 {
 	// TODO: need implemented here
 	return NULL;
 }
 
+const unsigned long long CIPHeaderUtil::ConvertMacToInt64(const ether_addr* pMacAddr)
+{
+	unsigned long long retVal = 0;
+	for (int i = 0; i < ETH_ALEN; ++i)
+	{
+		unsigned long long bitVal = (unsigned long long)pMacAddr->ether_addr_octet[i];
+		unsigned long long shiftVal = bitVal << (8 * (ETH_ALEN - i - 1));
+		retVal += shiftVal;
+	}
+	return retVal;
+}
 

@@ -48,7 +48,8 @@ public:
 	const CPacketStatistic& GetDownloadStatistic() const {return *(&m_downloadPacketStatistic);}
 	
 
-private:
+private: 
+	unsigned long long		m_macAddress;
 	unsigned int 			m_ipAddress;
 	
 	CPacketStatistic		m_uploadPacketStatistic;				// Upload Packet Statistic

@@ -29,6 +29,7 @@
 #include "resultrecorder.h"
 #include "resultenum.h"
 #include "TrafficAnalyzedresult.h"
+#include "SubscriberAnalyzedResult.h"
 
 using namespace std;
 
@@ -83,6 +84,8 @@ private:
 	CPayloadLengthResult	m_payloadLengthResult;
 
 	CTrafficAnalyzedResult  m_trafficResult;
+	
+	CSubscriberAnalyzedResult m_subscriberResult;
 
 	CUserInputParams*		m_pInputParams;
 };

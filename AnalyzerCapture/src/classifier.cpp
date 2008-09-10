@@ -445,64 +445,6 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 
 }
 
-u_short CClassifier::getID ( const struct ip *iph, const u_short ipLen, const u_short src_port, const u_short dst_port )
-{
-	unsigned char* payLoad = getPayload ( iph );
-	u_short mess_len = getPayloadLen ( iph, ipLen );
-	if ( NULL != payLoad )
-	{
-		if ( isBittorrent ( payLoad, mess_len ) )
-		{
-			return PROTO_ID_BITTORRENT;
-		}
-	}
-
-	if ( src_port > 1024 && dst_port > 1024 )
-	{
-		return PROTO_ID_UNKNOWN;
-	}
-
-	switch ( src_port )
-	{
-		case 21:
-			return PROTO_ID_FTP;
-		case 20:
-			return PROTO_ID_FTP;
-		case 443:
-			return PROTO_ID_HTTP;
-		case 80:  /* HTTP */
-			return PROTO_ID_HTTP;
-		case 25:
-			return PROTO_ID_SMTP;
-		case 465:
-			return PROTO_ID_SMTP;
-		case 110:
-			return PROTO_ID_POP3;
-		case 993:
-			return PROTO_ID_POP3;
-	}
-	switch ( dst_port )
-	{
-		case 21:
-			return PROTO_ID_FTP;
-		case 20:
-			return PROTO_ID_FTP;
-		case 443:
-			return PROTO_ID_HTTP;
-		case 80:  /* HTTP */
-			return PROTO_ID_HTTP;
-		case 25:
-			return PROTO_ID_SMTP;
-		case 465:
-			return PROTO_ID_SMTP;
-		case 110:
-			return PROTO_ID_POP3;
-		case 993:
-			return PROTO_ID_POP3;
-	}
-	return PROTO_ID_UNKNOWN;
-
-}
 
 //Earth
 u_short CClassifier::isEarthu ( const unsigned char *payload, const u16 mess_len )

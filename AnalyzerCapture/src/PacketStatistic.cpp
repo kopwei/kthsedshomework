@@ -22,6 +22,7 @@
 #include "PacketDigest.h"
 #include "classifier.h"
 #include "macro.h"
+#include <sstream>
 
 
 CPacketStatistic::CPacketStatistic( void ) :
@@ -101,19 +102,19 @@ ResultEnum CPacketStatistic::distributedByClassification(const unsigned short sC
 {
 	ResultEnum rs = eOK;
 	// If it is p2p packet 
-	map<ushort, MetaTraffic>::iterator itor = m_trafficMap.find(sClassId);
-	if (itor != m_trafficMap.end())
-	{
-		++itor->second.packetnumber;
-		itor->second.trafficvolume += iPacketSize;
-	}
-	else
-	{
-		MetaTraffic meta;
-		meta.packetnumber = 1;
-		meta.trafficvolume = iPacketSize;
-		m_trafficMap.insert(pair<ushort, MetaTraffic>(sClassId, meta));
-	}
+	MetaTraffic meta;
+	meta.packetnumber = 1;
+	meta.packetnumber = iPacketSize;
+	m_trafficMap.insert(sClassId, meta);
+	
 	return rs;
+}
+
+const string GetStatisticString()
+{
+	string indent = "   ";
+	stringstream strStream;
+	//strStream << 
+	return strStream.str();
 }
 

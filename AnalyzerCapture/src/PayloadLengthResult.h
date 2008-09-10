@@ -35,9 +35,14 @@ public:
 
 	ResultEnum PrintResult();
 
-	ResultEnum PrintDailyResult();
+	//ResultEnum PrintDailyResult();
 
 private:
+	/**
+	 * Avoid bitwise copy
+	 */
+	CPayloadLengthResult(const CPayloadLengthResult&);
+	const CPayloadLengthResult& operator = (const CPayloadLengthResult&);
 	
 	ResultEnum PrintPacketLengthToFile(unsigned int* pArray);
 	
@@ -45,5 +50,5 @@ private:
 	unsigned int m_tempPacketLength[PAYLOAD_MAXSIZE];
 	unsigned int* m_pCurrentArray;
 
-	unsigned int m_dailyPacketLength[PAYLOAD_MAXSIZE];
+	//unsigned int m_dailyPacketLength[PAYLOAD_MAXSIZE];
 };

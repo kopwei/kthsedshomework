@@ -516,7 +516,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
     int fileAdminTime = ( ( admin_t * ) par )->interval;
     int fileExpTime = ( ( admin_t * ) par )->hop;
     time_t init = 0, final = 0, sec, usec;
-    struct tm *clock = NULL;
+    tm *clock = NULL;
     //extern int analyserpxError;
     //extern char logFileName[];
     //extern char baseFileName[];

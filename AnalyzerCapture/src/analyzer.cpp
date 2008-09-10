@@ -191,12 +191,7 @@ void * CAnalyzer::threadsLoop ( void *par )
                     tm t = s_refTime;
 					//cout << "entered to record"<< endl;
                     RecordStatus(&t);
-					// If the day is end, we have to store the daily result
-					if (bNeedDailyStat)
-					{
-						RecordDailyStatus(&t);
-					}
-					
+					// If the day is end, we have to store the daily result					
                     s_bIsStoring = false;
 				   
                     pthread_mutex_unlock(&Locks::storing_lock);				   

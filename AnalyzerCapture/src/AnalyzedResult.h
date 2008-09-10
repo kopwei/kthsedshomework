@@ -28,6 +28,8 @@ class CPacketDigest;
 
 using namespace std;
 
+
+
 class CAnalyzedResult
 {
 public:

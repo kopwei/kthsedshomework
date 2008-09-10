@@ -59,9 +59,14 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 	ResultEnum rs = eOK;
 	rs = m_trafficResult.AddNewPacketInfo(pPacketDigest);
 	EABASSERT ( rs );
+	
+	rs = m_subscriberResult.AddNewPacketInfo(pPacketDigest);
+	EABASSERT ( rs );
 	//m_mapSubscriberStat.insert
 	rs = m_payloadLengthResult.AddNewPacketInfo(pPacketDigest);
 	EABASSERT ( rs );
+	
+	
 	//m_totalPacketStatistic.AddPacketInfo ( pPacketDigest );
 }
 
@@ -87,6 +92,9 @@ void CPacketStatistician::PrintStatisticResult(const tm* t)
 	
 	m_trafficResult.setEndTime(*t);
 	m_trafficResult.PrintResult();
+	
+	m_subscriberResult.setEndTime(*t);
+	m_subscriberResult.PrintResult();
 	
 	// Only for testing
 	//RecordStatisticResult(NULL);

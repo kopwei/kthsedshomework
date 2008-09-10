@@ -1,5 +1,5 @@
 /**
- *   TrafficAnalyzedresult.h
+ *   SubscriberAnalyzedResult.h
  *   Author: Wei Zhenfang
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -16,54 +16,51 @@
  *   along with this program; if not, write to Ericsson AB
  *   Copyright (C) 2008 by Ericsson AB
  */
+#ifndef SUBSCRIBERANALYZEDRESULT_H
+#define SUBSCRIBERANALYZEDRESULT_H
 
-#ifndef TRAFFICANALYZEDRESULT_H
-#define TRAFFICANALYZEDRESULT_H
+#include <AnalyzedResult.h>
 
-#include "AnalyzedResult.h"
 #include "SubscriberStatistic.h"
-//#include <map>
+#include <map>
 
 using namespace std;
 
-
-
+typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
 
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
-class CTrafficAnalyzedResult : public CAnalyzedResult
+class CSubscriberAnalyzedResult : public CAnalyzedResult
 {
 public:
-    CTrafficAnalyzedResult();
+    CSubscriberAnalyzedResult();
 
-    ~CTrafficAnalyzedResult();
-
+    ~CSubscriberAnalyzedResult();
+	
 	ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest);
 
 	ResultEnum PrintResult();
-
-//	ResultEnum PrintDailyResult();
-	
 	
 private:
 	/**
 	 * Avoid bitwise copy
 	 */
-	CTrafficAnalyzedResult(const CTrafficAnalyzedResult&);
-	const CTrafficAnalyzedResult& operator=(const CTrafficAnalyzedResult&);
-
-
-	bool				IsSubscriber(const int ip_addr) const;
-
-	CPacketStatistic		m_totalPacketStatistic;
+	CSubscriberAnalyzedResult(const CSubscriberAnalyzedResult&);
+	const CSubscriberAnalyzedResult& operator=(const CSubscriberAnalyzedResult&);
 	
-	ResultEnum				PrintInfoToFile(MetaTraffic* pTraffic);
-
-	MetaTraffic m_traffic_counter;
-	MetaTraffic m_temp_traffic_counter;
+	/**
+ 	 *	This method is used to store the information of new packet
+	 */
+	ResultEnum				AddPacketToMap(const CPacketDigest* pPacketDigest);
 	
-	MetaTraffic* m_pCounter;
+	ResultEnum				PrintInfoToFile(StatisticMap* pStatisticMap);
+	
+	
+	StatisticMap			m_mapSubscriberStat;
+	StatisticMap			m_map_tempSubscriberStat;
+	
+	StatisticMap*			m_pSubscriberMap;
 
 };
 

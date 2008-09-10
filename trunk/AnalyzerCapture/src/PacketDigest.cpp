@@ -19,6 +19,7 @@
 
 #include "PacketDigest.h"
 #include "netinet/ip.h"
+#include "netinet/if_ether.h"
 #include "flow.pb.h"
 //const int ETHER_HDR_LEN = 14;
 
@@ -26,6 +27,10 @@ CPacketDigest::CPacketDigest ( const pcap_pkthdr* header, const u_char* packet, 
 {
     m_timeStamp = header->ts.tv_usec + header->ts.tv_sec * ( 1e6 );
     m_sPacketSize = header->len;
+	ethhdr* pEtherHeader = (ethhdr *)packet;
+	m_srcMacAddr = *((ether_addr*) pEtherHeader->h_source);
+	m_destMacAddr = *((ether_addr*) pEtherHeader->h_dest);
+	
     ip* pIpHeader = ( ip * ) ( packet + ETHER_HDR_LEN );
     m_srcIPAddr = pIpHeader->ip_src;
     m_destIPAddr = pIpHeader->ip_dst;
@@ -45,6 +50,16 @@ CPacketDigest::~CPacketDigest ( void )
 const time_t CPacketDigest::getTimeStamp() const
 {
     return m_timeStamp;
+}
+
+ether_addr CPacketDigest::getSrcEtherAddress() const
+{
+	return m_srcMacAddr;
+}
+
+ether_addr CPacketDigest::getDestEtherAddress() const
+{
+	return m_destMacAddr;
 }
 
 /**

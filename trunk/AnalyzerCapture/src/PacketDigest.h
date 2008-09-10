@@ -25,6 +25,7 @@
 #include <net/if_arp.h>
 #include <netinet/in.h>
 #include <netinet/if_ether.h>
+#include <net/ethernet.h>
 //#include "net/socket.h"
 
 class flow_t;
@@ -41,6 +42,8 @@ public:
     ~CPacketDigest ( void );
 
     const time_t		getTimeStamp() const;
+	ether_addr			getSrcEtherAddress() const;
+	ether_addr			getDestEtherAddress() const;
     in_addr				getSrcAddress() const;
     in_addr				getDestAddress() const;
     unsigned int		getPacketSize() const;
@@ -49,6 +52,8 @@ public:
 
 private:
     time_t				m_timeStamp;		// Time
+	ether_addr			m_srcMacAddr;		// Source Mac Address
+	ether_addr			m_destMacAddr;		// Destination Mac Address
     in_addr				m_srcIPAddr;		// Source IP Address
     in_addr				m_destIPAddr;		// Destination IP Address
     unsigned int		m_sPacketSize;		// Packet size

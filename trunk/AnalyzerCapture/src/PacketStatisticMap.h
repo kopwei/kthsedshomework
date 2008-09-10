@@ -1,5 +1,5 @@
 /**
- *   ipheaderutil.h
+ *   PacketStatisticmap.h
  *   Author: Wei Zhenfang
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -13,37 +13,34 @@
  *   GNU General Public License for more details.
  *
  *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the
- *   Copyright (C) 2008 by Ericsson
+ *   along with this program; if not, write to Ericsson AB
+ *   Copyright (C) 2008 by Ericsson AB
  */
+#ifndef PACKETSTATISTICMAP_H
+#define PACKETSTATISTICMAP_H
 
-#ifndef IPHEADERUTIL_H
-#define IPHEADERUTIL_H
+#include "MetaTraffic.h"
 
-//#include "neti.h"
-#include "analyserpxTypes.h"
-#include "resultenum.h"
+#include <map>
 
+using namespace std;
 
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
-class CIPHeaderUtil{
+class CPacketStatisticMap{
 public:
-	
-	static ResultEnum GetIPHeader(const u_char* packet, ip*& pIPHeader);
-	
-	static ResultEnum GetSrcAndDstPort(const u_char* packet, u_int16_t* src_port, u_int16_t* dst_port);
-	
-	static const unsigned int ConvertIPToInt(const in_addr* pIPAddr);
-	
-	static const in_addr* ConvertIntToIP(const unsigned int pIntIP);
-	
-	static const unsigned long long ConvertMacToInt64(const ether_addr* pMacAddr);
-	
-	//static const unsigned long long ConvertMACToLong(const char* );
-	
+    CPacketStatisticMap();
 
+    ~CPacketStatisticMap();
+	
+	void insert(const ushort classifier, const MetaTraffic data);
+	
+	void clear();
+
+private:
+		
+	map<ushort, MetaTraffic> m_statisticMap;
 };
 
 #endif

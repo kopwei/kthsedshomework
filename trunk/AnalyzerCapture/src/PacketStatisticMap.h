@@ -37,6 +37,8 @@ public:
 	void insert(const ushort classifier, const MetaTraffic data);
 	
 	void clear();
+	
+	const string toString() const;
 
 private:
 		

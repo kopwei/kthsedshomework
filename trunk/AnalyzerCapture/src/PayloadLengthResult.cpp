@@ -75,7 +75,7 @@ ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned int* pArray)
 	string datestr = GetTimeStr(false);
 	//cout << "date is " << datestr << endl;
 	// Only for testing
-	ofstream ofile ( "payloadlength.ret", ios::binary | ios::app );
+	ofstream ofile ( "payloadlength.ret", ios_base::trunc );
 	string indent = "  ";
 	ofile << datestr << indent;
 	//cout << "date printed ..."<<endl;

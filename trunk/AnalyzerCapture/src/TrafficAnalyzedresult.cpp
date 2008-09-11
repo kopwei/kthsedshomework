@@ -82,12 +82,13 @@ bool CTrafficAnalyzedResult::IsSubscriber( const int ip_addr ) const
 ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( MetaTraffic* pTraffic )
 {
 	string datestr = GetTimeStr(false);
-	ofstream ofile ( "traffic.ret", ios::binary | ios::app );
+	ofstream ofile ( "traffic.ret", ios_base::app );
 	string indent = "  ";
 	int iFlowNumber = HashTableUtil::num_hash_entries(CAnalyzerAggregator::test_table);
 	ofile << datestr << indent;
 	//cout << "date printed ..."<<endl;
 	ofile << pTraffic->packetnumber << indent << pTraffic->trafficvolume << indent << iFlowNumber << endl;
+	ofile.close();
 	pTraffic->clear();
 }
 

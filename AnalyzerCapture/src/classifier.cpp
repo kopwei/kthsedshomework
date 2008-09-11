@@ -1427,7 +1427,6 @@ u_short CClassifier::isGoBoogy ( unsigned char *payload, const u16 mess_len )
 		//free(strg);
 		return 1;
 	}
-	printf ( "ttt\n" );
 	if ( mess_len < 5 )
 		return 0;
 	unsigned char *t = ( unsigned char * ) payload;

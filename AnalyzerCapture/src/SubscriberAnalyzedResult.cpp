@@ -67,7 +67,8 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 	// Create a new subscriber
 	in_addr srcAddr = pPacketDigest->getSrcAddress();
 	unsigned int src_key = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
-	//unsigned long long newkey = CIPHeaderUtil::ConvertMacToInt64(&(pPacketDigest->getDestEtherAddress()));
+	ether_addr macSrcAddr = pPacketDigest->getSrcEtherAddress();
+	unsigned long long mackey = CIPHeaderUtil::ConvertMacToInt64(&macSrcAddr);
 
 	// First try to find if there is a match
 	StatisticMap::iterator itor = m_pSubscriberMap->find ( src_key );
@@ -82,7 +83,7 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 	}
 	else
 	{
-		CSubscriberStatistic pSubscriber( src_key );
+		CSubscriberStatistic pSubscriber( src_key, mackey);
 		pSubscriber.AddNewPacket ( pPacketDigest );
 		EABASSERT ( rs );
 		m_pSubscriberMap->insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, pSubscriber ) );
@@ -108,10 +109,18 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 
 ResultEnum CSubscriberAnalyzedResult::PrintInfoToFile(StatisticMap* pStatisticMap)
 {
-	string directory = "trafficresult\\";
+	string directory = "TrafficResult/";
 	string datestr = GetTimeStr(false);
 	string fileName = directory.append(datestr);
 	
-	return eNotImplemented;
+	ofstream ofile(fileName.c_str(), ios_base::trunc);
+	StatisticMap::const_iterator itor = pStatisticMap->begin();
+	for( ; itor != pStatisticMap->end() ; ++itor)
+	{
+		ofile << itor->second.toString() << endl;
+	}
+	ofile.close();
+	pStatisticMap->clear();
+	return eOK;
 }
 

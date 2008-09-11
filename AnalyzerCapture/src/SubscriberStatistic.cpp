@@ -26,7 +26,8 @@
 
 using namespace std;
 
-CSubscriberStatistic::CSubscriberStatistic ( const unsigned int ipAddress ) :
+CSubscriberStatistic::CSubscriberStatistic ( const unsigned long long llMacAddress, const unsigned int ipAddress ) :
+		m_macAddress ( llMacAddress ),
 		m_ipAddress ( ipAddress )
 {
 }
@@ -37,7 +38,8 @@ CSubscriberStatistic::~CSubscriberStatistic ( void )
 
 
 CSubscriberStatistic::CSubscriberStatistic ( const CSubscriberStatistic& subStat )
-		: m_ipAddress ( subStat.m_ipAddress ),
+		:m_macAddress ( subStat.m_macAddress ),
+		m_ipAddress ( subStat.m_ipAddress ),
 		m_uploadPacketStatistic ( subStat.m_uploadPacketStatistic ),
 		m_downloadPacketStatistic ( subStat.m_downloadPacketStatistic )
 {}
@@ -61,6 +63,14 @@ ResultEnum CSubscriberStatistic::AddNewPacket ( const CPacketDigest* pPacketDige
 	}
 
 	return rs;
+}
+
+const string CSubscriberStatistic::toString() const
+{
+	string indent = "   ";
+	stringstream strStream;
+	strStream << m_macAddress << indent << m_ipAddress << m_uploadPacketStatistic.toString() << indent << m_downloadPacketStatistic.toString();
+	return strStream.str();
 }
 
 void CSubscriberStatistic::PrintSummary()

@@ -109,3 +109,16 @@ void CPacketStatisticMap::clear()
 		itor->second.clear();
 	}
 }
+
+const string CPacketStatisticMap::toString() const
+{
+	stringstream strStream;
+	string indent = "   ";
+	map<ushort, MetaTraffic>::const_iterator itor = m_statisticMap.begin();
+	for( ; itor != m_statisticMap.end(); ++itor)
+	{
+		strStream << itor->first << indent << itor->second.toString() << indent;
+	}
+	return strStream.str();
+}
+

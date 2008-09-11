@@ -30,7 +30,7 @@ class CPacketDigest;
 class CSubscriberStatistic
 {
 public:
-	CSubscriberStatistic(const unsigned int ipAddress);
+	CSubscriberStatistic(const unsigned long long llMacAddress, const unsigned int ipAddress);
 	~CSubscriberStatistic(void);
 	
 	CSubscriberStatistic(const CSubscriberStatistic& subStat);
@@ -46,6 +46,8 @@ public:
 	const CPacketStatistic& GetUploadStatistic() const {return *(&m_uploadPacketStatistic);}
 
 	const CPacketStatistic& GetDownloadStatistic() const {return *(&m_downloadPacketStatistic);}
+	
+	const string toString() const;
 	
 
 private: 

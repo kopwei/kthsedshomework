@@ -129,7 +129,9 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 //    }
     tFlag = false;
     //    printHash(fileName);
+	RecordStatus(&s_refTime);
     CAnalyzerAggregator::printHash();   
+	
     if ( pParam->isOnlineMode() )
     {
         pthread_exit ( ( void* ) CAnalyzerAggregator::verifyHashTimeOut );
@@ -186,7 +188,6 @@ void * CAnalyzer::threadsLoop ( void *par )
                 {
 					
                     s_bIsStoring = true;
-					bool bNeedDailyStat = NeedStoreDailyResult(header, &refTime);
                     s_refTime = *(localtime(&(header->ts.tv_sec)));
                     tm t = s_refTime;
 					//cout << "entered to record"<< endl;
@@ -318,19 +319,3 @@ ResultEnum CAnalyzer::RecordStatus(const tm* t)
 
     return eOK;
 }
-
-bool CAnalyzer::NeedStoreDailyResult( const pcap_pkthdr* header, const tm* t )
-{
-	tm* time = localtime(&(header->ts.tv_sec));
-	int packetMin = time->tm_min;
-	int refMin = t->tm_min;
-	return (time->tm_mday != t->tm_mday);
-}
-
-ResultEnum CAnalyzer::RecordDailyStatus( const tm* t )
-{
-	// TODO:
-	return eNotImplemented;
-}
-
-

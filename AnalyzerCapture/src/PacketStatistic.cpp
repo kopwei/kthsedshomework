@@ -104,17 +104,17 @@ ResultEnum CPacketStatistic::distributedByClassification(const unsigned short sC
 	// If it is p2p packet 
 	MetaTraffic meta;
 	meta.packetnumber = 1;
-	meta.packetnumber = iPacketSize;
+	meta.trafficvolume = iPacketSize;
 	m_trafficMap.insert(sClassId, meta);
 	
 	return rs;
 }
 
-const string GetStatisticString()
+const string CPacketStatistic::toString() const
 {
 	string indent = "   ";
 	stringstream strStream;
-	//strStream << 
+	strStream << m_packetnumber << indent << m_trafficvolume << indent << m_trafficMap.toString();
 	return strStream.str();
 }
 

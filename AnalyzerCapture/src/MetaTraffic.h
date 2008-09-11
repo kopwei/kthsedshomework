@@ -19,6 +19,9 @@
 #ifndef METATRAFFIC_H
 #define METATRAFFIC_H
 
+#include <string>
+#include <sstream>
+
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
@@ -29,6 +32,14 @@ struct MetaTraffic
 	MetaTraffic(void) : packetnumber(0), trafficvolume(0){}
 		
 	void clear() {packetnumber = 0; trafficvolume = 0;}
+	
+	const std::string toString() const 
+	{
+		std::stringstream strStream;
+		std::string indent = "   ";
+		strStream << packetnumber << indent << trafficvolume;
+		return strStream.str();
+	}
 	
 	_uint_64 packetnumber;
 	_uint_64 trafficvolume;

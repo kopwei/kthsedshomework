@@ -23,7 +23,6 @@
 #include "resultenum.h"
 #include "MetaTraffic.h"
 #include "PacketStatisticMap.h"
-#include <string>
 #include <map>
 
 using namespace std;
@@ -59,7 +58,7 @@ class CPacketStatistic
 //		_uint_64 unidentifiedpacketnumber() const {return m_unidentifiedpacketnumber;}
 //		_uint_64 unidentifiedtrafficvolume() const {return m_unidentifiedtrafficvolume;}
 		
-		const string GetStatisticString();
+		const string toString() const;
 
 
 	private:

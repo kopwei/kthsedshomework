@@ -61,15 +61,14 @@ ResultEnum CTrafficAnalyzedResult::AddNewPacketInfo( const CPacketDigest* pDiges
 {
 	ResultEnum rs = eOK;// AddPacketToMap(pDigest);
 	
-	++m_pCounter->packetnumber;
-	m_pCounter->trafficvolume += pDigest->getPacketSize();
+	m_pCounter->AddPacketInfo(pDigest);
 	
 	//if (IsSubscriber(src_key))
 	//{
 	//	++m_pCounter->user_number;
 	//}		
 	
-	rs = m_totalPacketStatistic.AddPacketInfo(pDigest);
+	//rs = m_totalPacketStatistic.AddPacketInfo(pDigest);
 	return rs;
 }
 
@@ -79,15 +78,15 @@ bool CTrafficAnalyzedResult::IsSubscriber( const int ip_addr ) const
 	return true;
 }
 
-ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( MetaTraffic* pTraffic )
+ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( CPacketStatistic* pTraffic )
 {
 	string datestr = GetTimeStr(false);
 	ofstream ofile ( "traffic.ret", ios_base::app );
 	string indent = "  ";
 	int iFlowNumber = HashTableUtil::num_hash_entries(CAnalyzerAggregator::test_table);
-	ofile << datestr << indent;
+	ofile << datestr << indent << iFlowNumber << indent;
 	//cout << "date printed ..."<<endl;
-	ofile << pTraffic->packetnumber << indent << pTraffic->trafficvolume << indent << iFlowNumber << endl;
+	ofile << pTraffic->toString() << endl;
 	ofile.close();
 	pTraffic->clear();
 }

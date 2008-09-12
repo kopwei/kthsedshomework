@@ -26,7 +26,7 @@
 
 using namespace std;
 
-typedef  map<unsigned int, CSubscriberStatistic> StatisticMap;
+typedef  map<unsigned long long, CSubscriberStatistic> SubscriberStatisticMap;
 
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
@@ -54,13 +54,13 @@ private:
 	 */
 	ResultEnum				AddPacketToMap(const CPacketDigest* pPacketDigest);
 	
-	ResultEnum				PrintInfoToFile(StatisticMap* pStatisticMap);
+	ResultEnum				PrintInfoToFile(SubscriberStatisticMap* pStatisticMap);
 	
 	
-	StatisticMap			m_mapSubscriberStat;
-	StatisticMap			m_map_tempSubscriberStat;
+	SubscriberStatisticMap			m_mapSubscriberStat;
+	SubscriberStatisticMap			m_map_tempSubscriberStat;
 	
-	StatisticMap*			m_pSubscriberMap;
+	SubscriberStatisticMap*			m_pSubscriberMap;
 
 };
 

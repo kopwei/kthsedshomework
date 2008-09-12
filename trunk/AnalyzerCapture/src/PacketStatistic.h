@@ -57,8 +57,10 @@ class CPacketStatistic
 //		_uint_64 httptrafficvolume() const {return m_httptrafficvolume;}
 //		_uint_64 unidentifiedpacketnumber() const {return m_unidentifiedpacketnumber;}
 //		_uint_64 unidentifiedtrafficvolume() const {return m_unidentifiedtrafficvolume;}
-		
+
 		const string toString() const;
+
+		void clear();
 
 
 	private:
@@ -90,10 +92,10 @@ class CPacketStatistic
 //		_uint_64 m_httptrafficvolume;
 //		_uint_64 m_unidentifiedpacketnumber;
 //		_uint_64 m_unidentifiedtrafficvolume;
-		
-		// 
+
+		//
 		CPacketStatisticMap m_trafficMap;
-		
+
 };
 
 #endif

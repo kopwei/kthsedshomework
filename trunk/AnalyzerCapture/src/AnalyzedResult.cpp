@@ -46,7 +46,7 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 	string year = CommonUtil::itoa(refTime.tm_year + 1900, 10);
 	// Month
 	string month;
-	if (refTime.tm_mon + 1 < 9)
+	if (refTime.tm_mon  <  9)
 	{
 		month.append(strZero);
 	}

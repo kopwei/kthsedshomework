@@ -118,3 +118,14 @@ const string CPacketStatistic::toString() const
 	return strStream.str();
 }
 
+void CPacketStatistic::clear()
+{
+	m_packetnumber = 0;
+	m_trafficvolume = 0;
+	m_tcppacketnumber = 0;
+	m_tcptrafficvolume= 0;
+	m_udppacketnumber = 0;
+	m_udptrafficvolume = 0;
+	m_trafficMap.clear();
+}
+

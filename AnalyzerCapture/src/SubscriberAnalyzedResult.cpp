@@ -66,12 +66,12 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 	
 	// Create a new subscriber
 	in_addr srcAddr = pPacketDigest->getSrcAddress();
-	unsigned int src_key = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
+	unsigned int srcIp = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
 	ether_addr macSrcAddr = pPacketDigest->getSrcEtherAddress();
-	unsigned long long mackey = CIPHeaderUtil::ConvertMacToInt64(&macSrcAddr);
+	unsigned long long src_key = CIPHeaderUtil::ConvertMacToInt64(&macSrcAddr);
 
 	// First try to find if there is a match
-	StatisticMap::iterator itor = m_pSubscriberMap->find ( src_key );
+	SubscriberStatisticMap::iterator itor = m_pSubscriberMap->find ( src_key );
 	bool bSrcFound = m_pSubscriberMap->end() != itor ? true : false;
 
 	// Lock the map and add specific values;
@@ -83,7 +83,7 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 	}
 	else
 	{
-		CSubscriberStatistic pSubscriber( src_key, mackey);
+		CSubscriberStatistic pSubscriber( srcIp, src_key);
 		pSubscriber.AddNewPacket ( pPacketDigest );
 		EABASSERT ( rs );
 		m_pSubscriberMap->insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, pSubscriber ) );
@@ -92,8 +92,10 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 	pthread_mutex_unlock ( &Locks::packetMap_lock );
 
 	// Try to find if there is a destination match
-	in_addr dstAddr = pPacketDigest->getDestAddress();
-	unsigned int dst_key = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
+	//in_addr dstAddr = pPacketDigest->getDestAddress();
+	//unsigned int dst_key = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
+	ether_addr macDestAddr = pPacketDigest->getSrcEtherAddress();
+	unsigned long long dst_key = CIPHeaderUtil::ConvertMacToInt64(&macDestAddr);
 
 	itor = m_pSubscriberMap->find ( dst_key );
 	if ( m_pSubscriberMap->end() != itor )
@@ -107,14 +109,14 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 	return rs;
 }
 
-ResultEnum CSubscriberAnalyzedResult::PrintInfoToFile(StatisticMap* pStatisticMap)
+ResultEnum CSubscriberAnalyzedResult::PrintInfoToFile(SubscriberStatisticMap* pStatisticMap)
 {
 	string directory = "TrafficResult/";
 	string datestr = GetTimeStr(false);
 	string fileName = directory.append(datestr);
 	
 	ofstream ofile(fileName.c_str(), ios_base::trunc);
-	StatisticMap::const_iterator itor = pStatisticMap->begin();
+	SubscriberStatisticMap::const_iterator itor = pStatisticMap->begin();
 	for( ; itor != pStatisticMap->end() ; ++itor)
 	{
 		ofile << itor->second.toString() << endl;

@@ -21,7 +21,7 @@
 #define TRAFFICANALYZEDRESULT_H
 
 #include "AnalyzedResult.h"
-#include "SubscriberStatistic.h"
+#include "PacketStatistic.h"
 //#include <map>
 
 using namespace std;
@@ -56,14 +56,14 @@ private:
 
 	bool				IsSubscriber(const int ip_addr) const;
 
-	CPacketStatistic		m_totalPacketStatistic;
+	//CPacketStatistic		m_totalPacketStatistic;
 	
-	ResultEnum				PrintInfoToFile(MetaTraffic* pTraffic);
+	ResultEnum				PrintInfoToFile(CPacketStatistic* pTraffic);
 
-	MetaTraffic m_traffic_counter;
-	MetaTraffic m_temp_traffic_counter;
+	CPacketStatistic 		m_traffic_counter;
+	CPacketStatistic 		m_temp_traffic_counter;
 	
-	MetaTraffic* m_pCounter;
+	CPacketStatistic* 		m_pCounter;
 
 };
 

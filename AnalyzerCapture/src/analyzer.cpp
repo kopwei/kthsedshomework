@@ -135,8 +135,11 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 		cout <<"File "<< namebase << " processing finished " <<  endl;
     }
     tFlag = false;
+	tm t = s_refTime;
+	time_t newTime = mktime(&t) + 60;
+	t = *(localtime(&newTime));
     //    printHash(fileName);
-	RecordStatus(&s_refTime);
+	RecordStatus(&t);
     CAnalyzerAggregator::printHash();   
 	
     if ( pParam->isOnlineMode() )

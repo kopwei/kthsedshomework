@@ -98,7 +98,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
         strFileName.append("_0");
     }
     int analyserpxError;
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 56; j++)
     {
 		string intstr = CommonUtil::itoa(j, 10);
 		//cout << "number string ready: " << intstr << endl;
@@ -109,6 +109,10 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 		if (j > 0)
 		{
 			namebase.append(intstr);	
+		}
+		if ( j == 3)
+		{
+			int b = 10;
 		}
 		//cout << "Name ready " << namebase << endl;
 		//cin >> c; 
@@ -156,7 +160,7 @@ void * CAnalyzer::threadsLoop ( void *par )
 
     cap_config* pCapConfig = s_pUserInputParams->GetCaptureConfig();
     struct pcap_pkthdr *head = ( pcap_pkthdr* ) malloc ( sizeof ( const struct pcap_pkthdr ) );
-    const u_char       *pkt = ( unsigned char* ) malloc ( pCapConfig->snap_len + 2 );
+    /* const*/ u_char       *pkt = ( unsigned char* ) malloc ( pCapConfig->snap_len + 2 );
 
 
 
@@ -215,7 +219,9 @@ void * CAnalyzer::threadsLoop ( void *par )
                 size = pCapConfig->snap_len - ETHER_HDR_LEN;
             }
             memcpy ( ( void* ) head  , ( void* ) header, sizeof ( struct pcap_pkthdr ) );
-            memcpy ( ( void* ) pkt, ( void* ) packet, size + ETHER_HDR_LEN );
+			void* pk = ( void* ) pkt;
+			void* pack = ( void* ) packet;
+            memcpy ( pk, pack, size + ETHER_HDR_LEN );
 
             pthread_mutex_unlock ( &Locks::cap_lock );
             processNewPacket ( ( u_char * ) & ( pCapConfig->snap_len ), head, pkt, tp );
@@ -246,7 +252,9 @@ void * CAnalyzer::threadsLoop ( void *par )
 
     //s_packetStatistician.PrintStatisticResult(localtime(&(header->ts.tv_sec)));
     free ( head );
-    //free(pkt);
+	head = NULL;
+    free(pkt);
+	pkt= NULL;
 	
 
 }

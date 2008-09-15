@@ -18,7 +18,8 @@
  */
 
 #include "AnalyzedResult.h"
-#include "CommonUtil.h"
+//#include "CommonUtil.h"
+#include <sstream>
 
 CAnalyzedResult::CAnalyzedResult(void)
 {
@@ -31,7 +32,7 @@ CAnalyzedResult::~CAnalyzedResult(void)
 
 const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 {
-	string strZero = CommonUtil::itoa(0, 10);
+	//string strZero = CommonUtil::itoa(0, 10);
 	tm refTime;
 	if (bIsStart)
 	{
@@ -41,7 +42,44 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 	{
 		refTime = m_endTime;
 	}
+	stringstream datestr;
+	// year
+	datestr << refTime.tm_year + 100;
+	// month
+	if (refTime.tm_mon < 11)
+	{
+		datestr << 0;
+	}
+	datestr << refTime.tm_mon;
+	// day
+	if (refTime.tm_mday < 10) 
+	{
+		datestr << 0;
+	}
+	datestr << refTime.tm_mday;
+	// hour
+	if (refTime.tm_hour < 10)
+	{
+		datestr << 0;
+		if (refTime.tm_hour == 0)
+		{
+			datestr << 0;
+		}
+	}
+	datestr << refTime.tm_hour;
+	// minute
+	if (refTime.tm_min < 10)
+	{
+		datestr << 0;
+		if (refTime.tm_min == 0)
+		{
+			datestr << 0;
+		}
+	}
+	datestr << refTime.tm_min;
+	return datestr.str();
 
+/*
 	// Year
 	string year = CommonUtil::itoa(refTime.tm_year + 1900, 10);
 	// Month
@@ -96,5 +134,6 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 	}
 	string datestr = year + month + day + hour + minute;
 	return datestr;
+	*/
 }
 

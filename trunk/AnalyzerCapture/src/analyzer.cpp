@@ -321,9 +321,10 @@ bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )
     tm* time = localtime(&(header->ts.tv_sec));
     int packetMin = time->tm_min;
     int refMin = t->tm_min;
-    return (time->tm_min != t->tm_min 
-		|| time->tm_hour != time->tm_hour 
-		|| time->tm_yday != time->tm_yday);
+    return (time->tm_sec != t->tm_sec
+		|| time->tm_min != t->tm_min 
+		|| time->tm_hour != t->tm_hour 
+		|| time->tm_yday != t->tm_yday);
 }
 
 ResultEnum CAnalyzer::RecordStatus(const tm* t)

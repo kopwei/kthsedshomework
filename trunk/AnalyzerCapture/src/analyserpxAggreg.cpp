@@ -210,7 +210,7 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
 
     if ( !s_pInputParams->isOnlineMode() )
     {
-        verifyTimeOutHash ( flow );
+        //verifyTimeOutHash ( flow );
     }
 
     //Sync Table begin

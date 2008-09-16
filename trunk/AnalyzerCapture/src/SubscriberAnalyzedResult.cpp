@@ -71,11 +71,12 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 	unsigned long long src_key = CIPHeaderUtil::ConvertMacToInt64(&macSrcAddr);
 
 	// First try to find if there is a match
-	SubscriberStatisticMap::iterator itor = m_pSubscriberMap->find ( src_key );
-	bool bSrcFound = m_pSubscriberMap->end() != itor ? true : false;
-
 	// Lock the map and add specific values;
 	pthread_mutex_lock ( &Locks::packetMap_lock );
+	
+	SubscriberStatisticMap::iterator itor = m_pSubscriberMap->find ( srcIp );
+	bool bSrcFound = m_pSubscriberMap->end() != itor ? true : false;
+	
 	if ( bSrcFound )
 	{
 		rs = ( itor->second ).AddNewPacket ( pPacketDigest );
@@ -86,26 +87,26 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPack
 		CSubscriberStatistic pSubscriber( srcIp, src_key);
 		pSubscriber.AddNewPacket ( pPacketDigest );
 		EABASSERT ( rs );
-		m_pSubscriberMap->insert ( pair<unsigned int, CSubscriberStatistic> ( src_key, pSubscriber ) );
+		m_pSubscriberMap->insert ( pair<unsigned long long, CSubscriberStatistic> ( srcIp, pSubscriber ) );
 
 	}
 	pthread_mutex_unlock ( &Locks::packetMap_lock );
 
 	// Try to find if there is a destination match
-	//in_addr dstAddr = pPacketDigest->getDestAddress();
-	//unsigned int dst_key = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
+	in_addr dstAddr = pPacketDigest->getDestAddress();
+	unsigned int dstIp = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
 	ether_addr macDestAddr = pPacketDigest->getSrcEtherAddress();
 	unsigned long long dst_key = CIPHeaderUtil::ConvertMacToInt64(&macDestAddr);
-
-	itor = m_pSubscriberMap->find ( dst_key );
+	
+	// Lock the map and add specific values;
+	pthread_mutex_lock ( &Locks::packetMap_lock );
+	itor = m_pSubscriberMap->find ( dstIp );
 	if ( m_pSubscriberMap->end() != itor )
-	{
-		// Lock the map and add specific values;
-		pthread_mutex_lock ( &Locks::packetMap_lock );
+	{		
 		rs = ( itor->second ).AddNewPacket ( pPacketDigest );
-		EABASSERT ( rs ); //ON_ERROR_RETURN()
-		pthread_mutex_unlock ( &Locks::packetMap_lock );
+		EABASSERT ( rs ); //ON_ERROR_RETURN()		
 	}
+	pthread_mutex_unlock ( &Locks::packetMap_lock );
 	return rs;
 }
 

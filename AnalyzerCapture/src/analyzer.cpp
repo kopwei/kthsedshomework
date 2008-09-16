@@ -136,7 +136,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
     }
     tFlag = false;
 	tm t = s_refTime;
-	time_t newTime = mktime(&t) + 60;
+	time_t newTime = mktime(&t) + 1;
 	t = *(localtime(&newTime));
     //    printHash(fileName);
 	RecordStatus(&t);
@@ -321,7 +321,9 @@ bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )
     tm* time = localtime(&(header->ts.tv_sec));
     int packetMin = time->tm_min;
     int refMin = t->tm_min;
-    return (time->tm_min != t->tm_min);
+    return (time->tm_min != t->tm_min 
+		|| time->tm_hour != time->tm_hour 
+		|| time->tm_yday != time->tm_yday);
 }
 
 ResultEnum CAnalyzer::RecordStatus(const tm* t)

@@ -77,6 +77,16 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 		}
 	}
 	datestr << refTime.tm_min;
+	// seconds
+	if (refTime.tm_sec < 10)
+	{
+		datestr << 0;
+		if (refTime.tm_sec == 0)
+		{
+			datestr << 0;
+		}
+	}
+	datestr << refTime.tm_sec;
 	return datestr.str();
 
 /*

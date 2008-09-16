@@ -44,7 +44,7 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 	}
 	stringstream datestr;
 	// year
-	datestr << refTime.tm_year + 1900;
+	datestr << refTime.tm_year - 100;
 	// month
 	if (refTime.tm_mon < 11)
 	{
@@ -65,8 +65,16 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 		{
 			datestr << 0;
 		}
+		else
+		{
+			datestr << refTime.tm_hour;
+		}
 	}
-	datestr << refTime.tm_hour;
+	else
+	{
+		datestr << refTime.tm_hour;
+	}
+	
 	// minute
 	if (refTime.tm_min < 10)
 	{
@@ -75,8 +83,15 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 		{
 			datestr << 0;
 		}
+		else
+		{
+			datestr << refTime.tm_min;
+		}
 	}
-	datestr << refTime.tm_min;
+	else
+	{
+		datestr << refTime.tm_min;
+	}
 	// seconds
 	if (refTime.tm_sec < 10)
 	{
@@ -85,8 +100,15 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 		{
 			datestr << 0;
 		}
+		else
+		{
+			datestr << refTime.tm_sec;
+		}
 	}
-	datestr << refTime.tm_sec;
+	else
+	{
+		datestr << refTime.tm_sec;
+	}
 	return datestr.str();
 
 /*

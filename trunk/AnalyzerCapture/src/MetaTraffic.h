@@ -22,25 +22,37 @@
 #include <string>
 #include <sstream>
 
+
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
 struct MetaTraffic
 {
 	typedef unsigned long long _uint_64;
-	
+public:	
 	MetaTraffic(void) : packetnumber(0), trafficvolume(0){}
 		
 	void clear() {packetnumber = 0; trafficvolume = 0;}
+	
+	void AddNewPacket(const uint packetSize)
+	{
+		++packetnumber;
+		trafficvolume += packetSize;
+	}
 	
 	const std::string toString() const 
 	{
 		std::stringstream strStream;
 		std::string indent = "   ";
-		strStream << packetnumber << indent << trafficvolume;
+		strStream << packetnumber << indent << trafficvolume << indent;
 		return strStream.str();
 	}
 	
+	_uint_64 GetPacketNumber() const {return packetnumber;}
+	_uint_64 GetTrafficVolume() const {return trafficvolume;}
+	
+private:
+		
 	_uint_64 packetnumber;
 	_uint_64 trafficvolume;
 

@@ -44,7 +44,12 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 	}
 	stringstream datestr;
 	// year
-	datestr << refTime.tm_year - 100;
+	int year = refTime.tm_year - 100;
+	if (year < 10)
+	{
+		datestr << 0;
+	}
+	datestr << year;
 	// month
 	if (refTime.tm_mon < 11)
 	{

@@ -25,9 +25,11 @@
 #include "PacketStatisticMap.h"
 #include <map>
 
-using namespace std;
 
 class CPacketDigest;
+
+using namespace std;
+
 
 class CPacketStatistic
 {
@@ -37,20 +39,18 @@ class CPacketStatistic
 		CPacketStatistic ( void );
 		~CPacketStatistic ( void );
 
-		CPacketStatistic ( const CPacketStatistic& );
-
 		/*
 		 *	This method is used to add a new packet digest into the info base
 		 */
 		ResultEnum		AddPacketInfo ( const CPacketDigest* pDigest );
 
-		_uint_64 packetnumber() const {return m_packetnumber;}
-		_uint_64 trafficvolume() const {return m_trafficvolume;}
+//		_uint_64 packetnumber() const {return m_packetnumber;}
+//		_uint_64 trafficvolume() const {return m_trafficvolume;}
 //		_uint_64 emptypacketnumber() const {return m_emptypacketnumber;}
-		_uint_64 tcppacketnumber() const {return m_tcppacketnumber;}
-		_uint_64 tcptrafficvolume() const {return m_tcptrafficvolume;}
-		_uint_64 udppacketnumber() const {return m_udppacketnumber;}
-		_uint_64 udptrafficvolume() const {return m_udptrafficvolume;}
+//		_uint_64 tcppacketnumber() const {return m_tcppacketnumber;}
+//		_uint_64 tcptrafficvolume() const {return m_tcptrafficvolume;}
+//		_uint_64 udppacketnumber() const {return m_udppacketnumber;}
+//		_uint_64 udptrafficvolume() const {return m_udptrafficvolume;}
 //		_uint_64 p2ppacketnumber() const {return m_p2ppacketnumber;}
 //		_uint_64 p2ptrafficvolume() const {return m_p2ptrafficvolume;}
 //		_uint_64 httppacketnumber() const {return m_httppacketnumber;}
@@ -68,30 +68,30 @@ class CPacketStatistic
 		/*
 		 *	My own private functions
 		 */
-		/*
+		/**
 		 *	This method will distribute the packet by its protocol e.g. TCP, UDP, etc.
 		 */
-		ResultEnum distributeByProtocol ( const unsigned short sProtocolId, const unsigned int iPacketSize );
+		ResultEnum distributeByProtocol ( const CPacketDigest* pDigest );
 
-		/*
+		/**
 		 *	This method will distribute the packet by its classification, e.g. P2P, Web, etc.
 		 */
-		ResultEnum distributedByClassification ( const unsigned short sClassId, const unsigned int iPacketSize );
+		ResultEnum distributeByClassification ( const CPacketDigest* pDigest );
+		
+		/**
+		 * This method will distribute the packet by its locality, e.g. user to user or user to other
+		 */
+		ResultEnum distributeByLocality(const CPacketDigest* pDigest );
+		
+		bool isUser(const uint ipAddress);
 
 
-		_uint_64 m_packetnumber;
-		_uint_64 m_trafficvolume;
-//		_uint_64 m_emptypacketnumber;
-		_uint_64 m_tcppacketnumber;
-		_uint_64 m_tcptrafficvolume;
-		_uint_64 m_udppacketnumber;
-		_uint_64 m_udptrafficvolume;
-//		_uint_64 m_p2ppacketnumber;
-//		_uint_64 m_p2ptrafficvolume;
-//		_uint_64 m_httppacketnumber;
-//		_uint_64 m_httptrafficvolume;
-//		_uint_64 m_unidentifiedpacketnumber;
-//		_uint_64 m_unidentifiedtrafficvolume;
+		MetaTraffic m_totalTraffic;
+		MetaTraffic m_tcpTraffic;
+		MetaTraffic m_udpTraffic;
+		MetaTraffic m_localTraffic;
+		MetaTraffic m_illocalTraffic;
+
 
 		//
 		CPacketStatisticMap m_trafficMap;

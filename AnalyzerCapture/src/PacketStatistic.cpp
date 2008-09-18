@@ -18,114 +18,103 @@
  */
 
 #include "PacketStatistic.h"
-
-#include "PacketDigest.h"
+#include "ipheaderutil.h"
 #include "classifier.h"
 #include "macro.h"
-#include <sstream>
+#include "PacketDigest.h"
 
 
-CPacketStatistic::CPacketStatistic( void ) :
-m_packetnumber(0), 
-m_trafficvolume(0), 
-//m_emptypacketnumber(0), 
-m_tcppacketnumber(0),
-m_tcptrafficvolume(0),
-m_udppacketnumber(0),
-m_udptrafficvolume(0)
-//m_p2ppacketnumber(0),
-//m_p2ptrafficvolume(0),
-//m_httppacketnumber(0),
-//m_httptrafficvolume(0),
-//m_unidentifiedpacketnumber(0),
-//m_unidentifiedtrafficvolume(0)
+CPacketStatistic::CPacketStatistic( void ) 
 {}
 
 CPacketStatistic::~CPacketStatistic( void )
 {}
 
-CPacketStatistic::CPacketStatistic(const CPacketStatistic& stat) :
-m_packetnumber(stat.m_packetnumber), 
-m_trafficvolume(stat.m_trafficvolume), 
-//m_emptypacketnumber(stat.m_emptypacketnumber), 
-m_tcppacketnumber(stat.m_tcppacketnumber),
-m_tcptrafficvolume(stat.m_tcptrafficvolume),
-m_udppacketnumber(stat.m_udppacketnumber),
-m_udptrafficvolume(stat.m_udptrafficvolume),
-m_trafficMap(stat.m_trafficMap)
-//m_p2ppacketnumber(stat.m_p2ppacketnumber),
-//m_p2ptrafficvolume(stat.m_p2ptrafficvolume),
-//m_httppacketnumber(stat.m_httppacketnumber),
-//m_httptrafficvolume(stat.m_httptrafficvolume),
-//m_unidentifiedpacketnumber(stat.m_unidentifiedpacketnumber),
-//m_unidentifiedtrafficvolume(stat.m_unidentifiedtrafficvolume)
-{}
 
 ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest)
 {
 	ResultEnum rs = eOK;
-	unsigned int size = pDigest->getPacketSize();
 	// Modify the total statistic
-	++m_packetnumber;
-	m_trafficvolume += size;
-
-	u_short protocol = pDigest->getProtocol();
-	rs = distributeByProtocol(protocol, size);
+	m_totalTraffic.AddNewPacket(pDigest->getPacketSize());
+	
+	rs = distributeByProtocol(pDigest);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
-	u_short classfication = pDigest->getProtocolClassification();
-	rs = distributedByClassification(classfication, size);
+	rs = distributeByClassification(pDigest);
+	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+	
+	rs = distributeByLocality(pDigest);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
 	// TODO: need more implementation here
 	return rs;
 }
 
-ResultEnum CPacketStatistic::distributeByProtocol(const unsigned short sProtocolId, const unsigned int iPacketSize)
+ResultEnum CPacketStatistic::distributeByProtocol(const CPacketDigest* pDigest)
 {
 	ResultEnum rs = eOK;
-	if (PROTO_ID_TCP == sProtocolId)
+	if (PROTO_ID_TCP == pDigest->getProtocol())
 	{
-		m_tcppacketnumber++;
-		m_tcptrafficvolume += iPacketSize;
+		m_tcpTraffic.AddNewPacket(pDigest->getPacketSize());
 	}
-	else if (PROTO_ID_UDP == sProtocolId)
+	else if (PROTO_ID_UDP == pDigest->getProtocol())
 	{
-		m_udppacketnumber++;
-		m_udptrafficvolume += iPacketSize;
+		m_udpTraffic.AddNewPacket(pDigest->getPacketSize());
 	}	
 	// TODO: May need more implementation here
 	return rs;
 } 
 
-ResultEnum CPacketStatistic::distributedByClassification(const unsigned short sClassId, const unsigned int iPacketSize)
+ResultEnum CPacketStatistic::distributeByClassification(const CPacketDigest* pDigest)
 {
 	ResultEnum rs = eOK;
 	// If it is p2p packet 
 	MetaTraffic meta;
-	meta.packetnumber = 1;
-	meta.trafficvolume = iPacketSize;
-	m_trafficMap.insert(sClassId, meta);
+	meta.AddNewPacket(pDigest->getPacketSize());
+	m_trafficMap.insert(pDigest->getProtocolClassification(), meta);
 	
 	return rs;
 }
+
+ResultEnum CPacketStatistic::distributeByLocality(const CPacketDigest* pDigest)
+{
+	in_addr src_addr = pDigest->getSrcAddress();
+	in_addr dst_addr = pDigest->getDestAddress();
+	uint srcAddr = CIPHeaderUtil::ConvertIPToInt(&src_addr);
+	uint dstAddr = CIPHeaderUtil::ConvertIPToInt(&dst_addr);
+	
+	if (isUser(srcAddr) && isUser(dstAddr))
+	{
+		m_localTraffic.AddNewPacket(pDigest->getPacketSize());
+	}
+	else
+	{
+		m_illocalTraffic.AddNewPacket(pDigest->getPacketSize());
+	}
+}
+
+bool CPacketStatistic::isUser(const uint ipAddress)
+{
+	//TODO: need implementation here
+	return true;
+}
+
 
 const string CPacketStatistic::toString() const
 {
 	string indent = "   ";
 	stringstream strStream;
-	strStream << m_packetnumber << indent << m_trafficvolume << indent << m_trafficMap.toString();
+	strStream << m_totalTraffic.toString() << m_localTraffic.toString() << m_trafficMap.toString();
 	return strStream.str();
 }
 
 void CPacketStatistic::clear()
 {
-	m_packetnumber = 0;
-	m_trafficvolume = 0;
-	m_tcppacketnumber = 0;
-	m_tcptrafficvolume= 0;
-	m_udppacketnumber = 0;
-	m_udptrafficvolume = 0;
+	m_totalTraffic.clear();
+	m_tcpTraffic.clear();
+	m_udpTraffic.clear();
+	m_localTraffic.clear();
+	m_illocalTraffic.clear();
 	m_trafficMap.clear();
 }
 

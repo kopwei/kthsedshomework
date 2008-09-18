@@ -38,8 +38,6 @@ public:
 	//const CSubscriberStatistic& operator= (const CSubscriberStatistic& subStat);	
 	
 	ResultEnum AddNewPacket(const CPacketDigest* pPacketDigest);
-	
-	void PrintSummary();
 
 	unsigned int GetIPAddress() const {return m_ipAddress;}
 

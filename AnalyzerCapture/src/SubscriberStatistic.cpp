@@ -73,9 +73,4 @@ const string CSubscriberStatistic::toString() const
 	return strStream.str();
 }
 
-void CSubscriberStatistic::PrintSummary()
-{
-	// Just for testing...
-	cout << "I am user " << m_ipAddress << " and I have received "
-	<< m_downloadPacketStatistic.packetnumber() << " Packets" << endl;
-}
+

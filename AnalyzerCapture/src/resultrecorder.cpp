@@ -218,20 +218,20 @@ ResultEnum CResultRecorder::RecordStatisticIntoTable(const string& strTableName,
 													 const CPacketStatistic& stat)
 {
 	ResultEnum rs = eOK;
-	if (iSubuscriber == 0)
-		return rs;
-	if (0 == strTableName.length())
-		return eCommonError;
+//	if (iSubuscriber == 0)
+//		return rs;
+//	if (0 == strTableName.length())
+//		return eCommonError;
 	// TODO: Need implementation here
-	unsigned long long iSub = ((unsigned long long)iSubuscriber) << 32;
-	unsigned long long id = iSub + start_time;
+//	unsigned long long iSub = ((unsigned long long)iSubuscriber) << 32;
+//	unsigned long long id = iSub + start_time;
 
-	mysqlpp::Query query = m_connection.query();
-	query << " INSERT INTO %0 VALUES ( " 
-		<< " %1q, %2q, %3q, %4q, %5q, %6q, %7q, %8q, %9q, %10q, "
-		<< " %11q, %12q, %13q, %14q, %15q, %16q, %17q) " ;
-	query.parse();
-	unsigned long long packetNumber = stat.packetnumber();
+//	mysqlpp::Query query = m_connection.query();
+//	query << " INSERT INTO %0 VALUES ( " 
+//		<< " %1q, %2q, %3q, %4q, %5q, %6q, %7q, %8q, %9q, %10q, "
+//		<< " %11q, %12q, %13q, %14q, %15q, %16q, %17q) " ;
+//	query.parse();
+//	unsigned long long packetNumber = stat.packetnumber();
 
 /*	query.execute(strTableName.c_str(), id, iSubuscriber, (unsigned int)start_time, (unsigned int)end_time, packetNumber,
 		stat.trafficvolume(), stat.emptypacketnumber(), stat.tcppacketnumber(), stat.tcptrafficvolume(),

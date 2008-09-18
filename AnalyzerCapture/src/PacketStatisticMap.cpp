@@ -96,8 +96,7 @@ void CPacketStatisticMap::insert(const ushort classifier, const MetaTraffic data
 	map<ushort, MetaTraffic>::iterator itor = m_statisticMap.find(classifier);
 	if (itor != m_statisticMap.end())
 	{
-		itor->second.packetnumber += data.packetnumber;
-		itor->second.trafficvolume += data.trafficvolume;
+		itor->second.AddNewPacket(data.GetTrafficVolume());
 	}
 }
 
@@ -117,7 +116,7 @@ const string CPacketStatisticMap::toString() const
 	map<ushort, MetaTraffic>::const_iterator itor = m_statisticMap.begin();
 	for( ; itor != m_statisticMap.end(); ++itor)
 	{
-		strStream << itor->first << indent << itor->second.toString() << indent;
+		strStream << itor->first << indent << itor->second.toString();
 	}
 	return strStream.str();
 }

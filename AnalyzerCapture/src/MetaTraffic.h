@@ -40,6 +40,12 @@ public:
 		trafficvolume += packetSize;
 	}
 	
+	void AddNewTraffic(const _uint_64 packets, const _uint_64 packetSize)
+	{
+		packetnumber += packets;
+		trafficvolume += packetSize;
+	}
+	
 	const std::string toString() const 
 	{
 		std::stringstream strStream;

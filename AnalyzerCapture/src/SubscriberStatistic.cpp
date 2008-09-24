@@ -37,21 +37,11 @@ CSubscriberStatistic::~CSubscriberStatistic ( void )
 }
 
 
-CSubscriberStatistic::CSubscriberStatistic ( const CSubscriberStatistic& subStat )
-		:m_macAddress ( subStat.m_macAddress ),
-		m_ipAddress ( subStat.m_ipAddress ),
-		m_uploadPacketStatistic ( subStat.m_uploadPacketStatistic ),
-		m_downloadPacketStatistic ( subStat.m_downloadPacketStatistic )
-{}
 
-
-ResultEnum CSubscriberStatistic::AddNewPacket ( const CPacketDigest* pPacketDigest )
+ResultEnum CSubscriberStatistic::AddNewPacket ( const CPacketDigest* pPacketDigest, const bool isDownload )
 {
 	ResultEnum rs = eOK;
-	in_addr src_addr = pPacketDigest->getSrcAddress();
-	bool bIsSrcPacket = CIPHeaderUtil::ConvertIPToInt ( &src_addr ) == m_ipAddress ? true : false;
-
-	if ( bIsSrcPacket )
+	if ( !isDownload )
 	{
 		rs = m_uploadPacketStatistic.AddPacketInfo ( pPacketDigest );
 		EABASSERT ( rs == eOK );
@@ -69,7 +59,7 @@ const string CSubscriberStatistic::toString() const
 {
 	string indent = "   ";
 	stringstream strStream;
-	strStream << m_macAddress << indent << m_ipAddress << m_uploadPacketStatistic.toString() << indent << m_downloadPacketStatistic.toString();
+	strStream << m_macAddress << indent << m_ipAddress <<indent << m_uploadPacketStatistic.toString() << indent << m_downloadPacketStatistic.toString();
 	return strStream.str();
 }
 

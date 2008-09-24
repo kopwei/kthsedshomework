@@ -22,11 +22,12 @@
 #include "PacketDigest.h"
 #include "locks.h"
 #include "macro.h"
+#include "UserUtil.h"
 #include <netinet/in.h>
 #include <fstream>
 
 CSubscriberAnalyzedResult::CSubscriberAnalyzedResult()
-	: CAnalyzedResult(), m_pSubscriberMap(NULL)
+		: CAnalyzedResult(), m_pSubscriberMap ( NULL )
 {
 	m_pSubscriberMap = &m_mapSubscriberStat;
 }
@@ -36,94 +37,100 @@ CSubscriberAnalyzedResult::~CSubscriberAnalyzedResult()
 {
 }
 
-ResultEnum CSubscriberAnalyzedResult::AddNewPacketInfo(const CPacketDigest* pDigest)
+ResultEnum CSubscriberAnalyzedResult::AddNewPacketInfo ( const CPacketDigest* pDigest )
 {
-	return AddPacketToMap(pDigest);
+	return AddPacketToMap ( pDigest );
 }
 
 ResultEnum CSubscriberAnalyzedResult::PrintResult()
 {
 	ResultEnum rs = eOK;
-	if (m_pSubscriberMap == &m_mapSubscriberStat)
+	string datestr = GetTimeStr ( false );
+	if ( m_pSubscriberMap == &m_mapSubscriberStat )
 	{
 		m_pSubscriberMap = &m_map_tempSubscriberStat;
-		rs = PrintInfoToFile(&m_mapSubscriberStat);
+		rs = PrintInfoToFile ( &m_mapSubscriberStat, datestr);
 		EABASSERT ( rs );
 	}
 	else
 	{
 		m_pSubscriberMap = &m_mapSubscriberStat;
-		rs = PrintInfoToFile(&m_map_tempSubscriberStat);
+		rs = PrintInfoToFile ( &m_map_tempSubscriberStat, datestr );
 		EABASSERT ( rs );
 	}
 	return rs;
 }
 
 
-ResultEnum CSubscriberAnalyzedResult::AddPacketToMap( const CPacketDigest* pPacketDigest )
+ResultEnum CSubscriberAnalyzedResult::AddPacketToMap ( const CPacketDigest* pPacketDigest )
 {
 	ResultEnum rs = eOK;
-	
+
 	// Create a new subscriber
 	in_addr srcAddr = pPacketDigest->getSrcAddress();
 	unsigned int srcIp = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
 	ether_addr macSrcAddr = pPacketDigest->getSrcEtherAddress();
-	unsigned long long src_key = CIPHeaderUtil::ConvertMacToInt64(&macSrcAddr);
-
-	// First try to find if there is a match
-	// Lock the map and add specific values;
-	pthread_mutex_lock ( &Locks::packetMap_lock );
-	
-	SubscriberStatisticMap::iterator itor = m_pSubscriberMap->find ( srcIp );
-	bool bSrcFound = m_pSubscriberMap->end() != itor ? true : false;
-	
-	if ( bSrcFound )
-	{
-		rs = ( itor->second ).AddNewPacket ( pPacketDigest );
-		EABASSERT ( rs ); //ON_ERROR_RETURN()
-	}
-	else
-	{
-		CSubscriberStatistic pSubscriber( srcIp, src_key);
-		pSubscriber.AddNewPacket ( pPacketDigest );
-		EABASSERT ( rs );
-		m_pSubscriberMap->insert ( pair<unsigned long long, CSubscriberStatistic> ( srcIp, pSubscriber ) );
-
-	}
-	pthread_mutex_unlock ( &Locks::packetMap_lock );
+	unsigned long long src_MAC_key = CIPHeaderUtil::ConvertMacToInt64 ( &macSrcAddr );
 
 	// Try to find if there is a destination match
 	in_addr dstAddr = pPacketDigest->getDestAddress();
 	unsigned int dstIp = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
-	ether_addr macDestAddr = pPacketDigest->getSrcEtherAddress();
-	unsigned long long dst_key = CIPHeaderUtil::ConvertMacToInt64(&macDestAddr);
-	
+	ether_addr macDestAddr = pPacketDigest->getDestEtherAddress();
+	unsigned long long dst_MAC_key = CIPHeaderUtil::ConvertMacToInt64 ( &macDestAddr );
+
+	if ( CUserUtil::IsUserUploaded ( src_MAC_key, dst_MAC_key, srcIp, dstIp ) )
+	{
+		DistributePacket(pPacketDigest, srcIp, src_MAC_key, false);
+	}
+	if ( CUserUtil::IsUserDownloaded(src_MAC_key, dst_MAC_key, srcIp, dstIp))
+	{		
+		DistributePacket(pPacketDigest, dstIp, dst_MAC_key, true);
+	}
+	return rs;
+}
+
+ResultEnum CSubscriberAnalyzedResult::DistributePacket(const CPacketDigest* pDigest, const uint ipAddr, const uint64 macAddr, const bool isDownload)
+{
+	ResultEnum rs = eOK;
 	// Lock the map and add specific values;
 	pthread_mutex_lock ( &Locks::packetMap_lock );
-	itor = m_pSubscriberMap->find ( dstIp );
-	if ( m_pSubscriberMap->end() != itor )
-	{		
-		rs = ( itor->second ).AddNewPacket ( pPacketDigest );
-		EABASSERT ( rs ); //ON_ERROR_RETURN()		
+	SubscriberStatisticMap::iterator itor = m_pSubscriberMap->find ( macAddr );
+	bool bFound = m_pSubscriberMap->end() != itor ? true : false;
+	if ( bFound )
+	{
+		rs = ( itor->second ).AddNewPacket ( pDigest, isDownload);
+		EABASSERT ( rs ); //ON_ERROR_RETURN()
+	}
+	else
+	{
+		CSubscriberStatistic pSubscriber ( macAddr , ipAddr);
+		rs = pSubscriber.AddNewPacket ( pDigest , isDownload);
+		EABASSERT ( rs );
+		m_pSubscriberMap->insert ( pair<uint64, CSubscriberStatistic> ( macAddr, pSubscriber ) );
 	}
 	pthread_mutex_unlock ( &Locks::packetMap_lock );
 	return rs;
 }
 
-ResultEnum CSubscriberAnalyzedResult::PrintInfoToFile(SubscriberStatisticMap* pStatisticMap)
+ResultEnum CSubscriberAnalyzedResult::PrintInfoToFile ( SubscriberStatisticMap* pStatisticMap, const string& fileName)
 {
-	string directory = "TrafficResult/";
-	string datestr = GetTimeStr(false);
-	string fileName = directory.append(datestr);
+	string directory = "PacketResult/";
 	
-	ofstream ofile(fileName.c_str(), ios_base::trunc);
+	string fileNameStr = directory.append ( fileName );
+	string indent = "   ";
+	ofstream ofile ( fileNameStr.c_str(), ios_base::trunc );
 	SubscriberStatisticMap::const_iterator itor = pStatisticMap->begin();
-	for( ; itor != pStatisticMap->end() ; ++itor)
+	for ( ; itor != pStatisticMap->end() ; ++itor )
 	{
 		ofile << itor->second.toString() << endl;
 	}
 	ofile.close();
 	pStatisticMap->clear();
 	return eOK;
+}
+
+ResultEnum CSubscriberAnalyzedResult::PrintFinalResult()
+{
+	//TODO: 
 }
 

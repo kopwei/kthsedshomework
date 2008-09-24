@@ -65,7 +65,7 @@ ResultEnum CPacketTypeStat::PrintResult()
 	{
 		double packetPercent = (double)(const_itor->second.packetNumber) / (double)totalPacket * 100;
 		double volumePercent = (double)(const_itor->second.volume) / (double)totalVolume * 100;
-		cout << CFlowUtil::get_protocolName(const_itor->first) << " : packet " << const_itor->second.packetNumber << "  " <<packetPercent << "% "
+		cout << const_itor->first << "  " << CFlowUtil::get_protocolName(const_itor->first) << " : packet " << const_itor->second.packetNumber << "  " <<packetPercent << "% "
 			<< " : volume " << const_itor->second.volume << "  " << volumePercent << "%" << endl;
 	}
 }

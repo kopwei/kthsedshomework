@@ -362,6 +362,11 @@ const char* CFlowUtil::get_protocolName ( unsigned short proto_id )
 			case PROTO_ID_OTHERHTTP:        return( PROTO_NAME_OTHERHTTP );
 			case PROTO_ID_OTHERDNS:         return( PROTO_NAME_OTHERDNS );*/
 		case PROTO_ID_MYSQL:            return ( PROTO_NAME_MYSQL );
+		case PROTO_ID_OTHERCHAT:		return (PROTO_NAME_OTHERCHAT);
+		case PROTO_ID_OTHERVIDEO:	return (PROTO_NAME_OTHERVIDEO);
+		case PROTO_ID_OTHERHTTP:	return (PROTO_NAME_OTHERHTTP);
+		case PROTO_ID_OTHERDNS:		return (PROTO_NAME_OTHERDNS);
+		
 			//end
 		default: return ( PROTO_NAME_OTHER );
 	}

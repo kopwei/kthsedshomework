@@ -36,11 +36,11 @@ public:
 	CAnalyzedResult(void);
 	virtual ~CAnalyzedResult(void);
 
-	virtual ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest) = 0;
+	virtual ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest) {};
 
 	virtual ResultEnum PrintResult() = 0;
 
-	virtual ResultEnum PrintDailyResult() {};
+	virtual ResultEnum PrintFinalResult() {};
 	
 	void 		setStartTime(const tm& t) {m_startTime = t;}
 	void 		setEndTime(const tm& t) {m_endTime = t;}

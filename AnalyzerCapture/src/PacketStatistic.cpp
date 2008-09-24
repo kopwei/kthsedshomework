@@ -22,6 +22,7 @@
 #include "classifier.h"
 #include "macro.h"
 #include "PacketDigest.h"
+#include "UserUtil.h"
 
 
 CPacketStatistic::CPacketStatistic( void ) 
@@ -83,7 +84,7 @@ ResultEnum CPacketStatistic::distributeByLocality(const CPacketDigest* pDigest)
 	uint srcAddr = CIPHeaderUtil::ConvertIPToInt(&src_addr);
 	uint dstAddr = CIPHeaderUtil::ConvertIPToInt(&dst_addr);
 	
-	if (isUser(srcAddr) && isUser(dstAddr))
+	if (CUserUtil::IsUserIP((srcAddr)) && CUserUtil::IsUserIP((dstAddr)))
 	{
 		m_localTraffic.AddNewPacket(pDigest->getPacketSize());
 	}
@@ -91,12 +92,6 @@ ResultEnum CPacketStatistic::distributeByLocality(const CPacketDigest* pDigest)
 	{
 		m_illocalTraffic.AddNewPacket(pDigest->getPacketSize());
 	}
-}
-
-bool CPacketStatistic::isUser(const uint ipAddress)
-{
-	//TODO: need implementation here
-	return true;
 }
 
 

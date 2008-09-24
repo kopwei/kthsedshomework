@@ -83,8 +83,6 @@ class CPacketStatistic
 		 */
 		ResultEnum distributeByLocality(const CPacketDigest* pDigest );
 		
-		bool isUser(const uint ipAddress);
-
 
 		MetaTraffic m_totalTraffic;
 		MetaTraffic m_tcpTraffic;

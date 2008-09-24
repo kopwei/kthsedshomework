@@ -26,7 +26,8 @@
 
 using namespace std;
 
-typedef  map<unsigned long long, CSubscriberStatistic> SubscriberStatisticMap;
+typedef unsigned long long uint64;
+typedef map<uint64, CSubscriberStatistic> SubscriberStatisticMap;
 
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
@@ -42,6 +43,8 @@ public:
 
 	ResultEnum PrintResult();
 	
+	ResultEnum PrintFinalResult();
+	
 private:
 	/**
 	 * Avoid bitwise copy
@@ -54,13 +57,17 @@ private:
 	 */
 	ResultEnum				AddPacketToMap(const CPacketDigest* pPacketDigest);
 	
-	ResultEnum				PrintInfoToFile(SubscriberStatisticMap* pStatisticMap);
+	ResultEnum 				DistributePacket(const CPacketDigest* pDigest, const uint ipAddr, const uint64 macAddr, const bool isDownload);
+	
+	ResultEnum				PrintInfoToFile(SubscriberStatisticMap* pStatisticMap, const string& fileName);
 	
 	
 	SubscriberStatisticMap			m_mapSubscriberStat;
 	SubscriberStatisticMap			m_map_tempSubscriberStat;
 	
 	SubscriberStatisticMap*			m_pSubscriberMap;
+	
+	SubscriberStatisticMap			m_totalSubscriberStat;
 
 };
 

@@ -33,11 +33,9 @@ public:
 	CSubscriberStatistic(const unsigned long long llMacAddress, const unsigned int ipAddress);
 	~CSubscriberStatistic(void);
 	
-	CSubscriberStatistic(const CSubscriberStatistic& subStat);
-	
 	//const CSubscriberStatistic& operator= (const CSubscriberStatistic& subStat);	
 	
-	ResultEnum AddNewPacket(const CPacketDigest* pPacketDigest);
+	ResultEnum AddNewPacket(const CPacketDigest* pPacketDigest, const bool isDownload);
 
 	unsigned int GetIPAddress() const {return m_ipAddress;}
 

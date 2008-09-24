@@ -33,6 +33,7 @@
 #include "macro.h"
 #include "PacketDigest.h"
 #include "CommonUtil.h"
+#include "UserUtil.h"
 
 using namespace std;
 
@@ -72,6 +73,9 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 
     pthread_mutex_init ( &Locks::cap_lock , NULL ) ;
     CAnalyzerAggregator::initVariables(pParam);
+	
+	// Initialize the ISP's mac address
+	CUserUtil::InitISPMacSet();
 
 
     for ( int i = 0; i < pParam->GetThreadNumber(); ++i )
@@ -98,7 +102,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
         strFileName.append("_0");
     }
     int analyserpxError;
-    for (int j = 0; j < 56; j++)
+    for (int j = 1; j < 56; j++)
     {
 		string intstr = CommonUtil::itoa(j, 10);
 		//cout << "number string ready: " << intstr << endl;
@@ -109,10 +113,6 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 		if (j > 0)
 		{
 			namebase.append(intstr);	
-		}
-		if ( j == 3)
-		{
-			int b = 10;
 		}
 		//cout << "Name ready " << namebase << endl;
 		//cin >> c; 

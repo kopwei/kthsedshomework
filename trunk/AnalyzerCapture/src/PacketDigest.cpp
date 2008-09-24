@@ -32,8 +32,10 @@ CPacketDigest::CPacketDigest ( const pcap_pkthdr* header, const u_char* packet, 
 	m_destMacAddr = *((ether_addr*) pEtherHeader->h_dest);
 	
     ip* pIpHeader = ( ip * ) ( packet + ETHER_HDR_LEN );
-    m_srcIPAddr = pIpHeader->ip_src;
-    m_destIPAddr = pIpHeader->ip_dst;
+	uint srcIp = ntohl(pIpHeader->ip_src.s_addr);
+	uint dstIp = ntohl(pIpHeader->ip_dst.s_addr);
+    m_srcIPAddr.s_addr = srcIp;
+    m_destIPAddr.s_addr = dstIp;
     m_sProtocol = pIpHeader->ip_p;
     //m_pFlow = flow; 
     m_sClass = flow->class_proto();

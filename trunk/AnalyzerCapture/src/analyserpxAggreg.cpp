@@ -102,7 +102,7 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
 
     }
 
-    CFlowUtil::printFlowCollectionToFile(&collection, fileName);
+    //CFlowUtil::printFlowCollectionToFile(&collection, fileName);
     //Sync Table begin
     pthread_mutex_unlock ( &Locks::hash_lock );
     return rs;
@@ -492,7 +492,7 @@ void CAnalyzerAggregator::printHash()
         //processNewFlow(flow_hsh);
         //CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
     }
-    CFlowUtil::printFlowCollectionToFile(&collection, s_strFileName);
+    //CFlowUtil::printFlowCollectionToFile(&collection, s_strFileName);
 	//////////////////////////////////////////////////////////////////////////
 	// This is used to clear the packet statistic result
 	s_PacketTypeStat.PrintResult();

@@ -35,8 +35,6 @@ CUserUtil::~CUserUtil()
 
 void CUserUtil::InitISPMacSet()
 {
-	// TODO: need implementation here
-
 	s_ispMacSet.insert(0x1b2ba3c1c9LL);
 	s_ispMacSet.insert(0x1b2ba3c1ccLL);
 	s_ispMacSet.insert(0x1b2ba3c1cdLL);

@@ -56,6 +56,8 @@ public:
 	static void*		PacketStatisticTimeOut(void* pArg);
 	
 	void				PrintStatisticResult(const tm* t);
+	
+	void				PrintFinalResult();
 
 	//StatisticMap		GetStatisticMap() const {return s_mapSubscriberStat;}
 

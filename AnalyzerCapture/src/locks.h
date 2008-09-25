@@ -34,6 +34,8 @@ public:
 	static pthread_mutex_t fileName_lock;
 	static pthread_mutex_t storing_lock;
 	static pthread_mutex_t time_lock;
+	
+	static pthread_mutex_t total_subscriber_lock;
 };
 
 #endif

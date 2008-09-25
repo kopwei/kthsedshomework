@@ -94,8 +94,22 @@ ResultEnum CSubscriberAnalyzedResult::DistributePacket(const CPacketDigest* pDig
 	ResultEnum rs = eOK;
 	// Lock the map and add specific values;
 	pthread_mutex_lock ( &Locks::packetMap_lock );
-	SubscriberStatisticMap::iterator itor = m_pSubscriberMap->find ( macAddr );
-	bool bFound = m_pSubscriberMap->end() != itor ? true : false;
+	rs = DistributePacketImpl(pDigest, ipAddr, macAddr, isDownload, m_pSubscriberMap);
+	EABASSERT ( rs );
+	pthread_mutex_unlock ( &Locks::packetMap_lock );
+	
+	pthread_mutex_lock(&Locks::total_subscriber_lock);
+	rs = DistributePacketImpl(pDigest, ipAddr, macAddr, isDownload, &m_totalSubscriberStat);
+	EABASSERT(rs);
+	pthread_mutex_unlock(&Locks::total_subscriber_lock);
+	return rs;
+}
+
+ResultEnum CSubscriberAnalyzedResult::DistributePacketImpl(const CPacketDigest* pDigest, const uint ipAddr, const uint64 macAddr, const bool isDownload, SubscriberStatisticMap* pStatisticMap)
+{
+	ResultEnum rs = eOK;
+	SubscriberStatisticMap::iterator itor = pStatisticMap->find ( macAddr );
+	bool bFound = pStatisticMap->end() != itor ? true : false;
 	if ( bFound )
 	{
 		rs = ( itor->second ).AddNewPacket ( pDigest, isDownload);
@@ -106,9 +120,8 @@ ResultEnum CSubscriberAnalyzedResult::DistributePacket(const CPacketDigest* pDig
 		CSubscriberStatistic pSubscriber ( macAddr , ipAddr);
 		rs = pSubscriber.AddNewPacket ( pDigest , isDownload);
 		EABASSERT ( rs );
-		m_pSubscriberMap->insert ( pair<uint64, CSubscriberStatistic> ( macAddr, pSubscriber ) );
+		pStatisticMap->insert ( pair<uint64, CSubscriberStatistic> ( macAddr, pSubscriber ) );
 	}
-	pthread_mutex_unlock ( &Locks::packetMap_lock );
 	return rs;
 }
 
@@ -132,5 +145,15 @@ ResultEnum CSubscriberAnalyzedResult::PrintInfoToFile ( SubscriberStatisticMap* 
 ResultEnum CSubscriberAnalyzedResult::PrintFinalResult()
 {
 	//TODO: 
+	string fileName = "SubscriberStat.ret";
+	ofstream ofile (fileName.c_str(), ios_base::trunc);
+	SubscriberStatisticMap::const_iterator itor = m_totalSubscriberStat.begin();
+	for (; itor != m_totalSubscriberStat.end(); ++itor)
+	{
+		ofile << itor->second.toString() << endl;
+	}
+	ofile.close();
+	m_totalSubscriberStat.clear();
+	
 }
 

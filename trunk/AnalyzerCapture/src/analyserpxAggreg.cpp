@@ -25,7 +25,12 @@
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
 
 // RTA 18-03-08 - to avoid multiple definitions
-hash_tab * CAnalyzerAggregator::test_table;
+
+typedef map<unsigned long long, flow_t*> FlowMap;
+typedef pair<unsigned long long, flow_t*> FlowPair;
+//hash_tab * CAnalyzerAggregator::test_table;
+
+FlowMap CAnalyzerAggregator::s_flowMap;
 
 time_t CAnalyzerAggregator::tvSec;
 time_t CAnalyzerAggregator::tvUSec;
@@ -55,11 +60,11 @@ void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
     pthread_mutex_init ( &Locks::print_lock , NULL ) ;
     pthread_mutex_init( &Locks::fileName_lock, NULL);
     s_pInputParams = pUserInputParams;
-    test_table = HashTableUtil::init_hash_table ( "ANALYSERPX_CAP_TABLE", CFlowUtil::compare_flow, CFlowUtil::flow_key,
-                 CFlowUtil::delete_flow, HASH_SIZE );
+//    test_table = HashTableUtil::init_hash_table ( "ANALYSERPX_CAP_TABLE", CFlowUtil::compare_flow, CFlowUtil::flow_key,
+//                CFlowUtil::delete_flow, HASH_SIZE );
 }
 
-ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const string& fileName )
+ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const string& fileName )
 {
     ResultEnum rs = eOK;
     //cout << "I entered the clean hash program" << endl;
@@ -70,37 +75,47 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( hash_tab * hash, time_t sec, 
     cout << "Clean " << endl;
 
     flow_t *flow_hsh=NULL;
-    HashTableUtil::init_hash_walk ( hash );
+//    HashTableUtil::init_hash_walk ( hash );
     double hashTime=0, lastTime=0;
     lastTime = sec* ( 1e6 ) + usec;
-    flow_collection collection;
-    while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
+//    flow_collection collection;
+//    while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
+	FlowMap::iterator itor = flowMap->begin();
+	list<unsigned long long> keyList;
+	for (;itor != flowMap->end(); ++itor)
     {
+		flow_hsh = itor->second;
         hashTime = ( ( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( flow_hsh->end_mic() );
         if ( flow_export )
         {
-            *collection.add_flow() = *flow_hsh;
+            //*collection.add_flow() = *flow_hsh;
             //CFlowUtil::addFlowToFile(flow_hsh, fileName);
             //CFlowUtil::printFlowToFile ( flow_hsh, fileName );
             if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
             {
 				s_PacketTypeStat.processNewFlow(flow_hsh);
-                HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+				keyList.push_back(flow_hsh->GetKey());
             }
         }
         else
         {
             if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
             {
-                *collection.add_flow() = *flow_hsh;
+                //*collection.add_flow() = *flow_hsh;
 				s_PacketTypeStat.processNewFlow(flow_hsh);
                 //CFlowUtil::addFlowToFile(flow_hsh, fileName);
                 //CFlowUtil::printFlowToFile ( flow_hsh, fileName );
-                HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+				keyList.push_back(flow_hsh->GetKey());
             }
         }
-
     }
+	list<unsigned long long>::const_iterator listItor;
+	for (listItor = keyList.begin(); listItor != keyList.end(); ++listItor)
+	{
+		flowMap->erase(flowMap->find(*listItor));
+	}
 
     //CFlowUtil::printFlowCollectionToFile(&collection, fileName);
     //Sync Table begin
@@ -181,7 +196,7 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
                 pthread_mutex_unlock(&Locks::fileName_lock);
 
                 //snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
-                optimumCleanHash ( test_table, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
+                optimumCleanHash ( &s_flowMap, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
                 //the analyzer-px output according to -b parameter
                 offCount++;					  //as well as this line
                 //numo=offCount;					  //and this another one
@@ -203,9 +218,9 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
 {
     //extern int onlineCapMode;
 
-    flow_t *flow_hsh;
-    flow_t *tmp_flow;
-    flow_t *reverse_flow_hsh;
+    //flow_t *flow_hsh;
+    //flow_t *tmp_flow;
+    //flow_t *reverse_flow_hsh;
 	flow_t* return_flow;
 
     if ( !s_pInputParams->isOnlineMode() )
@@ -218,7 +233,11 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 ) {}
     ;
 
-    flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
+    //flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
+	flow_t* flow_hsh = NULL;
+	FlowMap::iterator flow_hsh_itor = s_flowMap.find(flow->GetKey());
+	if (flow_hsh_itor != s_flowMap.end())
+		flow_hsh = flow_hsh_itor->second;
 
     pthread_mutex_unlock ( &Locks::hash_lock );
     //Sync Table end
@@ -253,25 +272,27 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     }
 
     string strEmpty = "";
-    tmp_flow = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, strEmpty, strEmpty, flow->dst_port(), flow->src_port(),
+    flow_t* tmp_flow = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, strEmpty, strEmpty, flow->dst_port(), flow->src_port(),
                                          ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),
                                          flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
     //Sync Table begin
     //pthread_mutex_lock(&hash_lock);
     while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 ) {}
     ;
-    flow_hsh         = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
-    reverse_flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, tmp_flow );
-
+    //flow_hsh         = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
+	flow_t* reverse_flow_hsh = NULL;
+	FlowMap::iterator reverse_flow_hsh_itor = s_flowMap.find(tmp_flow->GetKey());
+	if (reverse_flow_hsh_itor != s_flowMap.end())
+		reverse_flow_hsh = reverse_flow_hsh_itor->second;
+	
     if ( flow_hsh == NULL )
     {
-        HashTableUtil::add_hash_entry ( test_table, flow );
+		s_flowMap.insert(FlowPair(flow->GetKey(), flow));
+        //HashTableUtil::add_hash_entry ( test_table, flow );
 		return_flow = flow;
         if ( ( reverse_flow_hsh == NULL ) )
         {
-            flow->set_class_proto(classifier);
-			
-			
+            flow->set_class_proto(classifier);			
         }
         else
         {
@@ -285,10 +306,13 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     else if ( verifyTimeOut ( flow_hsh, flow ) )
     {
         //extern char fileName[];
-        CFlowUtil::addFlowToFile(flow_hsh, s_strFileName);
+        //CFlowUtil::addFlowToFile(flow_hsh, s_strFileName);
         //CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
-        HashTableUtil::clear_hash_entry ( test_table, flow_hsh );
-        HashTableUtil::add_hash_entry ( test_table, flow );
+        //HashTableUtil::clear_hash_entry ( test_table, flow_hsh );
+        //HashTableUtil::add_hash_entry ( test_table, flow );
+		s_flowMap.erase(flow_hsh_itor);
+		//TODO: I don't know if I should do something here
+		s_flowMap.insert(FlowPair(flow->GetKey(), flow));
 		return_flow = flow;
         if ( ( reverse_flow_hsh == NULL ) )
         {
@@ -461,8 +485,8 @@ flow_t* CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pca
 //void printHash(char *fileName)
 void CAnalyzerAggregator::printHash()
 {
-    flow_t *flow_hsh;
-    HashTableUtil::init_hash_walk ( test_table );
+    flow_t *flow_hsh = NULL;
+    //HashTableUtil::init_hash_walk ( test_table );
     //struct tm *clock = NULL;
     //extern char baseFileName[];
     //extern char fileName[];
@@ -471,23 +495,25 @@ void CAnalyzerAggregator::printHash()
     //extern char fileName[];
     //char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
     //extern char baseFileName[];
-    time_t init = 0;
-    time ( &init );
-    string strDate;
+    //time_t init = 0;
+    //time ( &init );
+    //string strDate;
     //clock = ( struct tm * ) localtime ( & ( init ) );
-    CFlowUtil::getDate ( &init,strDate) ;
-    pthread_mutex_lock(&Locks::fileName_lock);
-    s_strFileName = s_pInputParams->GetFilePrefix();
-    s_strFileName.append ( strDate );
-    s_strFileName.append ( "_latestFile" );
-    pthread_mutex_unlock(&Locks::fileName_lock);
+    //CFlowUtil::getDate ( &init,strDate) ;
+    //pthread_mutex_lock(&Locks::fileName_lock);
+    //s_strFileName = s_pInputParams->GetFilePrefix();
+    //s_strFileName.append ( strDate );
+    //s_strFileName.append ( "_latestFile" );
+    //pthread_mutex_unlock(&Locks::fileName_lock);
     //snprintf ( filenameCountStr,36,"%s_latestFile",data );
     //snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
-    flow_collection collection;
-    while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( test_table ) ) )
+    //flow_collection collection;
+	for (FlowMap::iterator itor = s_flowMap.begin(); itor != s_flowMap.end(); ++itor)
+    //while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( test_table ) ) )
     {
+		flow_hsh = itor->second;
         //	fprintf(stdout,"Estamos aqui 1\n");
-        *(collection.add_flow()) = *flow_hsh;
+        //*(collection.add_flow()) = *flow_hsh;
 		s_PacketTypeStat.processNewFlow(flow_hsh);
         //processNewFlow(flow_hsh);
         //CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
@@ -502,7 +528,8 @@ void CAnalyzerAggregator::printHash()
     //printStatistic();
     //free ( filenameCountStr );
     //free ( data );
-    HashTableUtil::clear_hash_table ( test_table );
+    //HashTableUtil::clear_hash_table ( test_table );
+	s_flowMap.clear();
     //s_digestMap.clear();
 }
 
@@ -594,7 +621,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
         }
         //cleanHash(test_table, sec, usec, fileName);
 
-        rs = optimumCleanHash ( test_table, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
+        rs = optimumCleanHash ( &s_flowMap, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
         EABASSERT ( rs == eOK );
         //the analyzer-px output according to -b parameter
         interCounter++;
@@ -646,7 +673,7 @@ ResultEnum CAnalyzerAggregator::PrintStatisticResult( const tm* t )
 	GetFileName(s_iFileNameCount++);
 	time_t sec = tvSec;
 	time_t usec = tvUSec;
-	optimumCleanHash(test_table, sec, usec, s_strFileName);
+	optimumCleanHash(&s_flowMap, sec, usec, s_strFileName);
 }
 
 /*void *verifyHashTimeOut(void *par)

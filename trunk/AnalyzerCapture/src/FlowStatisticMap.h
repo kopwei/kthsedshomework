@@ -1,5 +1,5 @@
 /**
- *   FlowAnalyzedResult.h
+ *   FlowStatisticMap.h
  *   Author: Wei Zhenfang
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -16,48 +16,36 @@
  *   along with this program; if not, write to Ericsson AB
  *   Copyright (C) 2008 by Ericsson AB
  */
-#ifndef FLOWANALYZEDRESULT_H
-#define FLOWANALYZEDRESULT_H
+#ifndef FLOWSTATISTICMAP_H
+#define FLOWSTATISTICMAP_H
 
-#include "AnalyzedResult.h"
-#include "MetaTraffic.h"
 #include <map>
-
+#include <string>
 
 class flow_t;
+
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
-class CFlowAnalyzedResult : public CAnalyzedResult
-{
-	typedef std::map<unsigned long long, flow_t*> FlowMap;
-	
+class CFlowStatisticMap{
 public:
-    CFlowAnalyzedResult();
+    CFlowStatisticMap();
 
-    ~CFlowAnalyzedResult();
+    ~CFlowStatisticMap();
 	
-	ResultEnum AddNewFlowInfo(flow_t* pFlow);
+	void AddNewFlow(const flow_t* pFlow);
 	
-	ResultEnum ProcessFlowMap(const FlowMap* pFlowMap);
-	
-	ResultEnum PrintResult();
-	
-	ResultEnum PrintTotalResult();
-
-	ResultEnum Clear();
+	const std::string toString();
 
 private:
-	typedef std::map<u_short, uint> FlowTypeDistributionMap;
 	
-	typedef std::map<u_short, MetaTraffic> FlowDigestMap;
+	typedef unsigned long long uint64;
+	typedef std::map<ushort, uint64> FlowTypeMap;
+	typedef std::map<uint, FlowTypeMap> UserFlowStatMap;
+	
+	void InitFlowTypeMap(FlowTypeMap& flowTypeMap);
 
-	FlowDigestMap m_digestMap;
-	
-	FlowTypeDistributionMap m_distributionMap;
-	
-	
-
+	UserFlowStatMap m_statMap;
 };
 
 #endif

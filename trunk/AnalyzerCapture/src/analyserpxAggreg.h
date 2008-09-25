@@ -28,6 +28,7 @@ struct hash_tab;
 
 class CAnalyzerAggregator
 {
+	typedef map<unsigned long long, flow_t*> FlowMap;
 	public:
 		//CAnalyzerAggregator(CUserInputParams* pInputParams);
 		
@@ -71,8 +72,9 @@ class CAnalyzerAggregator
 		
 		static ResultEnum PrintStatisticResult(const tm* t);
 		
-		static hash_tab* test_table;
-
+		// static hash_tab* test_table;
+		
+		static int GetTableSize() {return s_flowMap.size();}
 
 	private :
 
@@ -118,7 +120,7 @@ class CAnalyzerAggregator
 			\param usec		Indicate the timestamp miliseconds of the last packet arrived.
 			\param *fileName	Name/location to save the expired flows.
 		 */
-		static ResultEnum optimumCleanHash ( hash_tab * hash, time_t sec, time_t usec, const string& fileName );
+		static ResultEnum optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const string& fileName );
 		
 		static ResultEnum GetFileName(const int count);
 
@@ -136,6 +138,8 @@ class CAnalyzerAggregator
 
 		
 		static CPacketTypeStat s_PacketTypeStat;
+		
+		static map<unsigned long long, flow_t*> s_flowMap;
 		
 		
 

@@ -158,6 +158,8 @@ class flow_t : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 dst_ip() const;
   inline void set_dst_ip(::google::protobuf::uint32 value);
   
+  inline unsigned long long GetKey() const;
+  
  private:
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
   mutable int _cached_size_;
@@ -465,6 +467,12 @@ inline ::google::protobuf::uint32 flow_t::dst_ip() const {
 inline void flow_t::set_dst_ip(::google::protobuf::uint32 value) {
   _set_bit(13);
   dst_ip_ = value;
+}
+
+inline unsigned long long flow_t::GetKey() const
+{
+	typedef unsigned long long uint64;
+	return (uint64)src_ip_ * 59 + (uint64)dst_ip_ * 37 + (uint64)proto_ * 7 + (uint64)dst_port_ * 29 + (uint64)src_port_ * 23;
 }
 
 #endif  // PROTOBUF_flow_2eproto__INCLUDED

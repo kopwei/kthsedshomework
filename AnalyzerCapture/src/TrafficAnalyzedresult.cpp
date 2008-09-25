@@ -83,7 +83,7 @@ ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( CPacketStatistic* pTraffic )
 	string datestr = GetTimeStr(false);
 	ofstream ofile ( "traffic.ret", ios_base::app );
 	string indent = "  ";
-	int iFlowNumber = HashTableUtil::num_hash_entries(CAnalyzerAggregator::test_table) / 2;
+	int iFlowNumber = CAnalyzerAggregator::GetTableSize() / 2;
 	ofile << datestr << indent << iFlowNumber << indent;
 	//cout << "date printed ..."<<endl;
 	ofile << pTraffic->toString() << endl;

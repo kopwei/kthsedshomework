@@ -77,6 +77,8 @@ class CAnalyzer
 
 		static ResultEnum RecordDailyStatus(const tm* t);
 		
+		static ResultEnum RecordFinalResult();
+		
 		static CUserInputParams* s_pUserInputParams;
 		
 		static CPacketStatistician		s_packetStatistician;

@@ -31,3 +31,6 @@ pthread_mutex_t Locks::fileName_lock;
 pthread_mutex_t Locks::storing_lock;
 
 pthread_mutex_t Locks::time_lock;
+
+pthread_mutex_t Locks::total_subscriber_lock;
+

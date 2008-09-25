@@ -134,13 +134,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 		
 		cout <<"File "<< namebase << " processing finished " <<  endl;
     }
-    tFlag = false;
-	tm t = s_refTime;
-	time_t newTime = mktime(&t) + 1;
-	t = *(localtime(&newTime));
-    //    printHash(fileName);
-	RecordStatus(&t);
-    CAnalyzerAggregator::printHash();   
+	RecordFinalResult();
 	
     if ( pParam->isOnlineMode() )
     {
@@ -305,7 +299,7 @@ void CAnalyzer::task_ctrl_C ( int i )
     getDate(&init,data,6) ;
     snprintf(filenameCountStr,36,"%s_%u",data,filenameCount);
     snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);*/
-    CAnalyzerAggregator::printHash();
+	RecordFinalResult();
     printf ( " <- Interrupt received.\nProgram will exit now!\n" );
 
     //s_packetStatistician.PrintStatisticResult();
@@ -313,6 +307,17 @@ void CAnalyzer::task_ctrl_C ( int i )
     /*free(filenameCountStr);
     free(data);*/
     exit ( 0 );
+}
+
+ResultEnum CAnalyzer::RecordFinalResult()
+{
+	tm t = s_refTime;
+	time_t newTime = mktime(&t) + 1;
+	t = *(localtime(&newTime));
+    //    printHash(fileName);
+	RecordStatus(&t);
+	CAnalyzerAggregator::printHash();	
+	s_packetStatistician.PrintFinalResult();
 }
 
 bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )

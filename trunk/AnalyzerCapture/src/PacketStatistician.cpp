@@ -101,6 +101,11 @@ void CPacketStatistician::PrintStatisticResult(const tm* t)
 	
 }
 
+void CPacketStatistician::PrintFinalResult()
+{
+	m_subscriberResult.PrintFinalResult();
+}
+
 
 void* CPacketStatistician::PacketStatisticTimeOut(void* pArg)
 {

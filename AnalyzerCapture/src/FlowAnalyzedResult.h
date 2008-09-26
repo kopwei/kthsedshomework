@@ -36,7 +36,7 @@ public:
 
     ~CFlowAnalyzedResult();
 	
-	ResultEnum AddNewFlowInfo(flow_t* pFlow);
+	ResultEnum AddNewFlowInfo(const flow_t* pFlow);
 	
 	ResultEnum ProcessFlowMap(const FlowMap* pFlowMap);
 	
@@ -47,6 +47,12 @@ public:
 	ResultEnum Clear();
 
 private:
+	
+	ResultEnum PrintCurrentResultToFile();
+	
+	ResultEnum PrintTotalResultToFile();
+	
+	
 	CFlowStatisticMap m_statisticMap;
 	
 	CFlowStatisticMap m_totalStatisticMap;

@@ -36,9 +36,8 @@ time_t CAnalyzerAggregator::tvSec;
 time_t CAnalyzerAggregator::tvUSec;
 string CAnalyzerAggregator::s_strFileName;
 CUserInputParams* CAnalyzerAggregator::s_pInputParams;
-//CTrafficAnalyzedResult CAnalyzerAggregator::trafficResult;
-//std::map<u_short, FlowDigest> CAnalyzerAggregator::s_digestMap;
-CPacketTypeStat CAnalyzerAggregator::s_PacketTypeStat;
+//CPacketTypeStat CAnalyzerAggregator::s_PacketTypeStat;
+CFlowAnalyzedResult CAnalyzerAggregator::s_flowAnalyzer;
 
 //int fileAdminTimeOff;
 int filenameCount = 0;
@@ -93,7 +92,8 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
             //CFlowUtil::printFlowToFile ( flow_hsh, fileName );
             if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
             {
-				s_PacketTypeStat.processNewFlow(flow_hsh);
+				//s_PacketTypeStat.processNewFlow(flow_hsh);
+				s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
                 //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
 				keyList.push_back(flow_hsh->GetKey());
             }
@@ -103,7 +103,8 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
             if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
             {
                 //*collection.add_flow() = *flow_hsh;
-				s_PacketTypeStat.processNewFlow(flow_hsh);
+				//s_PacketTypeStat.processNewFlow(flow_hsh);
+				s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
                 //CFlowUtil::addFlowToFile(flow_hsh, fileName);
                 //CFlowUtil::printFlowToFile ( flow_hsh, fileName );
                 //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
@@ -116,10 +117,13 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
 	{
 		flowMap->erase(flowMap->find(*listItor));
 	}
-
+	s_flowAnalyzer.ProcessFlowMap(flowMap);
     //CFlowUtil::printFlowCollectionToFile(&collection, fileName);
     //Sync Table begin
     pthread_mutex_unlock ( &Locks::hash_lock );
+	tm t = *(localtime(&sec));
+	s_flowAnalyzer.setEndTime(t);
+	s_flowAnalyzer.PrintResult();
     return rs;
 
 }
@@ -310,8 +314,9 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
         //CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
         //HashTableUtil::clear_hash_entry ( test_table, flow_hsh );
         //HashTableUtil::add_hash_entry ( test_table, flow );
-		s_flowMap.erase(flow_hsh_itor);
 		//TODO: I don't know if I should do something here
+		s_flowAnalyzer.AddNewFlowInfo(flow_hsh_itor->second);
+		s_flowMap.erase(flow_hsh_itor);		
 		s_flowMap.insert(FlowPair(flow->GetKey(), flow));
 		return_flow = flow;
         if ( ( reverse_flow_hsh == NULL ) )
@@ -514,15 +519,17 @@ void CAnalyzerAggregator::printHash()
 		flow_hsh = itor->second;
         //	fprintf(stdout,"Estamos aqui 1\n");
         //*(collection.add_flow()) = *flow_hsh;
-		s_PacketTypeStat.processNewFlow(flow_hsh);
+		//s_PacketTypeStat.processNewFlow(flow_hsh);
+		s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
         //processNewFlow(flow_hsh);
         //CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
     }
     //CFlowUtil::printFlowCollectionToFile(&collection, s_strFileName);
 	//////////////////////////////////////////////////////////////////////////
 	// This is used to clear the packet statistic result
-	s_PacketTypeStat.PrintResult();
-	s_PacketTypeStat.Clear();
+	//s_PacketTypeStat.PrintResult();
+	s_flowAnalyzer.PrintTotalResult();
+	//s_PacketTypeStat.Clear();
 	//////////////////////////////////////////////////////////////////////////
 	
     //printStatistic();

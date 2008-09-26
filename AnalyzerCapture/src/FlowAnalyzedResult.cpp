@@ -19,7 +19,9 @@
 #include "FlowAnalyzedResult.h"
 #include "classifier.h"
 #include "flow.pb.h"
+#include "analyserpxFlow.h"
 
+#include <iostream>
 #include <fstream>
 
 CFlowAnalyzedResult::CFlowAnalyzedResult()
@@ -31,7 +33,7 @@ CFlowAnalyzedResult::~CFlowAnalyzedResult()
 {
 }
 
-ResultEnum CFlowAnalyzedResult::AddNewFlowInfo(flow_t* flow)
+ResultEnum CFlowAnalyzedResult::AddNewFlowInfo(const flow_t* flow)
 {
 	u_short proto = flow->class_proto();
 	// add the distribution
@@ -50,34 +52,83 @@ ResultEnum CFlowAnalyzedResult::AddNewFlowInfo(flow_t* flow)
 		m_digestMap.insert ( pair<u_short, MetaTraffic> ( proto, meta ) );
 	}
 	
+	m_totalStatisticMap.AddNewFlow(flow);
+	
 	return eOK;
 }
 
 ResultEnum CFlowAnalyzedResult::ProcessFlowMap(const FlowMap* pFlowMap)
 {
 	ResultEnum rs = eOK;
-	//TODO
+	m_statisticMap.clear();
+	FlowMap::const_iterator itor = pFlowMap->begin();
+	for( ;itor != pFlowMap->end() ; ++itor)
+	{
+		m_statisticMap.AddNewFlow(itor->second);
+	}
 	return rs;
 }
 
 ResultEnum CFlowAnalyzedResult::PrintResult()
 {
-	string directory = "FlowResult/";
-	string datestr = GetTimeStr(false);
-	string fileNameStr = directory.append(datestr);
-	string indent = "   ";
-	ofstream ofile(fileNameStr.c_str(), ios_base::trunc);
-//	FlowTypeDistributionMap::iterator itor = m_distributionMap.begin();
-//	for( ;itor != m_distributionMap.end() ;++itor )
-	{
-//		ofile << itor->first << indent << itor ->second << indent;
-	}
-	ofile.close();
+	return PrintCurrentResultToFile();
 }
 
 
 ResultEnum CFlowAnalyzedResult::PrintTotalResult()
 {
+	string indent = "   ";
+	string fileName = "FlowDigestResult.ret";
+	ofstream ofile(fileName.c_str(), ios_base::trunc);
+	unsigned long long totalPacket = 0;
+	unsigned long long totalVolume = 0;
+	FlowDigestMap::const_iterator const_itor;
+	for (const_itor = m_digestMap.begin(); const_itor != m_digestMap.end(); ++const_itor)
+	{
+		totalPacket += const_itor->second.GetPacketNumber();
+		totalVolume += const_itor->second.GetTrafficVolume();
+	}
+	cout << "Totally there are " << totalPacket << " frames" << endl;
+	ofile << "Totally there are " << totalPacket << " frames" << endl;	
+	cout << "Totally there are " << totalVolume << " bytes" << endl;
+	ofile << "Totally there are " << totalVolume << " bytes" << endl;
+	for (const_itor = m_digestMap.begin(); const_itor != m_digestMap.end(); ++const_itor)
+	{
+		double packetPercent = (double)(const_itor->second.GetPacketNumber()) / (double)totalPacket * 100;
+		double volumePercent = (double)(const_itor->second.GetTrafficVolume()) / (double)totalVolume * 100;
+		cout << const_itor->first << indent << CFlowUtil::get_protocolName(const_itor->first) << " : packet " 
+				<< const_itor->second.GetPacketNumber() << indent <<packetPercent << "% "
+				<< " : volume " << const_itor->second.GetTrafficVolume() << indent << volumePercent << "%" << endl;
+		ofile << const_itor->first << indent << CFlowUtil::get_protocolName(const_itor->first) << " : packet " 
+				<< const_itor->second.GetPacketNumber() << indent <<packetPercent << "% "
+				<< " : volume " << const_itor->second.GetTrafficVolume() << indent << volumePercent << "%" << endl;
+	}
+	ofile.close();
 	
+	return PrintTotalResultToFile();
+}
+
+ResultEnum CFlowAnalyzedResult::PrintCurrentResultToFile()
+{
+	ResultEnum rs = eOK;
+	string datestr = GetTimeStr(false);
+	string fileName = "FlowAnalyze.ret";
+	string indent = "   ";
+	ofstream ofile(fileName.c_str(), ios_base::app);
+	ofile << datestr << indent << m_statisticMap.toString() << endl;
+	ofile.close();
+	m_statisticMap.clear();
+	return rs;
+}
+
+ResultEnum CFlowAnalyzedResult::PrintTotalResultToFile()
+{
+	ResultEnum rs = eOK;
+	string fileName = "FlowFinalResult.ret";
+	ofstream ofile(fileName.c_str(), ios_base::trunc);
+	ofile << m_totalStatisticMap.toString() << endl;
+	ofile.close();
+	m_totalStatisticMap.clear();
+	return rs;
 }
 

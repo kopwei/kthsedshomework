@@ -7,7 +7,7 @@
 
 #include "analyserpxTypes.h"
 #include "resultenum.h"
-//#include "TrafficAnalyzedresult.h"
+#include "FlowAnalyzedResult.h"
 #include "PacketTypeStat.h"
 #include <map>
 
@@ -136,8 +136,8 @@ class CAnalyzerAggregator
 		static time_t tvUSec;
 		static int s_iFileNameCount;
 
-		
-		static CPacketTypeStat s_PacketTypeStat;
+		static CFlowAnalyzedResult s_flowAnalyzer;
+		//static CPacketTypeStat s_PacketTypeStat;
 		
 		static map<unsigned long long, flow_t*> s_flowMap;
 		

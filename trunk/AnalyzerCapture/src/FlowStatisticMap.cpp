@@ -20,6 +20,7 @@
 #include "classifier.h"
 #include "flow.pb.h"
 #include "UserUtil.h"
+#include <sstream>
 
 typedef unsigned long long uint64;
 typedef std::map<ushort, uint64> FlowTypeMap;
@@ -116,6 +117,30 @@ void CFlowStatisticMap::InitFlowTypeMap(FlowTypeMap& flowTypeMap)
 	flowTypeMap.insert(pair<ushort, uint>(PROTO_ID_SSH, 0));
 	flowTypeMap.insert(pair<ushort, uint>(PROTO_ID_SSL, 0));
 	flowTypeMap.insert(pair<ushort, uint>(PROTO_ID_VALIDCERTSSL, 0));	
+}
+
+const std::string CFlowStatisticMap::toString()
+{
+	std::stringstream strStream;
+	std::string indent = "   ";
+	UserFlowStatMap::const_iterator itor = m_statMap.begin();
+	for (; itor != m_statMap.end(); ++itor)
+	{
+		strStream << itor->first << indent;
+		FlowTypeMap::const_iterator typeItor = itor->second.begin();
+		for (; typeItor != itor->second.end(); ++typeItor)
+		{
+			strStream << typeItor->first << indent << typeItor->second << indent;
+		}
+		strStream << endl;
+	}
+	m_statMap.clear();
+	return strStream.str();
+}
+
+void CFlowStatisticMap::clear()
+{
+	m_statMap.clear();
 }
 
 

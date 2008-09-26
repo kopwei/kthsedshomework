@@ -21,8 +21,7 @@
 
 #include "AnalyzedResult.h"
 #include "MetaTraffic.h"
-#include <map>
-
+#include "FlowStatisticMap.h"
 
 class flow_t;
 /**
@@ -48,14 +47,13 @@ public:
 	ResultEnum Clear();
 
 private:
-	typedef std::map<u_short, uint> FlowTypeDistributionMap;
+	CFlowStatisticMap m_statisticMap;
+	
+	CFlowStatisticMap m_totalStatisticMap;
 	
 	typedef std::map<u_short, MetaTraffic> FlowDigestMap;
 
 	FlowDigestMap m_digestMap;
-	
-	FlowTypeDistributionMap m_distributionMap;
-	
 	
 
 };

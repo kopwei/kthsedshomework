@@ -35,6 +35,8 @@ public:
 	
 	void AddNewFlow(const flow_t* pFlow);
 	
+	void clear();
+	
 	const std::string toString();
 
 private:

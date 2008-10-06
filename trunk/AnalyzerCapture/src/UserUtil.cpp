@@ -17,6 +17,7 @@
  *   Copyright (C) 2008 by Ericsson AB
  */
 #include "UserUtil.h"
+#include "ipheaderutil.h"
 #include <fstream>
 
 // Re-declaration here
@@ -103,7 +104,7 @@ void CUserUtil::PrintUsers()
 	set<uint>::const_iterator itor = s_userIPSet.begin();
 	for( ;itor != s_userIPSet.end() ; ++itor)
 	{
-		ofile << *itor << indent;
+		ofile << CIPHeaderUtil::ConvertIPToString(*itor) << indent;
 	}
 	ofile << endl;
 	ofile.close();

@@ -21,6 +21,10 @@
 
 #include <netinet/in.h>
 #include <net/ethernet.h>
+#include <sstream>
+#include "CommonUtil.h"
+
+using namespace std;
 
 
 ResultEnum CIPHeaderUtil::GetIPHeader ( const u_char* packet, ip*& pIPHeader )
@@ -83,10 +87,12 @@ const unsigned int CIPHeaderUtil::ConvertIPToInt ( const in_addr* pIPAddr )
 }
 
 
-const in_addr* CIPHeaderUtil::ConvertIntToIP ( const unsigned int pIntIP )
+const in_addr CIPHeaderUtil::ConvertIntToIP ( const unsigned int pIntIP )
 {
 	// TODO: need implemented here
-	return NULL;
+	in_addr ip;
+	ip.s_addr = htonl(pIntIP);
+	return ip;
 }
 
 const unsigned long long CIPHeaderUtil::ConvertMacToInt64(const ether_addr* pMacAddr)
@@ -99,5 +105,69 @@ const unsigned long long CIPHeaderUtil::ConvertMacToInt64(const ether_addr* pMac
 		retVal += shiftVal;
 	}
 	return retVal;
+}
+
+
+
+const std::string CIPHeaderUtil::ConvertIPToString(const in_addr* pIPAddr)
+{
+	uint ip = ntohl(pIPAddr->s_addr);
+	
+	return ConvertIPToString(ip);
+}
+
+const std::string CIPHeaderUtil::ConvertIPToString(const uint ip)
+{
+	ushort s1, s2, s3, s4;
+	s4 = ip % 256;
+	s3 = (ip >> 8) % 256;
+	s2 = (ip >> 16) % 256;
+	s1 = (ip >> 24) % 256;
+	string indent = ".";
+	stringstream strStream;
+	strStream << s1 << indent << s2 << indent << s3 << indent << s4;
+	return strStream.str();
+}
+
+const std::string CIPHeaderUtil::ConvertMacToString(const ether_addr* pMacAddr)
+{
+	unsigned long long mac = ConvertMacToInt64(pMacAddr);
+	return ConvertMacToString(mac);
+}
+
+const std::string CIPHeaderUtil::ConvertMacToString(const unsigned long long mac)
+{
+	stringstream strStream;
+	//string s1, s2, s3, s4, s5, s6;
+	string indent = ":";
+	//int i[6];
+	//string s[6];
+	for (int i = 0; i < 5; i++)
+	{
+		int seg = (mac >> 8 * (5 - i)) % 256;
+		if (seg == 0)
+		{
+			strStream << "0";
+		}
+		else if (seg < 16)
+		{
+			strStream << "0";
+		}
+		strStream << CommonUtil::itoa(seg, 16);
+		if (i < 4)
+		{
+			strStream << indent;
+		}
+	}
+/*	s6 = CommonUtil::itoa(mac % 256, 16);
+	s5 = CommonUtil::itoa((mac >> 8) % 256, 16);
+	s4 = CommonUtil::itoa((mac >> 16) % 256, 16);
+	s3 = CommonUtil::itoa((mac >> 24) % 256, 16);
+	s2 = CommonUtil::itoa((mac >> 32) % 256, 16);
+	s1 = CommonUtil::itoa((mac >> 40) % 256, 16);
+	
+	strStream << s1 << indent << s2 << indent << s3 << indent << s4 << indent << s5 << indent << s6;
+*/
+	return strStream.str();
 }
 

@@ -28,7 +28,8 @@
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
-class CIPHeaderUtil{
+class CIPHeaderUtil
+{
 public:
 	
 	static ResultEnum GetIPHeader(const u_char* packet, ip*& pIPHeader);

@@ -17,6 +17,7 @@
  *   Copyright (C) 2008 by Ericsson AB
  */
 #include "UserUtil.h"
+#include <fstream>
 
 // Re-declaration here
 typedef unsigned long long uint64;
@@ -93,6 +94,19 @@ const bool CUserUtil::IsUserMac(const uint64 macAddr)
 {
 	set<uint64>::const_iterator itor = s_userMacSet.find(macAddr);
 	return itor != s_userMacSet.end();
+}
+
+void CUserUtil::PrintUsers()
+{
+	string indent = "   ";
+	ofstream ofile("Users.ret", ios_base::trunc);
+	set<uint>::const_iterator itor = s_userIPSet.begin();
+	for( ;itor != s_userIPSet.end() ; ++itor)
+	{
+		ofile << *itor << indent;
+	}
+	ofile << endl;
+	ofile.close();
 }
 
 

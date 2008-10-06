@@ -38,9 +38,10 @@ CFlowStatisticMap::~CFlowStatisticMap()
 
 void CFlowStatisticMap::AddNewFlow(const flow_t* pFlow)
 {
-	if (CUserUtil::IsUserIP(pFlow->src_ip()))
+	uint userIp = ntohl(pFlow->src_ip());
+	if (CUserUtil::IsUserIP(userIp))
 	{
-		UserFlowStatMap::iterator itor =  m_statMap.find(pFlow->src_ip());
+		UserFlowStatMap::iterator itor =  m_statMap.find(userIp);
 		if (itor != m_statMap.end())
 		{
 			(itor->second.find(pFlow->class_proto()))->second += 1;
@@ -50,7 +51,7 @@ void CFlowStatisticMap::AddNewFlow(const flow_t* pFlow)
 			FlowTypeMap typeMap;
 			InitFlowTypeMap(typeMap);
 			(typeMap.find(pFlow->class_proto()))->second += 1;
-			m_statMap.insert(pair<uint, FlowTypeMap>(pFlow->src_ip(), typeMap));
+			m_statMap.insert(pair<uint, FlowTypeMap>(userIp, typeMap));
 		}
 	}
 }

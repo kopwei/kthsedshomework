@@ -32,6 +32,7 @@
 #include "classifier.h"
 #include "flow.pb.h"
 #include "macro.h"
+#include "ipheaderutil.h"
 
 using namespace std;
 
@@ -58,11 +59,11 @@ void CFlowUtil::delete_flow ( void *data )
 {
 	if ( !data )
 		return;
-	delete((flow_t *)data);
+	delete ( ( flow_t * ) data );
 }
 
-flow_t* CFlowUtil::createFlow_t ( const unsigned char proto, const unsigned char class_proto, 
-								  const string& src_if, const string& dst_if,
+flow_t* CFlowUtil::createFlow_t ( const unsigned char proto, const unsigned char class_proto,
+                                  const string& src_if, const string& dst_if,
                                   const u_short src_port, const u_short dst_port,
                                   unsigned int n_bytes, unsigned int n_frames,
                                   const time_t ini_sec, const time_t end_sec, const time_t ini_mic,
@@ -98,8 +99,13 @@ flow_t* CFlowUtil::createFlow_t ( const unsigned char proto, const unsigned char
 	flow->set_end_sec ( end_sec );
 	flow->set_ini_mic ( ini_mic );
 	flow->set_end_mic ( end_mic );
-	flow->set_src_ip ( src_ip.s_addr );
-	flow->set_dst_ip ( dst_ip.s_addr );
+
+	if (src_ip.s_addr == 0)
+	{
+		int i = 0;
+	}
+	flow->set_src_ip ( CIPHeaderUtil::ConvertIPToInt ( &src_ip ) );
+	flow->set_dst_ip ( CIPHeaderUtil::ConvertIPToInt ( &dst_ip ) );
 	return flow;
 
 }
@@ -362,11 +368,11 @@ const char* CFlowUtil::get_protocolName ( unsigned short proto_id )
 			case PROTO_ID_OTHERHTTP:        return( PROTO_NAME_OTHERHTTP );
 			case PROTO_ID_OTHERDNS:         return( PROTO_NAME_OTHERDNS );*/
 		case PROTO_ID_MYSQL:            return ( PROTO_NAME_MYSQL );
-		case PROTO_ID_OTHERCHAT:		return (PROTO_NAME_OTHERCHAT);
-		case PROTO_ID_OTHERVIDEO:	return (PROTO_NAME_OTHERVIDEO);
-		case PROTO_ID_OTHERHTTP:	return (PROTO_NAME_OTHERHTTP);
-		case PROTO_ID_OTHERDNS:		return (PROTO_NAME_OTHERDNS);
-		
+		case PROTO_ID_OTHERCHAT:		return ( PROTO_NAME_OTHERCHAT );
+		case PROTO_ID_OTHERVIDEO:	return ( PROTO_NAME_OTHERVIDEO );
+		case PROTO_ID_OTHERHTTP:	return ( PROTO_NAME_OTHERHTTP );
+		case PROTO_ID_OTHERDNS:		return ( PROTO_NAME_OTHERDNS );
+
 			//end
 		default: return ( PROTO_NAME_OTHER );
 	}
@@ -393,24 +399,24 @@ const char* CFlowUtil::get_protocolName ( unsigned short proto_id )
 //	return 1;
 //}
 
-int CFlowUtil::getDate( const time_t* tloc, string& str)
+int CFlowUtil::getDate ( const time_t* tloc, string& str )
 {
-	tm* clock = localtime(tloc);
+	tm* clock = localtime ( tloc );
 	// TODO: Need implementation here
 	stringstream strstream;
-	if (clock->tm_mday < 9)
+	if ( clock->tm_mday < 9 )
 	{
 		strstream << 0;
 	}
 	strstream << clock->tm_mday;
-	if (clock->tm_mon + 1 < 9)
+	if ( clock->tm_mon + 1 < 9 )
 	{
 		strstream << 0;
 	}
 	strstream << clock->tm_mon + 1;
-	if (clock->tm_year < 110)
+	if ( clock->tm_year < 110 )
 		strstream << 0;
-	strstream << (clock->tm_year -100);
+	strstream << ( clock->tm_year -100 );
 	str = strstream.str();
 	return 1;
 }
@@ -443,16 +449,16 @@ u_short CFlowUtil::getDouLen ( double num )
 	return i;
 }
 
-ResultEnum CFlowUtil::printFlowCollectionToFile( flow_collection* pFlowCol, const string& strFileName )
+ResultEnum CFlowUtil::printFlowCollectionToFile ( flow_collection* pFlowCol, const string& strFileName )
 {
-	if (NULL == pFlowCol)
+	if ( NULL == pFlowCol )
 		return eEmptyPointer;
 	ResultEnum rs = eOK;
 	// TODO: need implementation here
 	ofstream ofile ( strFileName.c_str(), ios::binary | ios::trunc );
 	if ( !ofile.is_open() ) return eCommonError;
 	//ofile.write ( reinterpret_cast<char *> ( flow ), sizeof ( flow_t ) );
-	if (! pFlowCol->SerializePartialToOstream(&ofile))
+	if ( ! pFlowCol->SerializePartialToOstream ( &ofile ) )
 	{
 		cerr << "Writing file failed" << endl;
 	}
@@ -460,30 +466,30 @@ ResultEnum CFlowUtil::printFlowCollectionToFile( flow_collection* pFlowCol, cons
 	return rs;
 }
 
-ResultEnum CFlowUtil::addFlowToFile( flow_t* pFlow, const string& strFileName )
+ResultEnum CFlowUtil::addFlowToFile ( flow_t* pFlow, const string& strFileName )
 {
-	if (NULL == pFlow)
+	if ( NULL == pFlow )
 		return eEmptyPointer;
 	ResultEnum rs = eNotImplemented;
 	flow_collection collection;
-	rs = readFlowCollectionFromFile(&collection, strFileName);
-	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs!= eOK, rs);
+	rs = readFlowCollectionFromFile ( &collection, strFileName );
+	EABASSERT ( rs == eOK ); ON_ERROR_RETURN ( rs!= eOK, rs );
 	*collection.add_flow() = *pFlow;
-	printFlowCollectionToFile(&collection, strFileName);
-	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs!= eOK, rs);
+	printFlowCollectionToFile ( &collection, strFileName );
+	EABASSERT ( rs == eOK ); ON_ERROR_RETURN ( rs!= eOK, rs );
 	// TODO: need implementation here
 	return rs;
 }
 
-ResultEnum CFlowUtil::readFlowCollectionFromFile( flow_collection* pFlowCol, const string& strFileName )
+ResultEnum CFlowUtil::readFlowCollectionFromFile ( flow_collection* pFlowCol, const string& strFileName )
 {
-	if (NULL == pFlowCol)
+	if ( NULL == pFlowCol )
 		return eEmptyPointer;
 	ResultEnum rs = eOK;
 	// TODO: need implementation here
-	ifstream ifile(strFileName.c_str(), ios::binary | ios::trunc);
-	if (!ifile.is_open()) return eCommonError;
-	if (!pFlowCol->ParseFromIstream(&ifile))
+	ifstream ifile ( strFileName.c_str(), ios::binary | ios::trunc );
+	if ( !ifile.is_open() ) return eCommonError;
+	if ( !pFlowCol->ParseFromIstream ( &ifile ) )
 	{
 		cerr << "Reading file failed" << endl;
 	}

@@ -448,7 +448,7 @@ flow_t* CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pca
     // fixed
 
     string strEmpty = "";
-    flow_t* flow = CFlowUtil::createFlow_t ( pIpHeader->ip_p, pIpHeader->ip_p, strEmpty, strEmpty, src_port, dst_port,
+    flow_t* flow = CFlowUtil::createFlow_t ( pIpHeader->ip_p, 0, strEmpty, strEmpty, src_port, dst_port,
                    ( unsigned int ) ntohs ( pIpHeader->ip_len ), 1,
                    ( time_t ) ( header->ts.tv_sec ),
                    ( time_t ) ( header->ts.tv_sec ),

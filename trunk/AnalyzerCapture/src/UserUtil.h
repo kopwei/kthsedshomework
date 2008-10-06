@@ -43,7 +43,7 @@ public:
 	
 	static const bool IsUserMac(const uint64 macAddr);
 	
-	
+	static void PrintUsers();
 
 private:
 	

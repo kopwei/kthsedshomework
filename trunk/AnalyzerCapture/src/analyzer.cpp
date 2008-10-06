@@ -102,7 +102,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
         strFileName.append("_0");
     }
     int analyserpxError;
-    for (int j = 1; j < 56; j++)
+    for (int j = 1; j < 5; j++)
     {
 		string intstr = CommonUtil::itoa(j, 10);
 		//cout << "number string ready: " << intstr << endl;
@@ -318,6 +318,7 @@ ResultEnum CAnalyzer::RecordFinalResult()
 	RecordStatus(&t);
 	CAnalyzerAggregator::printHash();	
 	s_packetStatistician.PrintFinalResult();
+	CUserUtil::PrintUsers();
 }
 
 bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )

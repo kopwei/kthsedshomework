@@ -48,6 +48,8 @@ public:
 
 private:
 	
+	
+	
 	ResultEnum PrintCurrentResultToFile();
 	
 	ResultEnum PrintTotalResultToFile();

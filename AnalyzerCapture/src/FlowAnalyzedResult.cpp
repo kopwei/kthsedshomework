@@ -65,6 +65,7 @@ ResultEnum CFlowAnalyzedResult::ProcessFlowMap(const FlowMap* pFlowMap)
 	for( ;itor != pFlowMap->end() ; ++itor)
 	{
 		m_statisticMap.AddNewFlow(itor->second);
+		//AddNewFlowInfo(itor->second);
 	}
 	return rs;
 }

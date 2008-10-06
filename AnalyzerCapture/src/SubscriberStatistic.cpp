@@ -59,7 +59,8 @@ const string CSubscriberStatistic::toString() const
 {
 	string indent = "   ";
 	stringstream strStream;
-	strStream << m_macAddress << indent << m_ipAddress <<indent << m_uploadPacketStatistic.toString() << indent << m_downloadPacketStatistic.toString();
+	
+	strStream << CIPHeaderUtil::ConvertMacToString(m_macAddress) << indent << CIPHeaderUtil::ConvertIPToString(m_ipAddress) <<indent << m_uploadPacketStatistic.toString() << indent << m_downloadPacketStatistic.toString();
 	return strStream.str();
 }
 

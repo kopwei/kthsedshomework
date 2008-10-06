@@ -23,6 +23,7 @@
 //#include "neti.h"
 #include "analyserpxTypes.h"
 #include "resultenum.h"
+#include <string>
 
 
 /**
@@ -38,10 +39,17 @@ public:
 	
 	static const unsigned int ConvertIPToInt(const in_addr* pIPAddr);
 	
-	static const in_addr* ConvertIntToIP(const unsigned int pIntIP);
+	static const in_addr ConvertIntToIP(const unsigned int pIntIP);
 	
 	static const unsigned long long ConvertMacToInt64(const ether_addr* pMacAddr);
 	
+	static const std::string ConvertIPToString(const in_addr* pIPAddr);
+	
+	static const std::string ConvertIPToString(const uint ip);
+	
+	static const std::string ConvertMacToString(const ether_addr* pMacAddr);
+	
+	static const std::string ConvertMacToString(const unsigned long long mac);
 	//static const unsigned long long ConvertMACToLong(const char* );
 	
 

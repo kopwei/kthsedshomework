@@ -20,6 +20,7 @@
 #include "classifier.h"
 #include "flow.pb.h"
 #include "UserUtil.h"
+#include "ipheaderutil.h"
 #include <sstream>
 
 typedef unsigned long long uint64;
@@ -127,7 +128,7 @@ const std::string CFlowStatisticMap::toString()
 	UserFlowStatMap::const_iterator itor = m_statMap.begin();
 	for (; itor != m_statMap.end(); ++itor)
 	{
-		strStream << itor->first << indent;
+		strStream << CIPHeaderUtil::ConvertIPToString(itor->first) << indent;
 		FlowTypeMap::const_iterator typeItor = itor->second.begin();
 		for (; typeItor != itor->second.end(); ++typeItor)
 		{

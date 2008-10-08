@@ -175,6 +175,6 @@ const std::string CIPHeaderUtil::ConvertMacToString(const unsigned long long mac
 	
 	strStream << s1 << indent << s2 << indent << s3 << indent << s4 << indent << s5 << indent << s6;
 */
-	return strStream.str();
+	return strStream;
 }
 

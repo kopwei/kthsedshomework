@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <netinet/in.h>
 #include <iostream>
-#include <sstream>
+//#include <sstream>
 
 #include "analyserpxAggreg.h"
 #include "locks.h"
@@ -21,6 +21,7 @@
 #include "macro.h"
 #include "flow.pb.h"
 #include "flowcollection.pb.h"
+#include "CommonUtil.h"
 
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
 
@@ -194,9 +195,9 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
                 pthread_mutex_lock(&Locks::fileName_lock);
                 s_strFileName = s_pInputParams->GetFilePrefix();
                 s_strFileName.append ( "_" );
-                stringstream strCount;
-                strCount << offCount;
-                s_strFileName.append ( strCount.str() );
+				string strCount = CommonUtil::itoa(offCount, 10);
+                //strCount << offCount;
+                s_strFileName.append ( strCount );
                 pthread_mutex_unlock(&Locks::fileName_lock);
 
                 //snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
@@ -660,9 +661,9 @@ ResultEnum CAnalyzerAggregator::GetFileName ( const int count)
     CFlowUtil::getDate ( &init,filenameCountStr) ;
 
     filenameCountStr.append ( "_" );
-    stringstream strCount;
-    strCount << count;
-    filenameCountStr.append ( strCount.str() );
+	string strCount = CommonUtil::itoa(count, 10);
+//    strCount << count;
+    filenameCountStr.append ( strCount );
     //snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
     pthread_mutex_lock(&Locks::fileName_lock);
     s_strFileName = s_pInputParams->GetFilePrefix();

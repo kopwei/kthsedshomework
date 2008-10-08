@@ -18,8 +18,8 @@
  */
 
 #include "AnalyzedResult.h"
-//#include "CommonUtil.h"
-#include <sstream>
+#include "CommonUtil.h"
+//#include <sstream>
 
 CAnalyzedResult::CAnalyzedResult(void)
 {
@@ -42,79 +42,80 @@ const string CAnalyzedResult::GetTimeStr( const bool bIsStart )
 	{
 		refTime = m_endTime;
 	}
-	stringstream datestr;
+	string datestr;
+	string zeroString = "0";
 	// year
 	int year = refTime.tm_year - 100;
 	if (year < 10)
 	{
-		datestr << 0;
+		datestr.append(zeroString);
 	}
-	datestr << year;
+	datestr.append(CommonUtil::itoa(year, 10));
 	// month
 	if (refTime.tm_mon < 11)
 	{
-		datestr << 0;
+		datestr.append(zeroString);
 	}
-	datestr << refTime.tm_mon + 1;
+	datestr.append(CommonUtil::itoa(refTime.tm_mon + 1, 10));
 	// day
 	if (refTime.tm_mday < 10) 
 	{
-		datestr << 0;
+		datestr.append(zeroString);
 	}
-	datestr << refTime.tm_mday;
+	datestr.append(CommonUtil::itoa(refTime.tm_mday, 10));
 	// hour
 	if (refTime.tm_hour < 10)
 	{
-		datestr << 0;
+		datestr.append(zeroString);
 		if (refTime.tm_hour == 0)
 		{
-			datestr << 0;
+			datestr.append(zeroString);
 		}
 		else
 		{
-			datestr << refTime.tm_hour;
+			datestr.append(CommonUtil::itoa(refTime.tm_hour, 10));
 		}
 	}
 	else
 	{
-		datestr << refTime.tm_hour;
+		datestr.append(CommonUtil::itoa(refTime.tm_hour, 10));
 	}
 	
 	// minute
 	if (refTime.tm_min < 10)
 	{
-		datestr << 0;
+		datestr.append(zeroString);
 		if (refTime.tm_min == 0)
 		{
-			datestr << 0;
+			datestr.append(zeroString);
 		}
 		else
 		{
-			datestr << refTime.tm_min;
+			datestr.append(CommonUtil::itoa(refTime.tm_min, 10));
 		}
 	}
 	else
 	{
-		datestr << refTime.tm_min;
+		datestr.append(CommonUtil::itoa(refTime.tm_min, 10));
 	}
 	// seconds
 	if (refTime.tm_sec < 10)
 	{
-		datestr << 0;
+		datestr.append(zeroString);
 		if (refTime.tm_sec == 0)
 		{
-			datestr << 0;
+			datestr.append(zeroString);
 		}
 		else
 		{
-			datestr << refTime.tm_sec;
+			datestr.append(CommonUtil::itoa(refTime.tm_sec, 10));
 		}
 	}
 	else
 	{
-		datestr << refTime.tm_sec;
+		datestr.append(CommonUtil::itoa(refTime.tm_sec, 10));
 	}
-	return datestr.str();
+	return datestr;
 
 /*
 	// Year

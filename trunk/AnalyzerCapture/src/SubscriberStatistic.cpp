@@ -21,6 +21,7 @@
 #include "PacketDigest.h"
 #include "ipheaderutil.h"
 #include "macro.h"
+//#include "CommonUtil.h"
 
 #include <iostream>
 
@@ -58,10 +59,16 @@ ResultEnum CSubscriberStatistic::AddNewPacket ( const CPacketDigest* pPacketDige
 const string CSubscriberStatistic::toString() const
 {
 	string indent = "   ";
-	stringstream strStream;
+	string strStream;
 	
-	strStream << CIPHeaderUtil::ConvertMacToString(m_macAddress) << indent << CIPHeaderUtil::ConvertIPToString(m_ipAddress) <<indent << m_uploadPacketStatistic.toString() << indent << m_downloadPacketStatistic.toString();
-	return strStream.str();
+	strStream.append(CIPHeaderUtil::ConvertMacToString(m_macAddress));
+	strStream.append(indent);
+	strStream.append(CIPHeaderUtil::ConvertIPToString(m_ipAddress));
+	strStream.append(indent);
+	strStream.append(m_uploadPacketStatistic.toString());
+	strStream.append(indent);
+	strStream.append(m_downloadPacketStatistic.toString());
+	return strStream;
 }
 
 

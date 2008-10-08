@@ -30,7 +30,7 @@ public:
 	/**
 	 * This method is used to convert a integer value to standard string
 	 */
-	static std::string itoa(int value, int base);
+	static std::string itoa(unsigned long long value, int base = 10);
 
 };
 

@@ -20,7 +20,8 @@
 #define METATRAFFIC_H
 
 #include <string>
-#include <sstream>
+#include "CommonUtil.h"
+//#include <sstream>
 
 
 /**
@@ -48,10 +49,14 @@ public:
 	
 	const std::string toString() const 
 	{
-		std::stringstream strStream;
+		//std::stringstream strStream;
 		std::string indent = "   ";
-		strStream << packetnumber << indent << trafficvolume << indent;
-		return strStream.str();
+		std::string retString = CommonUtil::itoa(packetnumber, 10);
+		retString.append(indent);
+		retString.append(CommonUtil::itoa(trafficvolume, 10));
+		retString.append(indent);
+		//strStream << packetnumber << indent << trafficvolume << indent;
+		return retString;
 	}
 	
 	_uint_64 GetPacketNumber() const {return packetnumber;}

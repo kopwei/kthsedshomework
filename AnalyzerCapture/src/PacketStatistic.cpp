@@ -23,6 +23,7 @@
 #include "macro.h"
 #include "PacketDigest.h"
 #include "UserUtil.h"
+#include "CommonUtil.h"
 
 
 CPacketStatistic::CPacketStatistic( void ) 
@@ -98,9 +99,11 @@ ResultEnum CPacketStatistic::distributeByLocality(const CPacketDigest* pDigest)
 const string CPacketStatistic::toString() const
 {
 	string indent = "   ";
-	stringstream strStream;
-	strStream << m_totalTraffic.toString() << m_localTraffic.toString() << m_trafficMap.toString();
-	return strStream.str();
+	string strStream;
+	strStream.append(m_totalTraffic.toString());
+	strStream.append(m_localTraffic.toString());
+	strStream.append(m_trafficMap.toString());
+	return strStream;
 }
 
 void CPacketStatistic::clear()

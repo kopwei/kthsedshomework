@@ -21,7 +21,7 @@
 /**
  * This method is used to convert a integer value to standard string
  */
-std::string CommonUtil::itoa(int value, int base) {
+std::string CommonUtil::itoa(unsigned long long value, int base/* = 10 */) {
 	enum { kMaxDigits = 35 };
 	std::string buf;
 	buf.reserve( kMaxDigits ); // Pre-allocate enough space.

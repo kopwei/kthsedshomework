@@ -21,7 +21,8 @@
 #include "flow.pb.h"
 #include "UserUtil.h"
 #include "ipheaderutil.h"
-#include <sstream>
+#include "CommonUtil.h"
+//#include <sstream>
 
 typedef unsigned long long uint64;
 typedef std::map<ushort, uint64> FlowTypeMap;
@@ -123,21 +124,25 @@ void CFlowStatisticMap::InitFlowTypeMap(FlowTypeMap& flowTypeMap)
 
 const std::string CFlowStatisticMap::toString()
 {
-	std::stringstream strStream;
+	std::string strStream;
 	std::string indent = "   ";
 	UserFlowStatMap::const_iterator itor = m_statMap.begin();
 	for (; itor != m_statMap.end(); ++itor)
 	{
-		strStream << CIPHeaderUtil::ConvertIPToString(itor->first) << indent;
+		strStream.append(CIPHeaderUtil::ConvertIPToString(itor->first));
+		strStream.append(indent);
 		FlowTypeMap::const_iterator typeItor = itor->second.begin();
 		for (; typeItor != itor->second.end(); ++typeItor)
 		{
-			strStream << typeItor->first << indent << typeItor->second << indent;
+			strStream.append(CommonUtil::itoa(typeItor->first, 10);
+			strStream.append(indent);
+			strStream.append(CommonUtil::itoa( typeItor->second, 10 );
+			strStream.append(indent);
 		}
-		strStream << endl;
+		strStream.append("\n");
 	}
 	m_statMap.clear();
-	return strStream.str();
+	return strStream;
 }
 
 void CFlowStatisticMap::clear()

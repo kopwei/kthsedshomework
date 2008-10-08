@@ -21,7 +21,7 @@
 
 #include <netinet/in.h>
 #include <net/ethernet.h>
-#include <sstream>
+//#include <sstream>
 #include "CommonUtil.h"
 
 using namespace std;
@@ -124,9 +124,15 @@ const std::string CIPHeaderUtil::ConvertIPToString(const uint ip)
 	s2 = (ip >> 16) % 256;
 	s1 = (ip >> 24) % 256;
 	string indent = ".";
-	stringstream strStream;
-	strStream << s1 << indent << s2 << indent << s3 << indent << s4;
-	return strStream.str();
+	string strStream;
+	strStream.append(CommonUtil::itoa(s1, 10));
+	strStream.append(indent);
+	strStream.append(CommonUtil::itoa(s2));
+	strStream.append(indent);
+	strStream.append(CommonUtil::itoa(s3));
+	strStream.append(indent);
+	strStream.append(CommonUtil::itoa(s4));
+	return strStream;
 }
 
 const std::string CIPHeaderUtil::ConvertMacToString(const ether_addr* pMacAddr)
@@ -137,26 +143,27 @@ const std::string CIPHeaderUtil::ConvertMacToString(const ether_addr* pMacAddr)
 
 const std::string CIPHeaderUtil::ConvertMacToString(const unsigned long long mac)
 {
-	stringstream strStream;
+	string strStream;
 	//string s1, s2, s3, s4, s5, s6;
 	string indent = ":";
 	//int i[6];
 	//string s[6];
+	string zeroStr = "0";
 	for (int i = 0; i < 5; i++)
 	{
 		int seg = (mac >> 8 * (5 - i)) % 256;
 		if (seg == 0)
 		{
-			strStream << "0";
+			strStream.append(zeroStr);
 		}
 		else if (seg < 16)
 		{
-			strStream << "0";
+			strStream.append(zeroStr);
 		}
-		strStream << CommonUtil::itoa(seg, 16);
+		strStream.append(CommonUtil::itoa(seg, 16));
 		if (i < 4)
 		{
-			strStream << indent;
+			strStream.append(indent);
 		}
 	}
 /*	s6 = CommonUtil::itoa(mac % 256, 16);

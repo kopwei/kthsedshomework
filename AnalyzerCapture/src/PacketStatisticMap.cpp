@@ -19,6 +19,7 @@
 #include "PacketStatisticMap.h"
 
 #include "classifier.h"
+#include "CommonUtil.h"
 
 CPacketStatisticMap::CPacketStatisticMap()
 {
@@ -111,13 +112,15 @@ void CPacketStatisticMap::clear()
 
 const string CPacketStatisticMap::toString() const
 {
-	stringstream strStream;
+	string strStream;
 	string indent = "   ";
 	map<ushort, MetaTraffic>::const_iterator itor = m_statisticMap.begin();
 	for( ; itor != m_statisticMap.end(); ++itor)
 	{
-		strStream << itor->first << indent << itor->second.toString();
+		strStream.append(CommonUtil::itoa(itor->first));
+		strStream.append(indent);
+		strStream.append(itor->second.toString());
 	}
-	return strStream.str();
+	return strStream;
 }
 

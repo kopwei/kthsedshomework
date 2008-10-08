@@ -102,7 +102,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
         strFileName.append("_0");
     }
     int analyserpxError;
-    for (int j = 1; j < 5; j++)
+    for (int j = 1; j < 2000; j++)
     {
 		string intstr = CommonUtil::itoa(j, 10);
 		//cout << "number string ready: " << intstr << endl;
@@ -312,7 +312,7 @@ void CAnalyzer::task_ctrl_C ( int i )
 ResultEnum CAnalyzer::RecordFinalResult()
 {
 	tm t = s_refTime;
-	time_t newTime = mktime(&t) + 1;
+	time_t newTime = mktime(&t) + 60;
 	t = *(localtime(&newTime));
     //    printHash(fileName);
 	RecordStatus(&t);
@@ -327,8 +327,8 @@ bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )
     tm* time = localtime(&(header->ts.tv_sec));
     int packetMin = time->tm_min;
     int refMin = t->tm_min;
-    return (time->tm_sec != t->tm_sec
-		|| time->tm_min != t->tm_min 
+    return (//time->tm_sec != t->tm_sec ||
+		 time->tm_min != t->tm_min 
 		|| time->tm_hour != t->tm_hour 
 		|| time->tm_yday != t->tm_yday);
 }

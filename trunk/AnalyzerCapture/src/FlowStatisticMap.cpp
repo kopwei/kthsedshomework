@@ -134,9 +134,9 @@ const std::string CFlowStatisticMap::toString()
 		FlowTypeMap::const_iterator typeItor = itor->second.begin();
 		for (; typeItor != itor->second.end(); ++typeItor)
 		{
-			strStream.append(CommonUtil::itoa(typeItor->first, 10);
+			strStream.append(CommonUtil::itoa(typeItor->first, 10));
 			strStream.append(indent);
-			strStream.append(CommonUtil::itoa( typeItor->second, 10 );
+			strStream.append(CommonUtil::itoa( typeItor->second, 10 ));
 			strStream.append(indent);
 		}
 		strStream.append("\n");

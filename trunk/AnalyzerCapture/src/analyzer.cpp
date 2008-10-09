@@ -69,9 +69,9 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
     signal ( SIGINT, task_ctrl_C );
     //time_t t = 0;
     //s_refTime = localtime(&t);
+	InitLocks();
 
-
-    pthread_mutex_init ( &Locks::cap_lock , NULL ) ;
+    
     CAnalyzerAggregator::initVariables(pParam);
 	
 	// Initialize the ISP's mac address
@@ -341,4 +341,26 @@ ResultEnum CAnalyzer::RecordStatus(const tm* t)
 	CAnalyzerAggregator::PrintStatisticResult(t);
 
     return eOK;
+}
+
+void CAnalyzer::InitLocks()
+{
+	pthread_mutex_init ( &Locks::hash_lock , NULL ) ;
+	pthread_mutex_init ( &Locks::print_lock , NULL ) ;
+	pthread_mutex_init( &Locks::fileName_lock, NULL);
+	pthread_mutex_init ( &Locks::cap_lock , NULL ) ;
+	
+
+	pthread_mutex_init(&Locks::packetMap_lock, NULL);
+
+
+
+	pthread_mutex_init ( &Locks::storing_lock, NULL);
+
+	pthread_mutex_init ( &Locks::time_lock, NULL);
+
+	pthread_mutex_init ( &Locks::total_subscriber_lock, NULL);
+
+	pthread_mutex_init ( &Locks::userset_lock, NULL);
+
 }

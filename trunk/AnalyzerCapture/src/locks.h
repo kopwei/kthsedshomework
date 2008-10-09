@@ -36,6 +36,8 @@ public:
 	static pthread_mutex_t time_lock;
 	
 	static pthread_mutex_t total_subscriber_lock;
+	
+	static pthread_mutex_t userset_lock;
 };
 
 #endif

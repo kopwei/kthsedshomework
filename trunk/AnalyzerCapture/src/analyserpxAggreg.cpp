@@ -56,9 +56,6 @@ unsigned long long bytes_cap = 0;
 
 void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
 {
-    pthread_mutex_init ( &Locks::hash_lock , NULL ) ;
-    pthread_mutex_init ( &Locks::print_lock , NULL ) ;
-    pthread_mutex_init( &Locks::fileName_lock, NULL);
     s_pInputParams = pUserInputParams;
 //    test_table = HashTableUtil::init_hash_table ( "ANALYSERPX_CAP_TABLE", CFlowUtil::compare_flow, CFlowUtil::flow_key,
 //                CFlowUtil::delete_flow, HASH_SIZE );
@@ -282,8 +279,7 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
                                          flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
     //Sync Table begin
     //pthread_mutex_lock(&hash_lock);
-    while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 ) {}
-    ;
+	pthread_mutex_lock( &Locks::hash_lock );
     //flow_hsh         = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
 	flow_t* reverse_flow_hsh = NULL;
 	FlowMap::iterator reverse_flow_hsh_itor = s_flowMap.find(tmp_flow->GetKey());

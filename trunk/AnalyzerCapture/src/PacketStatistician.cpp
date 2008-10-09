@@ -25,7 +25,7 @@
 #include "resultrecorder.h"
 #include "analyzer.h"
 #include "userinputparams.h"
-
+#include "locks.h"
 //#include <netinet/in.h>
 //#include <pthread.h>
 #include <iostream>
@@ -59,13 +59,22 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 	if (NULL == pPacketDigest)
 		return eEmptyPointer;
 	ResultEnum rs = eOK;
+	
+	pthread_mutex_lock(&Locks::statistician_lock);
 	rs = m_trafficResult.AddNewPacketInfo(pPacketDigest);
+	pthread_mutex_unlock(&Locks::statistician_lock);
 	EABASSERT ( rs );
 	
+	
+	pthread_mutex_lock(&Locks::statistician_lock);
 	rs = m_subscriberResult.AddNewPacketInfo(pPacketDigest);
+	pthread_mutex_unlock(&Locks::statistician_lock);
 	EABASSERT ( rs );
+	
 	//m_mapSubscriberStat.insert
+	pthread_mutex_lock(&Locks::statistician_lock);
 	rs = m_payloadLengthResult.AddNewPacketInfo(pPacketDigest);
+	pthread_mutex_unlock(&Locks::statistician_lock);
 	EABASSERT ( rs );
 	
 	

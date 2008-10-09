@@ -167,9 +167,7 @@ void * CAnalyzer::threadsLoop ( void *par )
     {
 		
         //pthread_mutex_lock(&cap_lock);
-        while ( pthread_mutex_trylock ( &Locks::cap_lock ) != 0 )
-            {}
-        ;
+        pthread_mutex_lock ( &Locks::cap_lock );
         res = pcap_next_ex ( pCapConfig->descr, &header, &packet );
 		
         if ( res >= 0 )
@@ -263,6 +261,12 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
     ip* pIPHeader;
     ResultEnum rs= CIPHeaderUtil::GetIPHeader ( packet, pIPHeader );
     EABASSERT ( rs );
+	
+	if (CIPHeaderUtil::ConvertIPToInt(&(pIPHeader->ip_src)) == 0
+		   || CIPHeaderUtil::ConvertIPToInt(&(pIPHeader->ip_dst)) == 0)
+	{
+		return eOK;
+	}
     // Get the port info from packet
     u_int16_t src_port = 0;
     u_int16_t dst_port = 0;
@@ -275,12 +279,14 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
 	//u_short classifier = 0;
     u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
     //u_short classifier = CClassifier::getID(pIPHeader, ipLength, src_port, dst_port);
+	
 
     // Process the flows
 	flow_t* pflow = NULL;
     pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
 
     CPacketDigest packetDigest( header, packet, pflow );
+	
     rs = s_packetStatistician.AddNewPacketInfo ( &packetDigest );
     EABASSERT ( rs );
     return rs;
@@ -362,5 +368,9 @@ void CAnalyzer::InitLocks()
 	pthread_mutex_init ( &Locks::total_subscriber_lock, NULL);
 
 	pthread_mutex_init ( &Locks::userset_lock, NULL);
+	
+	pthread_mutex_init ( &Locks::statictician_lock, NULL);
+	
+	pthread_mutex_init ( &Locks::flow_analyzer_lock, NULL);
 
 }

@@ -34,3 +34,5 @@ pthread_mutex_t Locks::time_lock;
 
 pthread_mutex_t Locks::total_subscriber_lock;
 
+pthread_mutex_t Locks::userset_lock;
+

@@ -56,6 +56,8 @@ CPacketStatistician::~CPacketStatistician ( void )
 ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketDigest )
 {
 	//m_subscriberStatistic.
+	if (NULL == pPacketDigest)
+		return eEmptyPointer;
 	ResultEnum rs = eOK;
 	rs = m_trafficResult.AddNewPacketInfo(pPacketDigest);
 	EABASSERT ( rs );

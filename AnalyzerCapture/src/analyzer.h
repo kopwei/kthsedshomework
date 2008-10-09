@@ -68,6 +68,9 @@ class CAnalyzer
 		\param i	Interrupt signal.
 		 */
 		static void task_ctrl_C ( int i );
+		
+		static void InitLocks();
+		
 
 		static bool NeedStoreResult(const pcap_pkthdr* header, const tm* t);
 

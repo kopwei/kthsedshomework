@@ -77,17 +77,19 @@ const bool CUserUtil::IsUserDownloaded(const uint64 srcMac, const uint64 dstMac,
 		return true;
 	else
 	{
-		set<uint64>::iterator itor = s_ispMacSet.find(srcMac);
-		if (itor != s_ispMacSet.end())
-		{
-			pthread_mutex_lock(&Locks::userset_lock);
-			s_userMacSet.insert(srcMac);
-			s_userIPSet.insert(srcIp);
-			pthread_mutex_unlock(&Locks::userset_lock);
-			return true;
-		}
+			
+//		set<uint64>::iterator itor = s_ispMacSet.find(srcMac);
+//		if (itor != s_ispMacSet.end())
+//		{
+//			pthread_mutex_lock(&Locks::userset_lock);
+//			s_userMacSet.insert(srcMac);
+//			s_userIPSet.insert(srcIp);
+//			pthread_mutex_unlock(&Locks::userset_lock);
+//			return true;
+//		}
+		return false;
 	}
-	return false;	
+	
 }
 
 const bool CUserUtil::IsUserIP(const uint ipAddr)

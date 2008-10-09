@@ -91,7 +91,9 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
             if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
             {
 				//s_PacketTypeStat.processNewFlow(flow_hsh);
+				pthread_mutex_lock(&Locks::flow_analyzer_lock);
 				s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
+				pthread_mutex_unlock(&Locks::flow_analyzer_lock);
                 //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
 				keyList.push_back(flow_hsh->GetKey());
             }
@@ -102,7 +104,9 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
             {
                 //*collection.add_flow() = *flow_hsh;
 				//s_PacketTypeStat.processNewFlow(flow_hsh);
+				pthread_mutex_lock(&Locks::flow_analyzer_lock);
 				s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
+				pthread_mutex_unlock(&Locks::flow_analyzer_lock);
                 //CFlowUtil::addFlowToFile(flow_hsh, fileName);
                 //CFlowUtil::printFlowToFile ( flow_hsh, fileName );
                 //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
@@ -115,7 +119,9 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
 	{
 		flowMap->erase(flowMap->find(*listItor));
 	}
+	pthread_mutex_lock(&Locks::flow_analyzer_lock);
 	s_flowAnalyzer.ProcessFlowMap(flowMap);
+	pthread_mutex_unlock(&Locks::flow_analyzer_lock);
     //CFlowUtil::printFlowCollectionToFile(&collection, fileName);
     //Sync Table begin
     pthread_mutex_unlock ( &Locks::hash_lock );

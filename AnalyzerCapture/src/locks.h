@@ -38,6 +38,10 @@ public:
 	static pthread_mutex_t total_subscriber_lock;
 	
 	static pthread_mutex_t userset_lock;
+	
+	static pthread_mutex_t statistician_lock;
+	
+	static pthread_mutex_t flow_analyzer_lock;
 };
 
 #endif

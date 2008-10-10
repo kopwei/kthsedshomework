@@ -98,14 +98,20 @@ void CPacketStatistician::PrintStatisticResult(const tm* t)
 //	{
 //		itor->second.PrintSummary();
 //	}
+	pthread_mutex_lock(&Locks::statistician_lock);
 	m_payloadLengthResult.setEndTime(*t);
 	m_payloadLengthResult.PrintResult();
+	pthread_mutex_unlock(&Locks::statistician_lock);
 	
+	pthread_mutex_lock(&Locks::statistician_lock);
 	m_trafficResult.setEndTime(*t);
 	m_trafficResult.PrintResult();
+	pthread_mutex_unlock(&Locks::statistician_lock);
 	
+	pthread_mutex_lock(&Locks::statistician_lock);
 	m_subscriberResult.setEndTime(*t);
 	m_subscriberResult.PrintResult();
+	pthread_mutex_unlock(&Locks::statistician_lock);
 	
 	// Only for testing
 	//RecordStatisticResult(NULL);

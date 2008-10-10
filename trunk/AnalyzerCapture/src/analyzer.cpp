@@ -318,7 +318,7 @@ void CAnalyzer::task_ctrl_C ( int i )
 ResultEnum CAnalyzer::RecordFinalResult()
 {
 	tm t = s_refTime;
-	time_t newTime = mktime(&t) + 60;
+	time_t newTime = mktime(&t) + 1;
 	t = *(localtime(&newTime));
     //    printHash(fileName);
 	RecordStatus(&t);
@@ -333,7 +333,7 @@ bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )
     tm* time = localtime(&(header->ts.tv_sec));
     int packetMin = time->tm_min;
     int refMin = t->tm_min;
-    return (//time->tm_sec != t->tm_sec ||
+    return (time->tm_sec != t->tm_sec ||
 		 time->tm_min != t->tm_min 
 		|| time->tm_hour != t->tm_hour 
 		|| time->tm_yday != t->tm_yday);
@@ -369,7 +369,7 @@ void CAnalyzer::InitLocks()
 
 	pthread_mutex_init ( &Locks::userset_lock, NULL);
 	
-	pthread_mutex_init ( &Locks::statictician_lock, NULL);
+	pthread_mutex_init ( &Locks::statistician_lock, NULL);
 	
 	pthread_mutex_init ( &Locks::flow_analyzer_lock, NULL);
 

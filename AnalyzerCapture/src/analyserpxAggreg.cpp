@@ -126,8 +126,10 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
     //Sync Table begin
     pthread_mutex_unlock ( &Locks::hash_lock );
 	tm t = *(localtime(&sec));
+	pthread_mutex_lock(&Locks::flow_analyzer_lock);
 	s_flowAnalyzer.setEndTime(t);
 	s_flowAnalyzer.PrintResult();
+	pthread_mutex_unlock(&Locks::flow_analyzer_lock);
     return rs;
 
 }
@@ -523,7 +525,9 @@ void CAnalyzerAggregator::printHash()
         //	fprintf(stdout,"Estamos aqui 1\n");
         //*(collection.add_flow()) = *flow_hsh;
 		//s_PacketTypeStat.processNewFlow(flow_hsh);
+		pthread_mutex_lock(&Locks::flow_analyzer_lock);
 		s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
+		pthread_mutex_unlock(&Locks::flow_analyzer_lock);
         //processNewFlow(flow_hsh);
         //CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
     }
@@ -531,7 +535,9 @@ void CAnalyzerAggregator::printHash()
 	//////////////////////////////////////////////////////////////////////////
 	// This is used to clear the packet statistic result
 	//s_PacketTypeStat.PrintResult();
+	pthread_mutex_lock(&Locks::flow_analyzer_lock);
 	s_flowAnalyzer.PrintTotalResult();
+	pthread_mutex_unlock(&Locks::flow_analyzer_lock);
 	//s_PacketTypeStat.Clear();
 	//////////////////////////////////////////////////////////////////////////
 	
@@ -539,7 +545,9 @@ void CAnalyzerAggregator::printHash()
     //free ( filenameCountStr );
     //free ( data );
     //HashTableUtil::clear_hash_table ( test_table );
+	pthread_mutex_lock ( &Locks::hash_lock);
 	s_flowMap.clear();
+	pthread_mutex_unlock ( &Locks::hash_lock);
     //s_digestMap.clear();
 }
 

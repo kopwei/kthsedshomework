@@ -94,8 +94,9 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
 				pthread_mutex_lock(&Locks::flow_analyzer_lock);
 				s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
 				pthread_mutex_unlock(&Locks::flow_analyzer_lock);
-                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );				
 				keyList.push_back(flow_hsh->GetKey());
+				CFlowUtil::delete_flow(flow_hsh);
             }
         }
         else
@@ -109,15 +110,20 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
 				pthread_mutex_unlock(&Locks::flow_analyzer_lock);
                 //CFlowUtil::addFlowToFile(flow_hsh, fileName);
                 //CFlowUtil::printFlowToFile ( flow_hsh, fileName );
-                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );				
 				keyList.push_back(flow_hsh->GetKey());
+				CFlowUtil::delete_flow(flow_hsh);
             }
         }
     }
 	list<unsigned long long>::const_iterator listItor;
 	for (listItor = keyList.begin(); listItor != keyList.end(); ++listItor)
 	{
-		flowMap->erase(flowMap->find(*listItor));
+		FlowMap::iterator deleteItor = flowMap->find(*listItor);
+		if (deleteItor != flowMap->end())
+		{
+			flowMap->erase(deleteItor);
+		}
 	}
 	//pthread_mutex_lock(&Locks::flow_analyzer_lock);
 	
@@ -323,6 +329,7 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
 		pthread_mutex_lock(&Locks::flow_analyzer_lock);
 		s_flowAnalyzer.AddNewFlowInfo(flow_hsh_itor->second);
 		pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+		CFlowUtil::delete_flow(flow_hsh_itor->second);
 		s_flowMap.erase(flow_hsh_itor);		
 		s_flowMap.insert(FlowPair(flow->GetKey(), flow));
 		return_flow = flow;

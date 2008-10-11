@@ -72,7 +72,7 @@ public:
 	Release the memory allocated for a flow. 
 	\param data	Flow to be released.
 	*/
-	static void delete_flow(void * data);
+	static void delete_flow(flow_t * data);
 
 	/*!     \fn flow_t *createFlow_t( unsigned char proto, unsigned char class_proto, char *src_if, char *dst_if, u_short src_port, u_short dst_port, unsigned int n_bytes, unsigned int n_frames, time_t ini_sec, time_t end_sec, time_t ini_mic, time_t end_mic, struct in_addr ip_src, struct in_addr ip_dst)
 	\brief Create a new flow

@@ -60,7 +60,7 @@ ResultEnum CFlowAnalyzedResult::AddNewFlowInfo(const flow_t* flow)
 ResultEnum CFlowAnalyzedResult::ProcessFlowMap(const FlowMap* pFlowMap)
 {
 	ResultEnum rs = eOK;
-	m_statisticMap.clear();
+	//m_statisticMap.clear();
 	FlowMap::const_iterator itor = pFlowMap->begin();
 	for( ;itor != pFlowMap->end() ; ++itor)
 	{
@@ -113,10 +113,13 @@ ResultEnum CFlowAnalyzedResult::PrintCurrentResultToFile()
 {
 	ResultEnum rs = eOK;
 	string datestr = GetTimeStr(false);
-	string fileName = "FlowAnalyze.ret";
+	string dirName = "FlowResult/";
+	string fileName = GetTimeStr(false);
+	dirName.append(fileName);
 	string indent = "   ";
-	ofstream ofile(fileName.c_str(), ios_base::app);
-	ofile << datestr << indent << m_statisticMap.toString() << endl;
+	ofstream ofile(dirName.c_str(), ios_base::trunc);
+	
+	ofile << m_statisticMap.toString() << endl;
 	ofile.close();
 	m_statisticMap.clear();
 	return rs;

@@ -19,8 +19,7 @@
 #ifndef FLOWSTATISTICMAP_H
 #define FLOWSTATISTICMAP_H
 
-#include <map>
-#include <string>
+#include "FlowTypeMap.h"
 
 class flow_t;
 
@@ -41,11 +40,8 @@ public:
 
 private:
 	
-	typedef unsigned long long uint64;
-	typedef std::map<ushort, uint64> FlowTypeMap;
-	typedef std::map<uint, FlowTypeMap> UserFlowStatMap;
 	
-	void InitFlowTypeMap(FlowTypeMap& flowTypeMap);
+	typedef std::map<uint, CFlowTypeMap> UserFlowStatMap;
 
 	UserFlowStatMap m_statMap;
 };

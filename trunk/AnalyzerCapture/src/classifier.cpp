@@ -47,20 +47,29 @@ unsigned char* CClassifier::getPayload ( const struct ip *iph )
 
 unsigned short CClassifier::getPayloadLen ( const struct ip *iph, const u_short ipLen )
 {
+	u_short headerLen = 0;
 	unsigned char *transport = ( unsigned char * ) iph + iph->ip_hl * 4;
 	// if protocol is TCP
 	if ( ( ( ( int ) iph->ip_p ) == IPPROTO_TCP ) )
 	{
 		struct tcphdr *tcph = ( struct tcphdr * ) transport;
-		return ( ipLen - ( iph->ip_hl * 4 ) - ( tcph->th_off * 4 ) );
+		headerLen =  iph->ip_hl * 4  + tcph->th_off * 4 ;
 	}
 	// if protocol is UDP
 	else if ( ( ( ( int ) iph->ip_p ) == IPPROTO_UDP ) )
 	{
 		// udp has a fixed length of 8 bytes
-		return ( ipLen - ( iph->ip_hl * 4 ) - ( 2 * 4 ) );
+		headerLen = ( iph->ip_hl * 4 ) + ( 2 * 4 ) ;
 	}
-	return ( ipLen - ( iph->ip_hl * 4 ) );
+	else
+	{
+		headerLen = iph->ip_hl * 4;
+	}
+	if (ipLen > headerLen)
+		return ( ipLen - headerLen);
+	else
+		return 0;
+		
 	//return ipLen - (payload - ((unsigned char *) iph));
 }
 

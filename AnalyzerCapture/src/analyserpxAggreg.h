@@ -54,7 +54,7 @@ class CAnalyzerAggregator
 			\param *packet	an arrived packet
 		 */
 		static flow_t* mount_flow ( unsigned short ipLen, const struct pcap_pkthdr *header,
-		                         const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port, const u_short classifier, ThreadParams *tpp );
+		                         const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port, ThreadParams *tpp );
 		
 		
 		//static hash_tab* test_table;
@@ -83,7 +83,7 @@ class CAnalyzerAggregator
 
 		
 
-		static flow_t* addFlowSync ( flow_t * flow, const struct ip *ip, unsigned short ipLen, u_short classifier, ThreadParams *tp );
+		static flow_t* addFlowSync ( flow_t * flow, const struct ip *ip, unsigned short ipLen, ThreadParams *tp );
 
 
 
@@ -120,7 +120,7 @@ class CAnalyzerAggregator
 			\param usec		Indicate the timestamp miliseconds of the last packet arrived.
 			\param *fileName	Name/location to save the expired flows.
 		 */
-		static ResultEnum optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const string& fileName );
+		static ResultEnum optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const tm* refTime);
 		
 		static ResultEnum GetFileName(const int count);
 

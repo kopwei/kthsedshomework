@@ -61,7 +61,7 @@ void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
 //                CFlowUtil::delete_flow, HASH_SIZE );
 }
 
-ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const string& fileName )
+ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const tm* refTime)
 {
     ResultEnum rs = eOK;
     //cout << "I entered the clean hash program" << endl;
@@ -69,7 +69,7 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
 	pthread_mutex_lock(&Locks::hash_lock);
 //    while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 ) {}
 //    ;
-    cout << "Clean " << endl;
+    //cout << "Clean " << endl;
 
     flow_t *flow_hsh=NULL;
 //    HashTableUtil::init_hash_walk ( hash );
@@ -119,17 +119,17 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
 	{
 		flowMap->erase(flowMap->find(*listItor));
 	}
-	pthread_mutex_lock(&Locks::flow_analyzer_lock);
-	s_flowAnalyzer.ProcessFlowMap(flowMap);
-	pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+	//pthread_mutex_lock(&Locks::flow_analyzer_lock);
+	
+	s_flowAnalyzer.ProcessFlowMap(flowMap);	
+	
+	//pthread_mutex_unlock(&Locks::flow_analyzer_lock);
     //CFlowUtil::printFlowCollectionToFile(&collection, fileName);
     //Sync Table begin
     pthread_mutex_unlock ( &Locks::hash_lock );
-	tm t = *(localtime(&sec));
-	pthread_mutex_lock(&Locks::flow_analyzer_lock);
-	s_flowAnalyzer.setEndTime(t);
+	s_flowAnalyzer.setEndTime(*refTime);
 	s_flowAnalyzer.PrintResult();
-	pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+	//tm t = *(localtime(&sec));
     return rs;
 
 }
@@ -162,7 +162,7 @@ int CAnalyzerAggregator::verifyTimeOut ( flow_t * flow1, flow_t * flow2 )
 
 void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 {
-
+/*
     static time_t start = 0;
     double dif;
     //char *str = ( char* ) malloc ( sizeof ( char ) *1024 );
@@ -220,11 +220,11 @@ void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
     }
     //free ( str );
     //free ( filenameCountStr );
-
+*/
 
 }
 
-flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsigned short ipLen, u_short classifier, ThreadParams *tp )
+flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, unsigned short ipLen, ThreadParams *tp )
 {
     //extern int onlineCapMode;
 
@@ -238,16 +238,19 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
         //verifyTimeOutHash ( flow );
     }
 
+	u_short classifier = 0;
     //Sync Table begin
     //pthread_mutex_lock(&hash_lock);
-    while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 ) {}
-    ;
+   	pthread_mutex_lock ( &Locks::hash_lock );
 
     //flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
 	flow_t* flow_hsh = NULL;
 	FlowMap::iterator flow_hsh_itor = s_flowMap.find(flow->GetKey());
 	if (flow_hsh_itor != s_flowMap.end())
+	{
 		flow_hsh = flow_hsh_itor->second;
+		//classifier = flow_hsh->class_proto();
+	}
 
     pthread_mutex_unlock ( &Locks::hash_lock );
     //Sync Table end
@@ -255,29 +258,24 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     if ( flow_hsh == NULL )
     {
         ++tp->count[0];
+		classifier = CClassifier::getID ( ip, ipLen );
+		
     }
     else if ( verifyTimeOut ( flow_hsh, flow ) )
     {
         ++tp->count[1];
+		classifier = CClassifier::getID ( ip, ipLen );
     }
     else
     {
-        if ( ( flow_hsh->class_proto() == PROTO_ID_NONPAYLOAD ) )
-        {
-            //We can't classify a flow with NONPAYLOAD type only because his first packet
-            ++tp->count[2];
-        }
-        else if ( ( flow_hsh->class_proto() < DOWN_BASE_P2P_CLASS_NUMBER ) )
-        {
-            ++tp->count[3];
-        }
-        else if ( CClassifier::isSuperClass ( flow_hsh->class_proto() ) )
-        {
-            ++tp->count[4];
-        } /*else if ( (flow_hsh->class_proto>UP_BASE_P2P_CLASS_NUMBER)&&(flow_hsh->class_proto<PROTO_ID_NONPAYLOAD) ){
-		  ++tp->count[5];
-		  classifier = getID(ip, ipLen);
-		  }*/
+		if ( (flow_hsh->class_proto() >= DOWN_BASE_P2P_CLASS_NUMBER) && (flow_hsh->class_proto() <= UP_BASE_P2P_CLASS_NUMBER) )
+		{
+			classifier = flow_hsh->class_proto();
+		}
+		else 
+		{
+			classifier = CClassifier::getID ( ip, ipLen );
+		}
 		return_flow = flow_hsh;
     }
 
@@ -286,9 +284,11 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
                                          ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),
                                          flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
     //Sync Table begin
-    //pthread_mutex_lock(&hash_lock);
-	pthread_mutex_lock( &Locks::hash_lock );
-    //flow_hsh         = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
+	pthread_mutex_lock ( &Locks::hash_lock );
+	flow_hsh = NULL;
+	flow_hsh_itor = s_flowMap.find(flow->GetKey());
+	if (flow_hsh_itor != s_flowMap.end())
+		flow_hsh = flow_hsh_itor->second;
 	flow_t* reverse_flow_hsh = NULL;
 	FlowMap::iterator reverse_flow_hsh_itor = s_flowMap.find(tmp_flow->GetKey());
 	if (reverse_flow_hsh_itor != s_flowMap.end())
@@ -320,7 +320,9 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
         //HashTableUtil::clear_hash_entry ( test_table, flow_hsh );
         //HashTableUtil::add_hash_entry ( test_table, flow );
 		//TODO: I don't know if I should do something here
+		pthread_mutex_lock(&Locks::flow_analyzer_lock);
 		s_flowAnalyzer.AddNewFlowInfo(flow_hsh_itor->second);
+		pthread_mutex_unlock(&Locks::flow_analyzer_lock);
 		s_flowMap.erase(flow_hsh_itor);		
 		s_flowMap.insert(FlowPair(flow->GetKey(), flow));
 		return_flow = flow;
@@ -363,7 +365,7 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
         }
 
         CFlowUtil::delete_flow ( flow );
-        if ( ( flow_hsh->class_proto() == PROTO_ID_NONPAYLOAD ) )
+		if ( ( flow_hsh->class_proto() == PROTO_ID_NONPAYLOAD ) )
         {
             //We can't classify a flow with NONPAYLOAD type only because his first packet
             if ( ( reverse_flow_hsh == NULL ) )
@@ -439,7 +441,7 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
 */
 flow_t* CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_pkthdr *header,
                                        const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port,
-                                       const u_short classifier, ThreadParams *tp )
+                                       ThreadParams *tp )
 {
 
     //extern int outputThroughput;
@@ -464,7 +466,7 @@ flow_t* CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pca
     tvSec = ( time_t ) ( header->ts.tv_sec );
     tvUSec = ( time_t ) ( header->ts.tv_usec );
 
-	return addFlowSync ( flow, pIpHeader, ipLen, classifier, tp );
+	return addFlowSync ( flow, pIpHeader, ipLen, tp );
 
 }
 
@@ -555,6 +557,7 @@ void CAnalyzerAggregator::printHash()
 
 void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 {
+	/*
     ResultEnum rs = eOK;
     int filenameCount = 0;
     int flag=1;
@@ -585,9 +588,9 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 
     //char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
 
-
-    while ( /*( analyserpxError == 0 ) &&*/CAnalyzer::tFlag )
-    {
+*/
+ //   while ( /*( analyserpxError == 0 ) &&*/CAnalyzer::tFlag )
+ /*   {
         int sleepingTime =  fileAdminTime - ( final - init );
         //cout << "I will sleep for " << sleepingTime << endl;
         sleep ( sleepingTime );
@@ -656,6 +659,7 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
     //free ( data );
 
     //pthread_exit (0);
+	*/
     return ( void * ) NULL;
 }
 
@@ -688,10 +692,10 @@ ResultEnum CAnalyzerAggregator::PrintStatisticResult( const tm* t )
 {
 	// TODO: Need implementation here
 	
-	GetFileName(s_iFileNameCount++);
+	//GetFileName(s_iFileNameCount++);
 	time_t sec = tvSec;
 	time_t usec = tvUSec;
-	optimumCleanHash(&s_flowMap, sec, usec, s_strFileName);
+	optimumCleanHash(&s_flowMap, sec, usec, t);
 }
 
 /*void *verifyHashTimeOut(void *par)

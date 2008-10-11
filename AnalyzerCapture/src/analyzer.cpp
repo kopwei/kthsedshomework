@@ -53,6 +53,8 @@ bool CAnalyzer::s_bIsFirstTime = true;
 bool CAnalyzer::s_bIsStoring = false;
 tm  CAnalyzer::s_refTime;
 
+bool s_bTerminatingFlag = false;
+
 int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 {
     s_pUserInputParams = pParam;
@@ -102,7 +104,9 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
         strFileName.append("_0");
     }
     int analyserpxError;
-    for (int j = 1; j < 2000; j++)
+	time_t currentTime;
+	time(&currentTime);
+    for (int j = 1; j < 30000; j++)
     {
 		string intstr = CommonUtil::itoa(j, 10);
 		//cout << "number string ready: " << intstr << endl;
@@ -125,15 +129,23 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
                 pthread_create ( &workerthreads[i], NULL, threadsLoop, &tps[i] );
 				//cout << "thread " << i << "created" <<endl;
             }
+			
             for ( int i = 0; i < pParam->GetThreadNumber(); ++i )
             {
                 pthread_join ( workerthreads[i],NULL );
 				//cout << "thread " << i << "terminated" <<endl;
             }
         }
-		
-		cout <<"File "<< namebase << " processing finished " <<  endl;
+		if (!s_bTerminatingFlag)
+		{
+			time_t finishTime;
+			time(&finishTime);
+			cout << finishTime - currentTime << " seconds passed" << endl;
+			currentTime = finishTime;
+			cout <<"File "<< namebase << " processing finished " <<  endl;
+		}
     }
+	
 	RecordFinalResult();
 	
     if ( pParam->isOnlineMode() )
@@ -174,7 +186,7 @@ void * CAnalyzer::threadsLoop ( void *par )
         {
 			
             if (s_bIsFirstTime)
-            {
+			{
                 if (0 == pthread_mutex_trylock(&Locks::time_lock))
                 {
                     s_refTime = *(localtime(&(header->ts.tv_sec)));
@@ -231,7 +243,7 @@ void * CAnalyzer::threadsLoop ( void *par )
 		
 		
     }
-    while ( res >= 0 );
+	while ( res >= 0  && !s_bTerminatingFlag);
 	
 //	pthread_mutex_lock ( &Locks::print_lock );
 //	printf ( "Packets count : %d \n", tp->counttotal );
@@ -246,7 +258,7 @@ void * CAnalyzer::threadsLoop ( void *par )
 //	pthread_mutex_unlock ( &Locks::print_lock );
 
     //s_packetStatistician.PrintStatisticResult(localtime(&(header->ts.tv_sec)));
-    free ( head );
+	free ( head );
 	head = NULL;
     free(pkt);
 	pkt= NULL;
@@ -277,13 +289,13 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
     u_short len = ntohs ( pIPHeader->ip_len );
     u_short ipLength = tempIpLength <= len ? tempIpLength : len;
 	//u_short classifier = 0;
-    u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
+    //u_short classifier = CClassifier::getID ( pIPHeader, ipLength );
     //u_short classifier = CClassifier::getID(pIPHeader, ipLength, src_port, dst_port);
 	
 
     // Process the flows
 	flow_t* pflow = NULL;
-    pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, classifier, tp );
+    pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, tp );
 
     CPacketDigest packetDigest( header, packet, pflow );
 	
@@ -305,8 +317,9 @@ void CAnalyzer::task_ctrl_C ( int i )
     getDate(&init,data,6) ;
     snprintf(filenameCountStr,36,"%s_%u",data,filenameCount);
     snprintf(fileName,256,"%s%s",baseFileName, filenameCountStr);*/
+	printf ( " <- Interrupt received.\nProgram will exit now!\n" );
 	RecordFinalResult();
-    printf ( " <- Interrupt received.\nProgram will exit now!\n" );
+    
 
     //s_packetStatistician.PrintStatisticResult();
 
@@ -317,14 +330,23 @@ void CAnalyzer::task_ctrl_C ( int i )
 
 ResultEnum CAnalyzer::RecordFinalResult()
 {
+	// Terminate the threads
+	s_bTerminatingFlag = true;
+	sleep(20);
 	tm t = s_refTime;
-	time_t newTime = mktime(&t) + 1;
+	time_t temptime = mktime(&t);
+	time_t newTime =  temptime - temptime % 60 + 60;
 	t = *(localtime(&newTime));
     //    printHash(fileName);
+	
 	RecordStatus(&t);
+	cout << "status recording OK" << endl;
 	CAnalyzerAggregator::printHash();	
+	cout << "hash recording OK" << endl;
 	s_packetStatistician.PrintFinalResult();
+	cout << "statistician recording OK" << endl;
 	CUserUtil::PrintUsers();
+	cout << "Users recording OK" << endl;
 }
 
 bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )
@@ -333,7 +355,7 @@ bool CAnalyzer::NeedStoreResult( const pcap_pkthdr* header, const tm* t )
     tm* time = localtime(&(header->ts.tv_sec));
     int packetMin = time->tm_min;
     int refMin = t->tm_min;
-    return (time->tm_sec != t->tm_sec ||
+    return (// time->tm_sec != t->tm_sec ||
 		 time->tm_min != t->tm_min 
 		|| time->tm_hour != t->tm_hour 
 		|| time->tm_yday != t->tm_yday);
@@ -344,7 +366,9 @@ ResultEnum CAnalyzer::RecordStatus(const tm* t)
     // TODO:
     //s_refTime
     s_packetStatistician.PrintStatisticResult(t);
+	cout << "statistician clean ";
 	CAnalyzerAggregator::PrintStatisticResult(t);
+	cout << " and flow clean " << endl; 
 
     return eOK;
 }
@@ -369,7 +393,11 @@ void CAnalyzer::InitLocks()
 
 	pthread_mutex_init ( &Locks::userset_lock, NULL);
 	
-	pthread_mutex_init ( &Locks::statistician_lock, NULL);
+	pthread_mutex_init (&Locks::traffic_result_lock, NULL);
+
+	pthread_mutex_init (&Locks::subscriber_result_lock, NULL);
+
+	pthread_mutex_init (&Locks::payload_result_lock, NULL);
 	
 	pthread_mutex_init ( &Locks::flow_analyzer_lock, NULL);
 

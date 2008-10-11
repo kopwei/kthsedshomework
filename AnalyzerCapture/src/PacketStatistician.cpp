@@ -60,21 +60,21 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 		return eEmptyPointer;
 	ResultEnum rs = eOK;
 	
-	pthread_mutex_lock(&Locks::statistician_lock);
+	pthread_mutex_lock(&Locks::traffic_result_lock);
 	rs = m_trafficResult.AddNewPacketInfo(pPacketDigest);
-	pthread_mutex_unlock(&Locks::statistician_lock);
+	pthread_mutex_unlock(&Locks::traffic_result_lock);
 	EABASSERT ( rs );
 	
 	
-	pthread_mutex_lock(&Locks::statistician_lock);
+	pthread_mutex_lock(&Locks::subscriber_result_lock);
 	rs = m_subscriberResult.AddNewPacketInfo(pPacketDigest);
-	pthread_mutex_unlock(&Locks::statistician_lock);
+	pthread_mutex_unlock(&Locks::subscriber_result_lock);
 	EABASSERT ( rs );
 	
 	//m_mapSubscriberStat.insert
-	pthread_mutex_lock(&Locks::statistician_lock);
+	pthread_mutex_lock(&Locks::payload_result_lock);
 	rs = m_payloadLengthResult.AddNewPacketInfo(pPacketDigest);
-	pthread_mutex_unlock(&Locks::statistician_lock);
+	pthread_mutex_unlock(&Locks::payload_result_lock);
 	EABASSERT ( rs );
 	
 	
@@ -98,20 +98,20 @@ void CPacketStatistician::PrintStatisticResult(const tm* t)
 //	{
 //		itor->second.PrintSummary();
 //	}
-	pthread_mutex_lock(&Locks::statistician_lock);
+	//pthread_mutex_lock(&Locks::statistician_lock);
 	m_payloadLengthResult.setEndTime(*t);
 	m_payloadLengthResult.PrintResult();
-	pthread_mutex_unlock(&Locks::statistician_lock);
+	//pthread_mutex_unlock(&Locks::statistician_lock);
 	
-	pthread_mutex_lock(&Locks::statistician_lock);
+	//pthread_mutex_lock(&Locks::statistician_lock);
 	m_trafficResult.setEndTime(*t);
 	m_trafficResult.PrintResult();
-	pthread_mutex_unlock(&Locks::statistician_lock);
+	//pthread_mutex_unlock(&Locks::statistician_lock);
 	
-	pthread_mutex_lock(&Locks::statistician_lock);
+	//pthread_mutex_lock(&Locks::statistician_lock);
 	m_subscriberResult.setEndTime(*t);
 	m_subscriberResult.PrintResult();
-	pthread_mutex_unlock(&Locks::statistician_lock);
+	//pthread_mutex_unlock(&Locks::statistician_lock);
 	
 	// Only for testing
 	//RecordStatisticResult(NULL);

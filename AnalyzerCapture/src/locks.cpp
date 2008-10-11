@@ -36,7 +36,11 @@ pthread_mutex_t Locks::total_subscriber_lock;
 
 pthread_mutex_t Locks::userset_lock;
 
-pthread_mutex_t Locks::statistician_lock;
+pthread_mutex_t Locks::traffic_result_lock;
+
+pthread_mutex_t Locks::subscriber_result_lock;
+
+pthread_mutex_t Locks::payload_result_lock;
 
 pthread_mutex_t Locks::flow_analyzer_lock;
 

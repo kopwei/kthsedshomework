@@ -39,7 +39,11 @@ public:
 	
 	static pthread_mutex_t userset_lock;
 	
-	static pthread_mutex_t statistician_lock;
+	static pthread_mutex_t traffic_result_lock;
+
+	static pthread_mutex_t subscriber_result_lock;
+
+	static pthread_mutex_t payload_result_lock;
 	
 	static pthread_mutex_t flow_analyzer_lock;
 };

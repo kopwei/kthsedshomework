@@ -49,10 +49,10 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
 am_analyzercapture_OBJECTS = AnalyzedResult.$(OBJEXT) \
 	CommonUtil.$(OBJEXT) FlowAnalyzedResult.$(OBJEXT) \
-	FlowStatisticMap.$(OBJEXT) PacketDigest.$(OBJEXT) \
-	PacketStatistic.$(OBJEXT) PacketStatisticMap.$(OBJEXT) \
-	PacketStatistician.$(OBJEXT) PacketTypeStat.$(OBJEXT) \
-	PayloadLengthResult.$(OBJEXT) \
+	FlowStatisticMap.$(OBJEXT) FlowTypeMap.$(OBJEXT) \
+	PacketDigest.$(OBJEXT) PacketStatistic.$(OBJEXT) \
+	PacketStatisticMap.$(OBJEXT) PacketStatistician.$(OBJEXT) \
+	PacketTypeStat.$(OBJEXT) PayloadLengthResult.$(OBJEXT) \
 	SubscriberAnalyzedResult.$(OBJEXT) \
 	SubscriberStatistic.$(OBJEXT) TrafficAnalyzedresult.$(OBJEXT) \
 	UserUtil.$(OBJEXT) analyserpxAggreg.$(OBJEXT) \
@@ -195,13 +195,13 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 analyzercapture_SOURCES = AnalyzedResult.cpp CommonUtil.cpp \
-	FlowAnalyzedResult.cpp FlowStatisticMap.cpp PacketDigest.cpp PacketStatistic.cpp \
-	PacketStatisticMap.cpp PacketStatistician.cpp PacketTypeStat.cpp PayloadLengthResult.cpp \
-	SubscriberAnalyzedResult.cpp SubscriberStatistic.cpp TrafficAnalyzedresult.cpp UserUtil.cpp \
-	analyserpxAggreg.cpp analyserpxFile.cpp analyserpxFlow.cpp analyzer.cpp analyzercapture.cpp \
-	cap.cpp circularbuffer.cpp classifier.cpp expressions.cpp flow.pb.cpp \
-	flowcollection.pb.cpp hashtab.cpp ipheaderutil.cpp locks.cpp resultrecorder.cpp \
-	userinputparams.cpp
+	FlowAnalyzedResult.cpp FlowStatisticMap.cpp FlowTypeMap.cpp PacketDigest.cpp \
+	PacketStatistic.cpp PacketStatisticMap.cpp PacketStatistician.cpp PacketTypeStat.cpp \
+	PayloadLengthResult.cpp SubscriberAnalyzedResult.cpp SubscriberStatistic.cpp \
+	TrafficAnalyzedresult.cpp UserUtil.cpp analyserpxAggreg.cpp analyserpxFile.cpp analyserpxFlow.cpp \
+	analyzer.cpp analyzercapture.cpp cap.cpp circularbuffer.cpp classifier.cpp \
+	expressions.cpp flow.pb.cpp flowcollection.pb.cpp hashtab.cpp ipheaderutil.cpp \
+	locks.cpp resultrecorder.cpp userinputparams.cpp
 
 
 # set the include path found by configure
@@ -217,6 +217,7 @@ noinst_HEADERS = AnalyzedResult.h CommonUtil.h FlowAnalyzedResult.h \
 	flowcollection.pb.h hashtab.h ipheaderutil.h locks.h macro.h resultrecorder.h \
 	userinputparams.h version.h
 
+_SOURCES = FlowTypeMap.cpp FlowTypeMap.h
 all: all-am
 
 .SUFFIXES:
@@ -292,6 +293,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CommonUtil.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FlowAnalyzedResult.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FlowStatisticMap.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/FlowTypeMap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PacketDigest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PacketStatistic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PacketStatisticMap.Po@am__quote@

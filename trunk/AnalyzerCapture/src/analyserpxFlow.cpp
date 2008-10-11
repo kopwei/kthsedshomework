@@ -55,11 +55,11 @@ unsigned long CFlowUtil::flow_key ( const void *data )
 	       what->proto() + ( ( unsigned ) what->dst_port() << 16 ) + what->src_port();
 }
 
-void CFlowUtil::delete_flow ( void *data )
+void CFlowUtil::delete_flow ( flow_t *data )
 {
 	if ( !data )
 		return;
-	delete ( ( flow_t * ) data );
+	delete ( data );
 }
 
 flow_t* CFlowUtil::createFlow_t ( const unsigned char proto, const unsigned char class_proto,

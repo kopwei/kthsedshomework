@@ -86,6 +86,7 @@ ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned int* pArray)
 	}
 	//cout << "finish print" << endl;
 	ofile << endl;
+	ofile.close();
 
 	return eOK;
 }

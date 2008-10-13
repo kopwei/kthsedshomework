@@ -71,6 +71,8 @@ public:
 
 
 	static int initiate_capture(cap_config * c, const bool onlineCapMode, const string& offLineFile);
+	
+	static int stop_offline_capture(cap_config *c);
 
 };
 #endif

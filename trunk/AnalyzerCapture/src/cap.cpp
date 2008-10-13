@@ -126,6 +126,21 @@ int CCaptureUtil::initiate_capture(cap_config * c, const bool onlineCapMode, con
 
 }
 
+int CCaptureUtil::stop_offline_capture(cap_config * c)
+{
+	if (c == NULL)
+	{
+		cout << "empty configure pointer" << endl;
+		return -1;
+	}
+	if (NULL == c->descr)
+	{
+		cout << "empty handler pointer" << endl;
+		return -1;
+	}
+	pcap_close(c->descr);
+}
+
 void CCaptureUtil::delete_cap_config(void *data)
 {
 	// TODO: Unfinished

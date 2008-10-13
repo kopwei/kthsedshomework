@@ -27,7 +27,7 @@ std::string CommonUtil::itoa(unsigned long long value, int base/* = 10 */) {
 	buf.reserve( kMaxDigits ); // Pre-allocate enough space.
 	// check that the base if valid
 	if (base < 2 || base > 16) return buf;	
-	int quotient = value;
+	unsigned long long quotient = value;
 	// Translating number to string with base:
 	do {
 	

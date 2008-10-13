@@ -21,7 +21,7 @@
 /**
  * This method is used to convert a integer value to standard string
  */
-std::string CommonUtil::itoa(unsigned long long value, int base/* = 10 */) {
+std::string CommonUtil::itoa(unsigned long long value, uint base/* = 10 */) {
 	enum { kMaxDigits = 35 };
 	std::string buf;
 	buf.reserve( kMaxDigits ); // Pre-allocate enough space.
@@ -31,14 +31,14 @@ std::string CommonUtil::itoa(unsigned long long value, int base/* = 10 */) {
 	// Translating number to string with base:
 	do {
 	
-		buf += "0123456789abcdef"[ std::abs( quotient % base ) ];
+		buf += "0123456789abcdef"[ quotient % base ];
 		quotient /= base;
 	
 	} while ( quotient );
 	// Append the negative sign for base 10
 	
-	if ( value < 0 && base == 10) buf += '-';
-	std::reverse( buf.begin(), buf.end() );
+	//if ( value < 0 && base == 10) buf += '-';
+	//std::reverse( buf.begin(), buf.end() );
 	return buf;
 }
 

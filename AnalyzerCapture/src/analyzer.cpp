@@ -144,6 +144,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
 			currentTime = finishTime;
 			cout <<"File "<< namebase << " processing finished " <<  endl;
 		}
+		CCaptureUtil::stop_offline_capture(pParam->GetCaptureConfig());
     }
 	
 	RecordFinalResult();
@@ -332,7 +333,7 @@ ResultEnum CAnalyzer::RecordFinalResult()
 {
 	// Terminate the threads
 	s_bTerminatingFlag = true;
-	sleep(20);
+	sleep(2);
 	tm t = s_refTime;
 	time_t temptime = mktime(&t);
 	time_t newTime =  temptime - temptime % 60 + 60;

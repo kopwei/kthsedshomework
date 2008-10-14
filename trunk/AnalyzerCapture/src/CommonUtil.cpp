@@ -38,7 +38,7 @@ std::string CommonUtil::itoa(unsigned long long value, uint base/* = 10 */) {
 	// Append the negative sign for base 10
 	
 	//if ( value < 0 && base == 10) buf += '-';
-	//std::reverse( buf.begin(), buf.end() );
+	std::reverse( buf.begin(), buf.end() );
 	return buf;
 }
 

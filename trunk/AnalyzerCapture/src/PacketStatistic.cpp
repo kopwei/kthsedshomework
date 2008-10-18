@@ -49,8 +49,8 @@ ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest)
 	rs = distributeByLocality(pDigest);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 	
-	rs = distributedByInternationality(pDigest);
-	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+	//rs = distributedByInternationality(pDigest);
+	//EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
 	// TODO: need more implementation here
 	return rs;
@@ -124,7 +124,7 @@ const string CPacketStatistic::toString() const
 	string strStream;
 	strStream.append(m_totalTraffic.toString());
 	strStream.append(m_localTraffic.toString());
-	strStream.append(m_domesticTraffic.toString());
+	//strStream.append(m_domesticTraffic.toString());
 	strStream.append(m_trafficMap.toString());
 	return strStream;
 }

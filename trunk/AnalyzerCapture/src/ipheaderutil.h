@@ -26,6 +26,8 @@
 #include <string>
 
 
+class ethhdr;
+
 /**
 	@author LM Ericsson,,, <ericsson@ericsson-computer>
 */
@@ -36,6 +38,8 @@ public:
 	static ResultEnum GetIPHeader(const u_char* packet, ip*& pIPHeader);
 	
 	static ResultEnum GetSrcAndDstPort(const u_char* packet, u_int16_t* src_port, u_int16_t* dst_port);
+	
+	static ResultEnum GetMacHeader(const u_char* packet, ethhdr*& macHeader);
 	
 	static const unsigned int ConvertIPToInt(const in_addr* pIPAddr);
 	

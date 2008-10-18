@@ -71,6 +71,22 @@ class CAnalyzer
 		
 		static void InitLocks();
 		
+		/**
+		 * Some packet with a private IP address shall not be considered, error mac address will also be eliminated
+		 */ 
+		static bool IsUsablePacket(const ip* pIPHeader, const u_char *packet);
+		
+		/**
+		 *
+		 */
+		static bool IsValidIP(const uint ip);
+		
+		static bool IsValidMac(const unsigned long long macAddr);
+		
+		static ResultEnum SplitPacket(const u_char *packet, uint* srcIp, uint* dstIp, unsigned long long* srcMac, 
+									  unsigned long long* dstMac, u_short srcPort, u_short dstPort);
+		
+		
 
 		static bool NeedStoreResult(const pcap_pkthdr* header, const tm* t);
 

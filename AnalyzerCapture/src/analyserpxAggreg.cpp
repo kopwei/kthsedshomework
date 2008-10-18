@@ -274,7 +274,8 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     }
     else
     {
-		if ( (flow_hsh->class_proto() >= DOWN_BASE_P2P_CLASS_NUMBER) && (flow_hsh->class_proto() <= UP_BASE_P2P_CLASS_NUMBER) )
+		// If it is considered as BT or eDonkey, we won't check the following packet's type
+		if ( (flow_hsh->class_proto() == PROTO_ID_BITTORRENT) || (flow_hsh->class_proto() == PROTO_ID_EDONKEY) )
 		{
 			classifier = flow_hsh->class_proto();
 		}

@@ -37,7 +37,7 @@ CFlowStatisticMap::~CFlowStatisticMap()
 
 void CFlowStatisticMap::AddNewFlow(const flow_t* pFlow)
 {
-	uint userIp = ntohl(pFlow->src_ip());
+	uint userIp = pFlow->src_ip();
 	if (CUserUtil::IsUserIP(userIp))
 	{
 		UserFlowStatMap::iterator itor =  m_statMap.find(userIp);

@@ -275,11 +275,14 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
     ResultEnum rs= CIPHeaderUtil::GetIPHeader ( packet, pIPHeader );
     EABASSERT ( rs );
 	
-	if (CIPHeaderUtil::ConvertIPToInt(&(pIPHeader->ip_src)) == 0
-		   || CIPHeaderUtil::ConvertIPToInt(&(pIPHeader->ip_dst)) == 0)
+	
+	
+	// If the packet with an non-usage header, we won't consider it
+	if (!IsUsablePacket(pIPHeader, packet))
 	{
 		return eOK;
 	}
+	
     // Get the port info from packet
     u_int16_t src_port = 0;
     u_int16_t dst_port = 0;
@@ -327,6 +330,80 @@ void CAnalyzer::task_ctrl_C ( int i )
     /*free(filenameCountStr);
     free(data);*/
     exit ( 0 );
+}
+
+bool CAnalyzer::IsUsablePacket(const ip* pIPHeader, const u_char *packet)
+{
+	if (NULL == pIPHeader || NULL == packet)
+		return false;
+	uint srcIp = CIPHeaderUtil::ConvertIPToInt(&(pIPHeader->ip_src));
+	uint dstIp = CIPHeaderUtil::ConvertIPToInt(&(pIPHeader->ip_dst));
+	if (!IsValidIP(srcIp) || !IsValidIP(dstIp))
+	{
+		return false;
+	}
+	
+	else
+	{
+		ethhdr* macHeader = NULL;
+		ResultEnum rs = CIPHeaderUtil::GetMacHeader(packet, macHeader);
+		if (NULL == macHeader)
+		{
+			return false;
+		}
+		else
+		{
+			ether_addr* srcMac = (ether_addr*)(macHeader->h_source);
+			ether_addr* dstMac = (ether_addr*)(macHeader->h_dest);
+			unsigned long long srcAddr = CIPHeaderUtil::ConvertMacToInt64(srcMac);
+			unsigned long long dstAddr = CIPHeaderUtil::ConvertMacToInt64(dstMac);
+			if (!IsValidMac(srcAddr) || !IsValidMac(dstAddr))
+			{
+				return false;
+			}
+		}
+		
+	}
+	
+	
+	return true;
+}
+
+bool CAnalyzer::IsValidIP(const uint ip)
+{
+	// TODO:
+	if (0== ip)
+	{
+		return false;
+	}
+	// IP can't be 169.254.x.x or 192.168.x.x
+	else if (ip >= 2851995648LL && ip <= 2852061183LL)
+	{
+		return false;
+	}
+	else if (ip >= 3232235520LL && ip <= 3232301055LL)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool CAnalyzer::IsValidMac(const unsigned long long macAddr)
+{
+	// TODO:
+	if (macAddr == 0LL || macAddr == 0xFFFFFFFFFFFFLL)
+	{
+		return false;
+	}
+	return true;
+}
+
+ResultEnum SplitPacket(const u_char *packet, uint* srcIp, uint* dstIp, unsigned long long* srcMac, 
+					   unsigned long long* dstMac, u_short srcPort, u_short dstPort)
+{
+	ResultEnum rs = eOK;
+	// TODO:
+	return rs;
 }
 
 ResultEnum CAnalyzer::RecordFinalResult()

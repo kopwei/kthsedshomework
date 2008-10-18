@@ -21,6 +21,7 @@
 
 #include <netinet/in.h>
 #include <net/ethernet.h>
+#include <netinet/if_ether.h>
 //#include <sstream>
 #include "CommonUtil.h"
 
@@ -32,6 +33,19 @@ ResultEnum CIPHeaderUtil::GetIPHeader ( const u_char* packet, ip*& pIPHeader )
 	short size_ethernet = ETHER_HDR_LEN;
 	pIPHeader = ( ip* ) ( packet + size_ethernet );
 	return eOK;
+}
+
+ResultEnum CIPHeaderUtil::GetMacHeader(const u_char* packet, ethhdr*& macHeader)
+{
+	if (NULL != packet)
+	{
+		macHeader = (ethhdr *)packet;
+		return eOK;
+	}
+	else
+	{
+		return eEmptyPointer;
+	}
 }
 
 ResultEnum CIPHeaderUtil::GetSrcAndDstPort ( const u_char* packet, u_int16_t* src_port, u_int16_t* dst_port )
@@ -82,7 +96,7 @@ const unsigned int CIPHeaderUtil::ConvertIPToInt ( const in_addr* pIPAddr )
 {
 
 	// TODO: need implemented here
-	return pIPAddr->s_addr;
+	return ntohl(pIPAddr->s_addr);
 	//return add.S_addr;
 }
 

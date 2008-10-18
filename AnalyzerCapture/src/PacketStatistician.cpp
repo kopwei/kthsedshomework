@@ -60,16 +60,15 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 		return eEmptyPointer;
 	ResultEnum rs = eOK;
 	
-	pthread_mutex_lock(&Locks::traffic_result_lock);
-	rs = m_trafficResult.AddNewPacketInfo(pPacketDigest);
-	pthread_mutex_unlock(&Locks::traffic_result_lock);
-	EABASSERT ( rs );
-	
-	
 	pthread_mutex_lock(&Locks::subscriber_result_lock);
 	rs = m_subscriberResult.AddNewPacketInfo(pPacketDigest);
 	pthread_mutex_unlock(&Locks::subscriber_result_lock);
 	EABASSERT ( rs );
+	
+	pthread_mutex_lock(&Locks::traffic_result_lock);
+	rs = m_trafficResult.AddNewPacketInfo(pPacketDigest);
+	pthread_mutex_unlock(&Locks::traffic_result_lock);
+	EABASSERT ( rs );	
 	
 	//m_mapSubscriberStat.insert
 	pthread_mutex_lock(&Locks::payload_result_lock);

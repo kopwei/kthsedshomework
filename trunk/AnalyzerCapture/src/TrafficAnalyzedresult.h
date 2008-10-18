@@ -54,9 +54,6 @@ private:
 	const CTrafficAnalyzedResult& operator=(const CTrafficAnalyzedResult&);
 
 
-	bool				IsSubscriber(const int ip_addr) const;
-
-	//CPacketStatistic		m_totalPacketStatistic;
 	
 	ResultEnum				PrintInfoToFile(CPacketStatistic* pTraffic);
 

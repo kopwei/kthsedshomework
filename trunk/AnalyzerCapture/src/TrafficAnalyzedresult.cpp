@@ -72,11 +72,6 @@ ResultEnum CTrafficAnalyzedResult::AddNewPacketInfo( const CPacketDigest* pDiges
 	return rs;
 }
 
-bool CTrafficAnalyzedResult::IsSubscriber( const int ip_addr ) const
-{
-	// TODO: Need implementation here
-	return true;
-}
 
 ResultEnum CTrafficAnalyzedResult::PrintInfoToFile( CPacketStatistic* pTraffic )
 {

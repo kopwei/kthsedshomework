@@ -44,20 +44,6 @@ class CPacketStatistic
 		 */
 		ResultEnum		AddPacketInfo ( const CPacketDigest* pDigest );
 
-//		_uint_64 packetnumber() const {return m_packetnumber;}
-//		_uint_64 trafficvolume() const {return m_trafficvolume;}
-//		_uint_64 emptypacketnumber() const {return m_emptypacketnumber;}
-//		_uint_64 tcppacketnumber() const {return m_tcppacketnumber;}
-//		_uint_64 tcptrafficvolume() const {return m_tcptrafficvolume;}
-//		_uint_64 udppacketnumber() const {return m_udppacketnumber;}
-//		_uint_64 udptrafficvolume() const {return m_udptrafficvolume;}
-//		_uint_64 p2ppacketnumber() const {return m_p2ppacketnumber;}
-//		_uint_64 p2ptrafficvolume() const {return m_p2ptrafficvolume;}
-//		_uint_64 httppacketnumber() const {return m_httppacketnumber;}
-//		_uint_64 httptrafficvolume() const {return m_httptrafficvolume;}
-//		_uint_64 unidentifiedpacketnumber() const {return m_unidentifiedpacketnumber;}
-//		_uint_64 unidentifiedtrafficvolume() const {return m_unidentifiedtrafficvolume;}
-
 		const string toString() const;
 
 		void clear();
@@ -83,12 +69,19 @@ class CPacketStatistic
 		 */
 		ResultEnum distributeByLocality(const CPacketDigest* pDigest );
 		
+		/**
+		 * This method will distribute the traffic by natinality e.g. sweden to other countries or sweden to sweden
+		 */ 
+		ResultEnum distributedByInternationality(const CPacketDigest* pDigest);
+		
 
 		MetaTraffic m_totalTraffic;
 		MetaTraffic m_tcpTraffic;
 		MetaTraffic m_udpTraffic;
 		MetaTraffic m_localTraffic;
 		MetaTraffic m_illocalTraffic;
+		MetaTraffic m_domesticTraffic;
+		MetaTraffic m_intlTraffic;
 
 
 		//

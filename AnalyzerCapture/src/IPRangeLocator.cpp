@@ -17,7 +17,6 @@
  *   Copyright (C) 2008 by Ericsson AB
  */
 
-#include "StdAfx.h"
 #include "IPRangeLocator.h"
 
 #include <fstream>
@@ -62,7 +61,7 @@ const AreaCodeEnum CIPRangeLocator::GetIPLocation( const unsigned int ipAddr )
 			}
 		}
 	}
-	return eUnknown;
+	return eUnknownCountry;
 }
 
 /*
@@ -82,9 +81,10 @@ const bool IPRange::IsInRange( const unsigned int ipAddr) const
  */
 void CIPRangeLocator::InitIPData(const AreaCodeEnum country_code)
 {
-	list<IPRange> rangeList;
+	
 	if (country_code == eSweden)
 	{
+		list<IPRange> rangeList;
 		ifstream infile("sweden.rng");
 		while (!infile.eof())
 		{
@@ -99,6 +99,7 @@ void CIPRangeLocator::InitIPData(const AreaCodeEnum country_code)
 				rangeList.push_back(range);
 			}
 		}
+		s_ipMap.insert(pair<AreaCodeEnum, list<IPRange> >(eSweden, rangeList));
 	}
 	//IPRange range(;
 }

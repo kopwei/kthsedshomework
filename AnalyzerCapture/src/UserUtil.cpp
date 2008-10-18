@@ -114,6 +114,13 @@ void CUserUtil::PrintUsers()
 		ofile << CIPHeaderUtil::ConvertIPToString(*itor) << indent;
 	}
 	ofile << endl;
+	
+	set<uint64>::const_iterator macitor = s_userMacSet.begin();
+	for(; macitor != s_userMacSet.end(); ++macitor)
+	{
+		ofile << CIPHeaderUtil::ConvertMacToString(*macitor) << indent;
+	}
+	ofile << endl;
 	ofile.close();
 }
 

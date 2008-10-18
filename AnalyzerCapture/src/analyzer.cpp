@@ -34,6 +34,7 @@
 #include "PacketDigest.h"
 #include "CommonUtil.h"
 #include "UserUtil.h"
+#include "IPRangeLocator.h"
 
 using namespace std;
 
@@ -72,6 +73,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
     //time_t t = 0;
     //s_refTime = localtime(&t);
 	InitLocks();
+	CIPRangeLocator::InitIPData(eSweden);
 
     
     CAnalyzerAggregator::initVariables(pParam);

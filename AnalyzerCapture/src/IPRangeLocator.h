@@ -25,7 +25,7 @@
 
 enum AreaCodeEnum
 {
-	eUnknown = -1,
+	eUnknownCountry = -1,
 	eUSA = 1,
 	eUK = 44,
 	eSweden = 46,

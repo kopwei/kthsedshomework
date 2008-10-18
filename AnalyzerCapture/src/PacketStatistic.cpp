@@ -24,6 +24,7 @@
 #include "PacketDigest.h"
 #include "UserUtil.h"
 #include "CommonUtil.h"
+#include "IPRangeLocator.h"
 
 
 CPacketStatistic::CPacketStatistic( void ) 
@@ -46,6 +47,9 @@ ResultEnum CPacketStatistic::AddPacketInfo(const CPacketDigest* pDigest)
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 	
 	rs = distributeByLocality(pDigest);
+	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
+	
+	rs = distributedByInternationality(pDigest);
 	EABASSERT(rs == eOK); ON_ERROR_RETURN(rs != eOK, rs);
 
 	// TODO: need more implementation here
@@ -93,6 +97,24 @@ ResultEnum CPacketStatistic::distributeByLocality(const CPacketDigest* pDigest)
 	{
 		m_illocalTraffic.AddNewPacket(pDigest->getPacketSize());
 	}
+	return eOK;
+}
+
+ResultEnum CPacketStatistic::distributedByInternationality(const CPacketDigest* pDigest)
+{
+	in_addr src_addr = pDigest->getSrcAddress();
+	in_addr dst_addr = pDigest->getDestAddress();
+	uint srcAddr = CIPHeaderUtil::ConvertIPToInt(&src_addr);
+	uint dstAddr = CIPHeaderUtil::ConvertIPToInt(&dst_addr);
+	
+	if (CIPRangeLocator::IsIPInRange(srcAddr, eSweden) && CIPRangeLocator::IsIPInRange(dstAddr, eSweden))
+	{
+		m_domesticTraffic.AddNewPacket(pDigest->getPacketSize());
+	}
+	else
+	{
+		m_intlTraffic.AddNewPacket(pDigest->getPacketSize());
+	}
 }
 
 
@@ -102,6 +124,7 @@ const string CPacketStatistic::toString() const
 	string strStream;
 	strStream.append(m_totalTraffic.toString());
 	strStream.append(m_localTraffic.toString());
+	strStream.append(m_domesticTraffic.toString());
 	strStream.append(m_trafficMap.toString());
 	return strStream;
 }
@@ -113,6 +136,8 @@ void CPacketStatistic::clear()
 	m_udpTraffic.clear();
 	m_localTraffic.clear();
 	m_illocalTraffic.clear();
+	m_domesticTraffic.clear();
+	m_intlTraffic.clear();
 	m_trafficMap.clear();
 }
 

@@ -5,8 +5,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <netinet/in.h>
+
 #include <iostream>
+#include <list>
 //#include <sstream>
 
 #include "analyserpxAggreg.h"
@@ -19,8 +20,7 @@
 #include "userinputparams.h"
 #include "analyzer.h"
 #include "macro.h"
-#include "flow.pb.h"
-#include "flowcollection.pb.h"
+#include "Flow.h"
 #include "CommonUtil.h"
 
 //char *baseFileName = "cap", *logFileName = "logcap", *fileName = "cap0";
@@ -63,6 +63,7 @@ void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
 
 ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const tm* refTime)
 {
+	static int cleanCount = 0;
     ResultEnum rs = eOK;
     //cout << "I entered the clean hash program" << endl;
     //Sync Table begin
@@ -77,17 +78,18 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
     lastTime = sec* ( 1e6 ) + usec;
 //    flow_collection collection;
 //    while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
+	string fileName = GetFileName(refTime, cleanCount++);
 	FlowMap::iterator itor = flowMap->begin();
 	list<unsigned long long> keyList;
 	for (;itor != flowMap->end(); ++itor)
     {
 		flow_hsh = itor->second;
-        hashTime = ( ( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( flow_hsh->end_mic() );
+        hashTime = ( (double)( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( (double)(flow_hsh->end_mic()) );
         if ( flow_export )
         {
             //*collection.add_flow() = *flow_hsh;
             //CFlowUtil::addFlowToFile(flow_hsh, fileName);
-            //CFlowUtil::printFlowToFile ( flow_hsh, fileName );
+			CFlowUtil::printFlowToFile ( flow_hsh, fileName.c_str() );
             if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
             {
 				//s_PacketTypeStat.processNewFlow(flow_hsh);
@@ -109,7 +111,7 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
 				s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
 				pthread_mutex_unlock(&Locks::flow_analyzer_lock);
                 //CFlowUtil::addFlowToFile(flow_hsh, fileName);
-                //CFlowUtil::printFlowToFile ( flow_hsh, fileName );
+                CFlowUtil::printFlowToFile ( flow_hsh, fileName.c_str() );
                 //HashTableUtil::clear_hash_entry ( hash, flow_hsh );				
 				keyList.push_back(flow_hsh->GetKey());
 				CFlowUtil::delete_flow(flow_hsh);
@@ -671,29 +673,23 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
     return ( void * ) NULL;
 }
 
-ResultEnum CAnalyzerAggregator::GetFileName ( const int count)
+string CAnalyzerAggregator::GetFileName ( const tm* time, const int count)
 {
-    time_t init = 0;
-    time ( &init );
 
-    ResultEnum rs = eOK;
     // char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
     //string strDate;
+	string dir = "Flows/";
+	dir.append(s_pInputParams->GetFilePrefix());
     string filenameCountStr;
-    CFlowUtil::getDate ( &init,filenameCountStr) ;
+    CFlowUtil::getDate ( time, filenameCountStr) ;
 
     filenameCountStr.append ( "_" );
 	string strCount = CommonUtil::itoa(count, 10);
 //    strCount << count;
     filenameCountStr.append ( strCount );
     //snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
-    pthread_mutex_lock(&Locks::fileName_lock);
-    s_strFileName = s_pInputParams->GetFilePrefix();
-    s_strFileName.append ( filenameCountStr );
-    pthread_mutex_unlock(&Locks::fileName_lock);
-    //snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
-    //free ( data );
-    return rs;
+	dir.append(filenameCountStr);
+    return dir;
 }
 
 ResultEnum CAnalyzerAggregator::PrintStatisticResult( const tm* t )

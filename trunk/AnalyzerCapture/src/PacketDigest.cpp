@@ -20,7 +20,7 @@
 #include "PacketDigest.h"
 #include "netinet/ip.h"
 #include "netinet/if_ether.h"
-#include "flow.pb.h"
+#include "Flow.h"
 //const int ETHER_HDR_LEN = 14;
 
 CPacketDigest::CPacketDigest ( const pcap_pkthdr* header, const u_char* packet, flow_t* flow )

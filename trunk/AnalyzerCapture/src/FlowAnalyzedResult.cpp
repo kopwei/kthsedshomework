@@ -18,7 +18,7 @@
  */
 #include "FlowAnalyzedResult.h"
 #include "classifier.h"
-#include "flow.pb.h"
+#include "Flow.h"
 #include "analyserpxFlow.h"
 
 #include <iostream>

@@ -27,9 +27,8 @@
 
 #include "analyserpxFile.h"
 #include "analyserpxFlow.h"
-#include "flowcollection.pb.h"
 #include "classifier.h"
-#include "flow.pb.h"
+#include "Flow.h"
 #include "macro.h"
 #include "ipheaderutil.h"
 #include "CommonUtil.h"
@@ -40,20 +39,20 @@ int CFlowUtil::compare_flow ( const void *data1, const void *data2 )
 {
 	const flow_t *check1 = ( const flow_t * ) data1;
 	const flow_t *check2 = ( const flow_t * ) data2;
-	return ( check1->src_ip() != check2->src_ip()
-	         || check1->dst_ip() != check2->dst_ip()
+	return ( check1->src_ip().s_addr != check2->src_ip().s_addr
+			|| check1->dst_ip().s_addr != check2->dst_ip().s_addr
 	         || check1->dst_port() != check2->dst_port()
 	         || check1->src_port() != check2->src_port()
 	         || check1->proto() != check2->proto() );
 }
 
-unsigned long CFlowUtil::flow_key ( const void *data )
-{
-	const flow_t *what = ( const flow_t * ) data;
+//unsigned long CFlowUtil::flow_key ( const void *data )
+//{
+//	const flow_t *what = ( const flow_t * ) data;
 
-	return ( unsigned ) what->src_ip() * 59 + what->dst_ip() +
-	       what->proto() + ( ( unsigned ) what->dst_port() << 16 ) + what->src_port();
-}
+//	return ( unsigned ) what->src_ip() * 59 + what->dst_ip() +
+//	       what->proto() + ( ( unsigned ) what->dst_port() << 16 ) + what->src_port();
+//}
 
 void CFlowUtil::delete_flow ( flow_t *data )
 {
@@ -104,63 +103,50 @@ flow_t* CFlowUtil::createFlow_t ( const unsigned char proto, const unsigned char
 	{
 		int i = 0;
 	}
-	flow->set_src_ip ( CIPHeaderUtil::ConvertIPToInt ( &src_ip ) );
-	flow->set_dst_ip ( CIPHeaderUtil::ConvertIPToInt ( &dst_ip ) );
+	flow->set_src_ip ( src_ip );
+	flow->set_dst_ip ( dst_ip );
 	return flow;
 
 }
 
-//int CFlowUtil::printFlowToFile ( flow_t * flow, const char *file )
-//{
-//	int len1=strlen ( "stdout" );
-//	int len2=strlen ( file );
-//	if ( ! ( memcmp ( "stdout",file,len1>len2?len1:len2 ) ) )
-//	{
-//		char *buffer = ( char* ) malloc ( sizeof ( char ) *1024 );
-//		char proto_format = FORMAT_PROTO_DEFAULT;
-//		char flow_format = FORMAT_FLOW_DEFAULT;
-//		snprintf ( buffer,2,"%s","" );
-//		flowToString ( flow_format, proto_format, flow, buffer );
-//		fprintf ( stdout,"%s\n",buffer );
-//		free ( buffer );
-//	}
-//	//else {
-//	//	FILE *printFlow = openFile(file, "a+b", NULL, NULL);
-//	//	if (printFlow == NULL) {
-//	//		//ERROR OPENING FILE
-//	//		return 1;
-//	//	}
-//	//	if (fwrite(flow, sizeof(flow_t), 1, printFlow) != 1) {
-//	//		//ERROR
-//	//		closeFile(printFlow);
-//	//		return 1;
-//	//	}
-//	//	closeFile(printFlow);
-//	//	return 0;
-//	//}
-//	else
-//	{
-//		ofstream ofile ( file, ios::binary | ios::app );
-//		if ( !ofile.is_open() ) return 1;
-//		ofile.write ( reinterpret_cast<char *> ( flow ), sizeof ( flow_t ) );
-//		ofile.close();
-//	}
-//	return 0;
-//}
+int CFlowUtil::printFlowToFile ( flow_t * flow, const char *file )
+{
+	int len1=strlen ( "stdout" );
+	int len2=strlen ( file );
+	if ( ! ( memcmp ( "stdout",file,len1>len2?len1:len2 ) ) )
+	{
+		char *buffer = ( char* ) malloc ( sizeof ( char ) *1024 );
+		char proto_format = FORMAT_PROTO_DEFAULT;
+		char flow_format = FORMAT_FLOW_DEFAULT;
+		snprintf ( buffer,2,"%s","" );
+		flowToString ( flow_format, proto_format, flow, buffer );
+		fprintf ( stdout,"%s\n",buffer );
+		free ( buffer );
+	}
 
-//flow_t* CFlowUtil::readFlowFromFile ( flow_t * flow, const char *file, int ind )
-//{
-//	FILE *readFlow = CFileUtil::openFile ( file, "rb", NULL, NULL );
-//	fseek ( readFlow, ind * sizeof ( flow_t ), SEEK_SET );
-//	if ( fread ( flow, sizeof ( flow_t ), 1, readFlow ) != 1 )
-//	{
-//		//ERROR
-//		CFileUtil::closeFile ( readFlow );
-//		return NULL;
-//	}
-//	CFileUtil::closeFile ( readFlow );
-//	return flow;
-//}
+	else
+	{
+		ofstream ofile ( file, ios::binary | ios::app );
+		if ( !ofile.is_open() ) return 1;
+		ofile.write ( reinterpret_cast<char *> ( flow ), sizeof ( flow_t ) );
+		ofile.close();
+	}
+	return 0;
+}
+
+flow_t* CFlowUtil::readFlowFromFile ( flow_t * flow, const char *file, int ind )
+{
+	FILE *readFlow = CFileUtil::openFile ( file, "rb", NULL, NULL );
+	fseek ( readFlow, ind * sizeof ( flow_t ), SEEK_SET );
+	if ( fread ( flow, sizeof ( flow_t ), 1, readFlow ) != 1 )
+	{
+		//ERROR
+		CFileUtil::closeFile ( readFlow );
+		return NULL;
+	}
+	CFileUtil::closeFile ( readFlow );
+	return flow;
+}
 
 void CFlowUtil::adjustProtocol ( char* str_proto, char* final )
 {
@@ -196,8 +182,8 @@ void CFlowUtil::flowToString ( char format, char proto_format, flow_t * flow, ch
 	char final[15] = "";
 
 	in_addr src_ip, dst_ip;
-	src_ip.s_addr = flow->src_ip();
-	dst_ip.s_addr = flow->dst_ip();
+	src_ip = flow->src_ip();
+	dst_ip = flow->dst_ip();
 	strncpy ( srcIp, inet_ntoa ( src_ip ),16 );
 	strncpy ( dstIp, inet_ntoa ( dst_ip ),16 );
 
@@ -379,9 +365,8 @@ const char* CFlowUtil::get_protocolName ( unsigned short proto_id )
 }
 
 
-int CFlowUtil::getDate ( const time_t* tloc, string& str )
+int CFlowUtil::getDate ( const tm* clock, string& str )
 {
-	tm* clock = localtime ( tloc );
 	// TODO: Need implementation here
 	string retStr;
 	if ( clock->tm_mday < 9 )
@@ -389,7 +374,7 @@ int CFlowUtil::getDate ( const time_t* tloc, string& str )
 		retStr.append("0");
 	}
 	retStr.append(CommonUtil::itoa(clock->tm_mday, 10));
-	if ( clock->tm_mon + 1 < 9 )
+	if ( clock->tm_mon + 1 < 10 )
 	{
 		retStr.append("0");
 	}
@@ -429,6 +414,7 @@ u_short CFlowUtil::getDouLen ( double num )
 	return i;
 }
 
+/*
 ResultEnum CFlowUtil::printFlowCollectionToFile ( flow_collection* pFlowCol, const string& strFileName )
 {
 	if ( NULL == pFlowCol )
@@ -476,3 +462,5 @@ ResultEnum CFlowUtil::readFlowCollectionFromFile ( flow_collection* pFlowCol, co
 	ifile.close();
 	return rs;
 }
+
+*/

@@ -62,9 +62,10 @@ ResultEnum CUserInputParams::ParseInputParams ( const int argc, char** argv )
 			{
 				time_t tempo;
 				time ( &tempo );
+				tm* t = localtime(&tempo);
 				// char* data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
 				string strDate;
-				CFlowUtil::getDate ( &tempo, strDate );
+				CFlowUtil::getDate ( t, strDate );
 
 				string strBaseFileName = optarg;
 				//strBaseFileName.append ( strDate );

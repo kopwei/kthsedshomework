@@ -18,7 +18,7 @@
  */
 #include "FlowStatisticMap.h"
 #include "classifier.h"
-#include "flow.pb.h"
+#include "Flow.h"
 #include "UserUtil.h"
 #include "ipheaderutil.h"
 //#include <sstream>
@@ -37,7 +37,8 @@ CFlowStatisticMap::~CFlowStatisticMap()
 
 void CFlowStatisticMap::AddNewFlow(const flow_t* pFlow)
 {
-	uint userIp = pFlow->src_ip();
+	in_addr Ip = pFlow->src_ip();
+	uint userIp = CIPHeaderUtil::ConvertIPToInt(&Ip);
 	if (CUserUtil::IsUserIP(userIp))
 	{
 		UserFlowStatMap::iterator itor =  m_statMap.find(userIp);

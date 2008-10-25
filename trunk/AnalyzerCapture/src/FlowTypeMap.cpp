@@ -18,7 +18,7 @@
  */
 #include "FlowTypeMap.h"
 #include "classifier.h"
-#include "flow.pb.h"
+#include "Flow.h"
 #include "CommonUtil.h"
 
 using namespace std;

@@ -26,7 +26,6 @@
 #include "PacketStatistic.h"
 #include "SubscriberStatistic.h"
 #include "PayloadLengthResult.h"
-#include "resultrecorder.h"
 #include "resultenum.h"
 #include "TrafficAnalyzedresult.h"
 #include "SubscriberAnalyzedResult.h"

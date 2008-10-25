@@ -21,13 +21,14 @@
   <kdevautoproject>
     <general>
       <activetarget>src/analyzercapture</activetarget>
-      <useconfiguration>optimized</useconfiguration>
+      <useconfiguration>debug</useconfiguration>
     </general>
     <run>
       <mainprogram>/home/ericsson/KDevelopProjects/AnalyzerCapture/debug/src/analyzercapture</mainprogram>
       <terminal>false</terminal>
-      <programargs>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -q 2 -m</programargs>
-      <globaldebugarguments>-i eth0 -e ip -s 1500 -w flows -t 30 -z 1 -q 2 -m</globaldebugarguments>
+      <programargs>-r /mnt/lvm1/dump -w flows
+</programargs>
+      <globaldebugarguments>-r /mnt/lvm1/dump -w flows </globaldebugarguments>
       <globalcwd>/home/ericsson/KDevelopProjects/AnalyzerCapture/debug</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autocompile>false</autocompile>
@@ -43,15 +44,15 @@
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O2 -g0</cxxflags>
         <envvars/>
-        <configargs/>
-        <topsourcedir/>
-        <cppflags/>
-        <ldflags>-lpcap -lpthread -lprotobuf -lmysqlpp</ldflags>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
-        <cflags/>
-        <f77flags/>
+        <configargs></configargs>
+        <topsourcedir></topsourcedir>
+        <cppflags></cppflags>
+        <ldflags>-lpcap -lpthread</ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags></cflags>
+        <f77flags></f77flags>
       </optimized>
       <debug>
         <configargs>--enable-debug=full</configargs>
@@ -61,14 +62,14 @@
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O0 -g3</cxxflags>
         <envvars/>
-        <topsourcedir/>
-        <cppflags/>
-        <ldflags>-lpcap -lpthread -lprotobuf -lmysqlpp</ldflags>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
-        <cflags/>
-        <f77flags/>
+        <topsourcedir></topsourcedir>
+        <cppflags></cppflags>
+        <ldflags>-lpcap -lpthread</ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags></cflags>
+        <f77flags></f77flags>
       </debug>
     </configurations>
     <make>
@@ -131,6 +132,7 @@
     </ignoredoxygen>
   </kdevdoctreeview>
   <kdevfilecreate>
+    <filetypes/>
     <useglobaltypes>
       <type ext="cpp" />
       <type ext="h" />

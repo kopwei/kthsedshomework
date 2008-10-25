@@ -22,7 +22,6 @@
 //#include "locks.h"
 #include "macro.h"
 #include "ipheaderutil.h"
-#include "resultrecorder.h"
 #include "analyzer.h"
 #include "userinputparams.h"
 #include "locks.h"

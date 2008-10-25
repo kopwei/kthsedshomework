@@ -18,7 +18,7 @@
  */
 
 #include "PacketTypeStat.h"
-#include "flow.pb.h"
+#include "Flow.h"
 #include "analyserpxFlow.h"
 #include <iostream>
 #include <fstream>

@@ -144,13 +144,13 @@ ResultEnum CSubscriberAnalyzedResult::PrintInfoToFile ( SubscriberStatisticMap* 
 
 ResultEnum CSubscriberAnalyzedResult::PrintFinalResult()
 {
-	//TODO: 
+	string indent = "   ";
 	string fileName = "SubscriberStat.ret";
 	ofstream ofile (fileName.c_str(), ios_base::trunc);
 	SubscriberStatisticMap::const_iterator itor = m_totalSubscriberStat.begin();
 	for (; itor != m_totalSubscriberStat.end(); ++itor)
 	{
-		ofile << itor->second.toString() << endl;
+		ofile << CIPHeaderUtil::ConvertMacToString(itor->first)<< indent << itor->second.toString() << endl;
 	}
 	ofile.close();
 	m_totalSubscriberStat.clear();

@@ -73,7 +73,7 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
     //time_t t = 0;
     //s_refTime = localtime(&t);
 	InitLocks();
-	CIPRangeLocator::InitIPData(eSweden);
+	//CIPRangeLocator::InitIPData(eSweden);
 
     
     CAnalyzerAggregator::initVariables(pParam);
@@ -379,11 +379,11 @@ bool CAnalyzer::IsValidIP(const uint ip)
 		return false;
 	}
 	// IP can't be 169.254.x.x or 192.168.x.x
-	else if (ip >= 2851995648LL && ip <= 2852061183LL)
+	else if (ip >= 0xc0a80000LL && ip <= 0xc0a8ffffLL)
 	{
 		return false;
 	}
-	else if (ip >= 3232235520LL && ip <= 3232301055LL)
+	else if (ip >= 0xa9fd0000LL && ip <= 0xa9fd0000LL)
 	{
 		return false;
 	}

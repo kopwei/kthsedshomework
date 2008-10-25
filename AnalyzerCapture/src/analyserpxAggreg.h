@@ -122,7 +122,7 @@ class CAnalyzerAggregator
 		 */
 		static ResultEnum optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const tm* refTime);
 		
-		static ResultEnum GetFileName(const int count);
+		static string GetFileName(const tm* time, const int count);
 
 		
 

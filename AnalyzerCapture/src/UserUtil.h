@@ -35,11 +35,11 @@ public:
 	
 	static void InitISPMacSet();
 
-	static const bool IsUserUploaded(const uint64 srcMac, const uint64 dstMac, const uint srcIp, const uint dstIp);
+	static const bool IsUserUploaded(const uint64 srcMac, const uint64 dstMac, const unsigned int srcIp, const unsigned int dstIp);
 	
-	static const bool IsUserDownloaded(const uint64 srcMac, const uint64 dstMac, const uint srcIp, const uint dstIp);
+	static const bool IsUserDownloaded(const uint64 srcMac, const uint64 dstMac, const unsigned int srcIp, const unsigned int dstIp);
 	
-	static const bool IsUserIP(const uint ipAddr);
+	static const bool IsUserIP(const unsigned int ipAddr);
 	
 	static const bool IsUserMac(const uint64 macAddr);
 	
@@ -50,7 +50,7 @@ private:
 	static set<uint64> s_ispMacSet;	
 	static set<uint64> s_userMacSet;
 
-	static set<uint>   s_userIPSet;
+	static set<unsigned int>   s_userIPSet;
 };
 
 #endif

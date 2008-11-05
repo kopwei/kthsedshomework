@@ -61,7 +61,7 @@ private:
 	
 	CFlowStatisticMap m_totalStatisticMap;
 	
-	typedef std::map<u_short, MetaTraffic> FlowDigestMap;
+	typedef std::map<unsigned short, MetaTraffic> FlowDigestMap;
 
 	FlowDigestMap m_digestMap;
 	

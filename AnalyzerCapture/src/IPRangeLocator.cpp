@@ -18,6 +18,7 @@
  */
 
 #include "IPRangeLocator.h"
+#include <stdlib.h>
 
 #include <fstream>
 

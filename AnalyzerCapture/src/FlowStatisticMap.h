@@ -41,7 +41,7 @@ public:
 private:
 	
 	
-	typedef std::map<uint, CFlowTypeMap> UserFlowStatMap;
+	typedef std::map<unsigned int, CFlowTypeMap> UserFlowStatMap;
 
 	UserFlowStatMap m_statMap;
 };

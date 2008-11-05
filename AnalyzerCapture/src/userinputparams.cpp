@@ -23,8 +23,9 @@
 #include "version.h"
 #include "macro.h"
 
-#include "unistd.h"
+#include <unistd.h>
 #include <iostream>
+#include <stdlib.h>
 
 
 CUserInputParams::CUserInputParams() :

@@ -43,7 +43,7 @@ void CUserUtil::InitISPMacSet()
 	s_ispMacSet.insert(0x1b2ba3c1cdLL);
 }
 
-const bool CUserUtil::IsUserUploaded(const uint64 srcMac, const uint64 dstMac, const uint srcIp, const uint dstIp)
+const bool CUserUtil::IsUserUploaded(const uint64 srcMac, const uint64 dstMac, const unsigned int srcIp, const unsigned int dstIp)
 {
 	// If the ip and mac address belongs to a user mac list or
 	// user ip list , then it is uploaded by user
@@ -68,7 +68,7 @@ const bool CUserUtil::IsUserUploaded(const uint64 srcMac, const uint64 dstMac, c
 	return false;
 }
 
-const bool CUserUtil::IsUserDownloaded(const uint64 srcMac, const uint64 dstMac, const uint srcIp, const uint dstIp)
+const bool CUserUtil::IsUserDownloaded(const uint64 srcMac, const uint64 dstMac, const unsigned int srcIp, const unsigned int dstIp)
 {
 	// TODO: need implementation here
 	if (IsUserMac(dstMac))
@@ -92,7 +92,7 @@ const bool CUserUtil::IsUserDownloaded(const uint64 srcMac, const uint64 dstMac,
 	
 }
 
-const bool CUserUtil::IsUserIP(const uint ipAddr)
+const bool CUserUtil::IsUserIP(const unsigned int ipAddr)
 {
 	set<uint>::const_iterator itor = s_userIPSet.find(ipAddr);
 	return itor != s_userIPSet.end();

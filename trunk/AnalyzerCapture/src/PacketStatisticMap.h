@@ -34,7 +34,7 @@ public:
 
     ~CPacketStatisticMap();
 	
-	void insert(const ushort classifier, const MetaTraffic data);
+	void insert(const unsigned short classifier, const MetaTraffic data);
 	
 	void clear();
 	
@@ -42,7 +42,7 @@ public:
 
 private:
 		
-	map<ushort, MetaTraffic> m_statisticMap;
+	map<unsigned short, MetaTraffic> m_statisticMap;
 };
 
 #endif

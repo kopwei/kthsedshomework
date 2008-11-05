@@ -40,7 +40,7 @@ public:
 private:
 	
 	typedef unsigned long long uint64;
-	typedef std::map<ushort, uint64> TypeMap;
+	typedef std::map<unsigned short, uint64> TypeMap;
 	
 	TypeMap m_typeMap;
 };

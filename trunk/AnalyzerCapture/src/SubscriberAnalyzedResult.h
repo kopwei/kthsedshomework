@@ -57,9 +57,9 @@ private:
 	 */
 	ResultEnum				AddPacketToMap(const CPacketDigest* pPacketDigest);
 	
-	ResultEnum 				DistributePacket(const CPacketDigest* pDigest, const uint ipAddr, const uint64 macAddr, const bool isDownload);
+	ResultEnum 				DistributePacket(const CPacketDigest* pDigest, const unsigned int ipAddr, const uint64 macAddr, const bool isDownload);
 	
-	ResultEnum				DistributePacketImpl(const CPacketDigest* pDigest, const uint ipAddr, const uint64 macAddr, const bool isDownload, SubscriberStatisticMap* pStatisticMap);
+	ResultEnum				DistributePacketImpl(const CPacketDigest* pDigest, const unsigned int ipAddr, const uint64 macAddr, const bool isDownload, SubscriberStatisticMap* pStatisticMap);
 	
 	ResultEnum				PrintInfoToFile(SubscriberStatisticMap* pStatisticMap, const string& fileName);
 	

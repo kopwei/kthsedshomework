@@ -21,7 +21,8 @@
 #include <pcap.h>
 #include <signal.h>		//ctrl+c routine
 #include <iostream>
-
+#include <stdlib.h>
+#include <string.h>
 
 #include "analyzer.h"
 #include "locks.h"

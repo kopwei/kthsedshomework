@@ -17,11 +17,12 @@
  *   Copyright (C) 2008 by Ericsson AB
  */
 #include "CommonUtil.h"
+#include <algorithm>
 
 /**
  * This method is used to convert a integer value to standard string
  */
-std::string CommonUtil::itoa(unsigned long long value, uint base/* = 10 */) {
+std::string CommonUtil::itoa(unsigned long long value, unsigned int base/* = 10 */) {
 	enum { kMaxDigits = 35 };
 	std::string buf;
 	buf.reserve( kMaxDigits ); // Pre-allocate enough space.

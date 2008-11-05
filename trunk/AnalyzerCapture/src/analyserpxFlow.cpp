@@ -17,7 +17,7 @@
 *   Copyright (C) 2008 by Ericsson
 */
 
-//#include <stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string>
 #include <time.h>
@@ -369,7 +369,7 @@ int CFlowUtil::getDate ( const tm* clock, string& str )
 {
 	// TODO: Need implementation here
 	string retStr;
-	if ( clock->tm_mday < 9 )
+	if ( clock->tm_mday < 10 )
 	{
 		retStr.append("0");
 	}
@@ -464,3 +464,4 @@ ResultEnum CFlowUtil::readFlowCollectionFromFile ( flow_collection* pFlowCol, co
 }
 
 */
+

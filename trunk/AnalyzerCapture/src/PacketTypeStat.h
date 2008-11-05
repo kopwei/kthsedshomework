@@ -47,7 +47,7 @@ private:
 		unsigned int volume;
 	};
 
-	typedef std::map<u_short, FlowDigest> FlowDigestMap;
+	typedef std::map<unsigned short, FlowDigest> FlowDigestMap;
 
 	FlowDigestMap s_digestMap;
 

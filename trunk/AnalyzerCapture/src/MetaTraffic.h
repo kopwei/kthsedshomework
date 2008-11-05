@@ -35,7 +35,7 @@ public:
 		
 	void clear() {packetnumber = 0; trafficvolume = 0;}
 	
-	void AddNewPacket(const uint packetSize)
+	void AddNewPacket(const unsigned int packetSize)
 	{
 		++packetnumber;
 		trafficvolume += packetSize;

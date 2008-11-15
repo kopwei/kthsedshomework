@@ -45,6 +45,8 @@ public:
 
 	static pthread_mutex_t payload_result_lock;
 	
+	static pthread_mutex_t app_result_lock;
+	
 	static pthread_mutex_t flow_analyzer_lock;
 };
 

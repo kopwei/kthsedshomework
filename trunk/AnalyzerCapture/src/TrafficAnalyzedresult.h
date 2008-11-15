@@ -39,7 +39,7 @@ public:
 
     ~CTrafficAnalyzedResult();
 
-	ResultEnum AddNewPacketInfo(const CPacketDigest* pDigest);
+	ResultEnum AddNewPacketInfo( const CPacketDigest* pDigest);
 
 	ResultEnum PrintResult();
 

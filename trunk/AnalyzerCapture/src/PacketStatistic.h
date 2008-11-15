@@ -67,12 +67,12 @@ class CPacketStatistic
 		/**
 		 * This method will distribute the packet by its locality, e.g. user to user or user to other
 		 */
-		ResultEnum distributeByLocality(const CPacketDigest* pDigest );
+		ResultEnum distributeByLocality( const CPacketDigest* pDigest );
 		
 		/**
 		 * This method will distribute the traffic by natinality e.g. sweden to other countries or sweden to sweden
 		 */ 
-		ResultEnum distributedByInternationality(const CPacketDigest* pDigest);
+		ResultEnum distributedByInternationality( const CPacketDigest* pDigest);
 		
 
 		MetaTraffic m_totalTraffic;

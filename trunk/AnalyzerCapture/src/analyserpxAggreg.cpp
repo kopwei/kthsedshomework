@@ -43,7 +43,7 @@ CFlowAnalyzedResult CAnalyzerAggregator::s_flowAnalyzer;
 //int fileAdminTimeOff;
 int filenameCount = 0;
 int CAnalyzerAggregator::s_iFileNameCount = 0;
-int flow_export=1;
+int flow_export=0;
 //int slotsOffline;
 //int numo=0;
 
@@ -63,11 +63,11 @@ void CAnalyzerAggregator::initVariables ( CUserInputParams* pUserInputParams )
 
 ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec, time_t usec, const tm* refTime)
 {
-	static int cleanCount = 0;
+    static int cleanCount = 0;
     ResultEnum rs = eOK;
     //cout << "I entered the clean hash program" << endl;
     //Sync Table begin
-	pthread_mutex_lock(&Locks::hash_lock);
+    pthread_mutex_lock(&Locks::hash_lock);
 //    while ( pthread_mutex_trylock ( &Locks::hash_lock ) != 0 ) {}
 //    ;
     //cout << "Clean " << endl;
@@ -78,27 +78,27 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
     lastTime = sec* ( 1e6 ) + usec;
 //    flow_collection collection;
 //    while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( hash ) ) )
-	string fileName = GetFileName(refTime, cleanCount++);
-	FlowMap::iterator itor = flowMap->begin();
-	list<unsigned long long> keyList;
-	for (;itor != flowMap->end(); ++itor)
+    string fileName = GetFileName(refTime, cleanCount++);
+    FlowMap::iterator itor = flowMap->begin();
+    list<unsigned long long> keyList;
+    for (;itor != flowMap->end(); ++itor)
     {
-		flow_hsh = itor->second;
+        flow_hsh = itor->second;
         hashTime = ( (double)( flow_hsh->end_sec() ) * ( 1e6 ) ) + ( (double)(flow_hsh->end_mic()) );
         if ( flow_export )
         {
             //*collection.add_flow() = *flow_hsh;
             //CFlowUtil::addFlowToFile(flow_hsh, fileName);
-			CFlowUtil::printFlowToFile ( flow_hsh, fileName.c_str() );
+            CFlowUtil::printFlowToFile ( flow_hsh, fileName.c_str() );
             if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
             {
-				//s_PacketTypeStat.processNewFlow(flow_hsh);
-				pthread_mutex_lock(&Locks::flow_analyzer_lock);
-				s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
-				pthread_mutex_unlock(&Locks::flow_analyzer_lock);
-                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );				
-				keyList.push_back(flow_hsh->GetKey());
-				CFlowUtil::delete_flow(flow_hsh);
+                //s_PacketTypeStat.processNewFlow(flow_hsh);
+                pthread_mutex_lock(&Locks::flow_analyzer_lock);
+                s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
+                pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+                keyList.push_back(flow_hsh->GetKey());
+                CFlowUtil::delete_flow(flow_hsh);
             }
         }
         else
@@ -106,38 +106,38 @@ ResultEnum CAnalyzerAggregator::optimumCleanHash ( FlowMap * flowMap, time_t sec
             if ( ( lastTime - hashTime ) > ( TIMEOUT* ( 1e6 ) ) )
             {
                 //*collection.add_flow() = *flow_hsh;
-				//s_PacketTypeStat.processNewFlow(flow_hsh);
-				pthread_mutex_lock(&Locks::flow_analyzer_lock);
-				s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
-				pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+                //s_PacketTypeStat.processNewFlow(flow_hsh);
+                pthread_mutex_lock(&Locks::flow_analyzer_lock);
+                s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
+                pthread_mutex_unlock(&Locks::flow_analyzer_lock);
                 //CFlowUtil::addFlowToFile(flow_hsh, fileName);
                 CFlowUtil::printFlowToFile ( flow_hsh, fileName.c_str() );
-                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );				
-				keyList.push_back(flow_hsh->GetKey());
-				CFlowUtil::delete_flow(flow_hsh);
+                //HashTableUtil::clear_hash_entry ( hash, flow_hsh );
+                keyList.push_back(flow_hsh->GetKey());
+                CFlowUtil::delete_flow(flow_hsh);
             }
         }
     }
-	list<unsigned long long>::const_iterator listItor;
-	for (listItor = keyList.begin(); listItor != keyList.end(); ++listItor)
-	{
-		FlowMap::iterator deleteItor = flowMap->find(*listItor);
-		if (deleteItor != flowMap->end())
-		{
-			flowMap->erase(deleteItor);
-		}
-	}
-	//pthread_mutex_lock(&Locks::flow_analyzer_lock);
-	
-	s_flowAnalyzer.ProcessFlowMap(flowMap);	
-	
-	//pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+    list<unsigned long long>::const_iterator listItor;
+    for (listItor = keyList.begin(); listItor != keyList.end(); ++listItor)
+    {
+        FlowMap::iterator deleteItor = flowMap->find(*listItor);
+        if (deleteItor != flowMap->end())
+        {
+            flowMap->erase(deleteItor);
+        }
+    }
+    //pthread_mutex_lock(&Locks::flow_analyzer_lock);
+
+    s_flowAnalyzer.ProcessFlowMap(flowMap);
+
+    //pthread_mutex_unlock(&Locks::flow_analyzer_lock);
     //CFlowUtil::printFlowCollectionToFile(&collection, fileName);
     //Sync Table begin
     pthread_mutex_unlock ( &Locks::hash_lock );
-	s_flowAnalyzer.setEndTime(*refTime);
-	s_flowAnalyzer.PrintResult();
-	//tm t = *(localtime(&sec));
+    s_flowAnalyzer.setEndTime(*refTime);
+    s_flowAnalyzer.PrintResult();
+    //tm t = *(localtime(&sec));
     return rs;
 
 }
@@ -170,65 +170,65 @@ int CAnalyzerAggregator::verifyTimeOut ( flow_t * flow1, flow_t * flow2 )
 
 void CAnalyzerAggregator::verifyTimeOutHash ( flow_t *flow )
 {
-/*
-    static time_t start = 0;
-    double dif;
-    //char *str = ( char* ) malloc ( sizeof ( char ) *1024 );
-    //extern char baseFileName[]; //-b modification on 1 August 2007
-    //extern char fileName[];
-    static int offCount = 0;
-    //static int offCount = 0;
-    //u_short i = 0;
-    time_t sec=0, usec=0;
+    /*
+        static time_t start = 0;
+        double dif;
+        //char *str = ( char* ) malloc ( sizeof ( char ) *1024 );
+        //extern char baseFileName[]; //-b modification on 1 August 2007
+        //extern char fileName[];
+        static int offCount = 0;
+        //static int offCount = 0;
+        //u_short i = 0;
+        time_t sec=0, usec=0;
 
 
-    //char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 ); //-b modification on 1 August 2007
+        //char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 ); //-b modification on 1 August 2007
 
 
-    if ( start == 0 )
-    {
-        start = flow->end_sec();
-    }
-    else
-    {
-        dif = difftime ( flow->end_sec(),start );
-        if ( s_pInputParams->GetOutputTimeBin() != 0 )
+        if ( start == 0 )
         {
-            if ( dif >= ( ( ( double ) s_pInputParams->GetFlowTimeOutSeconds() ) * s_pInputParams->GetOutputTimeBin() ) )
-            {
-                //char *buffer=malloc(sizeof(char)*17);;
-                //offCount++;
-                //i=getIntLen(offCount);
-                //snprintf(buffer,i+1, "%u", offCount);
-                //snprintf(str, strlen(baseFileName)+i+1, "%s%u", baseFileName, offCount);
-                //printHash(str);
-                sec = tvSec;
-                usec = tvUSec;
-                //cleanHash(test_table, sec, usec, fileName);
-                pthread_mutex_lock(&Locks::fileName_lock);
-                s_strFileName = s_pInputParams->GetFilePrefix();
-                s_strFileName.append ( "_" );
-				string strCount = CommonUtil::itoa(offCount, 10);
-                //strCount << offCount;
-                s_strFileName.append ( strCount );
-                pthread_mutex_unlock(&Locks::fileName_lock);
-
-                //snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
-                optimumCleanHash ( &s_flowMap, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
-                //the analyzer-px output according to -b parameter
-                offCount++;					  //as well as this line
-                //numo=offCount;					  //and this another one
-                start = 0;
-                //free(buffer);
-
-            }
+            start = flow->end_sec();
         }
+        else
+        {
+            dif = difftime ( flow->end_sec(),start );
+            if ( s_pInputParams->GetOutputTimeBin() != 0 )
+            {
+                if ( dif >= ( ( ( double ) s_pInputParams->GetFlowTimeOutSeconds() ) * s_pInputParams->GetOutputTimeBin() ) )
+                {
+                    //char *buffer=malloc(sizeof(char)*17);;
+                    //offCount++;
+                    //i=getIntLen(offCount);
+                    //snprintf(buffer,i+1, "%u", offCount);
+                    //snprintf(str, strlen(baseFileName)+i+1, "%s%u", baseFileName, offCount);
+                    //printHash(str);
+                    sec = tvSec;
+                    usec = tvUSec;
+                    //cleanHash(test_table, sec, usec, fileName);
+                    pthread_mutex_lock(&Locks::fileName_lock);
+                    s_strFileName = s_pInputParams->GetFilePrefix();
+                    s_strFileName.append ( "_" );
+    				string strCount = CommonUtil::itoa(offCount, 10);
+                    //strCount << offCount;
+                    s_strFileName.append ( strCount );
+                    pthread_mutex_unlock(&Locks::fileName_lock);
+
+                    //snprintf ( fileName,256,"%s_%u",baseFileName, offCount ); //-b modification on 1 August 2007
+                    optimumCleanHash ( &s_flowMap, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
+                    //the analyzer-px output according to -b parameter
+                    offCount++;					  //as well as this line
+                    //numo=offCount;					  //and this another one
+                    start = 0;
+                    //free(buffer);
+
+                }
+            }
 
 
-    }
-    //free ( str );
-    //free ( filenameCountStr );
-*/
+        }
+        //free ( str );
+        //free ( filenameCountStr );
+    */
 
 }
 
@@ -239,26 +239,26 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     //flow_t *flow_hsh;
     //flow_t *tmp_flow;
     //flow_t *reverse_flow_hsh;
-	flow_t* return_flow;
+    flow_t* return_flow;
 
     if ( !s_pInputParams->isOnlineMode() )
     {
         //verifyTimeOutHash ( flow );
     }
 
-	u_short classifier = 0;
+    u_short classifier = 0;
     //Sync Table begin
     //pthread_mutex_lock(&hash_lock);
-   	pthread_mutex_lock ( &Locks::hash_lock );
+    pthread_mutex_lock ( &Locks::hash_lock );
 
     //flow_hsh = ( flow_t* ) HashTableUtil::find_hash_entry ( test_table, flow );
-	flow_t* flow_hsh = NULL;
-	FlowMap::iterator flow_hsh_itor = s_flowMap.find(flow->GetKey());
-	if (flow_hsh_itor != s_flowMap.end())
-	{
-		flow_hsh = flow_hsh_itor->second;
-		//classifier = flow_hsh->class_proto();
-	}
+    flow_t* flow_hsh = NULL;
+    FlowMap::iterator flow_hsh_itor = s_flowMap.find(flow->GetKey());
+    if (flow_hsh_itor != s_flowMap.end())
+    {
+        flow_hsh = flow_hsh_itor->second;
+        //classifier = flow_hsh->class_proto();
+    }
 
     pthread_mutex_unlock ( &Locks::hash_lock );
     //Sync Table end
@@ -266,51 +266,51 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     if ( flow_hsh == NULL )
     {
         ++tp->count[0];
-		classifier = CClassifier::getID ( ip, ipLen );
-		
+        classifier = CClassifier::getID ( ip, ipLen );
+
     }
     else if ( verifyTimeOut ( flow_hsh, flow ) )
     {
         ++tp->count[1];
-		classifier = CClassifier::getID ( ip, ipLen );
+        classifier = CClassifier::getID ( ip, ipLen );
     }
     else
     {
-		// If it is considered as BT or eDonkey, we won't check the following packet's type
-		if ( (flow_hsh->class_proto() == PROTO_ID_BITTORRENT) || (flow_hsh->class_proto() == PROTO_ID_EDONKEY) )
-		{
-			classifier = flow_hsh->class_proto();
-		}
-		else 
-		{
-			classifier = CClassifier::getID ( ip, ipLen );
-		}
-		return_flow = flow_hsh;
+        // If it is considered as BT or eDonkey, we won't check the following packet's type
+        if ( (flow_hsh->class_proto() == PROTO_ID_BITTORRENT) || (flow_hsh->class_proto() == PROTO_ID_EDONKEY) )
+       {
+          classifier = flow_hsh->class_proto();
+        }
+        else
+        {
+            classifier = CClassifier::getID ( ip, ipLen );
+        }
+        return_flow = flow_hsh;
     }
 
     string strEmpty = "";
     flow_t* tmp_flow = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, strEmpty, strEmpty, flow->dst_port(), flow->src_port(),
-                                         ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),
-                                         flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
+                       ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),
+                       flow->end_sec(), flow->ini_mic(), flow->end_mic(), ip->ip_dst,ip->ip_src );
     //Sync Table begin
-	pthread_mutex_lock ( &Locks::hash_lock );
-	flow_hsh = NULL;
-	flow_hsh_itor = s_flowMap.find(flow->GetKey());
-	if (flow_hsh_itor != s_flowMap.end())
-		flow_hsh = flow_hsh_itor->second;
-	flow_t* reverse_flow_hsh = NULL;
-	FlowMap::iterator reverse_flow_hsh_itor = s_flowMap.find(tmp_flow->GetKey());
-	if (reverse_flow_hsh_itor != s_flowMap.end())
-		reverse_flow_hsh = reverse_flow_hsh_itor->second;
-	
+    pthread_mutex_lock ( &Locks::hash_lock );
+    flow_hsh = NULL;
+    flow_hsh_itor = s_flowMap.find(flow->GetKey());
+    if (flow_hsh_itor != s_flowMap.end())
+        flow_hsh = flow_hsh_itor->second;
+    flow_t* reverse_flow_hsh = NULL;
+    FlowMap::iterator reverse_flow_hsh_itor = s_flowMap.find(tmp_flow->GetKey());
+    if (reverse_flow_hsh_itor != s_flowMap.end())
+        reverse_flow_hsh = reverse_flow_hsh_itor->second;
+
     if ( flow_hsh == NULL )
     {
-		s_flowMap.insert(FlowPair(flow->GetKey(), flow));
+        s_flowMap.insert(FlowPair(flow->GetKey(), flow));
         //HashTableUtil::add_hash_entry ( test_table, flow );
-		return_flow = flow;
+        return_flow = flow;
         if ( ( reverse_flow_hsh == NULL ) )
         {
-            flow->set_class_proto(classifier);			
+            flow->set_class_proto(classifier);
         }
         else
         {
@@ -328,14 +328,14 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
         //CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
         //HashTableUtil::clear_hash_entry ( test_table, flow_hsh );
         //HashTableUtil::add_hash_entry ( test_table, flow );
-		//TODO: I don't know if I should do something here
-		pthread_mutex_lock(&Locks::flow_analyzer_lock);
-		s_flowAnalyzer.AddNewFlowInfo(flow_hsh_itor->second);
-		pthread_mutex_unlock(&Locks::flow_analyzer_lock);
-		CFlowUtil::delete_flow(flow_hsh_itor->second);
-		s_flowMap.erase(flow_hsh_itor);		
-		s_flowMap.insert(FlowPair(flow->GetKey(), flow));
-		return_flow = flow;
+        //TODO: I don't know if I should do something here
+        pthread_mutex_lock(&Locks::flow_analyzer_lock);
+        s_flowAnalyzer.AddNewFlowInfo(flow_hsh_itor->second);
+        pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+        CFlowUtil::delete_flow(flow_hsh_itor->second);
+        s_flowMap.erase(flow_hsh_itor);
+        s_flowMap.insert(FlowPair(flow->GetKey(), flow));
+        return_flow = flow;
         if ( ( reverse_flow_hsh == NULL ) )
         {
             flow->set_class_proto(classifier);
@@ -352,7 +352,7 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     {
         flow_hsh->set_n_bytes(flow_hsh->n_bytes() + flow->n_bytes());
         flow_hsh->set_n_frames(flow_hsh->n_frames() + flow->n_frames());
-		return_flow = flow_hsh;
+        return_flow = flow_hsh;
 
         /* RTA - 26/05/08
         Verification added for synchronization purposes
@@ -375,7 +375,7 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
         }
 
         CFlowUtil::delete_flow ( flow );
-		if ( ( flow_hsh->class_proto() == PROTO_ID_NONPAYLOAD ) )
+        if ( ( flow_hsh->class_proto() == PROTO_ID_NONPAYLOAD ) )
         {
             //We can't classify a flow with NONPAYLOAD type only because his first packet
             if ( ( reverse_flow_hsh == NULL ) )
@@ -443,15 +443,15 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
     pthread_mutex_unlock ( &Locks::hash_lock );
     //Sync Table End
     CFlowUtil::delete_flow ( tmp_flow );
-	return return_flow;
+    return return_flow;
 }
 
 /*
 * dissect packet
 */
 flow_t* CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pcap_pkthdr *header,
-                                       const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port,
-                                       ThreadParams *tp )
+        const ip * pIpHeader, const u_int16_t src_port, const u_int16_t dst_port,
+        ThreadParams *tp )
 {
 
     //extern int outputThroughput;
@@ -476,7 +476,7 @@ flow_t* CAnalyzerAggregator::mount_flow ( unsigned short ipLen, const struct pca
     tvSec = ( time_t ) ( header->ts.tv_sec );
     tvUSec = ( time_t ) ( header->ts.tv_usec );
 
-	return addFlowSync ( flow, pIpHeader, ipLen, tp );
+    return addFlowSync ( flow, pIpHeader, ipLen, tp );
 
 }
 
@@ -530,36 +530,36 @@ void CAnalyzerAggregator::printHash()
     //snprintf ( filenameCountStr,36,"%s_latestFile",data );
     //snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
     //flow_collection collection;
-	for (FlowMap::iterator itor = s_flowMap.begin(); itor != s_flowMap.end(); ++itor)
-    //while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( test_table ) ) )
+    for (FlowMap::iterator itor = s_flowMap.begin(); itor != s_flowMap.end(); ++itor)
+        //while ( ( flow_hsh = ( flow_t* ) HashTableUtil::next_hash_walk ( test_table ) ) )
     {
-		flow_hsh = itor->second;
+        flow_hsh = itor->second;
         //	fprintf(stdout,"Estamos aqui 1\n");
         //*(collection.add_flow()) = *flow_hsh;
-		//s_PacketTypeStat.processNewFlow(flow_hsh);
-		pthread_mutex_lock(&Locks::flow_analyzer_lock);
-		s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
-		pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+        //s_PacketTypeStat.processNewFlow(flow_hsh);
+        pthread_mutex_lock(&Locks::flow_analyzer_lock);
+        s_flowAnalyzer.AddNewFlowInfo(flow_hsh);
+        pthread_mutex_unlock(&Locks::flow_analyzer_lock);
         //processNewFlow(flow_hsh);
         //CFlowUtil::printFlowToFile ( flow_hsh, m_strFileName.c_str() );
     }
     //CFlowUtil::printFlowCollectionToFile(&collection, s_strFileName);
-	//////////////////////////////////////////////////////////////////////////
-	// This is used to clear the packet statistic result
-	//s_PacketTypeStat.PrintResult();
-	pthread_mutex_lock(&Locks::flow_analyzer_lock);
-	s_flowAnalyzer.PrintTotalResult();
-	pthread_mutex_unlock(&Locks::flow_analyzer_lock);
-	//s_PacketTypeStat.Clear();
-	//////////////////////////////////////////////////////////////////////////
-	
+    //////////////////////////////////////////////////////////////////////////
+    // This is used to clear the packet statistic result
+    //s_PacketTypeStat.PrintResult();
+    pthread_mutex_lock(&Locks::flow_analyzer_lock);
+    s_flowAnalyzer.PrintTotalResult();
+    pthread_mutex_unlock(&Locks::flow_analyzer_lock);
+    //s_PacketTypeStat.Clear();
+    //////////////////////////////////////////////////////////////////////////
+
     //printStatistic();
     //free ( filenameCountStr );
     //free ( data );
     //HashTableUtil::clear_hash_table ( test_table );
-	pthread_mutex_lock ( &Locks::hash_lock);
-	s_flowMap.clear();
-	pthread_mutex_unlock ( &Locks::hash_lock);
+    pthread_mutex_lock ( &Locks::hash_lock);
+    s_flowMap.clear();
+    pthread_mutex_unlock ( &Locks::hash_lock);
     //s_digestMap.clear();
 }
 
@@ -567,7 +567,7 @@ void CAnalyzerAggregator::printHash()
 
 void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 {
-	/*
+    /*
     ResultEnum rs = eOK;
     int filenameCount = 0;
     int flag=1;
@@ -598,78 +598,78 @@ void * CAnalyzerAggregator::verifyHashTimeOut ( void *par )
 
     //char *filenameCountStr = ( char* ) malloc ( sizeof ( char ) * 36 );
 
-*/
- //   while ( /*( analyserpxError == 0 ) &&*/CAnalyzer::tFlag )
- /*   {
-        int sleepingTime =  fileAdminTime - ( final - init );
-        //cout << "I will sleep for " << sleepingTime << endl;
-        sleep ( sleepingTime );
+    */
+//   while ( /*( analyserpxError == 0 ) &&*/CAnalyzer::tFlag )
+    /*   {
+           int sleepingTime =  fileAdminTime - ( final - init );
+           //cout << "I will sleep for " << sleepingTime << endl;
+           sleep ( sleepingTime );
 
-        // fixed
-        if ( s_pInputParams->IsOutputThroughputEnabled() )
-        {
-            frames_cal = frames_cap - frames_caled;
-            //      bytes_cal = bytes_cap - bytes_caled;
-            FILE *out = fopen ( s_pInputParams->GetOutThroughputFileName().c_str(), "a" );
-            if ( out == NULL )
-                printf ( "error!\n" );
-            fprintf ( out, "# %.2f fps\n", frames_cal*fraction );
-            fclose ( out );
-            //     	printf("# %.0d %.0d %.2fpackets/s %.0d %.2fbytes/s\n", (int)frames_cap, (int)frames_cal, frames_cal*fraction, (int)bytes_cal, bytes_cal*fraction);
-            frames_caled += frames_cal;
-            //		bytes_caled += bytes_cal;
-        }
-        // fixed
+           // fixed
+           if ( s_pInputParams->IsOutputThroughputEnabled() )
+           {
+               frames_cal = frames_cap - frames_caled;
+               //      bytes_cal = bytes_cap - bytes_caled;
+               FILE *out = fopen ( s_pInputParams->GetOutThroughputFileName().c_str(), "a" );
+               if ( out == NULL )
+                   printf ( "error!\n" );
+               fprintf ( out, "# %.2f fps\n", frames_cal*fraction );
+               fclose ( out );
+               //     	printf("# %.0d %.0d %.2fpackets/s %.0d %.2fbytes/s\n", (int)frames_cap, (int)frames_cal, frames_cal*fraction, (int)bytes_cal, bytes_cal*fraction);
+               frames_caled += frames_cal;
+               //		bytes_caled += bytes_cal;
+           }
+           // fixed
 
-        sec = tvSec;
-        usec = tvUSec;
-        time ( &init );
+           sec = tvSec;
+           usec = tvUSec;
+           time ( &init );
 
-        clock = ( struct tm * ) localtime ( & ( init ) );
-        //string fileName;
-        if ( ( interCounter>=fileExpTime ) && ( fileExpTime>0 ) )
-        {
-            filenameCount++;
-            rs = GetFileName ( filenameCount);
-            EABASSERT ( rs == eOK );
-            interCounter=0;
-        }
-        if ( ( ( clock->tm_hour ) == 0 ) && ( ( clock->tm_min ) < ( ( int ) ( ( fileAdminTime*2 ) /60 ) ) ) )
-        {
-            if ( flag )
-            {
-                filenameCount=0;
-                rs = GetFileName ( filenameCount);
-                EABASSERT ( rs == eOK );
-                //snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
-                interCounter=0;
-            }
-            flag=0;
-        }
-        else
-        {
-            flag=1;
-        }
-        //cleanHash(test_table, sec, usec, fileName);
+           clock = ( struct tm * ) localtime ( & ( init ) );
+           //string fileName;
+           if ( ( interCounter>=fileExpTime ) && ( fileExpTime>0 ) )
+           {
+               filenameCount++;
+               rs = GetFileName ( filenameCount);
+               EABASSERT ( rs == eOK );
+               interCounter=0;
+           }
+           if ( ( ( clock->tm_hour ) == 0 ) && ( ( clock->tm_min ) < ( ( int ) ( ( fileAdminTime*2 ) /60 ) ) ) )
+           {
+               if ( flag )
+               {
+                   filenameCount=0;
+                   rs = GetFileName ( filenameCount);
+                   EABASSERT ( rs == eOK );
+                   //snprintf ( fileName,256,"%s%s",baseFileName, filenameCountStr );
+                   interCounter=0;
+               }
+               flag=0;
+           }
+           else
+           {
+               flag=1;
+           }
+           //cleanHash(test_table, sec, usec, fileName);
 
-        rs = optimumCleanHash ( &s_flowMap, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
-        EABASSERT ( rs == eOK );
-        //the analyzer-px output according to -b parameter
-        interCounter++;
-        time ( &final );
-    }
-    if ( eOK != rs )
-    {
-        char buffer[50];
-        snprintf ( buffer, 50,"ERROR CLEANING HASH. ERROR CODE: %u", rs );
-        CFileUtil::writeStringToLogFile ( s_pInputParams->GetLogFileName().c_str(), buffer, NULL );
-    }
+           rs = optimumCleanHash ( &s_flowMap, sec, usec, s_strFileName );//introduced on 1 August 2007, it aims to optimize
+           EABASSERT ( rs == eOK );
+           //the analyzer-px output according to -b parameter
+           interCounter++;
+           time ( &final );
+       }
+       if ( eOK != rs )
+       {
+           char buffer[50];
+           snprintf ( buffer, 50,"ERROR CLEANING HASH. ERROR CODE: %u", rs );
+           CFileUtil::writeStringToLogFile ( s_pInputParams->GetLogFileName().c_str(), buffer, NULL );
+       }
 
-    //free ( filenameCountStr );
-    //free ( data );
+       //free ( filenameCountStr );
+       //free ( data );
 
-    //pthread_exit (0);
-	*/
+       //pthread_exit (0);
+       */
     return ( void * ) NULL;
 }
 
@@ -678,28 +678,28 @@ string CAnalyzerAggregator::GetFileName ( const tm* time, const int count)
 
     // char *data = ( char * ) ( malloc ( sizeof ( char ) *7 ) );
     //string strDate;
-	string dir = "Flows/";
-	dir.append(s_pInputParams->GetFilePrefix());
+    string dir = "Flows/";
+    dir.append(s_pInputParams->GetFilePrefix());
     string filenameCountStr;
     CFlowUtil::getDate ( time, filenameCountStr) ;
 
     filenameCountStr.append ( "_" );
-	string strCount = CommonUtil::itoa(count, 10);
+    string strCount = CommonUtil::itoa(count, 10);
 //    strCount << count;
     filenameCountStr.append ( strCount );
     //snprintf ( filenameCountStr,36,"%s_%u",data,filenameCount );
-	dir.append(filenameCountStr);
+    dir.append(filenameCountStr);
     return dir;
 }
 
 ResultEnum CAnalyzerAggregator::PrintStatisticResult( const tm* t )
 {
-	// TODO: Need implementation here
-	
-	//GetFileName(s_iFileNameCount++);
-	time_t sec = tvSec;
-	time_t usec = tvUSec;
-	optimumCleanHash(&s_flowMap, sec, usec, t);
+    // TODO: Need implementation here
+
+    //GetFileName(s_iFileNameCount++);
+    time_t sec = tvSec;
+    time_t usec = tvUSec;
+    optimumCleanHash(&s_flowMap, sec, usec, t);
 }
 
 /*void *verifyHashTimeOut(void *par)

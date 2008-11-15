@@ -305,7 +305,37 @@ ResultEnum CAnalyzer::processNewPacket ( unsigned char *arg, const struct pcap_p
     pflow = CAnalyzerAggregator::mount_flow ( ipLength, header, pIPHeader, src_port, dst_port, tp );
 
     CPacketDigest packetDigest( header, packet, pflow );
+		
 	
+	// Setup the packet's locality
+	in_addr srcAddr = packetDigest.getSrcAddress();
+	unsigned int srcIp = CIPHeaderUtil::ConvertIPToInt ( &srcAddr );
+	ether_addr macSrcAddr = packetDigest.getSrcEtherAddress();
+	unsigned long long src_MAC_key = CIPHeaderUtil::ConvertMacToInt64 ( &macSrcAddr );
+
+	// Try to find if there is a destination match
+	in_addr dstAddr = packetDigest.getDestAddress();
+	unsigned int dstIp = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
+	ether_addr macDestAddr = packetDigest.getDestEtherAddress();
+	unsigned long long dst_MAC_key = CIPHeaderUtil::ConvertMacToInt64 ( &macDestAddr );
+	bool isUpload = false;
+	if ( CUserUtil::IsUserUploaded ( src_MAC_key, dst_MAC_key, srcIp, dstIp ) )
+	{
+		packetDigest.setLocality(eUpload);
+		isUpload = true;
+	}
+	bool isDownload = false;
+	if ( CUserUtil::IsUserDownloaded(src_MAC_key, dst_MAC_key, srcIp, dstIp))
+	{
+		packetDigest.setLocality(eDownload);
+		isDownload = true;
+	}
+	if (isUpload && isDownload)
+	{
+		packetDigest.setLocality(eLocal);
+	}
+	
+	// Analyze the packet
     rs = s_packetStatistician.AddNewPacketInfo ( &packetDigest );
     EABASSERT ( rs );
     return rs;
@@ -479,6 +509,8 @@ void CAnalyzer::InitLocks()
 	pthread_mutex_init (&Locks::subscriber_result_lock, NULL);
 
 	pthread_mutex_init (&Locks::payload_result_lock, NULL);
+	
+	pthread_mutex_init ( &Locks::app_result_lock, NULL);
 	
 	pthread_mutex_init ( &Locks::flow_analyzer_lock, NULL);
 

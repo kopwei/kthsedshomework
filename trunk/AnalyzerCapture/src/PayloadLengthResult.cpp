@@ -66,7 +66,7 @@ ResultEnum CPayloadLengthResult::PrintResult()
 	return rs;
 }
 
-ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned int* pArray)
+ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned long long* pArray)
 {
 	if (NULL == pArray)
 	{

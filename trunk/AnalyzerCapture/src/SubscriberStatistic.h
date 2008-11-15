@@ -35,7 +35,7 @@ public:
 	
 	//const CSubscriberStatistic& operator= (const CSubscriberStatistic& subStat);	
 	
-	ResultEnum AddNewPacket(const CPacketDigest* pPacketDigest, const bool isDownload);
+	ResultEnum AddNewPacket( const CPacketDigest* pPacketDigest, const bool isDownload);
 
 	unsigned int GetIPAddress() const {return m_ipAddress;}
 

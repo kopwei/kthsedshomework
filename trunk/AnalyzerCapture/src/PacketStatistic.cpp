@@ -89,7 +89,7 @@ ResultEnum CPacketStatistic::distributeByLocality(const CPacketDigest* pDigest)
 	uint srcAddr = CIPHeaderUtil::ConvertIPToInt(&src_addr);
 	uint dstAddr = CIPHeaderUtil::ConvertIPToInt(&dst_addr);
 	
-	if (CUserUtil::IsUserIP((srcAddr)) && CUserUtil::IsUserIP((dstAddr)))
+	if (pDigest->getLocality() == eLocal)
 	{
 		m_localTraffic.AddNewPacket(pDigest->getPacketSize());
 	}

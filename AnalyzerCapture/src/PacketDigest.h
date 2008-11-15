@@ -32,6 +32,14 @@ class flow_t;
 
 //////////////////////////////////////////////////////////////////////////
 
+enum PacketLocalityEnum
+{
+	eUnknownLocality,
+ 	eUpload,
+  	eDownload,
+    eLocal
+};
+
 /**
  *	This class represent a digest of an IP packet
  */
@@ -41,14 +49,17 @@ public:
     CPacketDigest ( const struct pcap_pkthdr* header, const u_char* packet, flow_t* flow );
     ~CPacketDigest ( void );
 
-    const time_t		getTimeStamp() const;
-	ether_addr			getSrcEtherAddress() const;
-	ether_addr			getDestEtherAddress() const;
-    in_addr				getSrcAddress() const;
-    in_addr				getDestAddress() const;
-    unsigned int		getPacketSize() const;
-    unsigned short		getProtocol() const;
-    unsigned short		getProtocolClassification() const;
+    const time_t				getTimeStamp() const;
+	const ether_addr			getSrcEtherAddress() const;
+	const ether_addr			getDestEtherAddress() const;
+    const in_addr				getSrcAddress() const;
+    const in_addr				getDestAddress() const;
+    const unsigned int			getPacketSize() const;
+    const unsigned short		getProtocol() const;
+    const unsigned short		getProtocolClassification() const;
+	
+	const PacketLocalityEnum	getLocality() const {return m_eLocality;}
+	void						setLocality(const PacketLocalityEnum locality) {m_eLocality = locality;}
 
 private:
     time_t				m_timeStamp;		// Time
@@ -59,6 +70,7 @@ private:
     unsigned int		m_sPacketSize;		// Packet size
     unsigned short		m_sProtocol;		// Protocol
     unsigned short		m_sClass;		// Protocol classification
+	PacketLocalityEnum	m_eLocality;		// Indicate if it is local
     //flow_t*				m_pFlow;			// Flow which the packet belongs to
 };
 

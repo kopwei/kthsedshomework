@@ -42,5 +42,7 @@ pthread_mutex_t Locks::subscriber_result_lock;
 
 pthread_mutex_t Locks::payload_result_lock;
 
+pthread_mutex_t Locks::app_result_lock;
+
 pthread_mutex_t Locks::flow_analyzer_lock;
 

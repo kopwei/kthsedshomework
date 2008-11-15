@@ -62,7 +62,7 @@ ResultEnum CSubscriberAnalyzedResult::PrintResult()
 }
 
 
-ResultEnum CSubscriberAnalyzedResult::AddPacketToMap ( const CPacketDigest* pPacketDigest )
+ResultEnum CSubscriberAnalyzedResult::AddPacketToMap (const CPacketDigest* pPacketDigest )
 {
 	ResultEnum rs = eOK;
 
@@ -77,12 +77,13 @@ ResultEnum CSubscriberAnalyzedResult::AddPacketToMap ( const CPacketDigest* pPac
 	unsigned int dstIp = CIPHeaderUtil::ConvertIPToInt ( &dstAddr );
 	ether_addr macDestAddr = pPacketDigest->getDestEtherAddress();
 	unsigned long long dst_MAC_key = CIPHeaderUtil::ConvertMacToInt64 ( &macDestAddr );
-
-	if ( CUserUtil::IsUserUploaded ( src_MAC_key, dst_MAC_key, srcIp, dstIp ) )
+	
+	PacketLocalityEnum locality = pPacketDigest->getLocality();
+	if ( locality == eUpload || locality == eLocal)
 	{
 		DistributePacket(pPacketDigest, srcIp, src_MAC_key, false);
 	}
-	if ( CUserUtil::IsUserDownloaded(src_MAC_key, dst_MAC_key, srcIp, dstIp))
+	if ( locality == eDownload || locality == eLocal )
 	{		
 		DistributePacket(pPacketDigest, dstIp, dst_MAC_key, true);
 	}

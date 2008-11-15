@@ -29,6 +29,7 @@
 //#include <pthread.h>
 #include <iostream>
 #include <time.h>
+#include <PacketDigest.h>
 
 //#include <fstream>
 
@@ -52,7 +53,7 @@ CPacketStatistician::~CPacketStatistician ( void )
 {
 }
 
-ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketDigest )
+ResultEnum CPacketStatistician::AddNewPacketInfo (const CPacketDigest* pPacketDigest )
 {
 	//m_subscriberStatistic.
 	if (NULL == pPacketDigest)
@@ -73,6 +74,11 @@ ResultEnum CPacketStatistician::AddNewPacketInfo ( const CPacketDigest* pPacketD
 	pthread_mutex_lock(&Locks::payload_result_lock);
 	rs = m_payloadLengthResult.AddNewPacketInfo(pPacketDigest);
 	pthread_mutex_unlock(&Locks::payload_result_lock);
+	
+	pthread_mutex_lock(&Locks::app_result_lock);
+	rs = m_appResult.AddNewPacketInfo(pPacketDigest);
+	pthread_mutex_unlock(&Locks::app_result_lock);
+	
 	EABASSERT ( rs );
 	
 	
@@ -110,6 +116,12 @@ void CPacketStatistician::PrintStatisticResult(const tm* t)
 	cout << "traffic result printed    ";
 	//pthread_mutex_unlock(&Locks::statistician_lock);
 	
+	pthread_mutex_lock(&Locks::app_result_lock);
+	m_appResult.setEndTime(*t);
+	m_appResult.PrintResult();
+	pthread_mutex_unlock(&Locks::app_result_lock);
+	cout << "app result printed    ";
+	
 	pthread_mutex_lock(&Locks::subscriber_result_lock);
 	m_subscriberResult.setEndTime(*t);
 	m_subscriberResult.PrintResult();
@@ -124,6 +136,7 @@ void CPacketStatistician::PrintStatisticResult(const tm* t)
 void CPacketStatistician::PrintFinalResult()
 {
 	m_subscriberResult.PrintFinalResult();
+	m_appResult.PrintFinalResult();
 }
 
 

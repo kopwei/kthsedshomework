@@ -23,7 +23,8 @@
 #include "Flow.h"
 //const int ETHER_HDR_LEN = 14;
 
-CPacketDigest::CPacketDigest ( const pcap_pkthdr* header, const u_char* packet, flow_t* flow )
+CPacketDigest::CPacketDigest ( const pcap_pkthdr* header, const u_char* packet, flow_t* flow ) :
+		m_eLocality(eUnknownLocality)
 {
     m_timeStamp = header->ts.tv_usec + header->ts.tv_sec * ( 1e6 );
     m_sPacketSize = header->len;
@@ -54,12 +55,12 @@ const time_t CPacketDigest::getTimeStamp() const
     return m_timeStamp;
 }
 
-ether_addr CPacketDigest::getSrcEtherAddress() const
+const ether_addr CPacketDigest::getSrcEtherAddress() const
 {
 	return m_srcMacAddr;
 }
 
-ether_addr CPacketDigest::getDestEtherAddress() const
+const ether_addr CPacketDigest::getDestEtherAddress() const
 {
 	return m_destMacAddr;
 }
@@ -67,27 +68,27 @@ ether_addr CPacketDigest::getDestEtherAddress() const
 /**
  *	This method returns the Source IP Address of the packet
  */
-in_addr CPacketDigest::getSrcAddress() const
+const in_addr CPacketDigest::getSrcAddress() const
 {
     return m_srcIPAddr;
 }
 
-in_addr CPacketDigest::getDestAddress() const
+const in_addr CPacketDigest::getDestAddress() const
 {
     return m_destIPAddr;
 }
 
-unsigned int CPacketDigest::getPacketSize() const
+const unsigned int CPacketDigest::getPacketSize() const
 {
     return m_sPacketSize;
 }
 
-unsigned short CPacketDigest::getProtocol() const
+const unsigned short CPacketDigest::getProtocol() const
 {
     return m_sProtocol;
 }
 
-unsigned short CPacketDigest::getProtocolClassification() const
+const unsigned short CPacketDigest::getProtocolClassification() const
 {
 //    if (NULL != m_pFlow)
 //        return m_pFlow->class_proto();

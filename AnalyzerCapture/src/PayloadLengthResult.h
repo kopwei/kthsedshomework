@@ -44,11 +44,11 @@ private:
 	CPayloadLengthResult(const CPayloadLengthResult&);
 	const CPayloadLengthResult& operator = (const CPayloadLengthResult&);
 	
-	ResultEnum PrintPacketLengthToFile(unsigned int* pArray);
+	ResultEnum PrintPacketLengthToFile(unsigned long long* pArray);
 	
-	unsigned int m_packetLength[PAYLOAD_MAXSIZE];
-	unsigned int m_tempPacketLength[PAYLOAD_MAXSIZE];
-	unsigned int* m_pCurrentArray;
+	unsigned long long m_packetLength[PAYLOAD_MAXSIZE];
+	unsigned long long m_tempPacketLength[PAYLOAD_MAXSIZE];
+	unsigned long long* m_pCurrentArray;
 
 	//unsigned int m_dailyPacketLength[PAYLOAD_MAXSIZE];
 };

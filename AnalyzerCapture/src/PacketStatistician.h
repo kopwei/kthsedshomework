@@ -29,6 +29,7 @@
 #include "resultenum.h"
 #include "TrafficAnalyzedresult.h"
 #include "SubscriberAnalyzedResult.h"
+#include "AppAnalyzedResult.h"
 
 using namespace std;
 
@@ -50,7 +51,7 @@ public:
 	/**
 	 *	This method will be called 
 	 */
-	ResultEnum			AddNewPacketInfo(const CPacketDigest* pPacketDigest);
+	ResultEnum			AddNewPacketInfo( const CPacketDigest* pPacketDigest);
 	
 	static void*		PacketStatisticTimeOut(void* pArg);
 	
@@ -82,13 +83,14 @@ private:
 	//static CResultRecorder		s_resultRecorder;
 	//static time_t			s_recordingTime;
 	
-	CPayloadLengthResult	m_payloadLengthResult;
+	CPayloadLengthResult		m_payloadLengthResult;
 
-	CTrafficAnalyzedResult  m_trafficResult;
+	CTrafficAnalyzedResult  	m_trafficResult;
 	
-	CSubscriberAnalyzedResult m_subscriberResult;
+	CSubscriberAnalyzedResult 	m_subscriberResult;
+	CAppAnalyzedResult 			m_appResult;
 
-	CUserInputParams*		m_pInputParams;
+	CUserInputParams*			m_pInputParams;
 };
 
 #endif

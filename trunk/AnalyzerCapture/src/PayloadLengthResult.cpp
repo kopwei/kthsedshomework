@@ -76,7 +76,7 @@ ResultEnum CPayloadLengthResult::PrintPacketLengthToFile(unsigned long long* pAr
 	//cout << "date is " << datestr << endl;
 	// Only for testing
 	ofstream ofile ( "payloadlength.ret", ios_base::app );
-	string indent = "  ";
+	string indent = " ";
 	ofile << datestr << indent;
 	//cout << "date printed ..."<<endl;
 	for (int i = 0; i < PAYLOAD_MAXSIZE; i++)

@@ -22,7 +22,7 @@
 
 #include "AnalyzedResult.h"
 
-const int PAYLOAD_MAXSIZE = 1501;
+const int PAYLOAD_MAXSIZE = 1515;
 
 class CPayloadLengthResult :
 	public CAnalyzedResult

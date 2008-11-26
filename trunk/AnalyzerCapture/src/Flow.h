@@ -71,11 +71,11 @@ public:
     {
         return src_port_;    /*!< destination port*/
     }
-    const unsigned int n_bytes() const
+	const unsigned long long n_bytes() const
     {
         return n_bytes_;    /*!< number of bytes*/
     }
-    const unsigned int n_frames() const
+	const unsigned long long n_frames() const
     {
         return n_frames_;    /*!< number of frames*/
     }
@@ -185,12 +185,12 @@ public:
         end_mic_ = val;
     }
 
-    void set_n_frames(const unsigned int val)
+	void set_n_frames(const unsigned long long val)
     {
         n_frames_ = val;
     }
 
-    void set_n_bytes(const unsigned int val)
+	void set_n_bytes(const unsigned long long val)
     {
         n_bytes_ = val;
     }
@@ -223,7 +223,7 @@ private:
     dst_if_[IF_CHAR_SIZE];	/*!< destination native interface name*/
     u_short dst_port_,		/*!< source port*/
     src_port_; 		/*!< destination port*/
-    unsigned int 	n_bytes_,	/*!< number of bytes*/
+    unsigned long long 	n_bytes_,	/*!< number of bytes*/
     n_frames_;	/*!< number of frames*/
     time_t 	ini_sec_,		/*!< seconds init time*/
     ini_mic_,		/*!< microseconds init time*/

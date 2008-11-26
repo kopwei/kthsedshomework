@@ -238,7 +238,7 @@ void CFlowUtil::flowToString ( char format, char proto_format, flow_t * flow, ch
 		flow->n_bytes,
 		flow->n_frames,
 		str_proto );*/
-		snprintf ( temp, 256,"%s:%03ldu %8ld %s %d %s %d %.0d %.0d %s %d",
+		snprintf ( temp, 256,"%s:%03ldu %8ld %s %d %s %d %Lu %Lu %s %d",
 		           str_start,
 		           inimil,
 		           flowduration,
@@ -257,7 +257,7 @@ void CFlowUtil::flowToString ( char format, char proto_format, flow_t * flow, ch
 	{
 
 		// default format FORMAT_FLOW_SECONDS
-		snprintf ( temp,256, "%.0f,%.0f,%.0f,%.0f,%s,%d,%s,%d,%.0d,%.0d,%s,%d",
+		snprintf ( temp,256, "%.0f,%.0f,%.0f,%.0f,%s,%d,%s,%d,%Lu,%Lu,%s,%d",
 		           ( double ) ( flow->ini_sec() ),
 		           ( double ) ( flow->ini_mic() ),
 		           ( double ) ( flow->end_sec() ),
@@ -268,8 +268,8 @@ void CFlowUtil::flowToString ( char format, char proto_format, flow_t * flow, ch
 		           ( int ) ntohs ( ( uint16_t ) ( flow->src_port() ) ),
 		           dstIp,
 		           ( int ) ntohs ( ( uint16_t ) ( flow->dst_port() ) ),
-		           ( int ) flow->n_bytes(),
-		           ( int ) flow->n_frames(),
+		           flow->n_bytes(),
+		           flow->n_frames(),
 		           final,
 		           flow->proto() );
 	}

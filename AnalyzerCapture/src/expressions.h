@@ -179,6 +179,13 @@ GLOBAL_PX regex_t* hlcs;
 */
 GLOBAL_PX regex_t* skypeToSkype;
 
+/*!     \var regex_t* DHT
+        \brief bootstrap regular expression variable.
+
+        This variable stores the regular expression of bootstrap messages.
+ */
+GLOBAL_PX regex_t* dht;
+
 /*!     \var regex_t* skypeOut
         \brief Second Skype regular expression variable.
 

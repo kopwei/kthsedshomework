@@ -117,10 +117,10 @@ const unsigned int PROTO_ID_MUTE		= 115;
 */
 const unsigned int PROTO_ID_NAP		= 116;
 
-/*! \def PROTO_ID_XDCC
-\brief XDCC Protocol's Identifier.
+/*! \def PROTO_ID_DHT
+\brief XDCC Protocol's Identifier. // Here I will change it to BT_DHT
 */
-const unsigned int PROTO_ID_XDCC		= 128;
+const unsigned int PROTO_ID_DHT		= 128;
 
 /*! \def PROTO_ID_DIRECTCONNECT
 \brief DirectConnect Protocol's Identifier.
@@ -434,9 +434,9 @@ const unsigned int PROTO_ID_VALIDCERTSSL	=1303;
 #define PROTO_NAME_NAP			"Napster"
 
 /*!     \def PROTO_NAME_XDCC
-\brief Xdcc P2P Protocol's string description.
+\brief Xdcc P2P Protocol's string description. // Here I change it to DHT
 */
-#define PROTO_NAME_XDCC			"Xdcc"
+#define PROTO_NAME_DHT			"DHT"
 
 /*!     \def PROTO_NAME_DIRECTCONNECT
 \brief DirectConnect P2P Protocol's string description.
@@ -859,6 +859,15 @@ private:
 	\return Return 1 if this function had been able to identify the signature into message string. Otherwise, return 0.
 	*/
 	static u_short isXdcc (const unsigned char *payload, const u16 mess_len);
+	
+	/*!     \fn u_short isXdcc (const unsigned char *payload, const u16 mess_len)
+	\brief Look for the XDCC application's signature in payload message from TCP segments.
+
+	\param *payload		Message string.
+	\param *mess_len	Message string length.
+	\return Return 1 if this function had been able to identify the signature into message string. Otherwise, return 0.
+	 */
+	static u_short isDHT (const unsigned char *payload, const u16 mess_len);
 
 	/*!     \fn u_short isWaste(const unsigned char *payload, const u16 mess_len)
 	\brief Look for the Waste application's signature in payload message from TCP segments.

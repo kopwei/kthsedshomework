@@ -125,8 +125,8 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 			return 124;		//EarthStation5 8	58->124
 		if ( isMP2P ( payload, mess_len ) )
 			return 125;		//MP2P	10	60->125
-		if ( isXdcc ( payload, mess_len ) )
-			return 128;		//Xdcc 14   64->128
+//		if ( isXdcc ( payload, mess_len ) )
+			//return 128;		//Xdcc 14   64->128
 		if ( isDc ( payload, mess_len ) )
 			return 105;		//DirectConnect  67->105
 		if ( isDc_all ( payload, mess_len ) )
@@ -303,6 +303,8 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 		}*/
 		if ( mess_len == 0 )
 			return 3000;	//Nonpayload UDP traffic
+		if ( isDHT ( payload, mess_len ) )
+			return 128;		//DHT 28	88->124
 		if ( isHLCS ( payload, mess_len ) )
 			return 403;
 		if ( isEdku ( payload, mess_len ) )
@@ -317,6 +319,7 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 			return 105;		//Dc 27              87->105
 		if ( isEarthu ( payload, mess_len ) )
 			return 124;		//EarthStation5 28	88->124
+		
 
 		strg = ( unsigned char* ) malloc ( ( mess_len+1 ) *sizeof ( char ) );
 		coupeEOF ( payload, mess_len, strg );
@@ -776,6 +779,20 @@ u_short CClassifier::isXdcc ( const unsigned char *payload, const u16 mess_len )
 			}
 			x++;
 		}
+	}
+	return 0;
+}
+
+/**
+ * For DHT checking
+ */
+
+u_short CClassifier::isDHT(const unsigned char *payload, const u16 mess_len)
+{
+	if ( regexec ( dht, ( char* ) payload, 0, NULL, 0 ) ==0 )
+	{
+		//free(strg);
+		return 1;
 	}
 	return 0;
 }

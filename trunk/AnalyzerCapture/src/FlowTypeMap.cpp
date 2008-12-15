@@ -40,7 +40,7 @@ CFlowTypeMap::CFlowTypeMap()
 	m_typeMap.insert(pair<ushort, uint>(PROTO_ID_WINMX, 0LL));
 	m_typeMap.insert(pair<ushort, uint>(PROTO_ID_MUTE, 0LL));
 	m_typeMap.insert(pair<ushort, uint>(PROTO_ID_NAP, 0LL));
-	m_typeMap.insert(pair<ushort, uint>(PROTO_ID_XDCC, 0LL));
+	m_typeMap.insert(pair<ushort, uint>(PROTO_ID_DHT, 0LL));
 	m_typeMap.insert(pair<ushort, uint>(PROTO_ID_DIRECTCONNECT, 0LL));
 	m_typeMap.insert(pair<ushort, uint>(PROTO_ID_APPLEJUICE, 0LL));
 	m_typeMap.insert(pair<ushort, uint>(PROTO_ID_WASTE, 0LL));

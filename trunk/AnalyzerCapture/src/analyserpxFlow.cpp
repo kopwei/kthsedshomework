@@ -304,7 +304,7 @@ const char* CFlowUtil::get_protocolName ( unsigned short proto_id )
 		case PROTO_ID_WINMX:		return ( PROTO_NAME_WINMX );
 		case PROTO_ID_MUTE:		return ( PROTO_NAME_MUTE );
 		case PROTO_ID_NAP:		return ( PROTO_NAME_NAP );
-		case PROTO_ID_XDCC:		return ( PROTO_NAME_XDCC );
+		case PROTO_ID_DHT:		return ( PROTO_NAME_DHT );
 		case PROTO_ID_DIRECTCONNECT:	return ( PROTO_NAME_DIRECTCONNECT );
 		case PROTO_ID_APPLEJUICE:	return ( PROTO_NAME_APPLEJUICE );
 		case PROTO_ID_WASTE:		return ( PROTO_NAME_WASTE );

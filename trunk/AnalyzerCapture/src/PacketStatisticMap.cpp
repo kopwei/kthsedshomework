@@ -37,7 +37,7 @@ CPacketStatisticMap::CPacketStatisticMap()
 	m_statisticMap.insert(pair<ushort, MetaTraffic>(PROTO_ID_WINMX, meta));
 	m_statisticMap.insert(pair<ushort, MetaTraffic>(PROTO_ID_MUTE, meta));
 	m_statisticMap.insert(pair<ushort, MetaTraffic>(PROTO_ID_NAP, meta));
-	m_statisticMap.insert(pair<ushort, MetaTraffic>(PROTO_ID_XDCC, meta));
+	m_statisticMap.insert(pair<ushort, MetaTraffic>(PROTO_ID_DHT, meta));
 	m_statisticMap.insert(pair<ushort, MetaTraffic>(PROTO_ID_DIRECTCONNECT, meta));
 	m_statisticMap.insert(pair<ushort, MetaTraffic>(PROTO_ID_APPLEJUICE, meta));
 	m_statisticMap.insert(pair<ushort, MetaTraffic>(PROTO_ID_WASTE, meta));

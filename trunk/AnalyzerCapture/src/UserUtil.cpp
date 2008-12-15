@@ -38,14 +38,14 @@ CUserUtil::~CUserUtil()
 
 void CUserUtil::InitISPMacSet()
 {
-	//s_ispMacSet.insert(0x1b2ba3c1c9LL);
-	//s_ispMacSet.insert(0x1b2ba3c1ccLL);
-	//s_ispMacSet.insert(0x1b2ba3c1cdLL);
-	s_ispMacSet.insert(0x2305e4d142LL);
-	s_ispMacSet.insert(0x2305e4d143LL);
-	s_ispMacSet.insert(0x2305e4d144LL);
-	s_ispMacSet.insert(0x1b2ba3c1c6LL);
-	s_ispMacSet.insert(0x1b2ba3c1c7LL);
+	s_ispMacSet.insert(0x1b2ba3c1c9LL);
+	s_ispMacSet.insert(0x1b2ba3c1ccLL);
+	s_ispMacSet.insert(0x1b2ba3c1cdLL);
+//	s_ispMacSet.insert(0x2305e4d142LL);
+//	s_ispMacSet.insert(0x2305e4d143LL);
+//	s_ispMacSet.insert(0x2305e4d144LL);
+//	s_ispMacSet.insert(0x1b2ba3c1c6LL);
+//	s_ispMacSet.insert(0x1b2ba3c1c7LL);
 }
 
 const bool CUserUtil::IsUserUploaded(const uint64 srcMac, const uint64 dstMac, const unsigned int srcIp, const unsigned int dstIp)

@@ -437,9 +437,9 @@ u_short CClassifier::getID ( const struct ip *iph, u16 ipLen )
 		{
 			free ( strg ); return 511;
 		}
-		if ( isSkypeToSkype ( strg, mess_len ) )
+//		if ( isSkypeToSkype ( strg, mess_len ) )
 		{
-			free ( strg ); return 1002;
+//			free ( strg ); return 1002;
 		}
 		if ( isSkypeOut ( strg, mess_len ) )
 		{

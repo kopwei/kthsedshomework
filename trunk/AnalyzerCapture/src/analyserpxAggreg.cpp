@@ -289,7 +289,6 @@ flow_t* CAnalyzerAggregator::addFlowSync ( flow_t * flow, const struct ip *ip, u
         }
         return_flow = flow_hsh;
     }
-
     string strEmpty = "";
     flow_t* tmp_flow = CFlowUtil::createFlow_t ( ip->ip_p,ip->ip_p, strEmpty, strEmpty, flow->dst_port(), flow->src_port(),
                        ( unsigned int ) ntohs ( ip->ip_len ), 1, flow->ini_sec(),

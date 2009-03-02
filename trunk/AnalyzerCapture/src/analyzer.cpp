@@ -109,8 +109,13 @@ int CAnalyzer::analyserpxStartMultiThreaded(CUserInputParams* pParam)
     int analyserpxError;
 	time_t currentTime;
 	time(&currentTime);
-    for (int j = 1; j < 27752; j++)
-	//for (int j = 1; j < 29734; j++)
+	///////////////////////////////////
+	// 10Mbps
+    // for (int j = 1; j < 27752; j++)
+	
+	///////////////////////////////////
+	// 100Mbps
+	for (int j = 1; j < 29734; j++)
     {
 		string intstr = CommonUtil::itoa(j, 10);
 		//cout << "number string ready: " << intstr << endl;
